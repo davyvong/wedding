@@ -2,7 +2,7 @@
 
 import classNames from 'classnames';
 import Gallery from 'components/gallery';
-import Hero from 'components/hero';
+import SaveTheDate from 'components/save-the-date';
 import galleryItems from 'constants/gallery-items.json';
 import useIsTouchDevice from 'hooks/is-touch-device';
 import type { FC } from 'react';
@@ -14,8 +14,8 @@ const Page: FC = () => {
 
   return (
     <div className={classNames(styles.container, isTouchDevice && styles.containerTouch)}>
-      <div className={classNames(styles.section, styles.hero, isTouchDevice && styles.heroTouch)}>
-        <Hero />
+      <div className={classNames(styles.section, styles.saveTheDate, isTouchDevice && styles.saveTheDateTouch)}>
+        <SaveTheDate />
       </div>
       <div className={styles.section}>
         <Gallery data={galleryItems} />

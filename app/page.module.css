@@ -1,8 +1,4 @@
-.container {
-  background-color: var(--champagne);
-}
-
-.hero {
+.saveTheDate {
   height: calc(100vh - 4rem);
 }
 
@@ -21,11 +17,11 @@
     width: auto;
   }
 
-  .hero {
+  .saveTheDate {
     height: auto;
   }
 
-  .heroTouch {
+  .saveTheDateTouch {
     position: sticky;
     top: 0;
   }
