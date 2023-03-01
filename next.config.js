@@ -21,7 +21,7 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ['a.storyblok.com'],
+    domains: ['images.unsplash.com'],
   },
   webpack: (config, { dev }) => {
     const rules = config.module.rules
