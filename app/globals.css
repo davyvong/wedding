@@ -1,0 +1,28 @@
+:root {
+  --ash-gray: #acbda1;
+  --black: #000000;
+  --brown-sugar: #bc623e;
+  --champagne: #f7e7ce;
+  --pale-dogwood: #eac9bb;
+  --persian-orange: #d0947a;
+  --white: #ffffff;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--champagne);
+  font-size: 100%;
+  height: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+body {
+  background-color: var(--champagne);
+  font-size: 1rem;
+  font-weight: 400;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}

@@ -1,0 +1,4 @@
+<a href="{{url}}">Click here to login with this magic link</a>
+<div style="margin-top: 1rem">Or, copy and paste this temporary login code:</div>
+<pre style="background-color: #f4f4f4;border-radius: 0.25rem;border: 1px solid #eeeeee;font-family: monospace;margin-top: 1rem;padding: 1rem 1.25rem;">{{code}}</pre>
+<div style="margin-top: 1rem">If you didn't try to login, you can safely ignore this email.</div>
