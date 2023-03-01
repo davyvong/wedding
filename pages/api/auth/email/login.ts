@@ -1,8 +1,10 @@
 import serverErrors from 'constants/server-errors.json';
+import loginCodeTemplate from 'emails/login-code.eml';
+import * as handlebars from 'handlebars';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getBaseURL } from 'utils/env';
 import { getMongoDatabase } from 'utils/mongodb';
-import { getEmailTemplate, getTransporter } from 'utils/nodemailer';
+import { getTransporter } from 'utils/nodemailer';
 import { createRedisKey, getRedisClient } from 'utils/redis';
 import { getRandomWords } from 'utils/words';
 import { isEmail } from 'utils/yup';
@@ -21,7 +23,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     const code = getRandomWords(4).join('-');
     const url = new URL(getBaseURL() + '/api/auth/email/check');
     url.searchParams.set('code', code);
-    const html = getEmailTemplate('./emails/login-code.template', { code, url: url.href });
+    const template = handlebars.compile(loginCodeTemplate);
+    const html = template({ code, url: url.href });
     const transporter = getTransporter();
     await transporter.sendMail({
       from: process.env.NODEMAILER_ADDRESS as string,

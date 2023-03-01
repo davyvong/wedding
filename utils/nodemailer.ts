@@ -13,12 +13,3 @@ const transporter = nodemailer.createTransport({
 });
 
 export const getTransporter = () => transporter;
-
-export const getEmailTemplate = (templatePath: string, context: Record<string, string> = {}): string => {
-  const __dirname = path.resolve();
-  const filePath = path.join(__dirname, templatePath);
-  const source = fs.readFileSync(filePath, 'utf-8').toString();
-  const template = handlebars.compile(source);
-  const html = template(context);
-  return html;
-};
