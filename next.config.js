@@ -36,6 +36,10 @@ module.exports = {
         });
       });
     }
+    config.module.rules.push({
+      test: /\.eml$/,
+      use: 'raw-loader',
+    });
     return config;
   },
 };
