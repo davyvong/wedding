@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getBaseURL } from 'utils/env';
 import { signToken } from 'utils/jwt';
 import { getMongoDatabase } from 'utils/mongodb';
+import { applyRateLimiter } from 'utils/rate-limiter';
 import { createRedisKey, getRedisClient } from 'utils/redis';
 import { isLoginCode } from 'utils/yup';
 
@@ -36,4 +37,4 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
   }
 };
 
-export default handler;
+export default applyRateLimiter(handler);
