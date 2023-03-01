@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getBaseURL } from 'utils/env';
 import { getMongoDatabase } from 'utils/mongodb';
 import { getTransporter } from 'utils/nodemailer';
+import { applyRateLimiter } from 'utils/rate-limiter';
 import { createRedisKey, getRedisClient } from 'utils/redis';
 import { getRandomWords } from 'utils/words';
 import { isEmail } from 'utils/yup';
@@ -42,4 +43,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
   }
 };
 
-export default handler;
+export default applyRateLimiter(handler, {
+  requestsPerInterval: 10,
+  scope: 'api-auth-email-login',
+});

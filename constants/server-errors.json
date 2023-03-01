@@ -2,5 +2,6 @@
   "guestNotFound": "GUEST_NOT_FOUND",
   "loginCodeNotFound": "LOGIN_CODE_NOT_FOUND",
   "invalidEmail": "INVALID_EMAIL",
-  "invalidLoginCode": "INVALID_LOGIN_CODE"
+  "invalidLoginCode": "INVALID_LOGIN_CODE",
+  "tooManyRequests": "TOO_MANY_REQUESTS"
 }
