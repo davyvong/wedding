@@ -9,12 +9,12 @@
 
 .contentOpen {
   overflow: hidden;
-  transform: translateY(calc(-1 * max(450px, 50vh) + 1px));
+  transform: translateY(calc(-1 * max(30rem, 50vh) + 1px));
 }
 
 .menu {
-  background-color: var(--black);
-  height: max(450px, 50vh);
+  background-color: var(--brown-sugar);
+  height: max(30rem, 50vh);
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
   width: 100%;
@@ -22,17 +22,14 @@
 }
 
 .menuOpen {
-  transform: translateY(calc(-1 * max(450px, 50vh)));
+  transform: translateY(calc(-1 * max(30rem, 50vh)));
 }
 
 .toggleButton {
-  background-color: transparent;
-  border: 0;
   display: flex;
   flex-direction: column;
   height: 1.125rem;
   justify-content: space-between;
-  padding: 0;
   position: fixed;
   right: 1rem;
   top: 1rem;

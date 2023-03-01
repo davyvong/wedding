@@ -84,7 +84,7 @@ const Gallery: FC<GalleryProps> = props => {
             animationRef.current.completed = false;
           }
         },
-        duration: (translateY.current / 15) * -1000,
+        duration: (translateY.current / 30) * -1000,
         easing: 'linear',
         loop: false,
         targets: '.' + styles.column,
@@ -112,7 +112,7 @@ const Gallery: FC<GalleryProps> = props => {
               animationRef.current.completed = false;
             }
           },
-          duration: (translateY.current / 15) * -1000,
+          duration: (translateY.current / 30) * -1000,
           easing: 'linear',
           loop: false,
           targets: '.' + styles.column,
