@@ -17,3 +17,11 @@ export const isLoginCode = (value): boolean =>
     .required()
     .matches(/^([a-z]+)-([a-z]+)-([a-z]+)-([a-z]+)$/)
     .isValidSync(value);
+
+export const isObjectId = (value): boolean =>
+  yup
+    .string()
+    .required()
+    .length(24)
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .isValidSync(value);
