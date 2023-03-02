@@ -1,4 +1,10 @@
 {
   "app.layout.title": "Davy & Vivian",
+  "components.cookie-banner.description": "We use cookies to offer you a better experience and analyse traffic to our site.",
+  "components.cookie-banner.learn-more": "Learn more",
+  "components.cookie-banner.modal.description": "When visiting our site we may place the following cookies:",
+  "components.cookie-banner.modal.necessary.description": "Necessary cookies are required for this site to work correctly. This includes remembering your invitation, protecting the site, and maintaining your consent preferences.",
+  "components.cookie-banner.modal.necessary.title": "Necessary",
+  "components.cookie-banner.modal.title": "Cookies",
   "components.save-the-date.hello-world": "Hello World!"
 }
