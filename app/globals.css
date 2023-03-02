@@ -6,30 +6,90 @@
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
   --white: #ffffff;
+
+  --border: #dfe3e8;
+  --primary: #333333;
+  --secondary: #454f5b;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   background-color: var(--champagne);
-  font-size: 100%;
+  font-size: 87.5%;
   height: 100%;
   overflow: hidden;
   scroll-behavior: smooth;
   width: 100%;
 }
 
+@media (min-width: 768px) {
+  html {
+    font-size: 100%;
+  }
+}
+
 body {
   background-color: var(--champagne);
+  color: var(--primary);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
+  line-height: 1.5;
   overflow: hidden;
   width: 100%;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 button {
+  align-items: center;
   background-color: transparent;
   border: 0;
+  display: flex;
+  font-size: 1rem;
+  justify-content: center;
   outline: none;
   padding: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.33;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+h3 {
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1.61;
+}
+h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.66;
+}
+
+input {
+  border: 0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  opacity: 1;
+  outline: none;
+  padding: 1rem;
+  width: 100%;
+}
+
+input:disabled,
+input::placeholder {
+  opacity: 1;
 }

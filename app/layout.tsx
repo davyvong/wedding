@@ -4,6 +4,7 @@ import 'minireset.css';
 
 import './globals.css';
 
+import CookieBanner from 'components/cookie-banner';
 import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
@@ -31,6 +32,7 @@ const Layout: FC<LayoutProps> = props => {
         </head>
         <body className={inter.className}>
           <Navigation>{children}</Navigation>
+          <CookieBanner />
         </body>
       </html>
     </NavigationProvider>

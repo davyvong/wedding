@@ -13,7 +13,7 @@
 }
 
 .menu {
-  background-color: var(--brown-sugar);
+  background-color: var(--persian-orange);
   height: max(30rem, 50vh);
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
@@ -31,14 +31,14 @@
   height: 1.125rem;
   justify-content: space-between;
   position: fixed;
-  right: 1rem;
-  top: 1rem;
+  right: 1.5rem;
+  top: 1.5rem;
   width: 1.5rem;
   z-index: 3;
 }
 
 .toggleButton span {
-  background-color: var(--brown-sugar);
+  background-color: var(--persian-orange);
   display: block;
   height: 0.125rem;
   width: 100%;
@@ -75,13 +75,6 @@
 .toggleButtonClose .toggleButtonLine3 {
   bottom: 0.5rem;
   transform: rotate(-45deg);
-}
-
-@media (min-width: 768px) {
-  .toggleButton {
-    right: 1.5rem;
-    top: 1.5rem;
-  }
 }
 
 @media (min-width: 1024px) {
