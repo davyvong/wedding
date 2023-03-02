@@ -1,23 +1,20 @@
 import { ObjectId } from 'mongodb';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { verifyToken } from 'server/jwt';
+import type { NextApiResponse } from 'next';
+import type { NextApiRequestWithToken } from 'server/jwt';
+import { applyToken } from 'server/jwt';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
+import { isObjectId } from 'utils/yup';
 
-const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+const handler = async (request: NextApiRequestWithToken, response: NextApiResponse): Promise<void> => {
   try {
-    if (!request.cookies.token) {
-      response.status(401).end();
-      return;
-    }
-    const token = await verifyToken(request.cookies.token);
-    if (!token) {
+    if (!isObjectId(request.token.id)) {
       response.status(401).end();
       return;
     }
     const db = await getMongoDatabase();
     const collection = db.collection('guests');
-    const doc = await collection.findOne({ _id: new ObjectId(token.id) });
+    const doc = await collection.findOne({ _id: new ObjectId(request.token.id) });
     if (!doc) {
       response.status(401).end();
       return;
@@ -33,4 +30,4 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
   }
 };
 
-export default applyRateLimiter(handler);
+export default applyRateLimiter(applyToken(handler));
