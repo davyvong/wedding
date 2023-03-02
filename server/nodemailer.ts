@@ -1,7 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
-import * as handlebars from 'handlebars';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
