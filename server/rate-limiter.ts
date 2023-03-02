@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getClientIp } from 'request-ip';
-import { createRedisKey, getRedisClient } from 'utils/redis';
+import { createRedisKey, getRedisClient } from 'server/redis';
 import { isIP } from 'utils/yup';
 
 interface RateLimitOptions {
