@@ -6,15 +6,10 @@
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
   --white: #ffffff;
-
-  --border: #dfe3e8;
-  --primary: #333333;
-  --secondary: #454f5b;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
-  background-color: var(--champagne);
   font-size: 87.5%;
   height: 100%;
   overflow: hidden;
@@ -63,16 +58,19 @@ h1 {
   font-weight: 600;
   line-height: 1.33;
 }
+
 h2 {
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.5;
 }
+
 h3 {
   font-size: 1.3125rem;
   font-weight: 600;
   line-height: 1.61;
 }
+
 h4 {
   font-size: 1.125rem;
   font-weight: 600;

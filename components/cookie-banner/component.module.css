@@ -1,107 +1,32 @@
 .banner {
   -webkit-box-shadow: 0 0 1rem -0.5rem var(--black);
+  align-items: center;
   background-color: var(--white);
-  border-radius: 0.5rem;
+  border-radius: 1.5rem;
   bottom: 1.5rem;
   box-shadow: 0 0 1rem -0.5rem var(--black);
-  left: 1.5rem;
-  padding: 1.5rem;
-  padding-right: 3rem;
-  position: fixed;
-  right: 1.5rem;
-}
-
-.banner a {
-  text-decoration: underline;
-}
-
-.banner p {
-  color: var(--secondary);
-}
-
-.closeButton {
-  height: 1.125rem;
-  right: 1rem;
+  display: flex;
+  flex-direction: row;
+  font-size: 0.875rem;
+  justify-content: center;
+  left: 50%;
+  padding: 0.375rem 0.375rem;
   position: absolute;
-  top: 1rem;
-  width: 1.125rem;
+  transform: translateX(-50%);
 }
 
-.closeButton:after,
-.closeButton:before {
-  background-color: var(--primary);
-  content: '';
-  display: block;
-  height: 0.125rem;
-  position: absolute;
-  top: 0.625rem;
-  width: 100%;
-}
-
-.closeButton:after {
-  transform: rotate(45deg);
-}
-
-.closeButton:before {
-  transform: rotate(-45deg);
-}
-
-.modal {
-  -webkit-box-shadow: 0 0 1rem -0.5rem var(--black);
-  background-color: var(--white);
-  border-radius: 0.5rem;
-  box-shadow: 0 0 1rem -0.5rem var(--black);
-  left: 1.5rem;
-  position: fixed;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.modal p {
+.banner .description {
   color: var(--secondary);
+  margin-left: 0.75rem;
+  white-space: nowrap;
 }
 
-.modal .closeButton {
-  right: 1.25rem;
-  top: 1.25rem;
-}
-
-.modalHeader {
-  margin: 1.5rem;
-}
-
-.modalHeader h1 {
-  margin-bottom: 0.5rem;
-}
-
-.modalGroup {
-  border-top: 1px solid var(--border);
-  margin: 1.5rem;
-  padding-top: 1rem;
-}
-
-.modalGroup h3 {
-  margin-bottom: 0.5rem;
-}
-
-@media (min-width: 512px) {
-  .banner {
-    bottom: 2rem;
-    left: 50%;
-    max-width: 30rem;
-    right: auto;
-    transform: translateX(-50%);
-    width: 100%;
-  }
-}
-
-@media (min-width: 672px) {
-  .modal {
-    left: 50%;
-    max-width: 40rem;
-    right: auto;
-    transform: translate(-50%, -50%);
-    width: 100%;
-  }
+.banner .button {
+  background-color: var(--black);
+  border-radius: 1rem;
+  color: var(--white);
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
 }
