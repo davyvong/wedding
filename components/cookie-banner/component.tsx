@@ -9,23 +9,23 @@ interface CookieBannerProps {
   style?: CSSProperties;
 }
 
-const CookieBannerComponent: FC<CookieBannerProps> = forwardRef((props, ref: RefObject<HTMLDivElement>) => {
-  const { closeBanner, style } = props;
+const CookieBannerComponent: FC<CookieBannerProps> = forwardRef(
+  ({ closeBanner, style }, ref: RefObject<HTMLDivElement>) => {
+    const t = useTranslate();
 
-  const t = useTranslate();
-
-  return (
-    <div className={styles.banner} ref={ref} style={style}>
-      <p className={styles.description}>
-        {t('components.cookie-banner.description') + ' '}
-        <a>{t('components.cookie-banner.learn-more')}</a>
-      </p>
-      <button className={styles.button} onClick={closeBanner}>
-        {t('components.cookie-banner.ok')}
-      </button>
-    </div>
-  );
-});
+    return (
+      <div className={styles.banner} ref={ref} style={style}>
+        <p className={styles.description}>
+          {t('components.cookie-banner.description') + ' '}
+          <a>{t('components.cookie-banner.learn-more')}</a>
+        </p>
+        <button className={styles.button} onClick={closeBanner}>
+          {t('components.cookie-banner.ok')}
+        </button>
+      </div>
+    );
+  },
+);
 
 CookieBannerComponent.displayName = 'CookieBannerComponent';
 

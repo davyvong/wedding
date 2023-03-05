@@ -21,9 +21,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: FC<LayoutProps> = props => {
-  const { children } = props;
-
+const Layout: FC<LayoutProps> = ({ children }) => {
   const t = useTranslate();
 
   return (

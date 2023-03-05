@@ -19,22 +19,7 @@ const CookieBanner: FC = () => {
   }, []);
 
   return (
-    <Transition
-      delay={50}
-      duration={300}
-      inStyle={{
-        opacity: 1,
-        transition: 'opacity 300ms ease-in-out',
-      }}
-      isIn={!hasPreferences}
-      ref={bannerRef}
-      onIn={() => {}}
-      onOut={() => {}}
-      outStyle={{
-        opacity: 0,
-        transition: 'opacity 300ms ease-in-out',
-      }}
-    >
+    <Transition isIn={!hasPreferences} ref={bannerRef}>
       <CookieBannerComponent closeBanner={closeBanner} />
     </Transition>
   );
