@@ -4,8 +4,9 @@ import 'minireset.css';
 
 import './globals.css';
 
-import ColorfulBackground from 'components/colorful-background';
+import ColorfulBackdrop from 'components/colorful-backdrop';
 import CookieBanner from 'components/cookie-banner';
+import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
 import { Roboto } from 'next/font/google';
@@ -34,9 +35,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           <title>{t('app.layout.title')}</title>
         </head>
         <body className={roboto.className}>
-          <ColorfulBackground />
+          <ColorfulBackdrop />
           <main className={styles.main}>{children}</main>
           <CookieBanner />
+          <Navigation />
         </body>
       </html>
     </NavigationProvider>

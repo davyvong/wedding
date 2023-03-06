@@ -1,21 +1,27 @@
 import classNames from 'classnames';
+import Transition from 'components/transition';
 import { Fragment } from 'react';
-import type { FC, ReactNode } from 'react';
+import type { FC, RefObject } from 'react';
 
 import styles from './component.module.css';
 
 interface NavigationComponentProps {
-  children: ReactNode;
   isOpen: boolean;
+  menuRef: RefObject<HTMLDivElement>;
   toggle: () => void;
 }
 
-const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, toggle }) => (
+const NavigationComponent: FC<NavigationComponentProps> = ({ isOpen, menuRef, toggle }) => (
   <Fragment>
-    <div className={classNames(styles.content, isOpen && styles.contentOpen)} onClick={isOpen ? toggle : undefined}>
-      {children}
-    </div>
-    <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
+    <Transition
+      duration={650}
+      inStyle={{ transform: 'translateY(-100%)' }}
+      isIn={isOpen}
+      outStyle={{ transform: 'translateY(0)' }}
+      ref={menuRef}
+    >
+      <div className={styles.menu} />
+    </Transition>
     <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonClose)} onClick={toggle}>
       <span className={styles.toggleButtonLine1} />
       <span className={styles.toggleButtonLine2} />

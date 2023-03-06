@@ -9,6 +9,7 @@
 }
 
 html {
+  -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   font-size: 87.5%;
   height: 100%;
