@@ -21,7 +21,7 @@ const ColorfulBackdrop = () => {
   }, []);
 
   const [blobStyle, setBlobStyle] = useState<CSSProperties>({ borderRadius: '0%' });
-  const hasFilterSupport = useCSSSupport('filter', 'blur(20rem)');
+  const hasFilterSupport = useCSSSupport('filter', 'blur(7rem)');
 
   useEffect(() => {
     if (hasFilterSupport) {
