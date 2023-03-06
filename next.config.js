@@ -21,7 +21,7 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ['images.unsplash.com'],
+    domains: ['collidephotography.ca'],
   },
   webpack: (config, { dev }) => {
     const rules = config.module.rules
@@ -36,6 +36,10 @@ module.exports = {
         });
       });
     }
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
     config.module.rules.push({
       test: /\.eml$/,
       use: 'raw-loader',

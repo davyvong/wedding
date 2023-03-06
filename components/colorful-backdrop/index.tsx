@@ -1,10 +1,13 @@
+import Transition from 'components/transition';
 import useCSSSupport from 'hooks/css-support';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 
 import ColorfulBackdropComponent from './component';
 
 const ColorfulBackdrop = () => {
+  const backdropRef = useRef<HTMLDivElement>(null);
+
   const generateBlobStyle = useCallback((): CSSProperties => {
     const generateRandomPercentage = () => Math.floor(Math.random() * 100) + '%';
     let borderRadius = '';
@@ -34,7 +37,11 @@ const ColorfulBackdrop = () => {
     }
   }, [generateBlobStyle, hasFilterSupport]);
 
-  return <ColorfulBackdropComponent blobStyle={blobStyle} hasFilterSupport={hasFilterSupport} />;
+  return (
+    <Transition isIn={hasFilterSupport} ref={backdropRef}>
+      <ColorfulBackdropComponent blobStyle={blobStyle} />
+    </Transition>
+  );
 };
 
 export default ColorfulBackdrop;

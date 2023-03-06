@@ -7,7 +7,7 @@
   box-shadow: 0 0 0.75rem -0.5rem var(--black);
   display: flex;
   flex-direction: row;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 300;
   justify-content: center;
   left: 50%;
@@ -18,16 +18,15 @@
 }
 
 .banner .description {
-  color: var(--secondary);
   margin-left: 0.75rem;
   white-space: nowrap;
 }
 
 .banner .button {
-  background-color: var(--black);
+  background-color: var(--primary);
   border-radius: 1rem;
   color: var(--white);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 1;
   padding: 0.5rem 1rem;
   margin-left: 1rem;

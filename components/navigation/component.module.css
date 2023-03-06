@@ -19,7 +19,7 @@
 }
 
 .toggleButton span {
-  background-color: var(--black);
+  background-color: var(--primary);
   display: block;
   height: 0.125rem;
   width: 100%;

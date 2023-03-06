@@ -1,8 +1,23 @@
 .hero {
-  height: 100vh;
-  padding: 5.5rem;
+  padding: 2rem 10rem;
   position: relative;
   width: 100%;
+}
+
+.saveTheDate {
+  color: var(--primary);
+  margin: 0 auto;
+  resize: both;
+  width: 60%;
+}
+
+.saveTheDate svg {
+  height: 100%;
+  width: 100%;
+}
+
+.cover {
+  margin-top: 1.5rem;
 }
 
 .figure {
@@ -11,23 +26,13 @@
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;;
   overflow: hidden;
-  padding: 3rem;
+  padding-top: 42%;
   position: relative;
   width: 100%;
 }
 
-.title {
-  color: var(--white);
-  text-shadow: 0 0.125rem 0.125rem rgb(0 0 0 / 13%);
-}
-
-.saveTheDate {
-  font-size: 5vh;
-}
-
-.weddingDate {
-  font-size: 7vh;
+.image {
+  object-fit: cover;
 }

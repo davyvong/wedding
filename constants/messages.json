@@ -2,5 +2,7 @@
   "app.layout.title": "Davy & Vivian",
   "components.cookie-banner.description": "This website uses cookies.",
   "components.cookie-banner.learn-more": "Learn more.",
-  "components.cookie-banner.ok": "OK"
+  "components.cookie-banner.ok": "OK",
+  "components.ticker.details.date": "June 23, 2024",
+  "components.ticker.details.location": "Toronto"
 }

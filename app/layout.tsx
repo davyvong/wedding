@@ -4,6 +4,7 @@ import 'minireset.css';
 
 import './globals.css';
 
+import classNames from 'classnames';
 import ColorfulBackdrop from 'components/colorful-backdrop';
 import CookieBanner from 'components/cookie-banner';
 import Navigation from 'components/navigation';

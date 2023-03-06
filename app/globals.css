@@ -5,7 +5,10 @@
   --champagne: #f7e7ce;
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
+  --rust: #a85838;
   --white: #ffffff;
+
+  --primary: var(--rust);
 }
 
 html {
@@ -26,7 +29,7 @@ html {
 
 body {
   background-color: var(--champagne);
-  color: var(--primary);
+  color: var(--black);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;

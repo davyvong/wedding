@@ -1,0 +1,27 @@
+@keyframes scrollingText {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.ticker {
+  color: var(--primary);
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.details {
+  animation: scrollingText infinite linear;
+  font-size: 2.5rem;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
+.divider {
+  padding: 0 1rem;
+}
