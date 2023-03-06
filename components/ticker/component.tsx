@@ -5,7 +5,7 @@ import styles from './component.module.css';
 
 interface TickerLabel {
   key: string;
-  style: CSSProperties;
+  style?: CSSProperties;
   text: string;
 }
 
