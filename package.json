@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "next lint",
-    "lint:prettier": "prettier --list-different --ignore-path .gitignore .",
+    "lint:prettier": "prettier --list-different .",
     "start": "next start"
   },
   "dependencies": {

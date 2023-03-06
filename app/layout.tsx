@@ -4,6 +4,7 @@ import 'minireset.css';
 
 import './globals.css';
 
+import ColorfulBackground from 'components/colorful-background';
 import CookieBanner from 'components/cookie-banner';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
@@ -33,6 +34,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           <title>{t('app.layout.title')}</title>
         </head>
         <body className={roboto.className}>
+          <ColorfulBackground />
           <main className={styles.main}>{children}</main>
           <CookieBanner />
         </body>

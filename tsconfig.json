@@ -7,7 +7,11 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "module": "ESNext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -22,6 +26,13 @@
     "strictNullChecks": true,
     "target": "ESNext"
   },
-  "exclude": ["node_modules"],
-  "include": [".next/types/**/*.ts", "**/*.ts", "**/*.tsx", "next-env.d.ts"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts"
+  ]
 }
