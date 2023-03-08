@@ -5,16 +5,15 @@
   --champagne: #f7e7ce;
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
+  --rust: #a85838;
   --white: #ffffff;
 
-  --border: #dfe3e8;
-  --primary: #333333;
-  --secondary: #454f5b;
+  --primary: var(--rust);
 }
 
 html {
+  -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
-  background-color: var(--champagne);
   font-size: 87.5%;
   height: 100%;
   overflow: hidden;
@@ -30,7 +29,7 @@ html {
 
 body {
   background-color: var(--champagne);
-  color: var(--primary);
+  color: var(--black);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
@@ -63,16 +62,19 @@ h1 {
   font-weight: 600;
   line-height: 1.33;
 }
+
 h2 {
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.5;
 }
+
 h3 {
   font-size: 1.3125rem;
   font-weight: 600;
   line-height: 1.61;
 }
+
 h4 {
   font-size: 1.125rem;
   font-weight: 600;

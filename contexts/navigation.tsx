@@ -17,9 +17,7 @@ interface NavigationProviderProps {
   children: ReactNode;
 }
 
-export const NavigationProvider: FC<NavigationProviderProps> = props => {
-  const { children } = props;
-
+export const NavigationProvider: FC<NavigationProviderProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(initialValue.isOpen);
 
   const value = useMemo(

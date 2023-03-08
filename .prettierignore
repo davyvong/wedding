@@ -3,7 +3,6 @@ node_modules/
 
 # Environment
 .env*
-!.env
 
 # Logs
 *.log
@@ -14,6 +13,9 @@ node_modules/
 
 # Operating System
 .DS_Store
+
+# TypeScript
+tsconfig.json
 
 # Vercel
 .vercel/

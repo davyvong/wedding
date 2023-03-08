@@ -1,11 +1,12 @@
-import type { FC, MouseEventHandler } from 'react';
+import Transition from 'components/transition';
+import type { FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import CookieBannerComponent from './component';
 
 const CookieBanner: FC = () => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const bannerRef = useRef<HTMLDivElement>(null);
+
   const [hasPreferences, setHasPreferences] = useState<boolean>(true);
 
   const closeBanner = useCallback(() => {
@@ -13,38 +14,14 @@ const CookieBanner: FC = () => {
     setHasPreferences(true);
   }, []);
 
-  const openModal = useCallback<MouseEventHandler<HTMLAnchorElement>>(event => {
-    event.stopPropagation();
-    setIsOpen(true);
-  }, []);
-
   useEffect(() => {
     setHasPreferences(!!window.localStorage.getItem('cookies'));
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      const modalNode = modalRef.current;
-      const onClick = event => {
-        if (!modalNode?.contains(event.target)) {
-          closeBanner();
-        }
-      };
-      window.addEventListener('click', onClick);
-      return () => {
-        window.removeEventListener('click', onClick);
-      };
-    }
-  }, [closeBanner, isOpen]);
-
   return (
-    <CookieBannerComponent
-      closeBanner={closeBanner}
-      hasPreferences={hasPreferences}
-      isOpen={isOpen}
-      modalRef={modalRef}
-      openModal={openModal}
-    />
+    <Transition isIn={!hasPreferences} ref={bannerRef}>
+      <CookieBannerComponent closeBanner={closeBanner} />
+    </Transition>
   );
 };
 

@@ -10,3 +10,13 @@ export const isTouchDevice = (): boolean => {
     (navigator.msMaxTouchPoints !== undefined && navigator.msMaxTouchPoints > 0)
   );
 };
+
+export const isCSSSupported = (property: string, value: string): boolean => {
+  if (!isBrowser()) {
+    return false;
+  }
+  if (!window.CSS) {
+    return false;
+  }
+  return window.CSS.supports(property, value);
+};

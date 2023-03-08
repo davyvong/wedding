@@ -1,0 +1,32 @@
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  50% {
+    scale: 1 1.5;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+.backdrop {
+  align-items: center;
+  filter: blur(7rem);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.blob {
+  animation: rotate 30s infinite;
+  background: linear-gradient(217deg, var(--pale-dogwood), rgba(255, 0, 0, 0) 70.71%),
+    linear-gradient(127deg, var(--persian-orange), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, var(--brown-sugar), rgba(0, 0, 255, 0) 70.71%);
+  height: 100%;
+  transition: border-radius 3000ms ease-in-out;
+  width: 100%;
+}
