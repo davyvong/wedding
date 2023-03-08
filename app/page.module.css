@@ -1,14 +1,16 @@
 .hero {
-  padding: 2rem 10rem;
+  margin: 0 auto;
+  max-width: 1920px;
+  padding: 1.5rem;
   position: relative;
   width: 100%;
 }
 
 .saveTheDate {
   color: var(--primary);
-  margin: 0 auto;
+  margin: 4rem auto 0 auto;
   resize: both;
-  width: 60%;
+  width: 80%;
 }
 
 .saveTheDate svg {
@@ -28,11 +30,51 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  padding-top: 42%;
+  padding-top: 150%;
   position: relative;
   width: 100%;
 }
 
 .image {
   object-fit: cover;
+}
+
+@media (min-width: 425px) {
+  .saveTheDate {
+    width: 70%;
+  }
+}
+
+@media (min-width: 768px) {
+  .saveTheDate {
+    width: 60%;
+  }
+
+  .figure {
+    padding-top: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 2.5rem;
+  }
+
+  .saveTheDate {
+    width: 50%;
+  }
+
+  .figure {
+    padding-top: 60%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .cover {
+    margin-top: 2rem;
+  }
+
+  .figure {
+    padding-top: 50%;
+  }
 }
