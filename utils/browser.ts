@@ -11,7 +11,7 @@ export const isTouchDevice = (): boolean => {
   );
 };
 
-export const isCSSSupported = (property: string, value: string): boolean => {
+export const isStyleSupported = (property: string, value: string): boolean => {
   if (!isBrowser()) {
     return false;
   }

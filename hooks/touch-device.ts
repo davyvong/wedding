@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { isTouchDevice as isTouchDeviceUtil } from 'utils/browser';
+import { isTouchDevice } from 'utils/browser';
 
 const useTouchDevice = (): boolean => {
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [hasTouch, setHasTouch] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setIsTouchDevice(isTouchDeviceUtil);
+      setHasTouch(isTouchDevice);
     }, 500);
     return () => {
       clearInterval(intervalId);
     };
   }, []);
 
-  return isTouchDevice;
+  return hasTouch;
 };
 
 export default useTouchDevice;
