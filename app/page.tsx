@@ -1,47 +1,26 @@
 'use client';
 
-// https://danmarshall.github.io/google-font-to-svg-path/
-
-import SaveTheDateSVG from 'assets/images/save-the-date2.svg';
-import Ticker from 'components/ticker';
-import useTranslate from 'hooks/translate';
-import Image from 'next/image';
-import { Fragment, useMemo } from 'react';
+import classNames from 'classnames';
+import Gallery from 'components/gallery';
+import SaveTheDate from 'components/save-the-date';
+import galleryItems from 'constants/gallery-items.json';
+import useTouchDevice from 'hooks/touch-device';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
 
 const Page: FC = () => {
-  const t = useTranslate();
-
-  const detailsTicker = useMemo(
-    () => [
-      { key: 'date', style: { fontWeight: '600' }, text: t('components.ticker.details.date') },
-      { key: 'location', text: t('components.ticker.details.location') },
-    ],
-    [t],
-  );
+  const isTouchDevice = useTouchDevice();
 
   return (
-    <Fragment>
-      <div className={styles.hero}>
-        <div className={styles.saveTheDate}>
-          <SaveTheDateSVG />
-        </div>
-        <Ticker data={detailsTicker} />
-        <div className={styles.cover}>
-          <figure className={styles.figure}>
-            <Image
-              alt=""
-              className={styles.image}
-              fill
-              priority
-              src="https://collidephotography.ca/wp-content/uploads/2022/06/Toronto_wedding_photographer-3-scaled.jpg"
-            />
-          </figure>
-        </div>
+    <div className={classNames(styles.container, isTouchDevice && styles.containerTouch)}>
+      <div className={classNames(styles.section, styles.saveTheDate, isTouchDevice && styles.saveTheDateTouch)}>
+        <SaveTheDate />
       </div>
-    </Fragment>
+      <div className={styles.section}>
+        <Gallery data={galleryItems} />
+      </div>
+    </div>
   );
 };
 

@@ -1,80 +1,37 @@
-.hero {
-  margin: 0 auto;
-  max-width: 1920px;
-  padding: 1.5rem;
-  position: relative;
-  width: 100%;
-}
-
 .saveTheDate {
-  color: var(--primary);
-  margin: 4rem auto 0 auto;
-  resize: both;
-  width: 80%;
-}
-
-.saveTheDate svg {
-  height: 100%;
-  width: 100%;
-}
-
-.cover {
-  margin-top: 1.5rem;
-}
-
-.figure {
-  align-items: flex-start;
-  background-color: var(--champagne);
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  padding-top: 150%;
-  position: relative;
-  width: 100%;
-}
-
-.image {
-  object-fit: cover;
-}
-
-@media (min-width: 425px) {
-  .saveTheDate {
-    width: 70%;
-  }
-}
-
-@media (min-width: 768px) {
-  .saveTheDate {
-    width: 60%;
-  }
-
-  .figure {
-    padding-top: 80%;
-  }
+  height: calc(100vh - 4rem);
 }
 
 @media (min-width: 1024px) {
-  .hero {
-    padding: 2.5rem;
+  .container {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .containerTouch {
+    height: auto;
+    overflow: auto;
+    width: auto;
   }
 
   .saveTheDate {
-    width: 50%;
+    height: auto;
   }
 
-  .figure {
-    padding-top: 60%;
-  }
-}
-
-@media (min-width: 1440px) {
-  .cover {
-    margin-top: 2rem;
+  .saveTheDateTouch {
+    position: sticky;
+    top: 0;
   }
 
-  .figure {
-    padding-top: 50%;
+  .section {
+    flex: 1;
+  }
+
+  .section:not(:first-child) {
+    background-color: var(--white);
+    padding-right: 2rem;
   }
 }

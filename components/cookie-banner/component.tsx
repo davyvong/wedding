@@ -1,27 +1,26 @@
 import useTranslate from 'hooks/translate';
-import type { CSSProperties, FC, RefObject } from 'react';
 import { forwardRef } from 'react';
+import type { CSSProperties, FC, MouseEventHandler, RefObject } from 'react';
 
 import styles from './component.module.css';
 
 interface CookieBannerProps {
   closeBanner: () => void;
+  openModal: MouseEventHandler<HTMLAnchorElement>;
   style?: CSSProperties;
 }
 
 const CookieBannerComponent: FC<CookieBannerProps> = forwardRef(
-  ({ closeBanner, style }, ref: RefObject<HTMLDivElement>) => {
+  ({ closeBanner, openModal, style }, ref: RefObject<HTMLDivElement>) => {
     const t = useTranslate();
 
     return (
       <div className={styles.banner} ref={ref} style={style}>
-        <p className={styles.description}>
+        <p>
           {t('components.cookie-banner.description') + ' '}
-          <a>{t('components.cookie-banner.learn-more')}</a>
+          <a onClick={openModal}>{t('components.cookie-banner.learn-more')}</a>
         </p>
-        <button className={styles.button} onClick={closeBanner}>
-          {t('components.cookie-banner.ok')}
-        </button>
+        <button className={styles.closeButton} onClick={closeBanner} />
       </div>
     );
   },
