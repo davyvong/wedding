@@ -4,20 +4,13 @@ import 'minireset.css';
 
 import './globals.css';
 
-import ColorfulBackdrop from 'components/colorful-backdrop';
-import CookieBanner from 'components/cookie-banner';
 import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
-import { Roboto } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import type { FC, ReactNode } from 'react';
 
-import styles from './layout.module.css';
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['300', '400', '700'],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 interface LayoutProps {
   children: ReactNode;
@@ -34,11 +27,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           <meta content="width=device-width, initial-scale=1" name="viewport" />
           <title>{t('app.layout.title')}</title>
         </head>
-        <body className={roboto.className}>
-          <ColorfulBackdrop />
-          <main className={styles.main}>{children}</main>
-          <CookieBanner />
-          <Navigation />
+        <body className={inter.className}>
+          <Navigation>{children}</Navigation>
         </body>
       </html>
     </NavigationProvider>

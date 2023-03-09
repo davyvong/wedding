@@ -1,5 +1,5 @@
 import Transition from 'components/transition';
-import useCSSSupport from 'hooks/css-support';
+import useStyleSupport from 'hooks/style-support';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 
@@ -24,10 +24,10 @@ const ColorfulBackdrop = () => {
   }, []);
 
   const [blobStyle, setBlobStyle] = useState<CSSProperties>({ borderRadius: '0%' });
-  const hasFilterSupport = useCSSSupport('filter', 'blur(7rem)');
+  const isFilterSupported = useStyleSupport('filter', 'blur(7rem)');
 
   useEffect(() => {
-    if (hasFilterSupport) {
+    if (isFilterSupported) {
       const intervalId = setInterval(() => {
         setBlobStyle(generateBlobStyle());
       }, 3000);
@@ -35,10 +35,10 @@ const ColorfulBackdrop = () => {
         clearInterval(intervalId);
       };
     }
-  }, [generateBlobStyle, hasFilterSupport]);
+  }, [generateBlobStyle, isFilterSupported]);
 
   return (
-    <Transition isIn={hasFilterSupport} ref={backdropRef}>
+    <Transition isIn={isFilterSupported} ref={backdropRef}>
       <ColorfulBackdropComponent blobStyle={blobStyle} />
     </Transition>
   );

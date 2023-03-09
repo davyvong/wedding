@@ -1,47 +1,52 @@
 'use client';
 
-// https://danmarshall.github.io/google-font-to-svg-path/
-
-import SaveTheDateSVG from 'assets/images/save-the-date2.svg';
-import Ticker from 'components/ticker';
-import useTranslate from 'hooks/translate';
-import Image from 'next/image';
-import { Fragment, useMemo } from 'react';
+import classNames from 'classnames';
+import Gallery from 'components/gallery';
+import SaveTheDate from 'components/save-the-date';
+import useTouchDevice from 'hooks/touch-device';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
 
-const Page: FC = () => {
-  const t = useTranslate();
+const gallery = [
+  {
+    aspectRatio: 1.25,
+    image: 'https://images.unsplash.com/photo-1525258946800-98cfd641d0de?auto=format&fit=crop&w=2787&q=80',
+  },
+  {
+    aspectRatio: 1.5,
+    image: 'https://images.unsplash.com/photo-1481980235850-66e47651e431?auto=format&fit=crop&w=2788&q=80',
+  },
+  {
+    aspectRatio: 1.75,
+    image: 'https://images.unsplash.com/photo-1519307212971-dd9561667ffb?auto=format&fit=crop&w=2787&q=80',
+  },
+  {
+    aspectRatio: 1.25,
+    image: 'https://images.unsplash.com/photo-1501924533620-645533f7d622?auto=format&fit=crop&w=2669&q=80',
+  },
+  {
+    aspectRatio: 1.5,
+    image: 'https://images.unsplash.com/photo-1527628173875-3c7bfd28ad78?auto=format&fit=crop&w=2787&q=80',
+  },
+  {
+    aspectRatio: 1.75,
+    image: 'https://images.unsplash.com/photo-1484849757660-7c00c60726b6?auto=format&fit=crop&w=2787&q=80',
+  },
+];
 
-  const detailsTicker = useMemo(
-    () => [
-      { key: 'date', style: { fontWeight: '600' }, text: t('components.ticker.details.date') },
-      { key: 'location', text: t('components.ticker.details.location') },
-    ],
-    [t],
-  );
+const Page: FC = () => {
+  const isTouchDevice = useTouchDevice();
 
   return (
-    <Fragment>
-      <div className={styles.hero}>
-        <div className={styles.saveTheDate}>
-          <SaveTheDateSVG />
-        </div>
-        <Ticker data={detailsTicker} />
-        <div className={styles.cover}>
-          <figure className={styles.figure}>
-            <Image
-              alt=""
-              className={styles.image}
-              fill
-              priority
-              src="https://collidephotography.ca/wp-content/uploads/2022/06/Toronto_wedding_photographer-3-scaled.jpg"
-            />
-          </figure>
-        </div>
+    <div className={classNames(styles.container, isTouchDevice && styles.containerTouch)}>
+      <div className={classNames(styles.section, styles.saveTheDate, isTouchDevice && styles.saveTheDateTouch)}>
+        <SaveTheDate />
       </div>
-    </Fragment>
+      <div className={styles.section}>
+        <Gallery data={gallery} />
+      </div>
+    </div>
   );
 };
 
