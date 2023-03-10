@@ -19,11 +19,10 @@ export interface GalleryItem {
 
 interface GalleryProps {
   data: GalleryItem[];
+  numColumns?: number;
 }
 
-const Gallery: FC<GalleryProps> = props => {
-  const { data = [] } = props;
-
+const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
   const isTouchDevice = useTouchDevice();
   const isLaptopWidth = useMediaQuery('(min-width: 1024px)');
   const navigation = useNavigation();
@@ -31,23 +30,28 @@ const Gallery: FC<GalleryProps> = props => {
   const animationRef = useRef<anime.AnimeInstance>();
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
   const playTimeoutRef = useRef<NodeJS.Timeout>();
-  const translateY = useRef<number>();
 
   const dataInColumns = useMemo((): GalleryItem[][] => {
     const groups: GalleryItem[][] = [];
+    const height: number[] = [];
     for (let i = 0; i < data.length; i++) {
-      const column = i % 2;
+      let column = i % numColumns;
+      if (i >= numColumns) {
+        column = height.indexOf(Math.min(...height));
+      }
       if (!Array.isArray(groups[column])) {
         groups[column] = [];
+        height[column] = 0;
       }
       const datum = { ...data[i] };
       if (groups[column].length < 2) {
         datum.priority = true;
       }
       groups[column].push(datum);
+      height[column] += datum.aspectRatio;
     }
     return groups;
-  }, [data]);
+  }, [data, numColumns]);
 
   useEffect(() => {
     if (isTouchDevice || !isLaptopWidth) {
@@ -76,7 +80,6 @@ const Gallery: FC<GalleryProps> = props => {
       if (!container) {
         return;
       }
-      translateY.current = window.innerHeight - container.clientHeight + 1;
       animationRef.current = anime({
         autoplay: false,
         complete: (): void => {
@@ -84,11 +87,14 @@ const Gallery: FC<GalleryProps> = props => {
             animationRef.current.completed = false;
           }
         },
-        duration: (translateY.current / 30) * -1000,
+        duration: (): number => {
+          const translateY = window.innerHeight - container.clientHeight + 1;
+          return (translateY / 30) * -1000;
+        },
         easing: 'linear',
         loop: false,
         targets: '.' + styles.column,
-        translateY: [0, translateY.current],
+        translateY: (element: Element): number[] => [0, window.innerHeight - element.clientHeight + 1],
       });
       animationRef.current.play();
     }
@@ -103,7 +109,6 @@ const Gallery: FC<GalleryProps> = props => {
         if (!paused) {
           animationRef.current.pause();
         }
-        translateY.current = window.innerHeight - container.clientHeight + 1;
         anime.remove('.' + styles.column);
         animationRef.current = anime({
           autoplay: false,
@@ -112,11 +117,14 @@ const Gallery: FC<GalleryProps> = props => {
               animationRef.current.completed = false;
             }
           },
-          duration: (translateY.current / 30) * -1000,
+          duration: (): number => {
+            const translateY = window.innerHeight - container.clientHeight + 1;
+            return (translateY / 30) * -1000;
+          },
           easing: 'linear',
           loop: false,
           targets: '.' + styles.column,
-          translateY: [0, translateY.current],
+          translateY: (element: Element): number[] => [0, window.innerHeight - element.clientHeight + 1],
         });
         animationRef.current.seek((progress / 100) * animationRef.current.duration);
         if (!paused) {
@@ -150,12 +158,14 @@ const Gallery: FC<GalleryProps> = props => {
     }
     const onWheel = (event: WheelEvent): void => {
       clearTimeout(playTimeoutRef.current);
-      if (!animationRef.current || !translateY.current) {
+      const container = document.querySelector('.' + styles.container);
+      if (!animationRef.current || !container) {
         return;
       }
       animationRef.current.pause();
-      const deltaDuration = (event.deltaY / Math.abs(translateY.current)) * animationRef.current.duration;
-      let nextDuration = animationRef.current.currentTime + deltaDuration;
+      const translateY = window.innerHeight - container.clientHeight + 1;
+      const durationDelta = (event.deltaY / Math.abs(translateY)) * animationRef.current.duration;
+      let nextDuration = animationRef.current.currentTime + durationDelta;
       nextDuration = Math.max(0, Math.min(animationRef.current.duration, nextDuration));
       animationRef.current.seek(nextDuration);
       if (animationRef.current.progress < 100) {
@@ -173,7 +183,7 @@ const Gallery: FC<GalleryProps> = props => {
     };
   }, [isLaptopWidth, isTouchDevice, navigation.isOpen]);
 
-  return <GalleryComponent {...props} data={dataInColumns} />;
+  return <GalleryComponent data={dataInColumns} />;
 };
 
 export default Gallery;

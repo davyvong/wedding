@@ -9,9 +9,7 @@ interface GalleryComponentProps {
   data: GalleryItem[][];
 }
 
-const GalleryComponent: FC<GalleryComponentProps> = props => {
-  const { data = [], ...containerProps } = props;
-
+const GalleryComponent: FC<GalleryComponentProps> = ({ data = [], ...containerProps }) => {
   const renderItem = useCallback(
     ({ aspectRatio, image, priority, subtitle, title, ...cardProps }: GalleryItem, index: number): ReactNode => {
       const style = {

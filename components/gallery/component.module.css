@@ -19,6 +19,7 @@
 
 .column {
   flex: 1;
+  height: 100%;
 }
 
 .column:not(:first-child) {
