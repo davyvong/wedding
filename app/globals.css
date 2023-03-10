@@ -11,6 +11,31 @@
   --primary: var(--rust);
 }
 
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar:hover {
+  background-color: rgba(188, 98, 62, 0.09);
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(188, 98, 62, 0.5);
+  border-radius: 0.25rem;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(188, 98, 62, 0.61);
+}
+
 html {
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;

@@ -50,13 +50,14 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
   useEffect(() => {
     timelineRef.current = gsap.timeline({
       scrollTrigger: {
-        start: 'start start',
         end: (): string => {
           const container = document.querySelector('.' + styles.container) as Element;
           return '+=' + (container.clientHeight - window.innerHeight - 1);
         },
+        invalidateOnRefresh: true,
         scroller: document.querySelector('.' + navigationStyles.content),
         scrub: true,
+        start: 'start start',
         trigger: '.' + styles.container,
       },
     });
