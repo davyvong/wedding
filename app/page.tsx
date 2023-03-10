@@ -3,7 +3,6 @@
 import classNames from 'classnames';
 import Gallery from 'components/gallery';
 import SaveTheDate from 'components/save-the-date';
-import useTouchDevice from 'hooks/touch-device';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
@@ -35,19 +34,15 @@ const gallery = [
   },
 ];
 
-const Page: FC = () => {
-  const isTouchDevice = useTouchDevice();
-
-  return (
-    <div className={classNames(styles.container, isTouchDevice && styles.containerTouch)}>
-      <div className={classNames(styles.section, styles.saveTheDate, isTouchDevice && styles.saveTheDateTouch)}>
-        <SaveTheDate />
-      </div>
-      <div className={styles.section}>
-        <Gallery data={gallery} />
-      </div>
+const Page: FC = () => (
+  <div className={styles.container}>
+    <div className={classNames(styles.section, styles.saveTheDate)}>
+      <SaveTheDate />
     </div>
-  );
-};
+    <div className={styles.section}>
+      <Gallery data={gallery} />
+    </div>
+  </div>
+);
 
 export default Page;

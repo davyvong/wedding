@@ -1,27 +1,14 @@
 .saveTheDate {
-  height: calc(100vh - 4rem);
+  height: 100vh;
 }
 
 @media (min-width: 1024px) {
   .container {
     display: flex;
     flex-direction: row-reverse;
-    height: 100%;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .containerTouch {
-    height: auto;
-    overflow: auto;
-    width: auto;
   }
 
   .saveTheDate {
-    height: auto;
-  }
-
-  .saveTheDateTouch {
     position: sticky;
     top: 0;
   }
