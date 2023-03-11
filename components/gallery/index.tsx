@@ -2,6 +2,7 @@ import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import useMediaQuery from 'hooks/media-query';
 import { useEffect, useMemo, useRef } from 'react';
 import type { FC } from 'react';
 
@@ -25,6 +26,8 @@ interface GalleryProps {
 }
 
 const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
   const timelineRef = useRef<gsap.core.Timeline>();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -51,6 +54,13 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
   }, [data, numColumns]);
 
   useEffect(() => {
+    if (!isDesktop) {
+      const tweens = gsap.getTweensOf('.' + navigationStyles.content);
+      for (const tween of tweens) {
+        tween.kill();
+      }
+      timelineRef.current?.seek(0);
+    }
     timelineRef.current = gsap.timeline({
       scrollTrigger: {
         end: (): string => {
@@ -71,6 +81,9 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
       },
     });
     const setAutoScroll = () => {
+      if (!isDesktop) {
+        return;
+      }
       gsap.to('.' + navigationStyles.content, {
         duration: () => {
           const content = document.querySelector('.' + navigationStyles.content) as Element;
@@ -79,6 +92,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
           return 30 * progress;
         },
         ease: 'none',
+        overwrite: true,
         scrollTo: {
           autoKill: true,
           y: 'max',
@@ -97,7 +111,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
       clearTimeout(timeoutRef.current);
       content?.removeEventListener('scroll', onScroll);
     };
-  }, []);
+  }, [isDesktop]);
 
   return <GalleryComponent data={dataInColumns} />;
 };
