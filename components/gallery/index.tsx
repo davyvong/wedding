@@ -1,5 +1,6 @@
 import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
+import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useEffect, useMemo, useRef } from 'react';
 import type { FC } from 'react';
@@ -7,6 +8,7 @@ import type { FC } from 'react';
 import GalleryComponent from './component';
 import styles from './component.module.css';
 
+gsap.registerPlugin(ScrollToPlugin);
 gsap.registerPlugin(ScrollTrigger);
 
 export interface GalleryItem {
@@ -24,6 +26,7 @@ interface GalleryProps {
 
 const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
   const timelineRef = useRef<gsap.core.Timeline>();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
   const dataInColumns = useMemo((): GalleryItem[][] => {
     const groups: GalleryItem[][] = [];
@@ -67,10 +70,32 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
         return container.clientHeight - column.clientHeight;
       },
     });
+    const setAutoScroll = () => {
+      gsap.to('.' + navigationStyles.content, {
+        duration: () => {
+          const content = document.querySelector('.' + navigationStyles.content) as Element;
+          const container = document.querySelector('.' + styles.container) as Element;
+          const progress = (container.clientHeight - content.scrollTop) / container.clientHeight;
+          return 30 * progress;
+        },
+        ease: 'none',
+        scrollTo: {
+          autoKill: true,
+          y: 'max',
+        },
+      });
+    };
+    timeoutRef.current = setTimeout(setAutoScroll, 3000);
+    const onScroll = () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(setAutoScroll, 3000);
+    };
+    const content = document.querySelector('.' + navigationStyles.content);
+    content?.addEventListener('scroll', onScroll);
     return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-      }
+      timelineRef.current?.kill();
+      clearTimeout(timeoutRef.current);
+      content?.removeEventListener('scroll', onScroll);
     };
   }, []);
 

@@ -42,7 +42,6 @@ html {
   font-size: 87.5%;
   height: 100%;
   overflow: hidden;
-  scroll-behavior: smooth;
   width: 100%;
 }
 
