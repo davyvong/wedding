@@ -10,22 +10,18 @@ interface NavigationComponentProps {
   toggle: () => void;
 }
 
-const NavigationComponent: FC<NavigationComponentProps> = props => {
-  const { children, isOpen, toggle } = props;
-
-  return (
-    <Fragment>
-      <div className={classNames(styles.content, isOpen && styles.contentOpen)} onClick={isOpen ? toggle : undefined}>
-        {children}
-      </div>
-      <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
-      <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonClose)} onClick={toggle}>
-        <span className={styles.toggleButtonLine1} />
-        <span className={styles.toggleButtonLine2} />
-        <span className={styles.toggleButtonLine3} />
-      </button>
-    </Fragment>
-  );
-};
+const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, toggle }) => (
+  <Fragment>
+    <div className={classNames(styles.content, isOpen && styles.contentOpen)} onClick={isOpen ? toggle : undefined}>
+      {children}
+    </div>
+    <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
+    <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonClose)} onClick={toggle}>
+      <span className={styles.toggleButtonLine1} />
+      <span className={styles.toggleButtonLine2} />
+      <span className={styles.toggleButtonLine3} />
+    </button>
+  </Fragment>
+);
 
 export default NavigationComponent;

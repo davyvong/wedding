@@ -1,13 +1,16 @@
-import anime from 'animejs';
-import pageStyles from 'app/page.module.css';
+import navigationStyles from 'components/navigation/component.module.css';
+import gsap from 'gsap';
+import ScrollToPlugin from 'gsap/ScrollToPlugin';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import useMediaQuery from 'hooks/media-query';
-import useNavigation from 'hooks/navigation';
-import useTouchDevice from 'hooks/touch-device';
 import { useEffect, useMemo, useRef } from 'react';
 import type { FC } from 'react';
 
 import GalleryComponent from './component';
 import styles from './component.module.css';
+
+gsap.registerPlugin(ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger);
 
 export interface GalleryItem {
   aspectRatio: number;
@@ -19,161 +22,98 @@ export interface GalleryItem {
 
 interface GalleryProps {
   data: GalleryItem[];
+  numColumns?: number;
 }
 
-const Gallery: FC<GalleryProps> = props => {
-  const { data = [] } = props;
+const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
 
-  const isTouchDevice = useTouchDevice();
-  const isLaptopWidth = useMediaQuery('(min-width: 1024px)');
-  const navigation = useNavigation();
-
-  const animationRef = useRef<anime.AnimeInstance>();
-  const resizeTimeoutRef = useRef<NodeJS.Timeout>();
-  const playTimeoutRef = useRef<NodeJS.Timeout>();
-  const translateY = useRef<number>();
+  const timelineRef = useRef<gsap.core.Timeline>();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
   const dataInColumns = useMemo((): GalleryItem[][] => {
     const groups: GalleryItem[][] = [];
+    const height: number[] = [];
     for (let i = 0; i < data.length; i++) {
-      const column = i % 2;
+      let column = i % numColumns;
+      if (i >= numColumns) {
+        column = height.indexOf(Math.min(...height));
+      }
       if (!Array.isArray(groups[column])) {
         groups[column] = [];
+        height[column] = 0;
       }
       const datum = { ...data[i] };
       if (groups[column].length < 2) {
         datum.priority = true;
       }
       groups[column].push(datum);
+      height[column] += datum.aspectRatio;
     }
     return groups;
-  }, [data]);
+  }, [data, numColumns]);
 
   useEffect(() => {
-    if (isTouchDevice || !isLaptopWidth) {
-      clearTimeout(resizeTimeoutRef.current);
-      clearTimeout(playTimeoutRef.current);
-      anime.remove('.' + styles.column);
-      const columns: NodeListOf<HTMLElement> = document.querySelectorAll('.' + styles.column);
-      for (const column of columns) {
-        column.style.transform = '';
+    if (!isDesktop) {
+      const tweens = gsap.getTweensOf('.' + navigationStyles.content);
+      for (const tween of tweens) {
+        tween.kill();
       }
-      const page = document.querySelector('.' + pageStyles.container);
-      if (page) {
-        page.scrollTop = 0;
-      }
-      if (animationRef.current) {
-        animationRef.current = undefined;
-      }
-      return () => {};
+      timelineRef.current?.seek(0);
     }
-    if (!animationRef.current) {
-      const page = document.querySelector('.' + pageStyles.container);
-      if (page) {
-        page.scrollTop = 0;
-      }
-      const container = document.querySelector('.' + styles.container);
-      if (!container) {
-        return;
-      }
-      translateY.current = window.innerHeight - container.clientHeight + 1;
-      animationRef.current = anime({
-        autoplay: false,
-        complete: (): void => {
-          if (animationRef.current) {
-            animationRef.current.completed = false;
-          }
+    timelineRef.current = gsap.timeline({
+      scrollTrigger: {
+        end: (): string => {
+          const container = document.querySelector('.' + styles.container) as Element;
+          return '+=' + (container.clientHeight - window.innerHeight - 1);
         },
-        duration: (translateY.current / 30) * -1000,
-        easing: 'linear',
-        loop: false,
-        targets: '.' + styles.column,
-        translateY: [0, translateY.current],
-      });
-      animationRef.current.play();
-    }
-    const onResize = (): void => {
-      clearTimeout(resizeTimeoutRef.current);
-      resizeTimeoutRef.current = setTimeout(() => {
-        const container = document.querySelector('.' + styles.container);
-        if (!animationRef.current || !container) {
-          return;
-        }
-        const { paused, progress } = animationRef.current;
-        if (!paused) {
-          animationRef.current.pause();
-        }
-        translateY.current = window.innerHeight - container.clientHeight + 1;
-        anime.remove('.' + styles.column);
-        animationRef.current = anime({
-          autoplay: false,
-          complete: () => {
-            if (animationRef.current) {
-              animationRef.current.completed = false;
-            }
-          },
-          duration: (translateY.current / 30) * -1000,
-          easing: 'linear',
-          loop: false,
-          targets: '.' + styles.column,
-          translateY: [0, translateY.current],
-        });
-        animationRef.current.seek((progress / 100) * animationRef.current.duration);
-        if (!paused) {
-          animationRef.current.play();
-        }
-      }, 500);
-    };
-    window.addEventListener('resize', onResize);
-    return (): void => {
-      window.removeEventListener('resize', onResize);
-      clearTimeout(resizeTimeoutRef.current);
-    };
-  }, [isLaptopWidth, isTouchDevice]);
-
-  useEffect(() => {
-    clearTimeout(playTimeoutRef.current);
-    if (isTouchDevice || !isLaptopWidth) {
-      clearTimeout(resizeTimeoutRef.current);
-      anime.remove('.' + styles.column);
-      if (animationRef.current) {
-        animationRef.current = undefined;
-      }
-      return (): void => {};
-    }
-    if (animationRef.current) {
-      if (navigation.isOpen) {
-        animationRef.current.pause();
-      } else if (animationRef.current.progress < 100) {
-        playTimeoutRef.current = setTimeout(animationRef.current.play, 3000);
-      }
-    }
-    const onWheel = (event: WheelEvent): void => {
-      clearTimeout(playTimeoutRef.current);
-      if (!animationRef.current || !translateY.current) {
+        invalidateOnRefresh: true,
+        scroller: document.querySelector('.' + navigationStyles.content),
+        scrub: true,
+        start: 'start start',
+        trigger: '.' + styles.container,
+      },
+    });
+    timelineRef.current.to('.' + styles.column, {
+      y: (index: number, column: Element) => {
+        const container = document.querySelector('.' + styles.container) as Element;
+        return container.clientHeight - column.clientHeight;
+      },
+    });
+    const setAutoScroll = () => {
+      if (!isDesktop) {
         return;
       }
-      animationRef.current.pause();
-      const deltaDuration = (event.deltaY / Math.abs(translateY.current)) * animationRef.current.duration;
-      let nextDuration = animationRef.current.currentTime + deltaDuration;
-      nextDuration = Math.max(0, Math.min(animationRef.current.duration, nextDuration));
-      animationRef.current.seek(nextDuration);
-      if (animationRef.current.progress < 100) {
-        playTimeoutRef.current = setTimeout(animationRef.current.play, 3000);
-      }
+      gsap.to('.' + navigationStyles.content, {
+        duration: () => {
+          const content = document.querySelector('.' + navigationStyles.content) as Element;
+          const container = document.querySelector('.' + styles.container) as Element;
+          const progress = (container.clientHeight - content.scrollTop) / container.clientHeight;
+          return 30 * progress;
+        },
+        ease: 'none',
+        overwrite: true,
+        scrollTo: {
+          autoKill: true,
+          y: 'max',
+        },
+      });
     };
-    if (!navigation.isOpen) {
-      window.addEventListener('wheel', onWheel);
-    }
+    timeoutRef.current = setTimeout(setAutoScroll, 3000);
+    const onScroll = () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(setAutoScroll, 3000);
+    };
+    const content = document.querySelector('.' + navigationStyles.content);
+    content?.addEventListener('scroll', onScroll);
     return () => {
-      if (!navigation.isOpen) {
-        window.removeEventListener('wheel', onWheel);
-      }
-      clearTimeout(playTimeoutRef.current);
+      timelineRef.current?.kill();
+      clearTimeout(timeoutRef.current);
+      content?.removeEventListener('scroll', onScroll);
     };
-  }, [isLaptopWidth, isTouchDevice, navigation.isOpen]);
+  }, [isDesktop]);
 
-  return <GalleryComponent {...props} data={dataInColumns} />;
+  return <GalleryComponent data={dataInColumns} />;
 };
 
 export default Gallery;
