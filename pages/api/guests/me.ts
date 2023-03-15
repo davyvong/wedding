@@ -13,17 +13,12 @@ const handler = async (request: NextApiRequestWithToken, response: NextApiRespon
       return;
     }
     const db = await getMongoDatabase();
-    const collection = db.collection('guests');
-    const doc = await collection.findOne({ _id: new ObjectId(request.token.id) });
+    const doc = await db.collection('guests').findOne({ _id: new ObjectId(request.token.id) });
     if (!doc) {
       response.status(401).end();
       return;
     }
-    response.status(200).json({
-      email: doc.email,
-      name: doc.name,
-      permissions: doc.permissions,
-    });
+    response.status(200).json(doc);
   } catch (error) {
     console.log(error);
     response.status(500).end();

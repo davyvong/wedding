@@ -22,8 +22,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       return;
     }
     const db = await getMongoDatabase();
-    const collection = db.collection('guests');
-    const doc = await collection.findOne({ _id: new ObjectId(cachedGuestId) });
+    const doc = await db.collection('guests').findOne({ _id: new ObjectId(cachedGuestId) });
     if (!doc) {
       response.status(400).end();
       return;
