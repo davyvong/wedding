@@ -12,4 +12,4 @@ export const getRedisClient = async () => {
   return redisClient;
 };
 
-export const createRedisKey = (...keys: string[]): string => process.env.NEXT_PUBLIC_VERCEL_ENV + ':' + keys.join(':');
+export const createRedisKey = (...keys: string[]): string => process.env.VERCEL_ENV + ':' + keys.join(':');

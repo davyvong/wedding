@@ -15,12 +15,16 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
     <div className={classNames(styles.content, isOpen && styles.contentOpen)} onClick={isOpen ? toggle : undefined}>
       {children}
     </div>
-    <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
-    <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
-      <span className={styles.toggleButtonLine1} />
-      <span className={styles.toggleButtonLine2} />
-      <span className={styles.toggleButtonLine3} />
-    </button>
+    {process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' && (
+      <Fragment>
+        <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
+        <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
+          <span className={styles.toggleButtonLine1} />
+          <span className={styles.toggleButtonLine2} />
+          <span className={styles.toggleButtonLine3} />
+        </button>
+      </Fragment>
+    )}
   </Fragment>
 );
 
