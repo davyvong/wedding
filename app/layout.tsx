@@ -20,18 +20,18 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const t = useTranslate();
 
   return (
-    <NavigationProvider>
-      <html lang="en">
-        <head>
-          <link rel="icon" href="/favicon.ico" />
-          <meta content="width=device-width, initial-scale=1" name="viewport" />
-          <title>{t('app.layout.title')}</title>
-        </head>
-        <body className={inter.className}>
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <title>{t('app.layout.title')}</title>
+      </head>
+      <body className={inter.className}>
+        <NavigationProvider>
           <Navigation>{children}</Navigation>
-        </body>
-      </html>
-    </NavigationProvider>
+        </NavigationProvider>
+      </body>
+    </html>
   );
 };
 

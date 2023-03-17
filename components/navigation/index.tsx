@@ -1,3 +1,5 @@
+'use client';
+
 import useNavigation from 'hooks/navigation';
 import { useCallback } from 'react';
 import type { FC, ReactNode } from 'react';

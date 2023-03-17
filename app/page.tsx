@@ -1,5 +1,3 @@
-'use client';
-
 import classNames from 'classnames';
 import Gallery from 'components/gallery';
 import SaveTheDate from 'components/save-the-date';
