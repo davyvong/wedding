@@ -16,7 +16,7 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
       {children}
     </div>
     <div className={classNames(styles.menu, isOpen && styles.menuOpen)} />
-    <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonClose)} onClick={toggle}>
+    <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
       <span className={styles.toggleButtonLine1} />
       <span className={styles.toggleButtonLine2} />
       <span className={styles.toggleButtonLine3} />

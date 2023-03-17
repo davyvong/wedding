@@ -9,12 +9,12 @@
 
 .contentOpen {
   overflow: hidden;
-  transform: translateY(calc(-1 * max(30rem, 50vh) + 1px));
+  transform: translateY(-100vh);
 }
 
 .menu {
   background-color: var(--persian-orange);
-  height: max(30rem, 50vh);
+  height: 100vh;
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
   width: 100%;
@@ -22,7 +22,7 @@
 }
 
 .menuOpen {
-  transform: translateY(calc(-1 * max(30rem, 50vh)));
+  transform: translateY(-100vh);
 }
 
 .toggleButton {
@@ -48,33 +48,40 @@
   position: relative;
   top: 0;
   transform: rotate(0);
-  transition: top 300ms ease-in-out, transform 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out, top 300ms ease-in-out, transform 300ms ease-in-out;
 }
 
 .toggleButton .toggleButtonLine2 {
   opacity: 1;
-  transition: opacity 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out, opacity 300ms ease-in-out;
 }
 
 .toggleButton .toggleButtonLine3 {
   bottom: 0;
   position: relative;
   transform: rotate(0);
-  transition: bottom 300ms ease-in-out, transform 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out, bottom 300ms ease-in-out, transform 300ms ease-in-out;
 }
 
-.toggleButtonClose .toggleButtonLine1 {
+.toggleButtonActive span {
+  background-color: var(--white);
+}
+
+.toggleButtonActive .toggleButtonLine1 {
   top: 0.5rem;
   transform: rotate(45deg);
+  transition: background-color 300ms ease-in-out 600ms, top 300ms ease-in-out, transform 300ms ease-in-out;
 }
 
-.toggleButtonClose .toggleButtonLine2 {
+.toggleButtonActive .toggleButtonLine2 {
   opacity: 0;
+  transition: background-color 300ms ease-in-out 600ms, opacity 300ms ease-in-out;
 }
 
-.toggleButtonClose .toggleButtonLine3 {
+.toggleButtonActive .toggleButtonLine3 {
   bottom: 0.5rem;
   transform: rotate(-45deg);
+  transition: background-color 300ms ease-in-out 600ms, bottom 300ms ease-in-out, transform 300ms ease-in-out;
 }
 
 @media (min-width: 1024px) {
