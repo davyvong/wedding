@@ -23,9 +23,10 @@ export interface GalleryItem {
 interface GalleryProps {
   data: GalleryItem[];
   numColumns?: number;
+  scrollDuration?: number;
 }
 
-const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
+const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration = 30 }) => {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const navigation = useNavigation();
 
@@ -102,9 +103,9 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
       gsap.to('.' + navigationStyles.content, {
         duration: () => {
           const content = document.querySelector('.' + navigationStyles.content) as Element;
-          const container = document.querySelector('.' + styles.container) as Element;
-          const progress = (container.clientHeight - content.scrollTop) / container.clientHeight;
-          return 30 * progress;
+          const scrollHeight = content.scrollHeight - window.innerHeight;
+          const progress = (scrollHeight - content.scrollTop) / scrollHeight;
+          return scrollDuration * progress;
         },
         ease: 'none',
         overwrite: true,
@@ -125,7 +126,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2 }) => {
       clearTimeout(timeoutRef.current);
       content?.removeEventListener('scroll', onScroll);
     };
-  }, [isDesktop, navigation.isOpen]);
+  }, [isDesktop, navigation.isOpen, scrollDuration]);
 
   return <GalleryComponent data={dataInColumns} />;
 };
