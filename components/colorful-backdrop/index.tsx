@@ -1,3 +1,5 @@
+'use client';
+
 import Transition from 'components/transition';
 import useStyleSupport from 'hooks/style-support';
 import { useCallback, useEffect, useRef, useState } from 'react';
