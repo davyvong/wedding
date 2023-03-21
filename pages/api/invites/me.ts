@@ -2,6 +2,9 @@ import { ObjectId } from 'mongodb';
 import type { NextApiResponse } from 'next';
 import type { NextApiRequestWithToken } from 'server/jwt';
 import { applyToken } from 'server/jwt';
+import Guest from 'server/models/guest';
+import Invite from 'server/models/invite';
+import Response from 'server/models/response';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
 import { isObjectId } from 'utils/yup';
@@ -38,16 +41,6 @@ const handler = async (request: NextApiRequestWithToken, response: NextApiRespon
             foreignField: 'guest',
             from: 'responses',
             localField: 'guests._id',
-            pipeline: [
-              {
-                $limit: 1,
-              },
-              {
-                $match: {
-                  guest: new ObjectId(request.token.id),
-                },
-              },
-            ],
           },
         },
       ])
@@ -56,8 +49,12 @@ const handler = async (request: NextApiRequestWithToken, response: NextApiRespon
       response.status(401).end();
       return;
     }
-    const [invite] = aggregation;
-    response.status(200).json(invite);
+    const [doc] = aggregation;
+    response.status(200).json({
+      ...Invite.toJSON(doc),
+      guests: doc.guests.map(Guest.toJSON),
+      responses: doc.responses.map(Response.toJSON),
+    });
   } catch (error) {
     console.log(error);
     response.status(500).end();

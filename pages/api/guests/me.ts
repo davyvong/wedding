@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb';
 import type { NextApiResponse } from 'next';
 import type { NextApiRequestWithToken } from 'server/jwt';
 import { applyToken } from 'server/jwt';
+import Guest from 'server/models/guest';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
 import { isObjectId } from 'utils/yup';
@@ -18,7 +19,7 @@ const handler = async (request: NextApiRequestWithToken, response: NextApiRespon
       response.status(401).end();
       return;
     }
-    response.status(200).json(doc);
+    response.status(200).json(Guest.toJSON(doc));
   } catch (error) {
     console.log(error);
     response.status(500).end();
