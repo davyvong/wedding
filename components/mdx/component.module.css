@@ -1,0 +1,30 @@
+.mdx {
+  line-height: 2;
+  margin: 3rem auto;
+  max-width: 768px;
+  padding: 1.5rem;
+  word-wrap: break-word;
+}
+
+.mdx > *:first-child {
+  margin-top: 0;
+}
+
+@media (min-width: 1024px) {
+  .mdx {
+    padding: 2rem;
+  }
+}
+
+.mdx h1,
+.mdx h2,
+.mdx h3,
+.mdx h4 {
+  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+}
+
+.mdx ol,
+.mdx ul {
+  margin-top: 0.5rem;
+}
