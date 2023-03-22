@@ -29,8 +29,10 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
+    "@next/mdx": "^13.2.4",
     "@svgr/webpack": "^6.5.1",
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/mdx": "^2.0.3",
     "@types/node": "^18.15.3",
     "@types/nodemailer": "^6.4.7",
     "@types/react": "^18.0.28",

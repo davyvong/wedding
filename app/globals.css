@@ -5,10 +5,9 @@
   --champagne: #f7e7ce;
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
-  --rust: #a85838;
   --white: #ffffff;
 
-  --primary: var(--rust);
+  --primary: var(--brown-sugar);
 }
 
 ::-webkit-scrollbar {
@@ -53,7 +52,7 @@ html {
 
 body {
   background-color: var(--champagne);
-  color: var(--black);
+  color: var(--primary);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
@@ -118,4 +117,9 @@ input {
 input:disabled,
 input::placeholder {
   opacity: 1;
+}
+
+ol,
+ul {
+  list-style-position: inside;
 }

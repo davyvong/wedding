@@ -1,3 +1,4 @@
+const withMDX = require('@next/mdx')();
 const loaderUtils = require('loader-utils');
 const path = require('path');
 
@@ -16,9 +17,10 @@ const getLocalIdent = (context, localIdentName, localName) =>
     .replace(/[^a-zA-Z0-9-_]/g, '_')
     .replace(/^(-?\d|--)/, '_$1');
 
-module.exports = {
+const config = {
   experimental: {
     appDir: true,
+    mdxRs: true,
   },
   images: {
     domains: ['images.unsplash.com'],
@@ -47,3 +49,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = withMDX(config);
