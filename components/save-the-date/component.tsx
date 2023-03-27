@@ -1,4 +1,5 @@
 import Link from 'components/link';
+import MDX from 'components/mdx';
 import useTranslate from 'hooks/translate';
 import { useCallback, useMemo } from 'react';
 import type { FC } from 'react';
@@ -62,10 +63,11 @@ const SaveTheDateComponent: FC = () => {
   const renderLink = useCallback(link => <Link {...link} key={link.text} />, []);
 
   return (
-    <div className={styles.container}>
-      <h4>Add to Calendar</h4>
+    <MDX className={styles.container}>
+      <h1>Save The Date</h1>
+      <h3>Add to Calendar</h3>
       <div className={styles.calendarLinks}>{addToCalendarOptions.map(renderLink)}</div>
-    </div>
+    </MDX>
   );
 };
 

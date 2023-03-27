@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import type { FC, HTMLAttributes, ReactElement } from 'react';
+import type { FC, HTMLAttributes, ReactNode } from 'react';
 
 import styles from './component.module.css';
 
 interface MDXComponentProps extends HTMLAttributes<HTMLDivElement> {
-  children?: ReactElement;
+  children?: ReactNode;
   className?: string;
 }
 

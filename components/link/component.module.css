@@ -5,7 +5,7 @@
 }
 
 .link:before {
-  background-color: var(--persian-orange);
+  background-color: var(--primary);
   border-radius: 0.25rem;
   content: '';
   display: block;
