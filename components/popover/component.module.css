@@ -4,7 +4,7 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 1rem;
   max-width: calc(100vw - 32px);
-  z-index: 101;
+  z-index: 10;
 }
 
 @media screen and (min-width: 768px) {

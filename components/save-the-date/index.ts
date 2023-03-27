@@ -1,5 +1,5 @@
 'use client';
 
-import SaveTheDateComponent from './component';
+import SaveTheDate from './component';
 
-export default SaveTheDateComponent;
+export default SaveTheDate;

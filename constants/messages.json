@@ -1,3 +1,7 @@
 {
-  "app.layout.title": "Davy & Vivian"
+  "app.layout.title": "Davy & Vivian",
+  "components.dropdown-button.text": "Add to Calendar",
+  "components.save-the-date.add-to-calendar.google": "Google Calendar",
+  "components.save-the-date.add-to-calendar.ics": "ICS File",
+  "components.save-the-date.add-to-calendar.outlook": "Outlook Calendar"
 }
