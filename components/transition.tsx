@@ -24,7 +24,7 @@ const Transition = forwardRef(
       onOut = () => {},
       outStyle = {},
     }: TransitionProps,
-    ref: RefObject<HTMLDivElement>,
+    ref: RefObject<HTMLElement>,
   ) => {
     const timeoutRef = useRef<NodeJS.Timeout>();
 
