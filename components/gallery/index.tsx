@@ -57,35 +57,42 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     let context;
-    setTimeout(() => {
-      context = gsap.context((self: gsap.Context) => {
-        if (!self.selector) {
-          return;
-        }
-        const columns = self.selector('.' + styles.column);
-        for (const column of columns) {
-          gsap.to(column, {
-            scrollTrigger: {
-              end: () => {
-                const container = document.querySelector('.' + styles.container) as Element;
-                return '+=' + (container.clientHeight - window.innerHeight);
+    const onResize = () => {
+      context?.revert();
+      setTimeout(() => {
+        context = gsap.context((self: gsap.Context) => {
+          if (!self.selector) {
+            return;
+          }
+          const columns = self.selector('.' + styles.column);
+          for (const column of columns) {
+            gsap.to(column, {
+              overwrite: true,
+              scrollTrigger: {
+                end: () => {
+                  const container = document.querySelector('.' + styles.container) as Element;
+                  return '+=' + (container.clientHeight - window.innerHeight);
+                },
+                invalidateOnRefresh: true,
+                scroller: document.querySelector('.' + navigationStyles.content),
+                scrub: true,
+                start: 'start start',
+                trigger: '.' + styles.container,
               },
-              invalidateOnRefresh: true,
-              scroller: document.querySelector('.' + navigationStyles.content),
-              scrub: true,
-              start: 'start start',
-              trigger: '.' + styles.container,
-            },
-            y: (index: number, column: Element) => {
-              const container = document.querySelector('.' + styles.container) as Element;
-              return container.clientHeight - column.clientHeight;
-            },
-          });
-        }
-      }, '.' + navigationStyles.content);
-    }, 100);
+              y: (index: number, column: Element) => {
+                const container = document.querySelector('.' + styles.container) as Element;
+                return container.clientHeight - column.clientHeight;
+              },
+            });
+          }
+        }, '.' + navigationStyles.content);
+      }, 100);
+    };
+    onResize();
+    window?.addEventListener('resize', onResize);
     return () => {
       context?.revert();
+      window?.removeEventListener('resize', onResize);
     };
   }, []);
 
@@ -115,7 +122,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
         },
       });
     };
-    timeoutRef.current = setTimeout(setAutoScroll, 3000);
+    timeoutRef.current = setTimeout(setAutoScroll);
     const onScroll = () => {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(setAutoScroll, 3000);

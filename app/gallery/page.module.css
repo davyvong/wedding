@@ -1,0 +1,23 @@
+.container {
+  background-color: var(--white);
+}
+
+.menu {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  transition: width 600ms ease-in-out;
+  width: 2rem;
+}
+
+.menu span {
+  text-orientation: mixed;
+  writing-mode: vertical-rl;
+}
+
+.menuOpen {
+  width: 300px;
+}
