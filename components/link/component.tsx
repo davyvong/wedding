@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import type { LinkProps } from 'next/link';
 import type { FC } from 'react';
 
@@ -11,9 +11,9 @@ interface LinkComponentProps extends LinkProps {
 }
 
 const LinkComponent: FC<LinkComponentProps> = ({ className, text, ...props }) => (
-  <Link {...props} className={classNames(styles.link, className)}>
+  <NextLink {...props} className={classNames(styles.link, className)}>
     <span>{text}</span>
-  </Link>
+  </NextLink>
 );
 
 export default LinkComponent;

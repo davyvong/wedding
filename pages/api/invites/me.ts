@@ -7,7 +7,7 @@ import Invite from 'server/models/invite';
 import Response from 'server/models/response';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
-import { isObjectId } from 'utils/yup';
+import { isObjectId } from 'server/yup';
 
 const handler = async (request: NextApiRequestWithToken, response: NextApiResponse): Promise<void> => {
   try {

@@ -6,7 +6,7 @@ import { signToken } from 'server/jwt';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
 import { createRedisKey, getRedisClient } from 'server/redis';
-import { isLoginCode } from 'utils/yup';
+import { isLoginCode } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
