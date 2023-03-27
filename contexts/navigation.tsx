@@ -18,7 +18,7 @@ interface NavigationProviderProps {
 }
 
 export const NavigationProvider: FC<NavigationProviderProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(initialValue.isOpen);
+  const [isOpen, setIsOpen] = useState<boolean>(initialValue.isOpen);
 
   const value = useMemo(
     (): NavigationContextValue => ({

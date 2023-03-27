@@ -1,0 +1,14 @@
+.container {
+  background-color: var(--persian-orange);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 1rem;
+  max-width: calc(100vw - 32px);
+  z-index: 10;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 736px;
+  }
+}
