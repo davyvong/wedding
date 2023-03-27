@@ -7,7 +7,7 @@ import { getMongoDatabase } from 'server/mongodb';
 import { getTransporter } from 'server/nodemailer';
 import { applyRateLimiter } from 'server/rate-limiter';
 import { createRedisKey, getRedisClient } from 'server/redis';
-import { isEmail } from 'utils/yup';
+import { isEmail } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
