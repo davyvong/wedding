@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Link from 'components/link';
 import useTranslate from 'hooks/translate';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import type { FC, ReactNode } from 'react';
 
 import styles from './component.module.css';
@@ -15,12 +15,17 @@ interface NavigationComponentProps {
 const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, toggle }) => {
   const t = useTranslate();
 
+  const isNavigationEnabled = useMemo(
+    () => process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' || process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview',
+    [],
+  );
+
   return (
     <Fragment>
       <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
         {children}
       </div>
-      {process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' && (
+      {isNavigationEnabled && (
         <Fragment>
           <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
             <Link href="/" onClick={toggle} text={t('components.navigation.home')} />
