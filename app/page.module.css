@@ -9,7 +9,8 @@
   }
 
   .saveTheDate {
-    min-height: calc(var(--vh) * 100);
+    height: calc(var(--vh) * 100);
+    min-height: initial;
     position: sticky;
     top: 0;
   }
