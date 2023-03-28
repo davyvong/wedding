@@ -5,7 +5,7 @@ import type { FC } from 'react';
 
 import styles from './component.module.css';
 
-interface LinkComponentProps extends LinkProps {
+export interface LinkComponentProps extends LinkProps {
   className?: string;
   text: string;
 }
