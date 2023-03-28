@@ -9,12 +9,10 @@ import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
 import { Inter } from 'next/font/google';
 import { FC, ReactNode, useLayoutEffect } from 'react';
+import { setVH } from 'utils/browser';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const setVH = () => {
-  document?.documentElement?.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
-};
 setVH();
 
 interface LayoutProps {
