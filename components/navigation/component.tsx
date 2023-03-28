@@ -17,21 +17,23 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
 
   return (
     <Fragment>
-      <div className={classNames(styles.content, isOpen && styles.contentOpen)} onClick={isOpen ? toggle : undefined}>
+      <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
         {children}
       </div>
       {process.env.NEXT_PUBLIC_VERCEL_ENV === 'development' && (
         <Fragment>
-          <div className={classNames(styles.menu, isOpen && styles.menuOpen)}>
+          <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
             <Link href="/" onClick={toggle} text={t('components.navigation.home')} />
             <Link href="/gallery" onClick={toggle} text={t('components.navigation.gallery')} />
             <Link href="/cookie-policy" onClick={toggle} text={t('components.navigation.cookie-policy')} />
           </div>
-          <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
-            <span className={styles.toggleButtonLine1} />
-            <span className={styles.toggleButtonLine2} />
-            <span className={styles.toggleButtonLine3} />
-          </button>
+          <div className={styles.floatingButton}>
+            <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
+              <span className={styles.toggleButtonLine1} />
+              <span className={styles.toggleButtonLine2} />
+              <span className={styles.toggleButtonLine3} />
+            </button>
+          </div>
         </Fragment>
       )}
     </Fragment>

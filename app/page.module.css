@@ -1,5 +1,5 @@
 .saveTheDate {
-  height: 100vh;
+  height: calc(100vh - 4rem);
 }
 
 @media (min-width: 1024px) {
@@ -9,6 +9,7 @@
   }
 
   .saveTheDate {
+    height: 100vh;
     position: sticky;
     top: 0;
   }
