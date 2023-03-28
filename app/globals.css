@@ -35,13 +35,14 @@ html {
 }
 
 body {
-  background-color: var(--champagne);
+  background-color: var(--black);
   color: var(--primary);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
   line-height: 1.5;
   overflow: hidden;
+  position: relative;
   width: 100%;
 }
 

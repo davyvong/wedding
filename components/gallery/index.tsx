@@ -32,7 +32,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
 
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const dataInColumns = useMemo((): GalleryItem[][] => {
+  const dataInColumns = useMemo<GalleryItem[][]>(() => {
     const groups: GalleryItem[][] = [];
     const height: number[] = [];
     for (let i = 0; i < data.length; i++) {
@@ -122,7 +122,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
         },
       });
     };
-    timeoutRef.current = setTimeout(setAutoScroll);
+    timeoutRef.current = setTimeout(setAutoScroll, 3000);
     const onScroll = () => {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(setAutoScroll, 3000);
