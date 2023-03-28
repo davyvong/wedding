@@ -8,9 +8,12 @@ import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
 import { Inter } from 'next/font/google';
-import type { FC, ReactNode } from 'react';
+import { FC, ReactNode, useLayoutEffect } from 'react';
+import { setVH } from 'utils/browser';
 
 const inter = Inter({ subsets: ['latin'] });
+
+setVH();
 
 interface LayoutProps {
   children: ReactNode;
@@ -18,6 +21,14 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const t = useTranslate();
+
+  useLayoutEffect(() => {
+    setVH();
+    window.addEventListener('resize', setVH);
+    return () => {
+      window.removeEventListener('resize', setVH);
+    };
+  }, []);
 
   return (
     <html lang="en">
