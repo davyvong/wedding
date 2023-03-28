@@ -8,9 +8,14 @@ import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
 import { Inter } from 'next/font/google';
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useLayoutEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
+
+const setVH = () => {
+  document?.documentElement?.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+};
+setVH();
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,14 +24,11 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const t = useTranslate();
 
-  useEffect(() => {
-    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
-    const onResize = () => {
-      document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
-    };
-    window.addEventListener('resize', onResize);
+  useLayoutEffect(() => {
+    setVH();
+    window.addEventListener('resize', setVH);
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener('resize', setVH);
     };
   }, []);
 
