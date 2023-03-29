@@ -8,7 +8,8 @@ import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
 import { Inter } from 'next/font/google';
-import { FC, ReactNode, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
+import type { FC, ReactNode } from 'react';
 import { setVH } from 'utils/browser';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -22,7 +23,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const t = useTranslate();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setVH();
     window.addEventListener('resize', setVH);
     return () => {
@@ -31,7 +32,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />

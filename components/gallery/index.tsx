@@ -6,7 +6,7 @@ import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import useMediaQuery from 'hooks/media-query';
 import useNavigation from 'hooks/navigation';
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { FC } from 'react';
 
 import GalleryComponent from './component';
@@ -54,7 +54,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
     return groups;
   }, [data, numColumns]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     let context;
     const onResize = () => {
@@ -96,7 +96,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     gsap.registerPlugin(ScrollToPlugin);
     if (!isDesktop || navigation.isOpen) {
       const tweens = gsap.getTweensOf('.' + navigationStyles.content);
