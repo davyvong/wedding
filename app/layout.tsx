@@ -12,7 +12,10 @@ import { useEffect } from 'react';
 import type { FC, ReactNode } from 'react';
 import { setVH } from 'utils/browser';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  display: 'swap',
+  subsets: ['latin'],
+});
 
 setVH();
 
