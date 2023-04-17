@@ -4,6 +4,7 @@ import 'minireset.css';
 
 import './globals.css';
 
+import { Analytics } from '@vercel/analytics/react';
 import Navigation from 'components/navigation';
 import { NavigationProvider } from 'contexts/navigation';
 import useTranslate from 'hooks/translate';
@@ -45,6 +46,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <NavigationProvider>
           <Navigation>{children}</Navigation>
         </NavigationProvider>
+        <Analytics />
       </body>
     </html>
   );
