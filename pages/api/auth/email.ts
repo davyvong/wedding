@@ -45,5 +45,5 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
 export default applyRateLimiter(handler, {
   requestsPerInterval: 10,
-  scope: 'api-auth-email-login',
+  scope: 'api-auth-email',
 });

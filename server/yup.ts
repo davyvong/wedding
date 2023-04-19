@@ -25,3 +25,5 @@ export const isObjectId = (value): boolean =>
     .length(24)
     .matches(/^[0-9a-fA-F]{24}$/)
     .isValidSync(value);
+
+export const isSpotifySearchQuery = (value): boolean => yup.string().required().min(1).max(256).isValidSync(value);
