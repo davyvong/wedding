@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
 import { applyToken } from 'server/jwt';
-import { applyRateLimiter } from 'server/rate-limiter';
+import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
 import { createRedisKey, getRedisClient } from 'server/redis';
 import { isSpotifySearchQuery } from 'server/yup';
 
@@ -30,5 +30,5 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 };
 
 export default applyRateLimiter(applyToken(handler), {
-  scope: 'api-songs-search',
+  scope: RateLimitScopes.Spotify,
 });

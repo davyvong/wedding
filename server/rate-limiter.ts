@@ -3,22 +3,28 @@ import { getClientIp } from 'request-ip';
 import { createRedisKey, getRedisClient } from 'server/redis';
 import { isIP } from 'server/yup';
 
+export enum RateLimitScopes {
+  Global = 'Global',
+  EmailAuthentication = 'EmailAuthentication',
+  Spotify = 'Spotify',
+}
+
 interface RateLimitOptions {
   interval: number;
   requestsPerInterval: number;
-  scope: string;
+  scope: RateLimitScopes;
 }
 
 interface RateLimitInitOptions {
   interval?: number;
   requestsPerInterval?: number;
-  scope: string;
+  scope: RateLimitScopes;
 }
 
 const defaultOptions: RateLimitOptions = {
   interval: 3600,
   requestsPerInterval: 1000,
-  scope: 'api',
+  scope: RateLimitScopes.Global,
 };
 
 export const applyRateLimiter =
