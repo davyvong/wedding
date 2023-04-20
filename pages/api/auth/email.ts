@@ -5,7 +5,7 @@ import { getRandomWords } from 'server/codes';
 import { getBaseURL } from 'server/env';
 import { getMongoDatabase } from 'server/mongodb';
 import { getTransporter } from 'server/nodemailer';
-import { applyRateLimiter } from 'server/rate-limiter';
+import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
 import { createRedisKey, getRedisClient } from 'server/redis';
 import { isEmail } from 'server/yup';
 
@@ -45,5 +45,5 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
 export default applyRateLimiter(handler, {
   requestsPerInterval: 10,
-  scope: 'api-auth-email',
+  scope: RateLimitScopes.EmailAuthentication,
 });
