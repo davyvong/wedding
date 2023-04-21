@@ -2,10 +2,11 @@ interface SpotifyTrack {
   artists: string[];
   duration: number;
   explicit: boolean;
+  href: string;
   id: string;
   image: string;
   name: string;
-  url: string;
+  uri: string;
 }
 
 interface SpotifyPlaylistTrack extends SpotifyTrack {
@@ -13,10 +14,11 @@ interface SpotifyPlaylistTrack extends SpotifyTrack {
 }
 
 interface SpotifyPlaylist {
+  href: string;
   id: string;
   name: string;
   tracks: SpotifyPlaylistTrack[];
-  url: string;
+  uri: string;
 }
 
 class SpotifyAPI {
@@ -25,10 +27,11 @@ class SpotifyAPI {
       artists: data.artists.filter(artist => artist.type === 'artist').map(artist => artist.name),
       duration: data.duration,
       explicit: data.explicit,
+      href: data.external_urls.spotify,
       id: data.id,
       image: data.album.images[0]?.url,
       name: data.name,
-      url: data.external_urls.spotify,
+      uri: data.uri,
     };
   }
 
@@ -41,10 +44,11 @@ class SpotifyAPI {
 
   private static toSpotifyPlaylist(data): SpotifyPlaylist {
     return {
+      href: data.external_urls.spotify,
       id: data.id,
       name: data.name,
       tracks: data.tracks.items.map(SpotifyAPI.toSpotifyPlaylistTrack),
-      url: data.external_urls.spotify,
+      uri: data.uri,
     };
   }
 
@@ -53,7 +57,7 @@ class SpotifyAPI {
     body.set('grant_type', 'refresh_token');
     body.set('refresh_token', process.env.SPOTIFY_REFRESH_TOKEN as string);
     const response = await fetch('https://accounts.spotify.com/api/token', {
-      body: body,
+      body,
       headers: {
         Authorization:
           'Basic ' +
@@ -68,7 +72,6 @@ class SpotifyAPI {
 
   public static async getPlaylist(accessToken: string, playlistId: string): Promise<SpotifyPlaylist> {
     const url = new URL('https://api.spotify.com/v1/playlists/' + playlistId);
-    url.searchParams.set('market', 'CA');
     const response = await fetch(url, {
       headers: {
         Authorization: 'Bearer ' + accessToken,
@@ -80,11 +83,34 @@ class SpotifyAPI {
     return SpotifyAPI.toSpotifyPlaylist(responseJson);
   }
 
+  public static async addToPlaylist(accessToken: string, playlistId: string, uris: string[]): Promise<void> {
+    const url = new URL(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`);
+    await fetch(url, {
+      body: JSON.stringify({ uris }),
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+  }
+
+  public static async removeFromPlaylist(accessToken: string, playlistId: string, uris: string[]): Promise<void> {
+    const url = new URL(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`);
+    await fetch(url, {
+      body: JSON.stringify({
+        tracks: uris.map(uri => ({ uri })),
+      }),
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    });
+  }
+
   public static async searchForItem(accessToken: string, query: string): Promise<SpotifyTrack[]> {
     const url = new URL('https://api.spotify.com/v1/search');
-    url.searchParams.set('limit', '10');
-    url.searchParams.set('market', 'CA');
-    url.searchParams.set('offset', '0');
     url.searchParams.set('q', query);
     url.searchParams.set('type', 'track');
     const response = await fetch(url, {
