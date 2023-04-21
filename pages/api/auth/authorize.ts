@@ -6,12 +6,12 @@ import { signToken } from 'server/jwt';
 import MongoDBClient from 'server/clients/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
 import RedisClient from 'server/clients/redis';
-import { isLoginCode } from 'server/yup';
+import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
     const loginCode = request.query.code as string;
-    if (!isLoginCode(loginCode)) {
+    if (!Validator.isLoginCode(loginCode)) {
       response.status(400).end();
       return;
     }

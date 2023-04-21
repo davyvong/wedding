@@ -3,12 +3,12 @@ import SpotifyAPI from 'server/apis/spotify';
 import { applyToken } from 'server/jwt';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
 import RedisClient from 'server/clients/redis';
-import { isSpotifySearchQuery } from 'server/yup';
+import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
     const query = request.body.query as string;
-    if (!isSpotifySearchQuery(query)) {
+    if (!Validator.isSpotifySearchQuery(query)) {
       response.status(400).end();
       return;
     }

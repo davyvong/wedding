@@ -7,11 +7,11 @@ import MongoDBClient from 'server/clients/mongodb';
 import { getTransporter } from 'server/nodemailer';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
 import RedisClient from 'server/clients/redis';
-import { isEmail } from 'server/yup';
+import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
-    if (!isEmail(request.body.email)) {
+    if (!Validator.isEmail(request.body.email)) {
       response.status(400).end();
       return;
     }

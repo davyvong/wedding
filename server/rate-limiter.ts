@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getClientIp } from 'request-ip';
 import RedisClient from 'server/clients/redis';
-import { isIP } from 'server/yup';
+import Validator from 'server/validator';
 
 export enum RateLimitScopes {
   Global = 'Global',
@@ -36,7 +36,7 @@ export const applyRateLimiter =
         return;
       }
       const ip = getClientIp(request);
-      if (!isIP(ip)) {
+      if (!Validator.isIP(ip)) {
         response.status(400).end();
         return;
       }

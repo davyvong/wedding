@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
-import { isSpotifyURIList } from 'server/yup';
+import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
     const uris = request.body.uris as string[];
-    if (!isSpotifyURIList(uris)) {
+    if (!Validator.isSpotifyURIList(uris)) {
       response.status(400).end();
       return;
     }

@@ -4,11 +4,11 @@ import type { NextApiRequestWithToken } from 'server/jwt';
 import { applyToken } from 'server/jwt';
 import MongoDBClient from 'server/clients/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
-import { isObjectId } from 'server/yup';
+import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequestWithToken, response: NextApiResponse): Promise<void> => {
   try {
-    if (!isObjectId(request.token.id)) {
+    if (!Validator.isObjectId(request.token.id)) {
       response.status(401).end();
       return;
     }
