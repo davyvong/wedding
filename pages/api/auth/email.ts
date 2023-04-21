@@ -6,7 +6,7 @@ import { getBaseURL } from 'server/env';
 import { getMongoDatabase } from 'server/mongodb';
 import { getTransporter } from 'server/nodemailer';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
-import { createRedisKey, getRedisClient } from 'server/redis';
+import RedisClient from 'server/clients/redis';
 import { isEmail } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
@@ -33,8 +33,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       subject: 'Your login code is ' + code,
       to: request.body.email,
     });
-    const redisClient = await getRedisClient();
-    const redisKey = createRedisKey('codes', code);
+    const redisClient = await RedisClient.getInstance();
+    const redisKey = RedisClient.getKey('codes', code);
     await redisClient.set(redisKey, doc._id.toString(), { EX: 900 });
     response.status(202).end();
   } catch (error) {

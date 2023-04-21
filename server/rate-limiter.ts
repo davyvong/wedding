@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getClientIp } from 'request-ip';
-import { createRedisKey, getRedisClient } from 'server/redis';
+import RedisClient from 'server/clients/redis';
 import { isIP } from 'server/yup';
 
 export enum RateLimitScopes {
@@ -41,8 +41,8 @@ export const applyRateLimiter =
         return;
       }
       const options = Object.assign({}, defaultOptions, initOptions);
-      const redisClient = await getRedisClient();
-      const redisKey = createRedisKey('rate-limit', options.scope, ip);
+      const redisClient = await RedisClient.getInstance();
+      const redisKey = RedisClient.getKey('rate-limit', options.scope, ip);
       if (!(await redisClient.exists(redisKey))) {
         await redisClient.set(redisKey, 0, { EX: options.interval });
       }

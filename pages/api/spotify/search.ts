@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
 import { applyToken } from 'server/jwt';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
-import { createRedisKey, getRedisClient } from 'server/redis';
+import RedisClient from 'server/clients/redis';
 import { isSpotifySearchQuery } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
@@ -12,8 +12,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       response.status(400).end();
       return;
     }
-    const redisClient = await getRedisClient();
-    const redisKey = createRedisKey('spotify', 'search', query);
+    const redisClient = await RedisClient.getInstance();
+    const redisKey = RedisClient.getKey('spotify', 'search', query);
     const cachedResults = await redisClient.get(redisKey);
     if (cachedResults) {
       response.status(200).json(JSON.parse(cachedResults));

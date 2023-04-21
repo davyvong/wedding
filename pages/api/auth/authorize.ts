@@ -5,7 +5,7 @@ import { getBaseURL } from 'server/env';
 import { signToken } from 'server/jwt';
 import { getMongoDatabase } from 'server/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
-import { createRedisKey, getRedisClient } from 'server/redis';
+import RedisClient from 'server/clients/redis';
 import { isLoginCode } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
@@ -15,8 +15,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       response.status(400).end();
       return;
     }
-    const redisClient = await getRedisClient();
-    const redisKey = createRedisKey('codes', loginCode);
+    const redisClient = await RedisClient.getInstance();
+    const redisKey = RedisClient.getKey('codes', loginCode);
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
       response.status(400).end();
