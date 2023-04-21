@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getBaseURL } from 'server/env';
 import { signToken } from 'server/jwt';
-import { getMongoDatabase } from 'server/mongodb';
+import MongoDBClient from 'server/clients/mongodb';
 import { applyRateLimiter } from 'server/rate-limiter';
 import RedisClient from 'server/clients/redis';
 import { isLoginCode } from 'server/yup';
@@ -22,7 +22,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       response.status(400).end();
       return;
     }
-    const db = await getMongoDatabase();
+    const db = await MongoDBClient.getInstance();
     const doc = await db.collection('guests').findOne({ _id: new ObjectId(cachedGuestId) });
     if (!doc) {
       response.status(400).end();

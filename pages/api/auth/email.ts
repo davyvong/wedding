@@ -3,7 +3,7 @@ import * as handlebars from 'handlebars';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRandomWords } from 'server/codes';
 import { getBaseURL } from 'server/env';
-import { getMongoDatabase } from 'server/mongodb';
+import MongoDBClient from 'server/clients/mongodb';
 import { getTransporter } from 'server/nodemailer';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
 import RedisClient from 'server/clients/redis';
@@ -15,7 +15,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       response.status(400).end();
       return;
     }
-    const db = await getMongoDatabase();
+    const db = await MongoDBClient.getInstance();
     const doc = await db.collection('guests').findOne({ email: request.body.email });
     if (!doc) {
       response.status(400).end();
