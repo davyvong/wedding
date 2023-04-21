@@ -1,37 +1,42 @@
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getBaseURL } from 'server/env';
-import { signToken } from 'server/jwt';
-import { getMongoDatabase } from 'server/mongodb';
-import { applyRateLimiter } from 'server/rate-limiter';
-import { createRedisKey, getRedisClient } from 'server/redis';
-import { isLoginCode } from 'server/yup';
+import Environment from 'server/env';
+import JWT from 'server/jwt';
+import MongoDBClient from 'server/clients/mongodb';
+import applyRateLimiter from 'server/middlewares/rate-limiter';
+import RedisClient from 'server/clients/redis';
+import Validator from 'server/validator';
 
-const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+interface NextApiRequestWithQuery extends NextApiRequest {
+  query: {
+    code: string;
+  };
+}
+
+const handler = async (request: NextApiRequestWithQuery, response: NextApiResponse): Promise<void> => {
   try {
-    const loginCode = request.query.code as string;
-    if (!isLoginCode(loginCode)) {
+    if (!Validator.isLoginCode(request.query.code)) {
       response.status(400).end();
       return;
     }
-    const redisClient = await getRedisClient();
-    const redisKey = createRedisKey('codes', loginCode);
+    const redisClient = await RedisClient.getInstance();
+    const redisKey = RedisClient.getKey('codes', request.query.code);
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
       response.status(400).end();
       return;
     }
-    const db = await getMongoDatabase();
+    const db = await MongoDBClient.getInstance();
     const doc = await db.collection('guests').findOne({ _id: new ObjectId(cachedGuestId) });
     if (!doc) {
       response.status(400).end();
       return;
     }
     await redisClient.del(redisKey);
-    const token = signToken({ id: cachedGuestId });
+    const token = JWT.sign({ id: cachedGuestId });
     response.setHeader('Set-Cookie', serialize('token', token, { maxAge: 2592000, path: '/' }));
-    response.redirect(getBaseURL());
+    response.redirect(Environment.getBaseURL());
   } catch (error) {
     console.log(error);
     response.status(500).end();

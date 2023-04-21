@@ -55,7 +55,7 @@ class SpotifyAPI {
   public static async getAccessToken(): Promise<string> {
     const body = new URLSearchParams();
     body.set('grant_type', 'refresh_token');
-    body.set('refresh_token', process.env.SPOTIFY_REFRESH_TOKEN as string);
+    body.set('refresh_token', process.env.SPOTIFY_REFRESH_TOKEN);
     const response = await fetch('https://accounts.spotify.com/api/token', {
       body,
       headers: {

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getClientIp } from 'request-ip';
-import { createRedisKey, getRedisClient } from 'server/redis';
-import { isIP } from 'server/yup';
+import RedisClient from 'server/clients/redis';
+import Validator from 'server/validator';
 
 export enum RateLimitScopes {
   Global = 'Global',
@@ -27,7 +27,7 @@ const defaultOptions: RateLimitOptions = {
   scope: RateLimitScopes.Global,
 };
 
-export const applyRateLimiter =
+const applyRateLimiter =
   (next: (request: NextApiRequest, response: NextApiResponse) => unknown, initOptions?: RateLimitInitOptions) =>
   async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
     try {
@@ -36,13 +36,13 @@ export const applyRateLimiter =
         return;
       }
       const ip = getClientIp(request);
-      if (!isIP(ip)) {
+      if (!Validator.isIP(ip)) {
         response.status(400).end();
         return;
       }
       const options = Object.assign({}, defaultOptions, initOptions);
-      const redisClient = await getRedisClient();
-      const redisKey = createRedisKey('rate-limit', options.scope, ip);
+      const redisClient = await RedisClient.getInstance();
+      const redisKey = RedisClient.getKey('rate-limit', options.scope, ip);
       if (!(await redisClient.exists(redisKey))) {
         await redisClient.set(redisKey, 0, { EX: options.interval });
       }
@@ -60,3 +60,5 @@ export const applyRateLimiter =
       await next(request, response);
     }
   };
+
+export default applyRateLimiter;
