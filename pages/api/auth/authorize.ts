@@ -10,12 +10,13 @@ import { isLoginCode } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
-    if (!isLoginCode(request.query.code)) {
+    const loginCode = request.query.code as string;
+    if (!isLoginCode(loginCode)) {
       response.status(400).end();
       return;
     }
     const redisClient = await getRedisClient();
-    const redisKey = createRedisKey('codes', request.query.code as string);
+    const redisKey = createRedisKey('codes', loginCode);
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
       response.status(400).end();
