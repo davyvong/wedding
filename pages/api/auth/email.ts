@@ -5,7 +5,7 @@ import { getRandomWords } from 'server/codes';
 import { getBaseURL } from 'server/env';
 import MongoDBClient from 'server/clients/mongodb';
 import { getTransporter } from 'server/nodemailer';
-import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
+import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
 import RedisClient from 'server/clients/redis';
 import Validator from 'server/validator';
 

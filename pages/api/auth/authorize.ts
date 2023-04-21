@@ -2,9 +2,9 @@ import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getBaseURL } from 'server/env';
-import { signToken } from 'server/jwt';
+import JWT from 'server/jwt';
 import MongoDBClient from 'server/clients/mongodb';
-import { applyRateLimiter } from 'server/rate-limiter';
+import applyRateLimiter from 'server/middlewares/rate-limiter';
 import RedisClient from 'server/clients/redis';
 import Validator from 'server/validator';
 
@@ -29,7 +29,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       return;
     }
     await redisClient.del(redisKey);
-    const token = signToken({ id: cachedGuestId });
+    const token = JWT.sign({ id: cachedGuestId });
     response.setHeader('Set-Cookie', serialize('token', token, { maxAge: 2592000, path: '/' }));
     response.redirect(getBaseURL());
   } catch (error) {

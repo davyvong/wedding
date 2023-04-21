@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
-import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
+import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
 import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {

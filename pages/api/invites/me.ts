@@ -1,9 +1,9 @@
 import { ObjectId } from 'mongodb';
 import type { NextApiResponse } from 'next';
-import type { NextApiRequestWithToken } from 'server/jwt';
-import { applyToken } from 'server/jwt';
+import applyToken from 'server/middlewares/jwt';
+import type { NextApiRequestWithToken } from 'server/middlewares/jwt';
 import MongoDBClient from 'server/clients/mongodb';
-import { applyRateLimiter } from 'server/rate-limiter';
+import applyRateLimiter from 'server/middlewares/rate-limiter';
 import Validator from 'server/validator';
 
 const handler = async (request: NextApiRequestWithToken, response: NextApiResponse): Promise<void> => {

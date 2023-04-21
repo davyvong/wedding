@@ -27,7 +27,7 @@ const defaultOptions: RateLimitOptions = {
   scope: RateLimitScopes.Global,
 };
 
-export const applyRateLimiter =
+const applyRateLimiter =
   (next: (request: NextApiRequest, response: NextApiResponse) => unknown, initOptions?: RateLimitInitOptions) =>
   async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
     try {
@@ -60,3 +60,5 @@ export const applyRateLimiter =
       await next(request, response);
     }
   };
+
+export default applyRateLimiter;

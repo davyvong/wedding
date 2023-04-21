@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
-import { applyToken } from 'server/jwt';
-import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
+import applyToken from 'server/middlewares/jwt';
+import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
