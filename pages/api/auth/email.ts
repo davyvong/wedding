@@ -2,7 +2,7 @@ import loginCodeTemplate from 'emails/login-code.eml';
 import * as handlebars from 'handlebars';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import words from 'constants/words.json';
-import { getBaseURL } from 'server/env';
+import Environment from 'server/env';
 import MongoDBClient from 'server/clients/mongodb';
 import NodemailerClient from 'server/clients/nodemailer';
 import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
@@ -31,13 +31,13 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
       return;
     }
     const code = getRandomWords(4).join('-');
-    const url = new URL(getBaseURL() + '/api/auth/authorize');
+    const url = new URL(Environment.getBaseURL() + '/api/auth/authorize');
     url.searchParams.set('code', code);
     const template = handlebars.compile(loginCodeTemplate);
     const html = template({ code, url: url.href });
     const transporter = NodemailerClient.getInstance();
     await transporter.sendMail({
-      from: process.env.NODEMAILER_ADDRESS as string,
+      from: process.env.NODEMAILER_ADDRESS,
       html,
       subject: 'Your login code is ' + code,
       to: request.body.email,

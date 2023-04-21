@@ -5,22 +5,27 @@ import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limit
 import RedisClient from 'server/clients/redis';
 import Validator from 'server/validator';
 
-const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+interface NextApiRequestWithBody extends NextApiRequest {
+  body: {
+    query: string;
+  };
+}
+
+const handler = async (request: NextApiRequestWithBody, response: NextApiResponse): Promise<void> => {
   try {
-    const query = request.body.query as string;
-    if (!Validator.isSpotifySearchQuery(query)) {
+    if (!Validator.isSpotifySearchQuery(request.body.query)) {
       response.status(400).end();
       return;
     }
     const redisClient = await RedisClient.getInstance();
-    const redisKey = RedisClient.getKey('spotify', 'search', query);
+    const redisKey = RedisClient.getKey('spotify', 'search', request.body.query);
     const cachedResults = await redisClient.get(redisKey);
     if (cachedResults) {
       response.status(200).json(JSON.parse(cachedResults));
       return;
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const results = await SpotifyAPI.searchForItem(accessToken, query);
+    const results = await SpotifyAPI.searchForItem(accessToken, request.body.query);
     redisClient.set(redisKey, JSON.stringify(results));
     response.status(200).json(results);
   } catch (error) {

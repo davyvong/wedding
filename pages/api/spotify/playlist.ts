@@ -6,8 +6,7 @@ import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limit
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
     const accessToken = await SpotifyAPI.getAccessToken();
-    const playlistId = process.env.SPOTIFY_PLAYLIST_ID as string;
-    const playlist = await SpotifyAPI.getPlaylist(accessToken, playlistId);
+    const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
     response.status(200).json(playlist);
   } catch (error) {
     console.log(error);

@@ -1,22 +1,27 @@
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getBaseURL } from 'server/env';
+import Environment from 'server/env';
 import JWT from 'server/jwt';
 import MongoDBClient from 'server/clients/mongodb';
 import applyRateLimiter from 'server/middlewares/rate-limiter';
 import RedisClient from 'server/clients/redis';
 import Validator from 'server/validator';
 
-const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+interface NextApiRequestWithQuery extends NextApiRequest {
+  query: {
+    code: string;
+  };
+}
+
+const handler = async (request: NextApiRequestWithQuery, response: NextApiResponse): Promise<void> => {
   try {
-    const loginCode = request.query.code as string;
-    if (!Validator.isLoginCode(loginCode)) {
+    if (!Validator.isLoginCode(request.query.code)) {
       response.status(400).end();
       return;
     }
     const redisClient = await RedisClient.getInstance();
-    const redisKey = RedisClient.getKey('codes', loginCode);
+    const redisKey = RedisClient.getKey('codes', request.query.code);
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
       response.status(400).end();
@@ -31,7 +36,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     await redisClient.del(redisKey);
     const token = JWT.sign({ id: cachedGuestId });
     response.setHeader('Set-Cookie', serialize('token', token, { maxAge: 2592000, path: '/' }));
-    response.redirect(getBaseURL());
+    response.redirect(Environment.getBaseURL());
   } catch (error) {
     console.log(error);
     response.status(500).end();

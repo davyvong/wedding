@@ -18,7 +18,7 @@ interface Response {
 }
 
 class MongoDBClient {
-  private static uri = process.env.MONGODB_URI as string;
+  private static uri = process.env.MONGODB_URI;
   private static database = MongoDBClient.uri.split('/').at(-1);
   private static instance: MongoClient;
 

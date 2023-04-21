@@ -3,16 +3,20 @@ import SpotifyAPI from 'server/apis/spotify';
 import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
 import Validator from 'server/validator';
 
-const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+interface NextApiRequestWithBody extends NextApiRequest {
+  body: {
+    uris: string[];
+  };
+}
+
+const handler = async (request: NextApiRequestWithBody, response: NextApiResponse): Promise<void> => {
   try {
-    const uris = request.body.uris as string[];
-    if (!Validator.isSpotifyURIList(uris)) {
+    if (!Validator.isSpotifyURIList(request.body.uris)) {
       response.status(400).end();
       return;
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const playlistId = process.env.SPOTIFY_PLAYLIST_ID as string;
-    await SpotifyAPI.addToPlaylist(accessToken, playlistId, uris);
+    await SpotifyAPI.addToPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, request.body.uris);
     response.status(202).end();
   } catch (error) {
     console.log(error);

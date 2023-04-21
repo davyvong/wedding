@@ -8,12 +8,12 @@ export interface Token {
 
 class JWT {
   public static sign(payload: Buffer | object | string): string {
-    return jwt.sign(payload, process.env.JWT_SECRET as string);
+    return jwt.sign(payload, process.env.JWT_SECRET);
   }
 
   public static verify(token: string): Promise<Token | undefined> {
     return new Promise(resolve => {
-      jwt.verify(token, process.env.JWT_SECRET as string, (error: VerifyErrors, decodedToken?: Token) => {
+      jwt.verify(token, process.env.JWT_SECRET, (error: VerifyErrors, decodedToken?: Token) => {
         if (error) {
           resolve(undefined);
         } else {
