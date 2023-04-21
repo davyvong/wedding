@@ -1,20 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import SpotifyAPI from 'server/apis/spotify';
-import { applyToken } from 'server/jwt';
 import { applyRateLimiter, RateLimitScopes } from 'server/rate-limiter';
+import { isSpotifyURIList } from 'server/yup';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
+    const uris = request.body.uris as string[];
+    if (!isSpotifyURIList(uris)) {
+      response.status(400).end();
+      return;
+    }
     const accessToken = await SpotifyAPI.getAccessToken();
     const playlistId = process.env.SPOTIFY_PLAYLIST_ID as string;
-    const playlist = await SpotifyAPI.getPlaylist(accessToken, playlistId);
-    response.status(200).json(playlist);
+    await SpotifyAPI.addToPlaylist(accessToken, playlistId, uris);
+    response.status(202).end();
   } catch (error) {
     console.log(error);
     response.status(500).end();
   }
 };
 
-export default applyRateLimiter(applyToken(handler), {
+export default applyRateLimiter(handler, {
   scope: RateLimitScopes.Spotify,
 });
