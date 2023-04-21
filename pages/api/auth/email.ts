@@ -1,13 +1,22 @@
 import loginCodeTemplate from 'emails/login-code.eml';
 import * as handlebars from 'handlebars';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getRandomWords } from 'server/codes';
+import words from 'constants/words.json';
 import { getBaseURL } from 'server/env';
 import MongoDBClient from 'server/clients/mongodb';
-import { getTransporter } from 'server/nodemailer';
+import NodemailerClient from 'server/clients/nodemailer';
 import applyRateLimiter, { RateLimitScopes } from 'server/middlewares/rate-limiter';
 import RedisClient from 'server/clients/redis';
 import Validator from 'server/validator';
+
+const getRandomWords = (count: number): string[] => {
+  const set = new Set<string>();
+  while (set.size < count) {
+    const index = Math.floor(Math.random() * words.length);
+    set.add(words[index]);
+  }
+  return Array.from(set);
+};
 
 const handler = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
   try {
@@ -26,7 +35,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
     url.searchParams.set('code', code);
     const template = handlebars.compile(loginCodeTemplate);
     const html = template({ code, url: url.href });
-    const transporter = getTransporter();
+    const transporter = NodemailerClient.getInstance();
     await transporter.sendMail({
       from: process.env.NODEMAILER_ADDRESS as string,
       html,
