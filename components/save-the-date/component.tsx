@@ -14,19 +14,16 @@ const SaveTheDateComponent: FC = () => {
   const addToCalendarOptions = useMemo<LinkComponentProps[]>(
     () => [
       {
-        alt: t('components.save-the-date.add-to-calendar.google'),
         href: CalendarLinks.getGoogle(),
         target: '_blank',
         text: t('components.save-the-date.add-to-calendar.google'),
       },
       {
-        alt: t('components.save-the-date.add-to-calendar.outlook'),
         href: CalendarLinks.getOutlook(),
         target: '_blank',
         text: t('components.save-the-date.add-to-calendar.outlook'),
       },
       {
-        alt: t('components.save-the-date.add-to-calendar.ics'),
         href: CalendarLinks.getICS(),
         text: t('components.save-the-date.add-to-calendar.ics'),
       },
@@ -34,12 +31,12 @@ const SaveTheDateComponent: FC = () => {
     [t],
   );
 
-  const renderLink = useCallback(link => <Link {...link} key={link.text} />, []);
+  const renderLink = useCallback(link => <Link {...link} alt={link.text} key={link.text} />, []);
 
   return (
     <MDX className={styles.container}>
-      <h1>Save The Date</h1>
-      <h3>Add to Calendar</h3>
+      <h1>{t('components.save-the-date')}</h1>
+      <h3>{t('components.save-the-date.add-to-calendar')}</h3>
       <div className={styles.calendarLinks}>{addToCalendarOptions.map(renderLink)}</div>
     </MDX>
   );
