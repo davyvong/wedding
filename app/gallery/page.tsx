@@ -1,10 +1,9 @@
-'use client';
-
-import Gallery from 'components/gallery';
-import useMediaQuery from 'hooks/media-query';
+import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
+
+const ResponsiveGallery = dynamic(() => import('components/responsive-gallery'));
 
 const gallery = [
   {
@@ -81,14 +80,9 @@ const gallery = [
   },
 ];
 
-const Page: FC = () => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
-
-  return (
-    <div className={styles.container}>
-      <Gallery data={gallery} numColumns={isDesktop ? 4 : 2} />
-    </div>
-  );
-};
-
+const Page: FC = () => (
+  <div className={styles.container}>
+    <ResponsiveGallery data={gallery} />
+  </div>
+);
 export default Page;

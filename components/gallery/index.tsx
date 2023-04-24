@@ -20,7 +20,7 @@ export interface GalleryItem {
   title?: string;
 }
 
-interface GalleryProps {
+export interface GalleryProps {
   data: GalleryItem[];
   numColumns?: number;
   scrollDuration?: number;
