@@ -4,6 +4,8 @@
   "components.navigation.home": "Home",
   "components.navigation.gallery": "Gallery",
   "components.navigation.cookie-policy": "Cookie Policy",
+  "components.save-the-date": "Save The Date",
+  "components.save-the-date.add-to-calendar": "Add to Calendar",
   "components.save-the-date.add-to-calendar.google": "Google",
   "components.save-the-date.add-to-calendar.ics": "ICS",
   "components.save-the-date.add-to-calendar.outlook": "Outlook"
