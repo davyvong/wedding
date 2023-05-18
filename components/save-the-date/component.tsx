@@ -3,6 +3,7 @@ import type { LinkComponentProps } from 'components/link/component';
 import MDX from 'components/mdx';
 import useTranslate from 'hooks/translate';
 import { useCallback, useMemo } from 'react';
+import { Fragment } from 'react';
 import type { FC } from 'react';
 
 import CalendarLinks from './calendar-links';
@@ -36,8 +37,12 @@ const SaveTheDateComponent: FC = () => {
   return (
     <MDX className={styles.container}>
       <h1>{t('components.save-the-date')}</h1>
-      <h3>{t('components.save-the-date.add-to-calendar')}</h3>
-      <div className={styles.calendarLinks}>{addToCalendarOptions.map(renderLink)}</div>
+      {false && (
+        <Fragment>
+          <h3>{t('components.save-the-date.add-to-calendar')}</h3>
+          <div className={styles.calendarLinks}>{addToCalendarOptions.map(renderLink)}</div>
+        </Fragment>
+      )}
     </MDX>
   );
 };
