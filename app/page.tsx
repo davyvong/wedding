@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import Gallery from 'components/gallery';
-import SaveTheDate from 'components/save-the-date';
+// import SaveTheDate from 'components/save-the-date';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
@@ -34,9 +34,7 @@ const gallery = [
 
 const Page: FC = () => (
   <div className={styles.container}>
-    <div className={classNames(styles.section, styles.saveTheDate)}>
-      <SaveTheDate />
-    </div>
+    <div className={classNames(styles.section, styles.saveTheDate)}>{/* <SaveTheDate /> */}</div>
     <div className={styles.section}>
       <Gallery data={gallery} />
     </div>
