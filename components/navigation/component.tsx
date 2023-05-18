@@ -1,3 +1,5 @@
+'use client';
+
 import classNames from 'classnames';
 import Link from 'components/link';
 import useTranslate from 'hooks/translate';

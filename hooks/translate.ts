@@ -1,3 +1,5 @@
+'use client';
+
 import messages from 'constants/messages.json';
 import template from 'lodash.template';
 import { useCallback } from 'react';

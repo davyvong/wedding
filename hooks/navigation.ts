@@ -1,3 +1,5 @@
+'use client';
+
 import NavigationContext from 'contexts/navigation';
 import { useContext } from 'react';
 

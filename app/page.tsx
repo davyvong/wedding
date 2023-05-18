@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import Gallery from 'components/gallery';
-import SaveTheDate from 'components/save-the-date';
+import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
+
+const Gallery = dynamic(() => import('components/gallery'));
 
 const gallery = [
   {
@@ -34,9 +35,7 @@ const gallery = [
 
 const Page: FC = () => (
   <div className={styles.container}>
-    <div className={classNames(styles.section, styles.saveTheDate)}>
-      <SaveTheDate />
-    </div>
+    <div className={classNames(styles.section, styles.saveTheDate)} />
     <div className={styles.section}>
       <Gallery data={gallery} />
     </div>
