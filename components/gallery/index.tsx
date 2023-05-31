@@ -70,7 +70,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
               overwrite: true,
               scrollTrigger: {
                 end: () => {
-                  const container = document.querySelector('.' + styles.container) as Element;
+                  const container = column.parentElement as Element;
                   return '+=' + (container.clientHeight - window.innerHeight);
                 },
                 invalidateOnRefresh: true,
@@ -80,7 +80,7 @@ const Gallery: FC<GalleryProps> = ({ data = [], numColumns = 2, scrollDuration =
                 trigger: '.' + styles.container,
               },
               y: (index: number, column: Element) => {
-                const container = document.querySelector('.' + styles.container) as Element;
+                const container = column.parentElement as Element;
                 return container.clientHeight - column.clientHeight;
               },
             });
