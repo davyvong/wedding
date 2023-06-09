@@ -1,14 +1,14 @@
 import words from 'constants/words.json';
 import * as handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
-import { MongoDBDocumentBuilder } from 'server/builders/mongodb';
-import { RedisKeyBuilder } from 'server/builders/redis';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
 import loginCodeTemplate from 'server/emails/login-code.eml';
 import ServerEnvironment from 'server/environment';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
+import { MongoDBDocumentConverter } from 'server/utils/mongodb';
+import { RedisKeyBuilder } from 'server/utils/redis';
 import { object, string } from 'yup';
 
 const getRandomWords = (count: number): string[] => {
@@ -56,7 +56,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     });
     const redisClient = await RedisClientFactory.getInstance();
     const redisKey = new RedisKeyBuilder().set('codes', code).toString();
-    const guest = new MongoDBDocumentBuilder(doc).toGuest();
+    const guest = MongoDBDocumentConverter.toGuest(doc);
     await redisClient.set(redisKey, guest.id, { EX: 900 });
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {

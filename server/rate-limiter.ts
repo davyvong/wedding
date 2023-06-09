@@ -1,8 +1,8 @@
 import { getClientIp } from 'request-ip';
-import { RedisKeyBuilder } from 'server/builders/redis';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
+import { RedisKeyBuilder } from 'server/utils/redis';
 import Validator from 'server/validator';
 
 export enum RateLimiterScope {
