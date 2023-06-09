@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
@@ -9,7 +9,7 @@ import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { RedisKeyBuilder } from 'server/utils/redis';
 import { object, string } from 'yup';
 
-export const GET = async (request: Request): Promise<Response> => {
+export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
       scope: RateLimiterScope.Global,

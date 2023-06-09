@@ -1,4 +1,4 @@
-import { getClientIp } from 'request-ip';
+import { NextRequest } from 'next/server';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
@@ -33,7 +33,7 @@ class RateLimiter {
     Object.assign(this, options);
   }
 
-  public async checkRequest(request: Request): Promise<RateLimiterCheckResult> {
+  public async checkRequest(request: NextRequest): Promise<RateLimiterCheckResult> {
     if (ServerEnvironment.isDevelopment) {
       return {
         exceeded: false,
@@ -42,7 +42,7 @@ class RateLimiter {
         reset: Infinity,
       };
     }
-    const ip = getClientIp(request);
+    const ip = request.headers.get('x-vercel-proxied-for');
     const ipSchema = string()
       .required()
       .min(7)
