@@ -6,6 +6,7 @@ import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
 import loginCodeTemplate from 'server/emails/login-code.eml';
 import ServerEnvironment from 'server/environment';
+import ServerError from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { MongoDBDocumentConverter } from 'server/utils/mongodb';
 import { RedisKeyBuilder } from 'server/utils/redis';
@@ -61,6 +62,9 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {
     console.log(error);
+    if (error instanceof ServerError) {
+      return new Response(undefined, { status: error.status });
+    }
     return new Response(undefined, { status: 500 });
   }
 };

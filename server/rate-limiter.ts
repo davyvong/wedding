@@ -3,7 +3,7 @@ import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
 import { RedisKeyBuilder } from 'server/utils/redis';
-import Validator from 'server/validator';
+import { string } from 'yup';
 
 export enum RateLimiterScope {
   Global = 'Global',
@@ -43,7 +43,12 @@ class RateLimiter {
       };
     }
     const ip = getClientIp(request);
-    if (!Validator.isIP(ip)) {
+    const ipSchema = string()
+      .required()
+      .min(7)
+      .max(15)
+      .matches(/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/);
+    if (!ipSchema.isValidSync(ip)) {
       throw new ServerError({
         code: ServerErrorCode.InvalidRequestIP,
         status: 400,

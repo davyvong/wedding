@@ -3,10 +3,11 @@ import { NextResponse } from 'next/server';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
+import ServerError from 'server/error';
 import JWT from 'server/jwt';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { RedisKeyBuilder } from 'server/utils/redis';
-import Validator from 'server/validator';
+import { object, string } from 'yup';
 
 export const GET = async (request: Request): Promise<Response> => {
   try {
@@ -21,7 +22,12 @@ export const GET = async (request: Request): Promise<Response> => {
     const params = {
       code: requestURL.searchParams.get('code'),
     };
-    if (!params.code || !Validator.isLoginCode(params.code)) {
+    const paramsSchema = object({
+      code: string()
+        .required()
+        .matches(/^([a-z]+)-([a-z]+)-([a-z]+)-([a-z]+)$/),
+    });
+    if (!paramsSchema.isValidSync(params)) {
       return new Response(undefined, { status: 400 });
     }
     const redisClient = await RedisClientFactory.getInstance();
@@ -42,6 +48,9 @@ export const GET = async (request: Request): Promise<Response> => {
     return response;
   } catch (error: unknown) {
     console.log(error);
+    if (error instanceof ServerError) {
+      return new Response(undefined, { status: error.status });
+    }
     return new Response(undefined, { status: 500 });
   }
 };

@@ -9,7 +9,7 @@ interface ServerErrorOptions {
 }
 
 class ServerError {
-  private status = 500;
+  public status = 500;
 
   constructor(options: ServerErrorOptions) {
     Object.assign(this, options);
