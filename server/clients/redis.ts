@@ -1,21 +1,16 @@
 import { createClient } from 'redis';
 
-class RedisClient {
+class RedisClientFactory {
   private static readonly instance = createClient({
-    password: process.env.REDIS_PASSWORD,
     url: process.env.REDIS_URL,
   });
 
   public static async getInstance() {
-    if (!RedisClient.instance.isOpen) {
-      await RedisClient.instance.connect();
+    if (!RedisClientFactory.instance.isOpen) {
+      await RedisClientFactory.instance.connect();
     }
-    return RedisClient.instance;
-  }
-
-  public static getKey(...keys: string[]): string {
-    return process.env.VERCEL_ENV + ':' + keys.join(':');
+    return RedisClientFactory.instance;
   }
 }
 
-export default RedisClient;
+export default RedisClientFactory;

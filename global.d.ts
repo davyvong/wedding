@@ -8,7 +8,6 @@ namespace NodeJS {
     NODEMAILER_PASSWORD: string;
     NODEMAILER_SERVICE: string;
     NODEMAILER_USERNAME: string;
-    REDIS_PASSWORD: string;
     REDIS_URL: string;
     SPOTIFY_CLIENT_ID: string;
     SPOTIFY_CLIENT_SECRET: string;

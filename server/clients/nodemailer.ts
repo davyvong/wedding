@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-class NodemailerClient {
+class NodemailerClientFactory {
   private static readonly instance = nodemailer.createTransport({
     auth: {
       user: process.env.NODEMAILER_USERNAME,
@@ -10,8 +10,8 @@ class NodemailerClient {
   });
 
   public static getInstance() {
-    return NodemailerClient.instance;
+    return NodemailerClientFactory.instance;
   }
 }
 
-export default NodemailerClient;
+export default NodemailerClientFactory;

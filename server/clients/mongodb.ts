@@ -17,17 +17,17 @@ interface Response {
   id: string;
 }
 
-class MongoDBClient {
+class MongoDBClientFactory {
   private static uri = process.env.MONGODB_URI;
-  private static database = MongoDBClient.uri.split('/').at(-1);
+  private static database = MongoDBClientFactory.uri.split('/').at(-1);
   private static instance: MongoClient;
 
   public static async getInstance(): Promise<Db> {
-    if (!MongoDBClient.instance) {
-      MongoDBClient.instance = new MongoClient(MongoDBClient.uri);
-      await MongoDBClient.instance.connect();
+    if (!MongoDBClientFactory.instance) {
+      MongoDBClientFactory.instance = new MongoClient(MongoDBClientFactory.uri);
+      await MongoDBClientFactory.instance.connect();
     }
-    return MongoDBClient.instance.db(MongoDBClient.database);
+    return MongoDBClientFactory.instance.db(MongoDBClientFactory.database);
   }
 
   public static toGuest(doc): Guest {
@@ -53,4 +53,4 @@ class MongoDBClient {
   }
 }
 
-export default MongoDBClient;
+export default MongoDBClientFactory;
