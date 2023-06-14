@@ -1,11 +1,9 @@
 'use client';
 
-import { GalleryProps } from 'components/gallery';
+import Gallery from 'components/gallery';
+import type { GalleryProps } from 'components/gallery';
 import useMediaQuery from 'hooks/media-query';
-import dynamic from 'next/dynamic';
 import type { FC } from 'react';
-
-const Gallery = dynamic(() => import('components/gallery'));
 
 const Page: FC<GalleryProps> = ({ ...props }) => {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
