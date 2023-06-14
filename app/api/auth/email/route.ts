@@ -1,5 +1,5 @@
 import words from 'constants/words.json';
-import * as handlebars from 'handlebars';
+import { compile } from 'handlebars/runtime';
 import { NextRequest } from 'next/server';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import NodemailerClientFactory from 'server/clients/nodemailer';
@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/api/auth/authorize');
     url.searchParams.set('code', code);
-    const template = handlebars.compile(loginCodeTemplate);
+    const template = compile(loginCodeTemplate);
     const html = template({ code, url: url.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({

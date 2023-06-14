@@ -1,9 +1,7 @@
-import dynamic from 'next/dynamic';
+import ResponsiveGallery from 'components/responsive-gallery';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
-
-const ResponsiveGallery = dynamic(() => import('components/responsive-gallery'));
 
 const gallery = [
   {

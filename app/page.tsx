@@ -1,10 +1,8 @@
 import classNames from 'classnames';
-import dynamic from 'next/dynamic';
+import Gallery from 'components/gallery';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
-
-const Gallery = dynamic(() => import('components/gallery'));
 
 const gallery = [
   {
