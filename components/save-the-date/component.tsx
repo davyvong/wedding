@@ -25,10 +25,6 @@ const SaveTheDateComponent: FC = () => {
         target: '_blank',
         text: t('components.save-the-date.add-to-calendar.outlook'),
       },
-      {
-        href: CalendarLinks.getICS(),
-        text: t('components.save-the-date.add-to-calendar.ics'),
-      },
     ],
     [t],
   );

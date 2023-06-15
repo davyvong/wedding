@@ -7,10 +7,6 @@ class CalendarLinks {
     return url.href;
   }
 
-  static getICS(): string {
-    return '/davy-and-vivian-wedding.ics';
-  }
-
   static getOutlook(): string {
     const url = new URL('https://outlook.live.com/calendar/0/deeplink/compose');
     url.searchParams.set('allday', 'true');
