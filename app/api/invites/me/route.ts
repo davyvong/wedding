@@ -65,9 +65,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       { status: 200 },
     );
   } catch (error: unknown) {
-    if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
-    }
-    return new Response(undefined, { status: 500 });
+    return ServerError.handle(error);
   }
 };

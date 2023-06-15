@@ -15,10 +15,18 @@ class ServerError {
     Object.assign(this, options);
   }
 
-  toRequest() {
+  public toRequest() {
     return {
       status: this.status,
     };
+  }
+
+  public static handle(error: unknown) {
+    console.log(error);
+    if (error instanceof ServerError) {
+      return new Response(undefined, { status: error.status });
+    }
+    return new Response(undefined, { status: 500 });
   }
 }
 

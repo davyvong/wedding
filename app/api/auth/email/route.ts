@@ -61,10 +61,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     await redisClient.set(redisKey, guest.id, { EX: 900 });
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {
-    console.log(error);
-    if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
-    }
-    return new Response(undefined, { status: 500 });
+    return ServerError.handle(error);
   }
 };

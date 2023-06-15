@@ -23,10 +23,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
     return NextResponse.json(playlist, { status: 200 });
   } catch (error: unknown) {
-    console.log(error);
-    if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
-    }
-    return new Response(undefined, { status: 500 });
+    return ServerError.handle(error);
   }
 };

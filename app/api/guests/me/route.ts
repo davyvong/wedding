@@ -31,10 +31,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
     return NextResponse.json(MongoDBDocumentConverter.toGuest(doc), { status: 200 });
   } catch (error: unknown) {
-    console.log(error);
-    if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
-    }
-    return new Response(undefined, { status: 500 });
+    return ServerError.handle(error);
   }
 };

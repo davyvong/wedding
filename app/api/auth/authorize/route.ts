@@ -49,10 +49,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     response.cookies.set('token', token);
     return response;
   } catch (error: unknown) {
-    console.log(error);
-    if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
-    }
-    return new Response(undefined, { status: 500 });
+    return ServerError.handle(error);
   }
 };
