@@ -9,7 +9,7 @@ interface Invite {
   id: string;
 }
 
-interface Response {
+interface InviteResponse {
   guest: Guest;
   id: string;
 }
@@ -30,7 +30,7 @@ export class MongoDBDocumentConverter {
     };
   }
 
-  public static toResponse(doc): Response {
+  public static toInviteResponse(doc): InviteResponse {
     return {
       guest: doc.guest,
       id: doc._id.toString(),
