@@ -1,5 +1,5 @@
 import words from 'constants/words.json';
-import { compile } from 'handlebars/runtime';
+import Handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import NodemailerClientFactory from 'server/clients/nodemailer';
@@ -41,18 +41,18 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guests').findOne({ email: body.email });
     if (!doc) {
-      return new Response(undefined, { status: 400 });
+      return new Response(undefined, { status: 401 });
     }
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/api/auth/authorize');
     url.searchParams.set('code', code);
-    const template = compile(loginCodeTemplate);
-    const html = template({ code, url: url.href });
+    const template = Handlebars.compile(loginCodeTemplate);
+    const html = template({ url: url.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({
       from: process.env.NODEMAILER_ADDRESS,
       html,
-      subject: 'Your login code is ' + code,
+      subject: 'Your secret link from Davy & Vivian',
       to: body.email,
     });
     const redisClient = await RedisClientFactory.getInstance();

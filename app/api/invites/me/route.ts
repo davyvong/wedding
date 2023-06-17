@@ -60,7 +60,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       {
         ...MongoDBDocumentConverter.toInvite(doc),
         guests: doc.guests.map(MongoDBDocumentConverter.toGuest),
-        responses: doc.responses.map(MongoDBDocumentConverter.toResponse),
+        responses: doc.responses.map(MongoDBDocumentConverter.toInviteResponse),
       },
       { status: 200 },
     );

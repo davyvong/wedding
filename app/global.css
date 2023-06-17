@@ -5,6 +5,7 @@
   --champagne: #f7e7ce;
   --pale-dogwood: #eac9bb;
   --persian-orange: #d0947a;
+  --ralph-lauren-petticoat-white: #ede8e1;
   --white: #ffffff;
 
   --primary: var(--brown-sugar);
@@ -57,17 +58,28 @@ a:hover {
 
 button {
   align-items: center;
-  background-color: transparent;
+  background-color: var(--persian-orange);
   border: 0;
+  border-radius: 0.5rem;
+  color: var(--white);
   display: flex;
   font-size: 1rem;
+  font-weight: 400;
   justify-content: center;
   outline: none;
-  padding: 0;
+  padding: 1rem;
+  transition: background-color 300ms ease-in-out;
+  width: 100%;
 }
 
 button:hover {
+  background-color: var(--brown-sugar);
   cursor: pointer;
+}
+
+button:disabled {
+  background-color: var(--persian-orange);
+  cursor: not-allowed;
 }
 
 h1 {
@@ -95,6 +107,7 @@ h4 {
 }
 
 input {
+  background-color: var(--white);
   border: 0;
   border-radius: 0.5rem;
   font-size: 1rem;

@@ -1,0 +1,59 @@
+.loadingHeart {
+  display: block;
+  height: 1.5rem;
+  position: relative;
+  transform-origin: 1rem 0.7rem;
+  transform: rotate(45deg);
+  width: 1.5rem;
+}
+
+.loadingHeart div {
+  animation: heartBeat 1200ms infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  background-color: var(--white);
+  height: 0.6rem;
+  left: 0.6rem;
+  position: absolute;
+  top: 0.6rem;
+  width: 0.6rem;
+}
+
+.loadingHeart div:after,
+.loadingHeart div:before {
+  background-color: var(--white);
+  content: '';
+  display: block;
+  height: 0.6rem;
+  position: absolute;
+  width: 0.6rem;
+}
+
+.loadingHeart div:before {
+  border-radius: 50% 0 0 50%;
+  left: -0.45rem;
+}
+
+.loadingHeart div:after {
+  border-radius: 50% 50% 0 0;
+  top: -0.45rem;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(0.95);
+  }
+  5% {
+    transform: scale(1.1);
+  }
+  39% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}

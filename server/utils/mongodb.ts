@@ -1,15 +1,15 @@
-interface Guest {
+export interface Guest {
   email: string;
   id: string;
   name: string;
 }
 
-interface Invite {
+export interface Invite {
   guests: Guest[];
   id: string;
 }
 
-interface Response {
+export interface InviteResponse {
   guest: Guest;
   id: string;
 }
@@ -30,7 +30,7 @@ export class MongoDBDocumentConverter {
     };
   }
 
-  public static toResponse(doc): Response {
+  public static toInviteResponse(doc): InviteResponse {
     return {
       guest: doc.guest,
       id: doc._id.toString(),
