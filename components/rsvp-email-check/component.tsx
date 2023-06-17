@@ -38,7 +38,10 @@ const RSVPEmailCheck: FC = () => {
         setIsSending(false);
         setError(new Error(t('components.rsvp-email-check.errors.not-invited')));
       } else {
-        window.location.pathname = '/auth/email-sent';
+        const redirectURL = new URL(window.location.origin);
+        redirectURL.pathname = '/auth/email-sent';
+        redirectURL.searchParams.set('email', email);
+        window.location.href = redirectURL.href;
       }
     },
     [email, error, t],
