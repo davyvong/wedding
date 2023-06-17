@@ -58,6 +58,7 @@ class SpotifyAPI {
     body.set('refresh_token', process.env.SPOTIFY_REFRESH_TOKEN);
     const response = await fetch('https://accounts.spotify.com/api/token', {
       body,
+      cache: 'no-store',
       headers: {
         Authorization:
           'Basic ' +
@@ -73,6 +74,7 @@ class SpotifyAPI {
   public static async getPlaylist(accessToken: string, playlistId: string): Promise<SpotifyPlaylist> {
     const url = new URL('https://api.spotify.com/v1/playlists/' + playlistId);
     const response = await fetch(url, {
+      cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + accessToken,
         'Content-Type': 'application/json',
@@ -87,6 +89,7 @@ class SpotifyAPI {
     const url = new URL(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`);
     await fetch(url, {
       body: JSON.stringify({ uris }),
+      cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + accessToken,
         'Content-Type': 'application/json',
@@ -101,6 +104,7 @@ class SpotifyAPI {
       body: JSON.stringify({
         tracks: uris.map(uri => ({ uri })),
       }),
+      cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + accessToken,
         'Content-Type': 'application/json',
@@ -114,6 +118,7 @@ class SpotifyAPI {
     url.searchParams.set('q', query);
     url.searchParams.set('type', 'track');
     const response = await fetch(url, {
+      cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + accessToken,
         'Content-Type': 'application/json',
