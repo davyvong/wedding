@@ -1,5 +1,7 @@
 'use client';
 
+import LoadingHeart from 'components/loading-heart';
+import useTranslate from 'hooks/translate';
 import { useCallback, useState } from 'react';
 import type { FC, FormEvent } from 'react';
 import { string } from 'yup';
@@ -7,6 +9,8 @@ import { string } from 'yup';
 import styles from './component.module.css';
 
 const RSVPEmailCheck: FC = () => {
+  const t = useTranslate();
+
   const [email, setEmail] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
   const [hasSent, setHasSent] = useState<boolean>(false);
@@ -16,10 +20,10 @@ const RSVPEmailCheck: FC = () => {
     async (event: FormEvent): Promise<void> => {
       event.preventDefault();
       if (!email) {
-        setError(new Error('Please fill in your email address.'));
+        setError(new Error(t('components.rsvp-email-check.errors.missing-email')));
         return;
       } else if (!string().email().required().isValidSync(email)) {
-        setError(new Error('The email address should be formatted like username@domain.com'));
+        setError(new Error(t('components.rsvp-email-check.errors.invalid-email')));
         return;
       } else if (error) {
         setError(undefined);
@@ -32,22 +36,22 @@ const RSVPEmailCheck: FC = () => {
       });
       setIsSending(false);
       if (response.status === 401) {
-        setError(new Error('Your email was not found on the guest list. Let the host know.'));
+        setError(new Error(t('components.rsvp-email-check.errors.not-invited')));
       } else {
         setHasSent(true);
       }
     },
-    [email, error],
+    [email, error, t],
   );
 
   if (hasSent) {
     return (
       <div className={styles.container}>
-        <div className={styles.successStage}>
-          <div className={styles.heading}>Check your email</div>
+        <div className={styles.successCard}>
+          <div className={styles.heading}>{t('components.rsvp-email-check.success.heading')}</div>
           <div className={styles.subheading}>
-            We have sent an email to you at <u>{email}</u>.<br />
-            It has a secret link to your invitation.
+            <span>{t('components.rsvp-email-check.success.subheading1', { email })} </span>
+            <span>{t('components.rsvp-email-check.success.subheading2')}</span>
           </div>
         </div>
       </div>
@@ -56,17 +60,17 @@ const RSVPEmailCheck: FC = () => {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={sendLoginCode}>
-        <div>Get a secret link sent to your email to view your RSVP invitation.</div>
+      <form className={styles.formCard} onSubmit={sendLoginCode}>
+        <div>{t('components.rsvp-email-check.form.description')}</div>
         <input
-          className={styles.field}
+          className={styles.emailInput}
           onChange={event => setEmail(event.target.value)}
           placeholder="Email"
           value={email}
         />
-        {error && <div className={styles.field}>{error.message}</div>}
-        <button className={styles.field} disabled={isSending} onClick={sendLoginCode}>
-          {isSending ? 'Sending secret link...' : 'Send secret link'}
+        {error && <div className={styles.errorMessage}>{error.message}</div>}
+        <button className={styles.sendButton} disabled={isSending} onClick={sendLoginCode}>
+          {isSending ? <LoadingHeart /> : t('components.rsvp-email-check.form.send-button')}
         </button>
       </form>
     </div>

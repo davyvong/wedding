@@ -77,6 +77,11 @@ button:hover {
   cursor: pointer;
 }
 
+button:disabled {
+  background-color: var(--persian-orange);
+  cursor: not-allowed;
+}
+
 h1 {
   font-size: 1.75rem;
   font-weight: 600;

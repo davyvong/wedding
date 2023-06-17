@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-.form {
+.formCard {
   background-color: var(--white);
   border-radius: 0.5rem;
   max-width: 425px;
@@ -16,13 +16,29 @@
   width: 100%;
 }
 
-.field {
+.successCard {
+  max-width: 768px;
+  width: 100%;
+}
+
+.emailInput {
   margin-top: 1rem;
 }
 
-.successStage {
-  max-width: 768px;
-  width: 100%;
+.errorMessage {
+  margin-top: 0.5rem;
+}
+
+.sendButton {
+  margin-top: 1rem;
+}
+
+.sendButton:disabled {
+  cursor: wait;
+}
+
+.sendButton span {
+  margin-left: 0.5rem;
 }
 
 .heading {
@@ -41,13 +57,25 @@
     padding: 1.5rem;
   }
 
-  .form {
+  .formCard {
     padding: 1.5rem;
     max-width: 600px;
   }
 
-  .field {
+  .emailInput {
     margin-top: 1.5rem;
+  }
+
+  .errorMessage {
+    margin-top: 0.75rem;
+  }
+  
+  .sendButton {
+    margin-top: 1.5rem;
+  }
+
+  .subheading span {
+    display: block;
   }
 }
 
@@ -56,11 +84,19 @@
     padding: 2rem;
   }
 
-  .form {
+  .formCard {
     padding: 2rem;
   }
 
-  .field {
+  .emailInput {
+    margin-top: 2rem;
+  }
+
+  .errorMessage {
+    margin-top: 1rem;
+  }
+  
+  .sendButton {
     margin-top: 2rem;
   }
 }
