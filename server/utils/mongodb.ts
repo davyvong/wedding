@@ -1,15 +1,15 @@
-interface Guest {
+export interface Guest {
   email: string;
   id: string;
   name: string;
 }
 
-interface Invite {
+export interface Invite {
   guests: Guest[];
   id: string;
 }
 
-interface InviteResponse {
+export interface InviteResponse {
   guest: Guest;
   id: string;
 }

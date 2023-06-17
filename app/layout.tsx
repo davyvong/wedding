@@ -2,7 +2,7 @@
 
 import 'minireset.css';
 
-import './globals.css';
+import './global.css';
 
 import { Analytics } from '@vercel/analytics/react';
 import Navigation from 'components/navigation';
