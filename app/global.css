@@ -58,7 +58,7 @@ a:hover {
 
 button {
   align-items: center;
-  background-color: var(--primary);
+  background-color: var(--persian-orange);
   border: 0;
   border-radius: 0.5rem;
   color: var(--white);
@@ -68,10 +68,12 @@ button {
   justify-content: center;
   outline: none;
   padding: 0.75rem 1rem;
+  transition: background-color 300ms ease-in-out;
   width: 100%;
 }
 
 button:hover {
+  background-color: var(--brown-sugar);
   cursor: pointer;
 }
 

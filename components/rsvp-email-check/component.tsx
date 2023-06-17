@@ -1,50 +1,74 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
-import type { FC } from 'react';
+import { useCallback, useState } from 'react';
+import type { FC, FormEvent } from 'react';
+import { string } from 'yup';
 
 import styles from './component.module.css';
 
 const RSVPEmailCheck: FC = () => {
-  const [email, setEmail] = useState('');
-  const [isSending, setIsSending] = useState(false);
-  const [hasSent, setHasSent] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [hasSent, setHasSent] = useState<boolean>(false);
+  const [error, setError] = useState<Error>();
 
-  const sendLoginCode = useCallback(async (): Promise<void> => {
-    setIsSending(true);
-    await fetch('/api/auth/email', {
-      body: JSON.stringify({ email }),
-      cache: 'no-store',
-      method: 'POST',
-    });
-    setIsSending(false);
-    setHasSent(true);
-  }, [email]);
+  const sendLoginCode = useCallback(
+    async (event: FormEvent): Promise<void> => {
+      event.preventDefault();
+      if (!email) {
+        setError(new Error('Please fill in your email address.'));
+        return;
+      } else if (!string().email().required().isValidSync(email)) {
+        setError(new Error('The email address should be formatted like username@domain.com'));
+        return;
+      } else if (error) {
+        setError(undefined);
+      }
+      setIsSending(true);
+      const response = await fetch('/api/auth/email', {
+        body: JSON.stringify({ email }),
+        cache: 'no-store',
+        method: 'POST',
+      });
+      setIsSending(false);
+      if (response.status === 401) {
+        setError(new Error('Your email was not found on the guest list. Let the host know.'));
+      } else {
+        setHasSent(true);
+      }
+    },
+    [email, error],
+  );
 
-  const sendButtonText = useMemo(() => {
-    if (isSending) {
-      return 'Sending email code...';
-    }
-    if (hasSent) {
-      return 'Email code sent!';
-    }
-    return 'Send email code';
-  }, [hasSent, isSending]);
+  if (hasSent) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.successStage}>
+          <div className={styles.heading}>Check your email</div>
+          <div className={styles.subheading}>
+            We have sent an email to you at <u>{email}</u>.<br />
+            It has a secret link to your invitation.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <div>Instructions</div>
+      <form className={styles.form} onSubmit={sendLoginCode}>
+        <div>Get a secret link sent to your email to view your RSVP invitation.</div>
         <input
-          className={styles.emailInput}
+          className={styles.field}
           onChange={event => setEmail(event.target.value)}
-          placeholder="Email address"
+          placeholder="Email"
           value={email}
         />
-        <button className={styles.sendButton} disabled={!email} onClick={sendLoginCode}>
-          {sendButtonText}
+        {error && <div className={styles.field}>{error.message}</div>}
+        <button className={styles.field} disabled={isSending} onClick={sendLoginCode}>
+          {isSending ? 'Sending secret link...' : 'Send secret link'}
         </button>
-      </div>
+      </form>
     </div>
   );
 };

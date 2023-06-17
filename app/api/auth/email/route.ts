@@ -41,7 +41,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guests').findOne({ email: body.email });
     if (!doc) {
-      return new Response(undefined, { status: 400 });
+      return new Response(undefined, { status: 401 });
     }
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/api/auth/authorize');
