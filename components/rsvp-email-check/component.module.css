@@ -8,16 +8,9 @@
   width: 100%;
 }
 
-.formCard {
-  background-color: var(--white);
-  border-radius: 0.5rem;
+.innerContainer {
   max-width: 425px;
   padding: 1rem;
-  width: 100%;
-}
-
-.successCard {
-  max-width: 768px;
   width: 100%;
 }
 
@@ -26,7 +19,7 @@
 }
 
 .errorMessage {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .sendButton {
@@ -37,8 +30,12 @@
   cursor: wait;
 }
 
-.sendButton span {
+.sendButtonLoading span {
   margin-left: 0.5rem;
+}
+
+.sendButtonLoading {
+  padding: 0.80625rem 1rem;
 }
 
 .heading {
@@ -48,8 +45,19 @@
 
 .subheading {
   font-size: 1.25rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   text-align: center;
+}
+
+.illustration {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.illustration svg {
+  width: 120px;
 }
 
 @media (min-width: 768px) {
@@ -57,7 +65,7 @@
     padding: 1.5rem;
   }
 
-  .formCard {
+  .innerContainer {
     padding: 1.5rem;
     max-width: 600px;
   }
@@ -69,13 +77,21 @@
   .errorMessage {
     margin-top: 0.75rem;
   }
-  
+
   .sendButton {
     margin-top: 1.5rem;
   }
 
   .subheading span {
     display: block;
+  }
+
+  .illustration {
+    margin-top: 2.5rem;
+  }
+
+  .illustration svg {
+    width: 140px;
   }
 }
 
@@ -84,7 +100,7 @@
     padding: 2rem;
   }
 
-  .formCard {
+  .innerContainer {
     padding: 2rem;
   }
 
@@ -95,8 +111,16 @@
   .errorMessage {
     margin-top: 1rem;
   }
-  
+
   .sendButton {
     margin-top: 2rem;
+  }
+
+  .illustration {
+    margin-top: 3rem;
+  }
+
+  .illustration svg {
+    width: 160px;
   }
 }

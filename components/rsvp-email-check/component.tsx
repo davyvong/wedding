@@ -1,5 +1,6 @@
 'use client';
 
+import classNames from 'classnames';
 import LoadingHeart from 'components/loading-heart';
 import useTranslate from 'hooks/translate';
 import { useCallback, useState } from 'react';
@@ -13,7 +14,6 @@ const RSVPEmailCheck: FC = () => {
 
   const [email, setEmail] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
-  const [hasSent, setHasSent] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
 
   const sendLoginCode = useCallback(
@@ -34,34 +34,21 @@ const RSVPEmailCheck: FC = () => {
         cache: 'no-store',
         method: 'POST',
       });
-      setIsSending(false);
       if (response.status === 401) {
+        setIsSending(false);
         setError(new Error(t('components.rsvp-email-check.errors.not-invited')));
       } else {
-        setHasSent(true);
+        window.location.pathname = '/auth/email-sent';
       }
     },
     [email, error, t],
   );
 
-  if (hasSent) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.successCard}>
-          <div className={styles.heading}>{t('components.rsvp-email-check.success.heading')}</div>
-          <div className={styles.subheading}>
-            <span>{t('components.rsvp-email-check.success.subheading1', { email })} </span>
-            <span>{t('components.rsvp-email-check.success.subheading2')}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.container}>
-      <form className={styles.formCard} onSubmit={sendLoginCode}>
-        <div>{t('components.rsvp-email-check.form.description')}</div>
+      <form className={styles.innerContainer} onSubmit={sendLoginCode}>
+        <div className={styles.heading}>{t('app.layout.title')}</div>
+        <div className={styles.subheading}>{t('components.rsvp-email-check.form.description')}</div>
         <input
           className={styles.emailInput}
           onChange={event => setEmail(event.target.value)}
@@ -69,7 +56,11 @@ const RSVPEmailCheck: FC = () => {
           value={email}
         />
         {error && <div className={styles.errorMessage}>{error.message}</div>}
-        <button className={styles.sendButton} disabled={isSending} onClick={sendLoginCode}>
+        <button
+          className={classNames(styles.sendButton, isSending && styles.sendButtonLoading)}
+          disabled={isSending}
+          onClick={sendLoginCode}
+        >
           {isSending ? <LoadingHeart /> : t('components.rsvp-email-check.form.send-button')}
         </button>
       </form>

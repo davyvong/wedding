@@ -29,13 +29,13 @@ class GuestAuthenticator {
   ): Promise<GuestTokenPayload | never> {
     const tokenCookie = cookies.get('token');
     if (!tokenCookie) {
-      return redirect('/');
+      return redirect('/auth');
     }
     try {
       const payload = await JWT.verify(tokenCookie.value);
       return payload as GuestTokenPayload;
     } catch {
-      return redirect('/');
+      return redirect('/auth');
     }
   }
 }

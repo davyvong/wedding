@@ -1,0 +1,30 @@
+.illustration {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.illustration svg {
+  width: 120px;
+}
+
+@media (min-width: 768px) {
+  .illustration {
+    margin-top: 2.5rem;
+  }
+
+  .illustration svg {
+    width: 140px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .illustration {
+    margin-top: 3rem;
+  }
+
+  .illustration svg {
+    width: 160px;
+  }
+}

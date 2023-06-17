@@ -1,3 +1,3 @@
-import RSVPEmailCheckComponent from './component';
+import RSVPEmailCheck from './component';
 
-export default RSVPEmailCheckComponent;
+export default RSVPEmailCheck;

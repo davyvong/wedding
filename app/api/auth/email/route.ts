@@ -47,12 +47,12 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const url = new URL(ServerEnvironment.getBaseURL() + '/api/auth/authorize');
     url.searchParams.set('code', code);
     const template = Handlebars.compile(loginCodeTemplate);
-    const html = template({ code, url: url.href });
+    const html = template({ url: url.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({
       from: process.env.NODEMAILER_ADDRESS,
       html,
-      subject: 'Your login code is ' + code,
+      subject: 'Your secret link from Davy & Vivian',
       to: body.email,
     });
     const redisClient = await RedisClientFactory.getInstance();

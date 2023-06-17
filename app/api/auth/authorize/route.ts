@@ -30,25 +30,26 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         .matches(/^([a-z]+)-([a-z]+)-([a-z]+)-([a-z]+)$/),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const redisClient = await RedisClientFactory.getInstance();
     const redisKey = new RedisKeyBuilder().set('codes', params.code).toString();
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
-      return new Response(undefined, { status: 400 });
+      return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guests').findOne({ _id: new ObjectId(cachedGuestId) });
     if (!doc) {
-      return new Response(undefined, { status: 400 });
+      return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     await redisClient.del(redisKey);
     const token = await JWT.sign({ id: cachedGuestId });
-    const response = NextResponse.redirect(ServerEnvironment.getBaseURL());
+    const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/rsvp');
     response.cookies.set('token', token);
     return response;
   } catch (error: unknown) {
-    return ServerError.handle(error);
+    ServerError.handle(error);
+    return NextResponse.redirect(ServerEnvironment.getBaseURL());
   }
 };
