@@ -19,8 +19,7 @@ const RSVPEmailSent: FC<RSVPEmailSentProps> = ({ email }) => {
       <div className={rsvpEmailCheckStyles.innerContainer}>
         <div className={rsvpEmailCheckStyles.heading}>{t('components.rsvp-email-sent.heading')}</div>
         <div className={rsvpEmailCheckStyles.subheading}>
-          <span>{html('components.rsvp-email-sent.subheading1', { email })} </span>
-          <span>{t('components.rsvp-email-sent.subheading2')}</span>
+          {html('components.rsvp-email-sent.subheading', { email })}
         </div>
         <div className={styles.illustration}>
           <InboxEmailOpenedSVG />
