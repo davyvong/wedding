@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
-import loginCodeTemplate from 'server/emails/login-code.eml';
+import secretLinkTemplate from 'server/emails/secret-link.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/api/auth/authorize');
     url.searchParams.set('code', code);
-    const template = Handlebars.compile(loginCodeTemplate);
+    const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: url.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({
