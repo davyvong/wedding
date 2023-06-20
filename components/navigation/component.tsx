@@ -15,7 +15,7 @@ interface NavigationComponentProps {
 }
 
 const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, toggle }) => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   return (
     <Fragment>

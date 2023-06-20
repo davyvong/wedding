@@ -10,7 +10,7 @@ import { string } from 'yup';
 import styles from './component.module.css';
 
 const RSVPEmailCheck: FC = () => {
-  const t = useTranslate();
+  const { html, t } = useTranslate();
 
   const [email, setEmail] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
@@ -58,7 +58,7 @@ const RSVPEmailCheck: FC = () => {
           placeholder="Email"
           value={email}
         />
-        {error && <div className={styles.errorMessage}>{error.message}</div>}
+        {error && <div className={styles.errorMessage}>{html(error.message)}</div>}
         <button
           className={classNames(styles.sendButton, isSending && styles.sendButtonLoading)}
           disabled={isSending}

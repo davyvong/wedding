@@ -12,15 +12,14 @@ interface RSVPEmailSentProps {
 }
 
 const RSVPEmailSent: FC<RSVPEmailSentProps> = ({ email }) => {
-  const t = useTranslate();
+  const { html, t } = useTranslate();
 
   return (
     <div className={rsvpEmailCheckStyles.container}>
       <div className={rsvpEmailCheckStyles.innerContainer}>
         <div className={rsvpEmailCheckStyles.heading}>{t('components.rsvp-email-sent.heading')}</div>
         <div className={rsvpEmailCheckStyles.subheading}>
-          <span>{t('components.rsvp-email-sent.subheading1', { email })} </span>
-          <span>{t('components.rsvp-email-sent.subheading2')}</span>
+          {html('components.rsvp-email-sent.subheading', { email })}
         </div>
         <div className={styles.illustration}>
           <InboxEmailOpenedSVG />
