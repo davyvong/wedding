@@ -38,8 +38,9 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
+    const email = body.email.toLowerCase();
     const db = await MongoDBClientFactory.getInstance();
-    const doc = await db.collection('guests').findOne({ email: body.email });
+    const doc = await db.collection('guests').findOne({ email });
     if (!doc) {
       return new Response(undefined, { status: 401 });
     }
@@ -52,8 +53,8 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     await transporter.sendMail({
       from: process.env.NODEMAILER_ADDRESS,
       html,
-      subject: 'Your secret link from Davy & Vivian',
-      to: body.email,
+      subject: 'Your secret link from Vivian & Davy',
+      to: email,
     });
     const redisClient = await RedisClientFactory.getInstance();
     const redisKey = new RedisKeyBuilder().set('codes', code).toString();

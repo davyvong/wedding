@@ -30,7 +30,7 @@ const RSVPEmailCheck: FC = () => {
       }
       setIsSending(true);
       const response = await fetch('/api/auth/email', {
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: email.toLowerCase() }),
         cache: 'no-store',
         method: 'POST',
       });
@@ -40,7 +40,7 @@ const RSVPEmailCheck: FC = () => {
       } else {
         const redirectURL = new URL(window.location.origin);
         redirectURL.pathname = '/auth/email-sent';
-        redirectURL.searchParams.set('email', email);
+        redirectURL.searchParams.set('email', email.toLowerCase());
         window.location.href = redirectURL.href;
       }
     },
