@@ -43,7 +43,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!doc) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    await redisClient.del(redisKey);
     const token = await JWT.sign({ id: cachedGuestId });
     const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/rsvp');
     response.cookies.set('token', token);
