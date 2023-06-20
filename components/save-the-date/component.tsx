@@ -11,7 +11,7 @@ import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
 
 const SaveTheDateComponent: FC = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   const addToCalendarOptions = useMemo<LinkComponentProps[]>(
     () => [

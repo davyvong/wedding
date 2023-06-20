@@ -25,7 +25,7 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   useEffect(() => {
     setVH();
