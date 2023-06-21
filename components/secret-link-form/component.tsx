@@ -60,6 +60,7 @@ const SecretLinkForm: FC = () => {
         />
         {error && <div className={styles.errorMessage}>{html(error.message)}</div>}
         <button
+          aria-label={t('components.secret-link-form.send-button')}
           className={classNames(styles.sendButton, isSending && styles.sendButtonLoading)}
           disabled={isSending}
           onClick={sendLoginCode}
