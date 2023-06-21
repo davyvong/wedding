@@ -1,7 +1,7 @@
+import navigationStyles from 'components/navigation/component.module.css';
 import ResponsiveGallery from 'components/responsive-gallery';
+import { Fragment } from 'react';
 import type { FC } from 'react';
-
-import styles from './page.module.css';
 
 const gallery = [
   {
@@ -79,8 +79,9 @@ const gallery = [
 ];
 
 const Page: FC = () => (
-  <div className={styles.container}>
+  <Fragment>
+    <style>{`.${navigationStyles.content} { background-color: var(--white); }`}</style>
     <ResponsiveGallery data={gallery} />
-  </div>
+  </Fragment>
 );
 export default Page;
