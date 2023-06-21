@@ -1,3 +1,7 @@
+.subheadingEmail u {
+  text-transform: lowercase;
+}
+
 .illustration {
   align-items: center;
   display: flex;
