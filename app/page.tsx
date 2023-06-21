@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import Gallery from 'components/gallery';
+import navigationStyles from 'components/navigation/component.module.css';
+import { Fragment } from 'react';
 import type { FC } from 'react';
 
 import styles from './page.module.css';
@@ -32,12 +34,15 @@ const gallery = [
 ];
 
 const Page: FC = () => (
-  <div className={styles.container}>
-    <div className={classNames(styles.section, styles.saveTheDate)} />
-    <div className={styles.section}>
-      <Gallery data={gallery} />
+  <Fragment>
+    <style>{`.${navigationStyles.content} { background-color: var(--champagne); }`}</style>
+    <div className={styles.container}>
+      <div className={classNames(styles.section, styles.saveTheDate)} />
+      <div className={styles.section}>
+        <Gallery data={gallery} />
+      </div>
     </div>
-  </div>
+  </Fragment>
 );
 
 export default Page;
