@@ -29,7 +29,7 @@ const RSVPEmailCheck: FC = () => {
         setError(undefined);
       }
       setIsSending(true);
-      const response = await fetch('/api/auth/email', {
+      const response = await fetch('/api/secret-link/email', {
         body: JSON.stringify({ email: email.toLowerCase() }),
         cache: 'no-store',
         method: 'POST',
@@ -39,8 +39,8 @@ const RSVPEmailCheck: FC = () => {
         setError(new Error(t('components.rsvp-email-check.errors.not-invited')));
       } else {
         const redirectURL = new URL(window.location.origin);
-        redirectURL.pathname = '/auth/email-sent';
-        redirectURL.searchParams.set('email', email.toLowerCase());
+        redirectURL.pathname = '/secret-link/sent';
+        redirectURL.searchParams.set('to', email.toLowerCase());
         window.location.href = redirectURL.href;
       }
     },
