@@ -10,7 +10,7 @@
 
 .contentActive {
   overflow: hidden;
-  transform: translateY(-25rem);
+  transform: translateY(-29rem);
 }
 
 .contentActive:hover {
@@ -20,8 +20,9 @@
 .menu {
   background-color: var(--black);
   color: var(--white);
-  height: 25rem;
-  padding: 1rem;
+  height: 29rem;
+  padding: 1rem 0;
+  padding-bottom: 8rem;
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
   width: 100%;
@@ -29,27 +30,88 @@
 }
 
 .menuActive {
-  transform: translateY(-25rem);
+  transform: translateY(-29rem);
+}
+
+.pageCarousel {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  padding: 0 1rem;
+}
+
+.pageCard:hover .pageTitle:before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.pageCard:hover .pageTitle span {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.pageCard:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.pageTitle {
+  font-weight: 500;
+}
+
+.pageThumbnail {
+  background-color: var(--persian-orange);
+  border-radius: 0.25rem;
+  display: block;
+  margin-top: 0.5rem;
+  padding-top: 160%;
+  transition: background-color 300ms ease-in-out;
+  width: 10rem;
+}
+
+.pageCard:hover .pageThumbnail {
+  background-color: var(--brown-sugar);
 }
 
 @media (min-width: 768px) {
+  .contentActive {
+    transform: translateY(calc(max(24rem, 50vh) * -1));
+  }
+
   .menu {
-    padding: 1.5rem;
+    height: 24rem;
+    padding: 1.5rem 0 8rem 0;
+  }
+
+  .menuActive {
+    transform: translateY(calc(max(24rem, 50vh) * -1));
+  }
+
+  .pageCarousel {
+    padding: 0 1.5rem;
+  }
+
+  .pageCard:not(:first-child) {
+    margin-left: 1.5rem;
+  }
+
+  .pageThumbnail {
+    padding-top: 60%;
+    width: 20rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .contentActive {
-    transform: translateY(calc(max(28.125rem, 50vh) * -1));
-  }
-
   .menu {
-    height: max(28.125rem, 50vh);
-    padding: 2rem;
+    padding: 2rem 0 8rem 0;
   }
 
-  .menuActive {
-    transform: translateY(calc(max(28.125rem, 50vh) * -1));
+  .pageCarousel {
+    padding: 0 2rem;
+  }
+
+  .pageCard:not(:first-child) {
+    margin-left: 2rem;
   }
 }
 

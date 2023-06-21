@@ -1,9 +1,9 @@
 {
   "app.layout.title": "Vivian & Davy",
   "components.dropdown-button.text": "Add to Calendar",
-  "components.navigation.cookie-policy": "Cookie Policy",
   "components.navigation.gallery": "Gallery",
   "components.navigation.home": "Home",
+  "components.navigation.rsvp": "RSVP",
   "components.rsvp-email-check.errors.invalid-email": "The email should be formatted like <b>username@domain.com</b>.",
   "components.rsvp-email-check.errors.missing-email": "Please fill in your email.",
   "components.rsvp-email-check.errors.not-invited": "Your email was not found on the guest list. <u>Let the host know</u>.",
