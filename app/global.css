@@ -9,7 +9,15 @@
   --seashell: #fff5ee;
   --white: #ffffff;
 
-  --primary: var(--brown-sugar);
+  --muted: #eaccc0;
+
+  --primary-100: #d18f75;
+  --primary-200: #cb8062;
+  --primary-300: #c5704f;
+  --primary-400: #bc623e;
+  --primary-500: #a95838;
+  --primary-600: #964e31;
+  --primary-700: #82442b;
 }
 
 ::-webkit-scrollbar {
@@ -38,7 +46,7 @@ html {
 
 body {
   background-color: var(--black);
-  color: var(--primary);
+  color: var(--primary-400);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
@@ -59,7 +67,7 @@ a:hover {
 
 button {
   align-items: center;
-  background-color: var(--persian-orange);
+  background-color: var(--primary-400);
   border: 0;
   border-radius: 0.5rem;
   color: var(--white);
@@ -73,12 +81,12 @@ button {
 }
 
 button:hover {
-  background-color: var(--brown-sugar);
+  background-color: var(--primary-600);
   cursor: pointer;
 }
 
 button:disabled {
-  background-color: var(--persian-orange);
+  background-color: var(--primary-200);
   cursor: not-allowed;
 }
 
@@ -108,17 +116,28 @@ h4 {
 
 input {
   background-color: var(--white);
-  border: 0;
+  border: 2px solid var(--muted);
   border-radius: 0.5rem;
+  color: var(--primary-400);
   font-size: 1rem;
   opacity: 1;
   outline: none;
   padding: 1rem;
+  transition: border 300ms ease-in-out;
   width: 100%;
 }
 
-input:disabled,
+input:disabled {
+  opacity: 1;
+}
+
+input:focus,
+input:hover {
+  border-color: var(--primary-400);
+}
+
 input::placeholder {
+  color: var(--muted);
   opacity: 1;
 }
 

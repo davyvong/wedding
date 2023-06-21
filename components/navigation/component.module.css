@@ -62,7 +62,7 @@
 }
 
 .pageThumbnail {
-  background-color: var(--persian-orange);
+  background-color: var(--primary-200);
   border-radius: 0.25rem;
   display: block;
   margin-top: 0.5rem;
@@ -72,7 +72,7 @@
 }
 
 .pageCard:hover .pageThumbnail {
-  background-color: var(--brown-sugar);
+  background-color: var(--primary-400);
 }
 
 @media (min-width: 768px) {
@@ -126,7 +126,7 @@
 }
 
 .toggleButton {
-  background-color: var(--persian-orange);
+  background-color: var(--primary-200);
   border-radius: 2rem;
   box-shadow: rgba(0, 0, 0, 0.25) 0 0.1875rem 0.5rem;
   display: flex;
@@ -139,7 +139,7 @@
 }
 
 .toggleButton:hover {
-  background-color: var(--brown-sugar);
+  background-color: var(--primary-400);
   transform: scale(1.1);
 }
 
