@@ -1,0 +1,31 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.innerContainer {
+  max-width: 300px;
+  width: 100%;
+}
+
+.guestResponse {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.guestResponse:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.guestResponse span {
+  flex: 1;
+}
+
+.guestResponse button {
+  padding: 0.75rem 1rem;
+}

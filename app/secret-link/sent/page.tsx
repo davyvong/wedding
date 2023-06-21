@@ -1,7 +1,7 @@
-import RSVPEmailSent from 'components/rsvp-email-sent';
+import SecretLinkSent from 'components/secret-link-sent';
 
 const Page = async ({ searchParams }): Promise<JSX.Element> => {
-  return <RSVPEmailSent email={searchParams.to} />;
+  return <SecretLinkSent email={searchParams.to} />;
 };
 
 export default Page;

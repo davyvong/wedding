@@ -69,7 +69,6 @@ button {
   outline: none;
   padding: 1rem;
   transition: background-color 300ms ease-in-out;
-  width: 100%;
 }
 
 button:hover {
