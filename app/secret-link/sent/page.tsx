@@ -1,6 +1,12 @@
 import SecretLinkSent from 'components/secret-link-sent';
 
-const Page = async ({ searchParams }): Promise<JSX.Element> => {
+interface PageProps {
+  searchParams: {
+    to?: string;
+  };
+}
+
+const Page = async ({ searchParams }: PageProps): Promise<JSX.Element> => {
   return <SecretLinkSent email={searchParams.to} />;
 };
 
