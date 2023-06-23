@@ -1,5 +1,6 @@
 .link {
   align-items: center;
+  color: var(--color-primary);
   display: flex;
   flex-direction: row;
   font-weight: 600;

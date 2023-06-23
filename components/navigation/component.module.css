@@ -43,6 +43,10 @@
   width: 100%;
 }
 
+.pageTitle {
+  color: var(--color-on-primary) !important;
+}
+
 .pageCard:hover .pageTitle:before {
   opacity: 1;
   transform: translateX(0);

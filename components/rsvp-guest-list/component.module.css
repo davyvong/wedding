@@ -8,28 +8,20 @@
 }
 
 .innerContainer {
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  color: var(--color-on-surface);
   max-width: 400px;
   width: 100%;
 }
 
 .guestResponse {
   align-items: center;
-  background-color: var(--color-surface);
-  border-radius: 0.5rem;
-  color: var(--color-on-surface);
   display: flex;
   flex-direction: row;
   padding: 1rem 1.5rem;
 }
 
-.guestResponse:not(:first-child) {
-  margin-top: 1rem;
-}
-
 .guestResponse span {
   flex: 1;
-}
-
-.guestResponseLink:before {
-  background-color: var(--color-on-surface);
 }
