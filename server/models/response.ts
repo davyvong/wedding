@@ -14,7 +14,7 @@ class MDBResponse {
     this.id = data.id;
   }
 
-  public static fromDocument(doc: Document) {
+  public static fromDocument(doc: Document): MDBResponse {
     const data: MDBResponseData = {
       guest: doc.guest,
       id: doc._id.toString(),

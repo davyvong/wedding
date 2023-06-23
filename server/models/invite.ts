@@ -14,7 +14,7 @@ class MDBInvite {
     this.id = data.id;
   }
 
-  public static fromDocument(doc: Document) {
+  public static fromDocument(doc: Document): MDBInvite {
     const data: MDBInviteData = {
       guests: doc.guests.map((guestId: ObjectId) => guestId.toString()),
       id: doc._id.toString(),

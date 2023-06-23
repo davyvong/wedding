@@ -5,8 +5,8 @@ import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import JWT from 'server/jwt';
+import RedisKey from 'server/models/redis-key';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { RedisKeyBuilder } from 'server/utils/redis';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -33,7 +33,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const redisClient = await RedisClientFactory.getInstance();
-    const redisKey = new RedisKeyBuilder().set('codes', params.code).toString();
+    const redisKey = RedisKey.create('codes', params.code);
     const cachedGuestId = await redisClient.get(redisKey);
     if (!cachedGuestId) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());

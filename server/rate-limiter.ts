@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
-import { RedisKeyBuilder } from 'server/utils/redis';
+import RedisKey from 'server/models/redis-key';
 import { string } from 'yup';
 
 export enum RateLimiterScope {
@@ -56,7 +56,7 @@ class RateLimiter {
     }
     try {
       const redisClient = await RedisClientFactory.getInstance();
-      const redisKey = new RedisKeyBuilder().set('rate-limit', this.scope, ip).toString();
+      const redisKey = RedisKey.create('rate-limit', this.scope, ip);
       if (!(await redisClient.exists(redisKey))) {
         await redisClient.set(redisKey, 0, { EX: this.interval });
       }

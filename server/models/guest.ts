@@ -17,7 +17,7 @@ class MDBGuest {
     this.name = data.name;
   }
 
-  public static fromDocument(doc: Document) {
+  public static fromDocument(doc: Document): MDBGuest {
     const data: MDBGuestData = {
       email: doc.email,
       id: doc._id.toString(),
