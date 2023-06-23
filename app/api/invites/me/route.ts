@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import GuestAuthenticator from 'server/authenticator';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import ServerError from 'server/error';
+import MDBGuest from 'server/models/guest';
+import MDBInvite from 'server/models/invite';
+import MDBResponse from 'server/models/response';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { MongoDBDocumentConverter } from 'server/utils/mongodb';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +40,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         },
         {
           $lookup: {
-            as: 'guests',
+            as: 'guestsLookup',
             foreignField: '_id',
             from: 'guests',
             localField: 'guests',
@@ -46,7 +48,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         },
         {
           $lookup: {
-            as: 'responses',
+            as: 'responsesLookup',
             foreignField: 'guest',
             from: 'responses',
             localField: 'guests._id',
@@ -60,9 +62,9 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const [doc] = aggregation;
     return NextResponse.json(
       {
-        ...MongoDBDocumentConverter.toInvite(doc),
-        guests: doc.guests.map(MongoDBDocumentConverter.toGuest),
-        responses: doc.responses.map(MongoDBDocumentConverter.toInviteResponse),
+        guests: doc.guestsLookup.map((guestDoc: Document) => MDBGuest.fromDocument(guestDoc)),
+        invite: MDBInvite.fromDocument(doc),
+        responses: doc.responsesLookup.map((responseDoc: Document) => MDBResponse.fromDocument(responseDoc)),
       },
       { status: 200 },
     );

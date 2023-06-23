@@ -7,8 +7,8 @@ import RedisClientFactory from 'server/clients/redis';
 import secretLinkTemplate from 'server/emails/secret-link.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
+import MDBGuest from 'server/models/guest';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { MongoDBDocumentConverter } from 'server/utils/mongodb';
 import { RedisKeyBuilder } from 'server/utils/redis';
 import { object, string } from 'yup';
 
@@ -58,7 +58,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     });
     const redisClient = await RedisClientFactory.getInstance();
     const redisKey = new RedisKeyBuilder().set('codes', code).toString();
-    const guest = MongoDBDocumentConverter.toGuest(doc);
+    const guest = MDBGuest.fromDocument(doc);
     await redisClient.set(redisKey, guest.id, { EX: 900 });
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {

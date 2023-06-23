@@ -4,14 +4,17 @@ import Link from 'components/link';
 import useTranslate from 'hooks/translate';
 import { useCallback, useMemo } from 'react';
 import type { FC, ReactNode } from 'react';
-import type { Guest, Invite, InviteResponse } from 'server/utils/mongodb';
+import MDBGuest from 'server/models/guest';
+import MDBInvite from 'server/models/invite';
+import MDBResponse from 'server/models/response';
 import useSWR from 'swr';
 
 import styles from './component.module.css';
 
-export interface InvitesMeAPIResponse extends Invite {
-  guests: Guest[];
-  responses: InviteResponse[];
+export interface InvitesMeAPIResponse {
+  guests: MDBGuest[];
+  invite: MDBInvite;
+  responses: MDBResponse[];
 }
 
 const RSVPGuestList: FC = () => {
@@ -29,8 +32,8 @@ const RSVPGuestList: FC = () => {
 
   const { data, error } = useSWR('/api/invites/me', fetchInvitesMe);
 
-  const guests = useMemo<Map<string, Guest>>(() => {
-    const map = new Map<string, Guest>();
+  const guests = useMemo<Map<string, MDBGuest>>(() => {
+    const map = new Map<string, MDBGuest>();
     if (data) {
       for (const guest of data.guests) {
         map.set(guest.id, guest);
@@ -39,8 +42,8 @@ const RSVPGuestList: FC = () => {
     return map;
   }, [data]);
 
-  const responses = useMemo<Map<string, InviteResponse>>(() => {
-    const map = new Map<string, InviteResponse>();
+  const responses = useMemo<Map<string, MDBResponse>>(() => {
+    const map = new Map<string, MDBResponse>();
     if (data) {
       for (const response of data.responses) {
         map.set(response.guest, response);
@@ -50,19 +53,20 @@ const RSVPGuestList: FC = () => {
   }, [data]);
 
   const renderGuestResponse = useCallback(
-    (response: InviteResponse): ReactNode => {
-      const guest = guests.get(response.guest);
-      if (!guest) {
-        return null;
-      }
+    (guest: MDBGuest): ReactNode => {
+      const response = responses.get(guest.id);
       return (
-        <div className={styles.guestResponse} key={response.id}>
+        <div className={styles.guestResponse} key={guest.id}>
           <span>{guest.name}</span>
-          <Link className={styles.guestResponseLink} href="/" text={t('components.rsvp-guest-list.rsvp')} />
+          <Link
+            className={styles.guestResponseLink}
+            href={'/rsvp/' + guest.id}
+            text={response ? t('components.rsvp-guest-list.edit-response') : t('components.rsvp-guest-list.rsvp')}
+          />
         </div>
       );
     },
-    [guests, t],
+    [responses, t],
   );
 
   if (!data || error) {
@@ -71,7 +75,7 @@ const RSVPGuestList: FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.innerContainer}>{Array.from(responses.values()).map(renderGuestResponse)}</div>
+      <div className={styles.innerContainer}>{Array.from(guests.values()).map(renderGuestResponse)}</div>
     </div>
   );
 };

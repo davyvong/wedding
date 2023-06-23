@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import GuestAuthenticator from 'server/authenticator';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import ServerError from 'server/error';
+import MDBGuest from 'server/models/guest';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { MongoDBDocumentConverter } from 'server/utils/mongodb';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!doc) {
       return new Response(undefined, { status: 401 });
     }
-    return NextResponse.json(MongoDBDocumentConverter.toGuest(doc), { status: 200 });
+    return NextResponse.json(MDBGuest.fromDocument(doc), { status: 200 });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }
