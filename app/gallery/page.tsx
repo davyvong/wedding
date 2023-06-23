@@ -1,7 +1,4 @@
-import navigationStyles from 'components/navigation/component.module.css';
 import ResponsiveGallery from 'components/responsive-gallery';
-import { Fragment } from 'react';
-import type { FC } from 'react';
 
 const gallery = [
   {
@@ -78,10 +75,8 @@ const gallery = [
   },
 ];
 
-const Page: FC = () => (
-  <Fragment>
-    <style>{`.${navigationStyles.content} { background-color: var(--color-surface); }`}</style>
-    <ResponsiveGallery data={gallery} />
-  </Fragment>
-);
+const Page = async (): Promise<JSX.Element> => {
+  return <ResponsiveGallery data={gallery} />;
+};
+
 export default Page;

@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import Gallery from 'components/gallery';
 import navigationStyles from 'components/navigation/component.module.css';
 import { Fragment } from 'react';
-import type { FC } from 'react';
 
 import styles from './page.module.css';
 
@@ -33,7 +32,7 @@ const gallery = [
   },
 ];
 
-const Page: FC = () => (
+const Page = async (): Promise<JSX.Element> => (
   <Fragment>
     <style>{`.${navigationStyles.content} { background-color: var(--color-surface-variant); }`}</style>
     <div className={styles.container}>

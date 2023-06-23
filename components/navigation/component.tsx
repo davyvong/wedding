@@ -43,6 +43,12 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
               <div className={styles.pageThumbnail} />
             </NextLink>
           </div>
+          <div className={styles.pageCard} onClick={toggle}>
+            <Link className={styles.pageTitle} href="/song-requests" text={t('components.navigation.song-requests')} />
+            <NextLink href="/song-requests">
+              <div className={styles.pageThumbnail} />
+            </NextLink>
+          </div>
         </div>
       </div>
       <div className={styles.floatingButton}>

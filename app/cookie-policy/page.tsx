@@ -1,9 +1,8 @@
 import MDX from 'components/mdx';
-import type { FC } from 'react';
 
 import Content from './content.mdx';
 
-const Page: FC = () => (
+const Page = async (): Promise<JSX.Element> => (
   <MDX>
     <Content />
   </MDX>
