@@ -1,14 +1,34 @@
 :root {
-  --ash-gray: #acbda1;
-  --black: #000000;
-  --brown-sugar: #bc623e;
-  --champagne: #f7e7ce;
-  --pale-dogwood: #eac9bb;
-  --persian-orange: #d0947a;
-  --ralph-lauren-petticoat-white: #ede8e1;
-  --white: #ffffff;
+  --palette-ash-gray: #acbda1;
+  --palette-black: #000000;
+  --palette-brown-sugar: #bc623e;
+  --palette-champagne: #f7e7ce;
+  --palette-pale-dogwood: #eac9bb;
+  --palette-persian-orange: #d0947a;
+  --palette-white: #ffffff;
 
-  --primary: var(--brown-sugar);
+  --color-primary: var(--palette-brown-sugar);
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ffdbce;
+  --color-on-primary-container: #370d00;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #410002;
+  --color-background: #fffbff;
+  --color-on-background: #251a00;
+  --color-surface: #fffbff;
+  --color-on-surface: #251a00;
+  --color-surface-variant: #f5ded6;
+  --color-on-surface-variant: #53433e;
+  --color-outline: #85736d;
+  --color-inverse-on-surface: #ffefd3;
+  --color-inverse-surface: #3f2e00;
+  --color-inverse-primary: #ffb59a;
+  --color-shadow: #000000;
+  --color-surface-tint: #9a4522;
+  --color-outline-variant: #d8c2bb;
+  --color-scrim: #000000;
 }
 
 ::-webkit-scrollbar {
@@ -36,8 +56,8 @@ html {
 }
 
 body {
-  background-color: var(--black);
-  color: var(--primary);
+  background-color: var(--palette-black);
+  color: var(--color-on-surface-variant);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;
@@ -58,27 +78,27 @@ a:hover {
 
 button {
   align-items: center;
-  background-color: var(--persian-orange);
+  background-color: var(--palette-persian-orange);
   border: 0;
-  border-radius: 0.5rem;
-  color: var(--white);
+  border-radius: 100rem;
+  color: var(--color-on-primary);
   display: flex;
   font-size: 1rem;
   font-weight: 400;
+  height: 50px;
   justify-content: center;
   outline: none;
   padding: 1rem;
   transition: background-color 300ms ease-in-out;
-  width: 100%;
 }
 
 button:hover {
-  background-color: var(--brown-sugar);
+  background-color: var(--color-primary);
   cursor: pointer;
 }
 
 button:disabled {
-  background-color: var(--persian-orange);
+  background-color: var(--palette-persian-orange);
   cursor: not-allowed;
 }
 
@@ -107,18 +127,30 @@ h4 {
 }
 
 input {
-  background-color: var(--white);
-  border: 0;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-outline);
   border-radius: 0.5rem;
+  color: var(--color-on-surface);
   font-size: 1rem;
+  height: 50px;
   opacity: 1;
   outline: none;
   padding: 1rem;
+  transition: border 300ms ease-in-out;
   width: 100%;
 }
 
-input:disabled,
+input:disabled {
+  opacity: 1;
+}
+
+input:focus,
+input:hover {
+  border-color: var(--palette-persian-orange);
+}
+
 input::placeholder {
+  color: var(--color-outline);
   opacity: 1;
 }
 

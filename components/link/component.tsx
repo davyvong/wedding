@@ -11,7 +11,7 @@ export interface LinkComponentProps extends LinkProps {
 }
 
 const LinkComponent: FC<LinkComponentProps> = ({ className, text, ...props }) => (
-  <NextLink {...props} className={classNames(styles.link, className)}>
+  <NextLink aria-label={text} {...props} className={classNames(styles.link, className)}>
     <span>{text}</span>
   </NextLink>
 );

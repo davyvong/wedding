@@ -80,7 +80,7 @@ const gallery = [
 
 const Page: FC = () => (
   <Fragment>
-    <style>{`.${navigationStyles.content} { background-color: var(--white); }`}</style>
+    <style>{`.${navigationStyles.content} { background-color: var(--color-surface); }`}</style>
     <ResponsiveGallery data={gallery} />
   </Fragment>
 );

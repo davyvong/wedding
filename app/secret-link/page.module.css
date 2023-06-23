@@ -1,0 +1,21 @@
+.photo {
+  height: calc(100vh - 4rem);
+  height: calc(var(--vh, 100vh) * 100 - 4rem);
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .photo {
+    height: 100vh;
+    height: calc(var(--vh, 100vh) * 100);
+  }
+
+  .section {
+    flex: 1;
+  }
+}

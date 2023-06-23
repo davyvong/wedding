@@ -10,7 +10,7 @@ export interface Invite {
 }
 
 export interface InviteResponse {
-  guest: Guest;
+  guest: string;
   id: string;
 }
 

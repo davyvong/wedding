@@ -1,4 +1,5 @@
 .saveTheDate {
+  min-height: calc(100vh - 4rem);
   min-height: calc(var(--vh) * 100 - 4rem);
 }
 
@@ -9,7 +10,8 @@
   }
 
   .saveTheDate {
-    height: calc(var(--vh) * 100);
+    height: 100vh;
+    height: calc(var(--vh, 100vh) * 100);
     min-height: initial;
     position: sticky;
     top: 0;
@@ -20,7 +22,7 @@
   }
 
   .section:not(:first-child) {
-    background-color: var(--white);
+    background-color: var(--color-surface);
     padding-right: 2rem;
   }
 }
