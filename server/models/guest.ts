@@ -1,6 +1,6 @@
 import type { Document } from 'mongodb';
 
-interface MDBGuestData {
+export interface MDBGuestData {
   email: string;
   id: string;
   name: string;
@@ -24,6 +24,14 @@ class MDBGuest {
       name: doc.name,
     };
     return new MDBGuest(data);
+  }
+
+  toPlainObject(): MDBGuestData {
+    return {
+      email: this.email,
+      id: this.id,
+      name: this.name,
+    };
   }
 }
 

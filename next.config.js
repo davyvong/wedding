@@ -21,6 +21,7 @@ const config = {
   experimental: {
     appDir: true,
     mdxRs: true,
+    serverActions: true,
   },
   images: {
     domains: ['images.unsplash.com'],

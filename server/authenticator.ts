@@ -4,7 +4,7 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { redirect } from 'next/navigation';
 import JWT from 'server/jwt';
 
-interface GuestTokenPayload extends JWTPayload {
+export interface GuestTokenPayload extends JWTPayload {
   id: string;
 }
 

@@ -1,6 +1,6 @@
 import type { Document } from 'mongodb';
 
-interface MDBResponseData {
+export interface MDBResponseData {
   guest: string;
   id: string;
 }
@@ -20,6 +20,13 @@ class MDBResponse {
       id: doc._id.toString(),
     };
     return new MDBResponse(data);
+  }
+
+  toPlainObject(): MDBResponseData {
+    return {
+      guest: this.guest,
+      id: this.id,
+    };
   }
 }
 

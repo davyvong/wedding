@@ -1,6 +1,6 @@
 import { Document, ObjectId } from 'mongodb';
 
-interface MDBInviteData {
+export interface MDBInviteData {
   guests: string[];
   id: string;
 }
@@ -20,6 +20,13 @@ class MDBInvite {
       id: doc._id.toString(),
     };
     return new MDBInvite(data);
+  }
+
+  toPlainObject(): MDBInviteData {
+    return {
+      guests: this.guests,
+      id: this.id,
+    };
   }
 }
 
