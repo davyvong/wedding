@@ -1,5 +1,5 @@
 .subheadingEmail u {
-  color: var(--palette-primary50);
+  color: var(--palette-persian-orange);
   text-transform: lowercase;
   transition: color 300ms ease-in-out;
 }

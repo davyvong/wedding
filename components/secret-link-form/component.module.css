@@ -1,5 +1,7 @@
 .container {
   align-items: center;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   display: flex;
   flex-direction: column;
   height: 100%;

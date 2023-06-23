@@ -2,7 +2,6 @@
 
 import 'minireset.css';
 
-import './colors.css';
 import './global.css';
 
 import { Analytics } from '@vercel/analytics/react';

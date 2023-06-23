@@ -58,7 +58,7 @@ const RSVPGuestList: FC = () => {
       return (
         <div className={styles.guestResponse} key={response.id}>
           <span>{guest.name}</span>
-          <Link href="/" text={t('components.rsvp-guest-list.rsvp')} />
+          <Link className={styles.guestResponseLink} href="/" text={t('components.rsvp-guest-list.rsvp')} />
         </div>
       );
     },
