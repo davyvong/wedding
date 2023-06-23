@@ -8,14 +8,18 @@
 }
 
 .innerContainer {
-  max-width: 300px;
+  max-width: 400px;
   width: 100%;
 }
 
 .guestResponse {
   align-items: center;
+  background-color: var(--color-primary-container);
+  border-radius: 0.5rem;
+  color: var(--color-on-primary-container);
   display: flex;
   flex-direction: row;
+  padding: 1rem 1.5rem;
 }
 
 .guestResponse:not(:first-child) {

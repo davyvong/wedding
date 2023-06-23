@@ -35,7 +35,7 @@ const gallery = [
 
 const Page: FC = () => (
   <Fragment>
-    <style>{`.${navigationStyles.content} { background-color: var(--champagne); }`}</style>
+    <style>{`.${navigationStyles.content} { background-color: var(--color-surface-variant); }`}</style>
     <div className={styles.container}>
       <div className={classNames(styles.section, styles.saveTheDate)} />
       <div className={styles.section}>

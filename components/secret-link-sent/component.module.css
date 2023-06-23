@@ -1,5 +1,11 @@
 .subheadingEmail u {
+  color: var(--palette-primary50);
   text-transform: lowercase;
+  transition: color 300ms ease-in-out;
+}
+
+.subheadingEmail u:hover {
+  color: var(--color-primary);
 }
 
 .illustration {

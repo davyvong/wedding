@@ -2,10 +2,11 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  font-weight: 600;
 }
 
 .link:before {
-  background-color: var(--primary-400);
+  background-color: var(--color-primary);
   border-radius: 0.25rem;
   content: '';
   display: block;

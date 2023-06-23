@@ -1,5 +1,5 @@
 .content {
-  background-color: var(--seashell);
+  background-color: var(--color-surface);
   height: 100%;
   overflow: auto;
   transform: translateY(0);
@@ -18,8 +18,8 @@
 }
 
 .menu {
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--palette-primary0);
+  color: var(--color-on-primary);
   height: 29rem;
   padding: 1rem 0;
   padding-bottom: 8rem;
@@ -57,12 +57,8 @@
   margin-left: 1rem;
 }
 
-.pageTitle {
-  font-weight: 500;
-}
-
 .pageThumbnail {
-  background-color: var(--primary-200);
+  background-color: var(--palette-primary50);
   border-radius: 0.25rem;
   display: block;
   margin-top: 0.5rem;
@@ -72,7 +68,7 @@
 }
 
 .pageCard:hover .pageThumbnail {
-  background-color: var(--primary-400);
+  background-color: var(--color-primary);
 }
 
 @media (min-width: 768px) {
@@ -126,7 +122,7 @@
 }
 
 .toggleButton {
-  background-color: var(--primary-200);
+  background-color: var(--palette-primary50);
   border-radius: 2rem;
   box-shadow: rgba(0, 0, 0, 0.25) 0 0.1875rem 0.5rem;
   display: flex;
@@ -139,12 +135,12 @@
 }
 
 .toggleButton:hover {
-  background-color: var(--primary-400);
+  background-color: var(--color-primary);
   transform: scale(1.1);
 }
 
 .toggleButton span {
-  background-color: var(--white);
+  background-color: var(--color-on-primary);
   display: block;
   height: 0.125rem;
   width: 1.5rem;
@@ -172,7 +168,7 @@
 }
 
 .toggleButtonActive span {
-  background-color: var(--white);
+  background-color: var(--color-on-primary);
 }
 
 .toggleButtonActive .toggleButtonLine1 {

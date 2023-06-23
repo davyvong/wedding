@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'components/link';
 import useTranslate from 'hooks/translate';
 import { useCallback, useMemo } from 'react';
 import type { FC, ReactNode } from 'react';
@@ -57,9 +58,7 @@ const RSVPGuestList: FC = () => {
       return (
         <div className={styles.guestResponse} key={response.id}>
           <span>{guest.name}</span>
-          <button aria-label={t('components.rsvp-guest-list.rsvp-button')}>
-            {t('components.rsvp-guest-list.rsvp-button')}
-          </button>
+          <Link href="/" text={t('components.rsvp-guest-list.rsvp')} />
         </div>
       );
     },
