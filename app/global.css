@@ -126,6 +126,13 @@ h4 {
   line-height: 1.66;
 }
 
+hr {
+  border: 0;
+  border-top: 2px solid var(--color-surface-variant);
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
 input {
   background-color: var(--color-surface);
   border: 2px solid var(--color-outline);

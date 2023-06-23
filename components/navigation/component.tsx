@@ -32,20 +32,26 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
             </NextLink>
           </div>
           <div className={styles.pageCard} onClick={toggle}>
-            <Link className={styles.pageTitle} href="/gallery" text={t('components.navigation.gallery')} />
-            <NextLink href="/gallery">
-              <div className={styles.pageThumbnail} />
-            </NextLink>
-          </div>
-          <div className={styles.pageCard} onClick={toggle}>
             <Link className={styles.pageTitle} href="/rsvp" text={t('components.navigation.rsvp')} />
             <NextLink href="/rsvp">
               <div className={styles.pageThumbnail} />
             </NextLink>
           </div>
           <div className={styles.pageCard} onClick={toggle}>
-            <Link className={styles.pageTitle} href="/song-requests" text={t('components.navigation.song-requests')} />
-            <NextLink href="/song-requests">
+            <Link className={styles.pageTitle} href="/schedule" text={t('components.navigation.schedule')} />
+            <NextLink href="/schedule">
+              <div className={styles.pageThumbnail} />
+            </NextLink>
+          </div>
+          <div className={styles.pageCard} onClick={toggle}>
+            <Link className={styles.pageTitle} href="/story" text={t('components.navigation.story')} />
+            <NextLink href="/story">
+              <div className={styles.pageThumbnail} />
+            </NextLink>
+          </div>
+          <div className={styles.pageCard} onClick={toggle}>
+            <Link className={styles.pageTitle} href="/gallery" text={t('components.navigation.gallery')} />
+            <NextLink href="/gallery">
               <div className={styles.pageThumbnail} />
             </NextLink>
           </div>

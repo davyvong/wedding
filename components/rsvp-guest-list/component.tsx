@@ -75,7 +75,18 @@ const RSVPGuestList: FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.innerContainer}>{Array.from(guests.values()).map(renderGuestResponse)}</div>
+      <div className={styles.innerContainer}>
+        {Array.from(guests.values()).map(renderGuestResponse)}
+        <hr />
+        <div className={styles.songRequests}>
+          <span>{t('components.rsvp-guest-list.song-requests.description')}</span>
+          <Link
+            className={styles.songRequestsLink}
+            href="/song-requests"
+            text={t('components.rsvp-guest-list.song-requests.link')}
+          />
+        </div>
+      </div>
     </div>
   );
 };

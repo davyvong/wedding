@@ -25,3 +25,14 @@
 .guestResponse span {
   flex: 1;
 }
+
+.songRequests {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+}
+
+.songRequestsLink {
+  margin-top: 0.5rem;
+}
