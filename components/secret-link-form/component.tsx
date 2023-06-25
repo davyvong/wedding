@@ -3,6 +3,7 @@
 import classNames from 'classnames';
 import LoadingHeart from 'components/loading-heart';
 import useTranslate from 'hooks/translate';
+import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import type { FC, FormEvent } from 'react';
 import { string } from 'yup';
@@ -10,6 +11,7 @@ import { string } from 'yup';
 import styles from './component.module.css';
 
 const SecretLinkForm: FC = () => {
+  const router = useRouter();
   const { html, t } = useTranslate();
 
   const [email, setEmail] = useState<string>('');
@@ -34,17 +36,14 @@ const SecretLinkForm: FC = () => {
         cache: 'no-store',
         method: 'POST',
       });
+      setIsSending(false);
       if (response.status === 401) {
-        setIsSending(false);
         setError(new Error('components.secret-link-form.errors.not-invited'));
       } else {
-        const redirectURL = new URL(window.location.origin);
-        redirectURL.pathname = '/secret-link/sent';
-        redirectURL.searchParams.set('to', email.toLowerCase());
-        window.location.href = redirectURL.href;
+        router.push('/secret-link/sent?to=' + email.toLowerCase());
       }
     },
-    [email, error],
+    [email, error, router],
   );
 
   return (
