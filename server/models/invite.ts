@@ -22,7 +22,7 @@ class MDBInvite {
     return new MDBInvite(data);
   }
 
-  toPlainObject(): MDBInviteData {
+  public toPlainObject(): MDBInviteData {
     return {
       guests: this.guests,
       id: this.id,

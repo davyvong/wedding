@@ -26,7 +26,7 @@ class MDBGuest {
     return new MDBGuest(data);
   }
 
-  toPlainObject(): MDBGuestData {
+  public toPlainObject(): MDBGuestData {
     return {
       email: this.email,
       id: this.id,

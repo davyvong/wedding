@@ -22,7 +22,7 @@ class MDBResponse {
     return new MDBResponse(data);
   }
 
-  toPlainObject(): MDBResponseData {
+  public toPlainObject(): MDBResponseData {
     return {
       guest: this.guest,
       id: this.id,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI from 'server/apis/spotify';
-import GuestAuthenticator from 'server/authenticator';
+import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 
@@ -15,7 +15,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       return new Response(undefined, { status: 429 });
     }
-    const token = await GuestAuthenticator.verifyToken(request.cookies);
+    const token = await Authenticator.verifyToken(request.cookies);
     if (!token) {
       return new Response(undefined, { status: 401 });
     }

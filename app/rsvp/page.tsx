@@ -1,14 +1,14 @@
 import RSVPGuestList from 'components/rsvp-guest-list';
 import { ObjectId } from 'mongodb';
 import { cookies } from 'next/headers';
-import GuestAuthenticator from 'server/authenticator';
+import Authenticator from 'server/authenticator';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import MDBGuest from 'server/models/guest';
 import MDBInvite from 'server/models/invite';
 import MDBResponse from 'server/models/response';
 
 const Page = async (): Promise<JSX.Element> => {
-  const token = await GuestAuthenticator.verifyTokenOrRedirect(cookies());
+  const token = await Authenticator.verifyTokenOrRedirect(cookies());
 
   const db = await MongoDBClientFactory.getInstance();
   const aggregation = await db

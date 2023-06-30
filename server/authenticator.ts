@@ -8,7 +8,7 @@ export interface GuestTokenPayload extends JWTPayload {
   id: string;
 }
 
-class GuestAuthenticator {
+class Authenticator {
   public static async verifyToken(
     cookies: RequestCookies | ReadonlyRequestCookies,
   ): Promise<GuestTokenPayload | undefined> {
@@ -40,4 +40,4 @@ class GuestAuthenticator {
   }
 }
 
-export default GuestAuthenticator;
+export default Authenticator;

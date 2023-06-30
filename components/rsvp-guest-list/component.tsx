@@ -40,7 +40,7 @@ const RSVPGuestList: FC<RSVPGuestListProps> = ({ guests = [], responses = [], to
             <div className={styles.guestName}>
               {guest.name}{' '}
               {isUser && (
-                <Link className={styles.guestNotYou} href="/secret-link" onClick={() => clearTokenCookie()}>
+                <Link className={styles.guestNotYou} href="/secret-link" onClick={clearTokenCookie}>
                   {t('components.rsvp-guest-list.guest-not-you')}
                 </Link>
               )}
