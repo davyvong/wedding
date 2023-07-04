@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return new Response(undefined, { status: 401 });
     }
     const code = getRandomWords(4).join('-');
-    const url = new URL(ServerEnvironment.getBaseURL() + '/api/secret-link/verify');
+    const url = new URL(ServerEnvironment.getBaseURL() + '/secret-link/verify');
     url.searchParams.set('code', code);
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: url.href });
