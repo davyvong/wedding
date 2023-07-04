@@ -133,7 +133,8 @@ hr {
   margin: 0.5rem 1.5rem;
 }
 
-input {
+input,
+textarea {
   background-color: var(--color-surface);
   border: 2px solid var(--color-outline);
   border-radius: 0.5rem;
@@ -147,18 +148,28 @@ input {
   width: 100%;
 }
 
-input:disabled {
+input:disabled,
+textarea:disabled {
   opacity: 1;
 }
 
 input:focus,
-input:hover {
+input:hover,
+textarea:focus,
+textarea:hover {
   border-color: var(--palette-persian-orange);
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--color-outline);
   opacity: 1;
+}
+
+textarea {
+  font-family: inherit;
+  height: inherit;
+  width: 100%;
 }
 
 ol,

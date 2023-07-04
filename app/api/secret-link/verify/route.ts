@@ -1,12 +1,11 @@
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
-import MongoDBClientFactory from 'server/clients/mongodb';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import JWT from 'server/jwt';
 import RedisKey from 'server/models/redis-key';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
+import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -38,9 +37,8 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!cachedGuestId) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    const db = await MongoDBClientFactory.getInstance();
-    const doc = await db.collection('guests').findOne({ _id: new ObjectId(cachedGuestId) });
-    if (!doc) {
+    const guest = await MongoDBQueryTemplate.findGuestFromId(cachedGuestId);
+    if (!guest) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const token = await JWT.sign({ id: cachedGuestId });

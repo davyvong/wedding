@@ -1,15 +1,14 @@
 import words from 'constants/words.json';
 import Handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
-import MongoDBClientFactory from 'server/clients/mongodb';
 import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
 import secretLinkTemplate from 'server/emails/secret-link.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
-import MDBGuest from 'server/models/guest';
 import RedisKey from 'server/models/redis-key';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
+import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { object, string } from 'yup';
 
 const getRandomWords = (count: number): string[] => {
@@ -39,13 +38,12 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return new Response(undefined, { status: 400 });
     }
     const email = body.email.toLowerCase();
-    const db = await MongoDBClientFactory.getInstance();
-    const doc = await db.collection('guests').findOne({ email });
-    if (!doc) {
+    const guest = await MongoDBQueryTemplate.findGuestFromEmail(email);
+    if (!guest) {
       return new Response(undefined, { status: 401 });
     }
     const code = getRandomWords(4).join('-');
-    const url = new URL(ServerEnvironment.getBaseURL() + '/api/secret-link/authorize');
+    const url = new URL(ServerEnvironment.getBaseURL() + '/api/secret-link/verify');
     url.searchParams.set('code', code);
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: url.href });
@@ -58,7 +56,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     });
     const redisClient = await RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', code);
-    const guest = MDBGuest.fromDocument(doc);
     await redisClient.set(redisKey, guest.id, { EX: 900 });
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {

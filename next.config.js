@@ -26,6 +26,13 @@ const config = {
   images: {
     domains: ['images.unsplash.com'],
   },
+  redirects: () => [
+    {
+      destination: '/api/secret-link/verify',
+      permanent: false,
+      source: '/secret-link/verify',
+    },
+  ],
   webpack: (config, { dev }) => {
     const rules = config.module.rules
       .find(rule => typeof rule.oneOf === 'object')

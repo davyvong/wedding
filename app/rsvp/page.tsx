@@ -1,59 +1,19 @@
 import RSVPGuestList from 'components/rsvp-guest-list';
-import { ObjectId } from 'mongodb';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import Authenticator from 'server/authenticator';
-import MongoDBClientFactory from 'server/clients/mongodb';
-import MDBGuest from 'server/models/guest';
-import MDBInvite from 'server/models/invite';
-import MDBResponse from 'server/models/response';
+import MongoDBQueryTemplate from 'server/templates/mongodb';
 
 const Page = async (): Promise<JSX.Element> => {
   const token = await Authenticator.verifyTokenOrRedirect(cookies());
 
-  const db = await MongoDBClientFactory.getInstance();
-  const aggregation = await db
-    .collection('invites')
-    .aggregate([
-      {
-        $limit: 1,
-      },
-      {
-        $match: {
-          guests: new ObjectId(token.id),
-        },
-      },
-      {
-        $lookup: {
-          as: 'guestsLookup',
-          foreignField: '_id',
-          from: 'guests',
-          localField: 'guests',
-        },
-      },
-      {
-        $lookup: {
-          as: 'responsesLookup',
-          foreignField: 'guest',
-          from: 'responses',
-          localField: 'guests._id',
-        },
-      },
-    ])
-    .toArray();
+  const rsvp = await MongoDBQueryTemplate.findRSVPFromGuestId(token.id);
 
-  const [doc] = aggregation;
+  if (!rsvp) {
+    return redirect('/secret-link');
+  }
 
-  const data = {
-    guests: doc.guestsLookup.map((guestDoc: Document) => {
-      return MDBGuest.fromDocument(guestDoc).toPlainObject();
-    }),
-    invite: MDBInvite.fromDocument(doc).toPlainObject(),
-    responses: doc.responsesLookup.map((responseDoc: Document) => {
-      return MDBResponse.fromDocument(responseDoc).toPlainObject();
-    }),
-  };
-
-  return <RSVPGuestList {...data} token={token} />;
+  return <RSVPGuestList {...rsvp} token={token} />;
 };
 
 export default Page;

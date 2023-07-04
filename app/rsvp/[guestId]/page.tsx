@@ -1,5 +1,8 @@
+import RSVPForm from 'components/rsvp-form';
 import { cookies } from 'next/headers';
-import GuestAuthenticator from 'server/authenticator';
+import { redirect } from 'next/navigation';
+import Authenticator from 'server/authenticator';
+import MongoDBQueryTemplate from 'server/templates/mongodb';
 
 interface PageProps {
   params: {
@@ -8,9 +11,15 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps): Promise<JSX.Element> => {
-  await GuestAuthenticator.verifyTokenOrRedirect(cookies());
+  const token = await Authenticator.verifyTokenOrRedirect(cookies());
 
-  return <div>{params.guestId}</div>;
+  const rsvp = await MongoDBQueryTemplate.findRSVPFromGuestId(token.id);
+
+  if (!rsvp) {
+    return redirect('/secret-link');
+  }
+
+  return <RSVPForm {...rsvp} id={params.guestId} />;
 };
 
 export default Page;

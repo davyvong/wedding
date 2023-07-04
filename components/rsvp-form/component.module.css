@@ -1,0 +1,13 @@
+.form {
+  margin: 9rem auto;
+  max-width: 768px;
+  width: 100%;
+}
+
+.step:not(:first-child) {
+  margin-top: 3rem;
+}
+
+.question {
+  margin-bottom: 1rem;
+}
