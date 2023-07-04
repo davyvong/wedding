@@ -133,7 +133,8 @@ hr {
   margin: 0.5rem 1.5rem;
 }
 
-input, textarea {
+input,
+textarea {
   background-color: var(--color-surface);
   border: 2px solid var(--color-outline);
   border-radius: 0.5rem;
@@ -147,7 +148,8 @@ input, textarea {
   width: 100%;
 }
 
-input:disabled, textarea:disabled {
+input:disabled,
+textarea:disabled {
   opacity: 1;
 }
 
