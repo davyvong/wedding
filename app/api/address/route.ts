@@ -21,8 +21,11 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     return new Response(undefined, { status: 400 });
   }
   const url = new URL('https://ws1.postescanada-canadapost.ca/Capture/Interactive/Find/v1.00/json3ex.ws');
+  url.searchParams.set('Countries', 'CAN');
   url.searchParams.set('Key', 'EA98-JC42-TF94-JK98');
+  url.searchParams.set('Language', 'en');
   url.searchParams.set('Limit', '7');
+  url.searchParams.set('Origin', 'CAN');
   url.searchParams.set('Text', params.lookup);
   const response = await fetch(url, {
     headers: {
