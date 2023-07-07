@@ -169,6 +169,7 @@ textarea::placeholder {
 textarea {
   font-family: inherit;
   height: inherit;
+  resize: vertical;
   width: 100%;
 }
 
