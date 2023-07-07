@@ -40,7 +40,13 @@
   height: 100%;
   overflow-x: auto;
   padding: 0 1rem;
+  transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
+  transform: scale(0.95);
   width: 100%;
+}
+
+.menuActive .pageCarousel {
+  transform: scale(1);
 }
 
 .pageTitle {
@@ -77,7 +83,7 @@
 
 @media (min-width: 768px) {
   .contentActive {
-    transform: translateY(calc(max(24rem, 50vh) * -1));
+    transform: translateY(-24rem);
   }
 
   .menu {
@@ -86,7 +92,7 @@
   }
 
   .menuActive {
-    transform: translateY(calc(max(24rem, 50vh) * -1));
+    transform: translateY(-24rem);
   }
 
   .pageCarousel {
