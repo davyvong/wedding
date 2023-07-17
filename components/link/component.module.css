@@ -14,7 +14,9 @@
   height: 0.5rem;
   margin-right: 0.5rem;
   opacity: 0;
-  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  transition:
+    transform 300ms ease-in-out,
+    opacity 300ms ease-in-out;
   transform: translateX(0.5rem);
   width: 0.5rem;
 }
