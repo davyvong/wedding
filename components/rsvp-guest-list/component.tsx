@@ -9,7 +9,6 @@ import { MDBGuestData } from 'server/models/guest';
 import { MDBInviteData } from 'server/models/invite';
 import { MDBResponseData } from 'server/models/response';
 
-import { clearTokenCookie } from './actions';
 import styles from './component.module.css';
 
 interface RSVPGuestListProps {
@@ -40,7 +39,7 @@ const RSVPGuestList: FC<RSVPGuestListProps> = ({ guests = [], responses = [], to
             <div className={styles.guestName}>
               {guest.name}{' '}
               {isUser && (
-                <Link className={styles.guestNotYou} href="/secret-link" onClick={clearTokenCookie}>
+                <Link className={styles.guestNotYou} href="/sign-out">
                   {t('components.rsvp-guest-list.guest-not-you')}
                 </Link>
               )}
