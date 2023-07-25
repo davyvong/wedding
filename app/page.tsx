@@ -3,34 +3,8 @@ import Gallery from 'components/gallery';
 import navigationStyles from 'components/navigation/component.module.css';
 import { Fragment } from 'react';
 
+import { galleryImageList } from './constants';
 import styles from './page.module.css';
-
-const gallery = [
-  {
-    aspectRatio: 1.25,
-    image: 'https://images.unsplash.com/photo-1525258946800-98cfd641d0de?auto=format&fit=crop&w=2787&q=80',
-  },
-  {
-    aspectRatio: 1.5,
-    image: 'https://images.unsplash.com/photo-1481980235850-66e47651e431?auto=format&fit=crop&w=2788&q=80',
-  },
-  {
-    aspectRatio: 1.75,
-    image: 'https://images.unsplash.com/photo-1519307212971-dd9561667ffb?auto=format&fit=crop&w=2787&q=80',
-  },
-  {
-    aspectRatio: 1.25,
-    image: 'https://images.unsplash.com/photo-1501924533620-645533f7d622?auto=format&fit=crop&w=2669&q=80',
-  },
-  {
-    aspectRatio: 1.5,
-    image: 'https://images.unsplash.com/photo-1527628173875-3c7bfd28ad78?auto=format&fit=crop&w=2787&q=80',
-  },
-  {
-    aspectRatio: 1.75,
-    image: 'https://images.unsplash.com/photo-1484849757660-7c00c60726b6?auto=format&fit=crop&w=2787&q=80',
-  },
-];
 
 const Page = async (): Promise<JSX.Element> => (
   <Fragment>
@@ -38,7 +12,7 @@ const Page = async (): Promise<JSX.Element> => (
     <div className={styles.container}>
       <div className={classNames(styles.section, styles.saveTheDate)} />
       <div className={styles.section}>
-        <Gallery data={gallery} />
+        <Gallery data={galleryImageList} />
       </div>
     </div>
   </Fragment>
