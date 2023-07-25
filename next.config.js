@@ -21,7 +21,6 @@ const config = {
   experimental: {
     appDir: true,
     mdxRs: true,
-    serverActions: true,
   },
   images: {
     domains: ['images.unsplash.com'],
@@ -31,6 +30,11 @@ const config = {
       destination: '/api/secret-link/verify',
       permanent: false,
       source: '/secret-link/verify',
+    },
+    {
+      destination: '/api/sign-out',
+      permanent: false,
+      source: '/sign-out',
     },
   ],
   webpack: (config, { dev }) => {
