@@ -1,5 +1,6 @@
 .content {
-  background-color: var(--color-surface-variant);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   height: 100%;
   overflow: auto;
   transform: translateY(0);
