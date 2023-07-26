@@ -1,13 +1,14 @@
 'use client';
 
 import classNames from 'classnames';
+import ClientEnvironment from 'client/environment';
 import Link from 'components/link';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import useTranslate from 'hooks/translate';
 import NextLink from 'next/link';
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import type { FC, ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useMemo } from 'react';
 
 import styles from './component.module.css';
 import { pageList } from './constants';
@@ -74,6 +75,14 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
       };
     }
   }, []);
+
+  if (ClientEnvironment.isDevelopment || ClientEnvironment.isPreview || ClientEnvironment.isProduction) {
+    return (
+      <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <Fragment>
