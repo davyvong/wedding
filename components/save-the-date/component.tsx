@@ -1,5 +1,6 @@
 'use client';
 
+import backgroundImage from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import useTranslate from 'hooks/translate';
 import localFont from 'next/font/local';
@@ -31,10 +32,10 @@ const SaveTheDateComponent: FC = () => {
     <Fragment>
       <Image
         alt={t('components.save-the-date')}
-        className={styles.imageBackdrop}
+        className={styles.backgroundImage}
         fill
         sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
-        src="/images/VD-72.jpg"
+        src={backgroundImage}
       />
       <div className={styles.textOverlay}>
         <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
