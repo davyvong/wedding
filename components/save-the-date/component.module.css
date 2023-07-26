@@ -1,13 +1,39 @@
-.container {
-  margin: 0 !important;
-  max-width: none !important;
+.imageBackdrop {
+  object-fit: cover;
 }
 
-.calendarLinks {
-  display: flex;
-  flex-direction: row;
+.textOverlay {
+  bottom: 6vmax;
+  color: var(--palette-white);
+  left: 6vmax;
+  position: absolute;
+  text-align: center;
 }
 
-.calendarLinks a:not(:first-child) {
-  margin-left: 1.5rem;
+.saveTheDate {
+  font-size: 6vmax;
+}
+
+.names {
+  font-size: 3vmax;
+  letter-spacing: 0.5vw;
+  margin-top: 1vh;
+}
+
+.date {
+  font-size: 2vmax;
+  letter-spacing: 0.75vw;
+  margin-top: 1vh;
+}
+
+@media (min-width: 768px) {
+  
+}
+
+@media (min-width: 1024px) {
+  
+}
+
+@media (min-width: 1440px) {
+  
 }

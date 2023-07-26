@@ -1,42 +1,45 @@
 'use client';
 
-import Link from 'components/link';
-import type { LinkComponentProps } from 'components/link/component';
-import MDX from 'components/mdx';
+import classNames from 'classnames';
 import useTranslate from 'hooks/translate';
-import { useCallback, useMemo } from 'react';
+import localFont from 'next/font/local';
+import Image from 'next/image';
+import { Fragment } from 'react';
 import type { FC } from 'react';
 
-import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
+
+const brittanySignatureFont = localFont({
+  display: 'swap',
+  src: '../../assets/fonts/brittany-signature.woff2',
+});
+
+const kollektifFont = localFont({
+  display: 'swap',
+  src: '../../assets/fonts/kollektif.woff2',
+});
+
+const playfairDislayFont = localFont({
+  display: 'swap',
+  src: '../../assets/fonts/playfair-display.woff2',
+});
 
 const SaveTheDateComponent: FC = () => {
   const { t } = useTranslate();
 
-  const addToCalendarOptions = useMemo<LinkComponentProps[]>(
-    () => [
-      {
-        href: CalendarLinks.getGoogle(),
-        target: '_blank',
-        text: t('components.save-the-date.add-to-calendar.google'),
-      },
-      {
-        href: CalendarLinks.getOutlook(),
-        target: '_blank',
-        text: t('components.save-the-date.add-to-calendar.outlook'),
-      },
-    ],
-    [t],
-  );
-
-  const renderLink = useCallback(link => <Link {...link} alt={link.text} key={link.text} />, []);
-
   return (
-    <MDX className={styles.container}>
-      <h1>{t('components.save-the-date')}</h1>
-      <h3>{t('components.save-the-date.add-to-calendar')}</h3>
-      <div className={styles.calendarLinks}>{addToCalendarOptions.map(renderLink)}</div>
-    </MDX>
+    <Fragment>
+      <Image alt="" className={styles.imageBackdrop} fill src="/images/VD-72.jpg" />
+      <div className={styles.textOverlay}>
+        <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
+          {t('components.save-the-date')}
+        </div>
+        <div className={classNames(playfairDislayFont.className, styles.names)}>
+          {t('components.save-the-date.names')}
+        </div>
+        <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
+      </div>
+    </Fragment>
   );
 };
 
