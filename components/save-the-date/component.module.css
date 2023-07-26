@@ -4,26 +4,35 @@
 
 .textOverlay {
   bottom: 6vmax;
+  bottom: calc(var(--vmax, 6vmax) * 6);
   color: var(--palette-white);
   left: 6vmax;
+  left: calc(var(--vmax, 6vmax) * 6);
   position: absolute;
   text-align: center;
 }
 
 .saveTheDate {
   font-size: 6vmax;
+  font-size: calc(var(--vmax, 6vmax) * 6);
 }
 
 .names {
   font-size: 3vmax;
+  font-size: calc(var(--vmax, 3vmax) * 3);
   letter-spacing: 0.5vw;
+  letter-spacing: calc(var(--vw, 0.5vw) * 0.5);
   margin-top: 1vh;
+  margin-top: var(--vh, 1vh);
 }
 
 .date {
   font-size: 2vmax;
+  font-size: calc(var(--vmax, 2vmax) * 2);
   letter-spacing: 0.75vw;
+  letter-spacing: calc(var(--vw, 0.75vw) * 0.75);
   margin-top: 1vh;
+  margin-top: var(--vh, 1vh);
 }
 
 @media (min-width: 768px) {
