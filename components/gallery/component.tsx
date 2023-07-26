@@ -19,13 +19,13 @@ const GalleryComponent: FC<GalleryComponentProps> = ({ data = [], ...containerPr
         <div {...cardProps} className={styles.card} key={index} style={style}>
           <Image
             alt={image}
+            className={styles.image}
             fill
             key={index}
             priority={priority}
             quality={80}
-            sizes="(max-width: 448px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, 50vw"
+            sizes="(max-width: 425px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, 50vw"
             src={image}
-            style={{ objectFit: 'cover' }}
           />
           {(subtitle || title) && (
             <div className={styles.body}>

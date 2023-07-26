@@ -29,7 +29,13 @@ const SaveTheDateComponent: FC = () => {
 
   return (
     <Fragment>
-      <Image alt="" className={styles.imageBackdrop} fill src="/images/VD-72.jpg" />
+      <Image
+        alt={t('components.save-the-date')}
+        className={styles.imageBackdrop}
+        fill
+        sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
+        src="/images/VD-72.jpg"
+      />
       <div className={styles.textOverlay}>
         <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
           {t('components.save-the-date')}

@@ -31,6 +31,10 @@
   flex-direction: row;
 }
 
+.image {
+  object-fit: cover;
+}
+
 .subtitle {
   font-size: 0.875rem;
   font-weight: 300;
