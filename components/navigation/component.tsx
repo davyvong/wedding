@@ -76,30 +76,26 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
     }
   }, []);
 
-  if (ClientEnvironment.isDevelopment || ClientEnvironment.isPreview || ClientEnvironment.isProduction) {
-    return (
-      <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
-        {children}
-      </div>
-    );
-  }
-
   return (
-    <Fragment>
+    <div className={styles.container}>
       <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
         {children}
       </div>
-      <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
-        <div className={styles.pageCarousel}>{visiblePageList.map(renderPageCard)}</div>
-      </div>
-      <div className={styles.floatingButton}>
-        <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
-          <span className={styles.toggleButtonLine1} />
-          <span className={styles.toggleButtonLine2} />
-          <span className={styles.toggleButtonLine3} />
-        </button>
-      </div>
-    </Fragment>
+      {!(ClientEnvironment.isDevelopment || ClientEnvironment.isPreview || ClientEnvironment.isProduction) && (
+        <Fragment>
+          <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
+            <div className={styles.pageCarousel}>{visiblePageList.map(renderPageCard)}</div>
+          </div>
+          <div className={styles.floatingButton}>
+            <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
+              <span className={styles.toggleButtonLine1} />
+              <span className={styles.toggleButtonLine2} />
+              <span className={styles.toggleButtonLine3} />
+            </button>
+          </div>
+        </Fragment>
+      )}
+    </div>
   );
 };
 
