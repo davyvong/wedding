@@ -40,30 +40,33 @@ const SaveTheDateComponent: FC = () => {
       ScrollTrigger.normalizeScroll({
         target: '.' + navigationStyles.content,
       });
-      const timeline = gsap.timeline({
-        overwrite: true,
-        scrollTrigger: {
-          end: '+=200%',
-          invalidateOnRefresh: true,
-          pin: true,
-          scroller: '.' + navigationStyles.content,
-          scrub: true,
-          start: 'start start',
-          trigger: '.' + styles.container,
-        },
+      const matchMedia = gsap.matchMedia();
+      matchMedia.add('(min-width: 768px)', () => {
+        const timeline = gsap.timeline({
+          overwrite: true,
+          scrollTrigger: {
+            end: '+=200%',
+            invalidateOnRefresh: true,
+            pin: true,
+            scroller: '.' + navigationStyles.content,
+            scrub: true,
+            start: 'start start',
+            trigger: '.' + styles.container,
+          },
+        });
+        timeline.to('.' + styles.textMask, { flex: 1 });
+        timeline.addPause('+=1');
+        timeline.add(() => {
+          if (timeline.scrollTrigger?.direction === 1) {
+            gsap.to('.' + styles.textOverlay, { bottom: '50%', translateY: '50%' });
+            gsap.to('.' + styles.calendarRow, { autoAlpha: 1 });
+          } else {
+            gsap.to('.' + styles.textOverlay, { bottom: '3rem', translateY: '0' });
+            gsap.to('.' + styles.calendarRow, { autoAlpha: 0 });
+          }
+        });
+        timeline.addPause('+=1');
       });
-      timeline.to('.' + styles.textMask, { flex: 1 });
-      timeline.addPause('+=1');
-      timeline.add(() => {
-        if (timeline.scrollTrigger?.direction === 1) {
-          gsap.to('.' + styles.textOverlay, { bottom: '50%', translateY: '50%' });
-          gsap.to('.' + styles.calendarRow, { autoAlpha: 1 });
-        } else {
-          gsap.to('.' + styles.textOverlay, { bottom: '3rem', translateY: '0' });
-          gsap.to('.' + styles.calendarRow, { autoAlpha: 0 });
-        }
-      });
-      timeline.addPause('+=1');
     };
     waitForElement('.' + styles.textMask).then(setGSAPAnimations);
     return () => {
