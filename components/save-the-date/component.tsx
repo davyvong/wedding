@@ -35,12 +35,15 @@ const SaveTheDateComponent: FC = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const setGSAPAnimations = () => {
+      ScrollTrigger.normalizeScroll({
+        target: '.' + navigationStyles.content,
+      });
       gsap.to('.' + styles.textMask, {
         overwrite: true,
         scrollTrigger: {
           invalidateOnRefresh: true,
           pin: true,
-          scroller: document.querySelector('.' + navigationStyles.content),
+          scroller: '.' + navigationStyles.content,
           scrub: true,
           start: 'start start',
           trigger: '.' + styles.container,
@@ -49,9 +52,12 @@ const SaveTheDateComponent: FC = () => {
       });
     };
     waitForElement('.' + styles.textMask).then(setGSAPAnimations);
+    return () => {
+      ScrollTrigger.normalizeScroll(false);
+    };
   }, []);
 
-  const TextOverlay = (
+  const renderTextOverlay = (): JSX.Element => (
     <div className={styles.textOverlay}>
       <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
         {t('components.save-the-date')}
@@ -66,7 +72,7 @@ const SaveTheDateComponent: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <div className={styles.textMask}>{TextOverlay}</div>
+        <div className={styles.textMask}>{renderTextOverlay()}</div>
         <div className={styles.coverImageContainer}>
           <Image
             alt={t('components.save-the-date')}
@@ -77,7 +83,7 @@ const SaveTheDateComponent: FC = () => {
             src={coverImageJPG}
           />
         </div>
-        {TextOverlay}
+        {renderTextOverlay()}
       </div>
     </div>
   );
