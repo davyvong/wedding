@@ -10,3 +10,29 @@ export const setViewportUnits = (): void => {
     document.documentElement.style.setProperty('--vmin', Math.min(vh, vw) + 'px');
   }
 };
+
+export const waitForElement = (selector: string): Promise<Element> =>
+  new Promise((resolve: (element: Element) => void) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      resolve(element);
+      return;
+    }
+    const mutationCallback: MutationCallback = (mutations: MutationRecord[], observer: MutationObserver) => {
+      for (const mutation of mutations) {
+        const addedNodes = Array.from(mutation.addedNodes);
+        for (const addedNode of addedNodes) {
+          const addedElement = addedNode as Element;
+          if (addedElement.matches(selector)) {
+            resolve(addedElement);
+            observer.disconnect();
+            return;
+          }
+        }
+      }
+    };
+    new MutationObserver(mutationCallback).observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });

@@ -10,6 +10,7 @@ import localFont from 'next/font/local';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import type { FC } from 'react';
+import { waitForElement } from 'utils/browser';
 
 import styles from './component.module.css';
 
@@ -33,7 +34,7 @@ const SaveTheDateComponent: FC = () => {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    setTimeout(() => {
+    const setGSAPAnimations = () => {
       gsap.to('.' + styles.textMask, {
         overwrite: true,
         scrollTrigger: {
@@ -46,7 +47,8 @@ const SaveTheDateComponent: FC = () => {
         },
         flex: 1,
       });
-    }, 1000);
+    };
+    waitForElement('.' + styles.textMask).then(setGSAPAnimations);
   }, []);
 
   const TextOverlay = (
