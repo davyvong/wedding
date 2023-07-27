@@ -1,6 +1,6 @@
 .container {
   height: 100%;
-  padding: calc(var(--vmax, 1vmax) * 3);
+  padding: 3rem;
   width: 100%;
 }
 
@@ -17,6 +17,7 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  transition: flex 150ms ease-in-out;
 }
 
 .textMask .textOverlay {
@@ -37,26 +38,68 @@
 }
 
 .textOverlay {
-  bottom: calc(var(--vmax, 1vmax) * 3);
+  bottom: 3rem;
   color: var(--palette-white);
   left: 0;
   position: absolute;
   text-align: center;
-  width: calc(var(--vw, 1vw) * 50 - var(--vmax, 1vmax) * 6);
+  transition:
+    bottom 150ms linear,
+    transform 150ms linear;
+  width: calc(min(calc(var(--vw, 1vw) * 50), 840px) - 6rem);
 }
 
 .saveTheDate {
-  font-size: calc(var(--vmax, 1vmax) * 6);
+  font-size: min(calc(var(--vmax, 1vmax) * 6), 100.8px);
 }
 
 .names {
-  font-size: calc(var(--vmax, 1vmax) * 3);
-  letter-spacing: calc(var(--vw, 1vw) * 0.5);
-  margin-top: var(--vh, 1vh);
+  font-size: min(calc(var(--vmax, 1vmax) * 3), 50.4px);
+  letter-spacing: min(calc(var(--vw, 1vw) * 0.5), 8.4px);
+  margin-top: calc(var(--vh, 1vh) * 3);
 }
 
 .date {
-  font-size: calc(var(--vmax, 1vmax) * 2);
-  letter-spacing: calc(var(--vw, 1vw) * 0.75);
+  font-size: min(calc(var(--vmax, 1vmax) * 2), 33.6px);
+  letter-spacing: min(calc(var(--vw, 1vw) * 0.75), 12.6px);
   margin-top: var(--vh, 1vh);
+}
+
+.calendarRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: calc(var(--vh, 1vh) * 2);
+  visibility: hidden;
+}
+
+.calendarButton {
+  align-items: center;
+  background-color: var(--palette-persian-orange);
+  border: 0;
+  border-radius: 100rem;
+  color: var(--color-on-primary);
+  display: flex;
+  font-size: 1rem;
+  font-weight: 400;
+  height: 50px;
+  justify-content: center;
+  outline: none;
+  padding: 1rem;
+  transition: background-color 300ms ease-in-out;
+}
+
+.calendarButton:hover {
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.calendarButton:disabled {
+  background-color: var(--palette-persian-orange);
+  cursor: not-allowed;
+}
+
+.calendarButton:not(:first-child) {
+  margin-left: 1rem;
 }

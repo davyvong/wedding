@@ -12,14 +12,10 @@ class CalendarLinks {
     url.searchParams.set('allday', 'true');
     url.searchParams.set('body', 'https://vivian-and-davy.com/');
     url.searchParams.set('enddt', '2023-06-23');
-    url.searchParams.set(
-      'location',
-      'Willow Springs Winery, 5572 Bethesda Rd, Whitchurch-Stouffville, ON L4A 3A2, Canada',
-    );
     url.searchParams.set('path', '/calendar/action/compose');
     url.searchParams.set('rru', 'addevent');
     url.searchParams.set('startdt', '2023-06-23');
-    url.searchParams.set('subject', "Vivian & Davy's Wedding");
+    url.searchParams.set('subject', "Save The Date: Vivian & Davy's Wedding");
     return url.href;
   }
 }
