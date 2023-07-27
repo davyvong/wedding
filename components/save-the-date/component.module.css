@@ -1,45 +1,62 @@
-.backgroundImage {
+.container {
+  height: 100%;
+  padding: calc(var(--vmax, 1vmax) * 3);
+  width: 100%;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.textMask {
+  flex: 0;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.textMask .textOverlay {
+  color: var(--palette-black);
+  z-index: 100;
+}
+
+.coverImageContainer {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.coverImage {
   object-fit: cover;
+  object-position: bottom;
+  user-select: none;
 }
 
 .textOverlay {
-  bottom: 6vmax;
-  bottom: calc(var(--vmax, 6vmax) * 6);
+  bottom: calc(var(--vmax, 1vmax) * 3);
   color: var(--palette-white);
-  left: 6vmax;
-  left: calc(var(--vmax, 6vmax) * 6);
+  left: 0;
   position: absolute;
   text-align: center;
+  width: calc(var(--vw, 1vw) * 50 - var(--vmax, 1vmax) * 6);
 }
 
 .saveTheDate {
-  font-size: 6vmax;
-  font-size: calc(var(--vmax, 6vmax) * 6);
+  font-size: calc(var(--vmax, 1vmax) * 6);
 }
 
 .names {
-  font-size: 3vmax;
-  font-size: calc(var(--vmax, 3vmax) * 3);
-  letter-spacing: 0.5vw;
-  letter-spacing: calc(var(--vw, 0.5vw) * 0.5);
-  margin-top: 1vh;
+  font-size: calc(var(--vmax, 1vmax) * 3);
+  letter-spacing: calc(var(--vw, 1vw) * 0.5);
   margin-top: var(--vh, 1vh);
 }
 
 .date {
-  font-size: 2vmax;
-  font-size: calc(var(--vmax, 2vmax) * 2);
-  letter-spacing: 0.75vw;
-  letter-spacing: calc(var(--vw, 0.75vw) * 0.75);
-  margin-top: 1vh;
+  font-size: calc(var(--vmax, 1vmax) * 2);
+  letter-spacing: calc(var(--vw, 1vw) * 0.75);
   margin-top: var(--vh, 1vh);
-}
-
-@media (min-width: 768px) {
-}
-
-@media (min-width: 1024px) {
-}
-
-@media (min-width: 1440px) {
 }
