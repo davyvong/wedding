@@ -3,6 +3,8 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 
+export const dynamic = 'force-dynamic';
+
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
