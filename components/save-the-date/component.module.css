@@ -1,28 +1,18 @@
 .container {
   height: 100%;
-  padding: 3rem;
   width: 100%;
 }
 
 .innerContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   height: 100%;
   position: relative;
   width: 100%;
 }
 
 .textMask {
-  flex: 0;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  transition: flex 150ms ease-in-out;
-}
-
-.textMask .textOverlay {
-  color: var(--palette-black);
-  z-index: 100;
+  display: none;
 }
 
 .coverImageContainer {
@@ -42,11 +32,11 @@
   color: var(--palette-white);
   left: 0;
   position: absolute;
+  right: 0;
   text-align: center;
   transition:
     bottom 150ms linear,
     transform 150ms linear;
-  width: calc(min(calc(var(--vw, 1vw) * 50), 840px) - 6rem);
 }
 
 .saveTheDate {
@@ -102,4 +92,45 @@
 
 .calendarButton:not(:first-child) {
   margin-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .innerContainer {
+    flex-direction: row;
+  }
+
+  .textMask {
+    display: block;
+    flex: 0;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition: flex 150ms ease-in-out;
+  }
+
+  .textMask .textOverlay {
+    color: var(--palette-black);
+    z-index: 30;
+  }
+
+  .textOverlay {
+    bottom: 2rem;
+    right: initial;
+    width: calc(min(calc(var(--vw, 1vw) * 50), 840px) - 4rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 3rem;
+  }
+
+  .textOverlay {
+    bottom: 3rem;
+    width: calc(min(calc(var(--vw, 1vw) * 50), 840px) - 6rem);
+  }
 }
