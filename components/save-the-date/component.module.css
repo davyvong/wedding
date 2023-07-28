@@ -1,13 +1,115 @@
 .container {
-  margin: 0 !important;
-  max-width: none !important;
+  height: 100%;
+  width: 100%;
 }
 
-.calendarLinks {
+.innerContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  width: 100%;
 }
 
-.calendarLinks a:not(:first-child) {
-  margin-left: 1.5rem;
+.coverImageContainer {
+  min-height: calc(var(--vh, 1vh) * 100);
+  position: relative;
+}
+
+.coverImage {
+  object-fit: cover;
+  object-position: bottom;
+  user-select: none;
+}
+
+.cardMask {
+  display: none;
+}
+
+.cardContainer {
+  align-items: center;
+  color: var(--palette-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(var(--vh, 1vh) * 100);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.saveTheDate {
+  font-size: 4.5rem;
+}
+
+.names {
+  font-size: 2.25rem;
+  letter-spacing: 0.25rem;
+  margin-top: 1rem;
+}
+
+.date {
+  font-size: 1.25rem;
+  letter-spacing: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .innerContainer {
+    flex-direction: row-reverse;
+  }
+
+  .coverImageContainer {
+    flex: 1;
+  }
+
+  .cardContainer {
+    bottom: 3rem;
+    color: var(--color-surface);
+    left: 3rem;
+    min-height: auto;
+    position: absolute;
+    z-index: 30;
+  }
+
+  .cardMask {
+    display: block;
+    flex: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .cardMask .cardContainer {
+    color: var(--palette-black);
+    z-index: 31;
+  }
+
+  .saveTheDate {
+    font-size: 3.5rem;
+  }
+
+  .names {
+    font-size: 1.5rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .date {
+    font-size: 1rem;
+    letter-spacing: 0.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .saveTheDate {
+    font-size: 4.5rem;
+  }
+
+  .names {
+    font-size: 2.25rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .date {
+    font-size: 1.25rem;
+    letter-spacing: 0.5rem;
+  }
 }

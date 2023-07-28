@@ -57,7 +57,7 @@ html {
 
 body {
   background-color: var(--palette-black);
-  color: var(--color-on-surface-variant);
+  color: var(--palette-white);
   font-size: 1rem;
   font-weight: 400;
   height: 100%;

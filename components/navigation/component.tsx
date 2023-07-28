@@ -1,13 +1,14 @@
 'use client';
 
 import classNames from 'classnames';
+import ClientEnvironment from 'client/environment';
 import Link from 'components/link';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import useTranslate from 'hooks/translate';
 import NextLink from 'next/link';
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import type { FC, ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useMemo } from 'react';
 
 import styles from './component.module.css';
 import { pageList } from './constants';
@@ -76,21 +77,25 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
   }, []);
 
   return (
-    <Fragment>
+    <div className={styles.container}>
       <div className={classNames(styles.content, isOpen && styles.contentActive)} onClick={isOpen ? toggle : undefined}>
         {children}
       </div>
-      <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
-        <div className={styles.pageCarousel}>{visiblePageList.map(renderPageCard)}</div>
-      </div>
-      <div className={styles.floatingButton}>
-        <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
-          <span className={styles.toggleButtonLine1} />
-          <span className={styles.toggleButtonLine2} />
-          <span className={styles.toggleButtonLine3} />
-        </button>
-      </div>
-    </Fragment>
+      {!(ClientEnvironment.isDevelopment || ClientEnvironment.isPreview || ClientEnvironment.isProduction) && (
+        <Fragment>
+          <div className={classNames(styles.menu, isOpen && styles.menuActive)}>
+            <div className={styles.pageCarousel}>{visiblePageList.map(renderPageCard)}</div>
+          </div>
+          <div className={styles.floatingButton}>
+            <button className={classNames(styles.toggleButton, isOpen && styles.toggleButtonActive)} onClick={toggle}>
+              <span className={styles.toggleButtonLine1} />
+              <span className={styles.toggleButtonLine2} />
+              <span className={styles.toggleButtonLine3} />
+            </button>
+          </div>
+        </Fragment>
+      )}
+    </div>
   );
 };
 

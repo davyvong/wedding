@@ -2,20 +2,19 @@ const withMDX = require('@next/mdx')();
 const loaderUtils = require('loader-utils');
 const path = require('path');
 
-const getLocalIdent = (context, localIdentName, localName) =>
-  loaderUtils
-    .getHashDigest(
-      Buffer.from(
-        `filePath:${path
-          .relative(context.rootContext, context.resourcePath)
-          .replace(/\\+/g, '/')}#className:${localName}`,
-      ),
-      'md4',
-      'base64',
-      6,
-    )
+const getLocalIdent = (context, localIdentName, localName) => {
+  let bufferStr = `filePath:${path
+    .relative(context.rootContext, context.resourcePath)
+    .replace(/\\+/g, '/')}#className:${localName}`;
+  if (context.resourcePath.includes('next/font/local')) {
+    const resourceQuery = JSON.parse(context.resourceQuery.substring(1));
+    bufferStr += resourceQuery.variableName;
+  }
+  return loaderUtils
+    .getHashDigest(Buffer.from(bufferStr), 'md4', 'base64', 8)
     .replace(/[^a-zA-Z0-9-_]/g, '_')
     .replace(/^(-?\d|--)/, '_$1');
+};
 
 const config = {
   experimental: {

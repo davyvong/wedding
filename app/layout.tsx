@@ -11,14 +11,14 @@ import useTranslate from 'hooks/translate';
 import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
 import type { FC, ReactNode } from 'react';
-import { setVH } from 'utils/browser';
+import { setViewportUnits } from 'utils/browser';
 
 const inter = Inter({
   display: 'swap',
   subsets: ['latin'],
 });
 
-setVH();
+setViewportUnits();
 
 interface LayoutProps {
   children: ReactNode;
@@ -28,10 +28,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslate();
 
   useEffect(() => {
-    setVH();
-    window.addEventListener('resize', setVH);
+    setViewportUnits();
+    window.addEventListener('resize', setViewportUnits);
     return () => {
-      window.removeEventListener('resize', setVH);
+      window.removeEventListener('resize', setViewportUnits);
     };
   }, []);
 

@@ -1,6 +1,15 @@
-.content {
-  background-color: var(--color-surface-variant);
+.container {
+  background-color: var(--color-surface);
   height: 100%;
+  width: 100%;
+}
+
+.content {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  height: 100%;
+  margin: 0 auto;
+  max-width: 1680px;
   overflow: auto;
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
