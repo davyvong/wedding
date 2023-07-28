@@ -22,7 +22,7 @@
   user-select: none;
 }
 
-.cardMask {
+.backgroundCard {
   display: none;
 }
 
@@ -53,6 +53,18 @@
   margin-top: 1rem;
 }
 
+.calendarRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.calendarButton:not(:first-child) {
+  margin-left: 1rem;
+}
+
 @media (min-width: 768px) {
   .innerContainer {
     flex-direction: row-reverse;
@@ -68,19 +80,34 @@
     left: 3rem;
     min-height: auto;
     position: absolute;
-    z-index: 30;
   }
 
-  .cardMask {
+  .backgroundCard {
     display: block;
     flex: 0;
     overflow: hidden;
     position: relative;
   }
 
-  .cardMask .cardContainer {
+  .backgroundCard .cardContainer {
     color: var(--palette-black);
     z-index: 31;
+  }
+
+  .foregroundCard {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 50%;
+    top: 0;
+  }
+
+  .foregroundCard .cardContainer {
+    z-index: 30;
+  }
+
+  .foregroundCard .cardContainer .calendarRow {
+    visibility: hidden;
   }
 
   .saveTheDate {

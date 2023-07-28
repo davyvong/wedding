@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import type { FC } from 'react';
 import { waitForElement } from 'utils/browser';
 
+import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
 
 const brittanySignatureFont = localFont({
@@ -34,7 +35,7 @@ const SaveTheDateComponent: FC = () => {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    waitForElement('.' + styles.cardMask).then(() => {
+    waitForElement('.' + styles.foregroundCard).then(() => {
       const matchMedia = gsap.matchMedia();
       matchMedia.add('(min-width: 768px)', () => {
         ScrollTrigger.normalizeScroll({
@@ -52,18 +53,18 @@ const SaveTheDateComponent: FC = () => {
             trigger: '.' + styles.container,
           },
         });
-        timeline.to('.' + styles.cardMask, { flex: 1 });
+        timeline.to('.' + styles.backgroundCard, { flex: 1 });
         timeline.addPause('>0.1');
         timeline.add(() => {
           if (timeline.scrollTrigger?.direction === 1) {
-            gsap.to('.' + styles.cardMask + ' .' + styles.cardContainer, {
+            gsap.to('.' + styles.cardContainer, {
               bottom: '50%',
               left: '50%',
               translateX: '-50%',
               translateY: '50%',
             });
           } else {
-            gsap.to('.' + styles.cardMask + ' .' + styles.cardContainer, {
+            gsap.to('.' + styles.cardContainer, {
               bottom: '3rem',
               left: '3rem',
               translateX: '0',
@@ -88,6 +89,14 @@ const SaveTheDateComponent: FC = () => {
         {t('components.save-the-date.names')}
       </div>
       <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
+      <div className={styles.calendarRow}>
+        <a className={styles.calendarButton} href={CalendarLinks.getGoogle()} target="_blank">
+          {t('components.save-the-date.calendar-links.google')}
+        </a>
+        <a className={styles.calendarButton} href={CalendarLinks.getOutlook()} target="_blank">
+          {t('components.save-the-date.calendar-links.outlook')}
+        </a>
+      </div>
     </div>
   );
 
@@ -104,8 +113,8 @@ const SaveTheDateComponent: FC = () => {
             src={coverImageJPG}
           />
         </div>
-        {renderCard()}
-        <div className={styles.cardMask}>{renderCard()}</div>
+        <div className={styles.backgroundCard}>{renderCard()}</div>
+        <div className={styles.foregroundCard}>{renderCard()}</div>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 class CalendarLinks {
   static getGoogle(): string {
-    const url = new URL('https://calendar.google.com/calendar/event');
+    const url = new URL('https://calendar.google.com/calendar/render');
     url.searchParams.set('action', 'TEMPLATE');
-    url.searchParams.set('tmeid', 'MjBjc3ZpMXE4OXRsdjIwYzM2MzluaGc2MWEgZGF2eS52b25nQG0');
-    url.searchParams.set('tmsrc', 'host@vivian-and-davy.com');
+    url.searchParams.set('dates', '20240623/20240623');
+    url.searchParams.set('details', 'https://vivian-and-davy.com/');
+    url.searchParams.set('location', '');
+    url.searchParams.set('text', "Save The Date: Vivian & Davy's Wedding");
     return url.href;
   }
 
@@ -11,10 +13,11 @@ class CalendarLinks {
     const url = new URL('https://outlook.live.com/calendar/0/deeplink/compose');
     url.searchParams.set('allday', 'true');
     url.searchParams.set('body', 'https://vivian-and-davy.com/');
-    url.searchParams.set('enddt', '2023-06-23');
+    url.searchParams.set('enddt', '2024-06-23');
+    url.searchParams.set('location', '');
     url.searchParams.set('path', '/calendar/action/compose');
     url.searchParams.set('rru', 'addevent');
-    url.searchParams.set('startdt', '2023-06-23');
+    url.searchParams.set('startdt', '2024-06-23');
     url.searchParams.set('subject', "Save The Date: Vivian & Davy's Wedding");
     return url.href;
   }
