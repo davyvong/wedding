@@ -34,12 +34,12 @@ const SaveTheDateComponent: FC = () => {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const setAnimations = () => {
-      ScrollTrigger.normalizeScroll({
-        target: '.' + navigationStyles.content,
-      });
+    waitForElement('.' + styles.cardMask).then(() => {
       const matchMedia = gsap.matchMedia();
       matchMedia.add('(min-width: 768px)', () => {
+        ScrollTrigger.normalizeScroll({
+          target: '.' + navigationStyles.content,
+        });
         const timeline = gsap.timeline({
           overwrite: true,
           scrollTrigger: {
@@ -73,8 +73,7 @@ const SaveTheDateComponent: FC = () => {
         });
         timeline.addPause('>0.1');
       });
-    };
-    waitForElement('.' + styles.cardMask).then(setAnimations);
+    });
     return () => {
       ScrollTrigger.normalizeScroll(false);
     };
