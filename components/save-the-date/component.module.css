@@ -28,7 +28,7 @@
 
 .cardContainer {
   align-items: center;
-  color: var(--color-surface);
+  color: var(--palette-black);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,6 +64,7 @@
 
   .cardContainer {
     bottom: 3rem;
+    color: var(--color-surface);
     left: 3rem;
     min-height: auto;
     position: absolute;
