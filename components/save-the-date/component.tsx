@@ -8,12 +8,10 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
 import localFont from 'next/font/local';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect } from 'react';
 import type { FC } from 'react';
 import { waitForElement } from 'utils/browser';
 
-import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
 
 const brittanySignatureFont = localFont({
@@ -36,7 +34,7 @@ const SaveTheDateComponent: FC = () => {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const setGSAPAnimations = () => {
+    const setAnimations = () => {
       ScrollTrigger.normalizeScroll({
         target: '.' + navigationStyles.content,
       });
@@ -45,7 +43,7 @@ const SaveTheDateComponent: FC = () => {
         const timeline = gsap.timeline({
           overwrite: true,
           scrollTrigger: {
-            end: '+=200%',
+            end: '+=10000px',
             invalidateOnRefresh: true,
             pin: true,
             scroller: '.' + navigationStyles.content,
@@ -54,28 +52,36 @@ const SaveTheDateComponent: FC = () => {
             trigger: '.' + styles.container,
           },
         });
-        timeline.to('.' + styles.textMask, { flex: 1 });
-        timeline.addPause('+=1');
+        timeline.to('.' + styles.cardMask, { flex: 1 });
+        timeline.addPause('>0.1');
         timeline.add(() => {
           if (timeline.scrollTrigger?.direction === 1) {
-            gsap.to('.' + styles.textOverlay, { bottom: '50%', translateY: '50%' });
-            gsap.to('.' + styles.calendarRow, { autoAlpha: 1 });
+            gsap.to('.' + styles.cardMask + ' .' + styles.cardContainer, {
+              bottom: '50%',
+              left: '50%',
+              translateX: '-50%',
+              translateY: '50%',
+            });
           } else {
-            gsap.to('.' + styles.textOverlay, { bottom: '3rem', translateY: '0' });
-            gsap.to('.' + styles.calendarRow, { autoAlpha: 0 });
+            gsap.to('.' + styles.cardMask + ' .' + styles.cardContainer, {
+              bottom: '3rem',
+              left: '3rem',
+              translateX: '0',
+              translateY: '0',
+            });
           }
         });
-        timeline.addPause('+=1');
+        timeline.addPause('>0.1');
       });
     };
-    waitForElement('.' + styles.textMask).then(setGSAPAnimations);
+    waitForElement('.' + styles.cardMask).then(setAnimations);
     return () => {
       ScrollTrigger.normalizeScroll(false);
     };
   }, []);
 
-  const renderTextOverlay = (): JSX.Element => (
-    <div className={styles.textOverlay}>
+  const renderCard = (): JSX.Element => (
+    <div className={styles.cardContainer}>
       <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
         {t('components.save-the-date')}
       </div>
@@ -83,21 +89,12 @@ const SaveTheDateComponent: FC = () => {
         {t('components.save-the-date.names')}
       </div>
       <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
-      <div className={styles.calendarRow}>
-        <Link className={styles.calendarButton} href={CalendarLinks.getGoogle()} target="_blank">
-          {t('components.save-the-date.calendar-links.google')}
-        </Link>
-        <Link className={styles.calendarButton} href={CalendarLinks.getOutlook()} target="_blank">
-          {t('components.save-the-date.calendar-links.outlook')}
-        </Link>
-      </div>
     </div>
   );
 
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <div className={styles.textMask}>{renderTextOverlay()}</div>
         <div className={styles.coverImageContainer}>
           <Image
             alt={t('components.save-the-date')}
@@ -108,7 +105,8 @@ const SaveTheDateComponent: FC = () => {
             src={coverImageJPG}
           />
         </div>
-        {renderTextOverlay()}
+        {renderCard()}
+        <div className={styles.cardMask}>{renderCard()}</div>
       </div>
     </div>
   );

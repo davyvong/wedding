@@ -5,19 +5,14 @@
 
 .innerContainer {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   height: 100%;
   position: relative;
   width: 100%;
 }
 
-.textMask {
-  display: none;
-}
-
 .coverImageContainer {
-  flex: 1;
-  height: 100%;
+  min-height: calc(var(--vh, 1vh) * 100);
   position: relative;
 }
 
@@ -27,107 +22,93 @@
   user-select: none;
 }
 
-.textOverlay {
-  bottom: 3rem;
-  color: var(--palette-white);
-  left: 0;
-  position: absolute;
-  right: 0;
+.cardMask {
+  display: none;
+}
+
+.cardContainer {
+  align-items: center;
+  color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(var(--vh, 1vh) * 100);
   text-align: center;
-  transition:
-    bottom 150ms linear,
-    transform 150ms linear;
+  white-space: nowrap;
 }
 
 .saveTheDate {
-  font-size: min(calc(var(--vmax, 1vmax) * 6), 100.8px);
+  font-size: 4.5rem;
 }
 
 .names {
-  font-size: min(calc(var(--vmax, 1vmax) * 3), 50.4px);
-  letter-spacing: min(calc(var(--vw, 1vw) * 0.5), 8.4px);
-  margin-top: calc(var(--vh, 1vh) * 3);
+  font-size: 2.25rem;
+  letter-spacing: 0.25rem;
+  margin-top: 1rem;
 }
 
 .date {
-  font-size: min(calc(var(--vmax, 1vmax) * 2), 33.6px);
-  letter-spacing: min(calc(var(--vw, 1vw) * 0.75), 12.6px);
-  margin-top: var(--vh, 1vh);
-}
-
-.calendarRow {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: calc(var(--vh, 1vh) * 2);
-  visibility: hidden;
-}
-
-.calendarButton {
-  align-items: center;
-  background-color: var(--palette-persian-orange);
-  border: 0;
-  border-radius: 100rem;
-  color: var(--color-on-primary);
-  display: flex;
-  font-size: 1rem;
-  font-weight: 400;
-  height: 50px;
-  justify-content: center;
-  outline: none;
-  padding: 1rem;
-  transition: background-color 300ms ease-in-out;
-}
-
-.calendarButton:hover {
-  background-color: var(--color-primary);
-  cursor: pointer;
-}
-
-.calendarButton:disabled {
-  background-color: var(--palette-persian-orange);
-  cursor: not-allowed;
-}
-
-.calendarButton:not(:first-child) {
-  margin-left: 1rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.5rem;
+  margin-top: 1rem;
 }
 
 @media (min-width: 768px) {
   .innerContainer {
-    flex-direction: row;
+    flex-direction: row-reverse;
   }
 
-  .textMask {
-    display: block;
-    flex: 0;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    transition: flex 150ms ease-in-out;
+  .coverImageContainer {
+    flex: 1;
   }
 
-  .textMask .textOverlay {
-    color: var(--palette-black);
+  .cardContainer {
+    bottom: 3rem;
+    left: 3rem;
+    min-height: auto;
+    position: absolute;
     z-index: 30;
   }
 
-  .textOverlay {
-    bottom: 2rem;
-    right: initial;
-    width: min(calc(var(--vw, 1vw) * 50), 840px);
+  .cardMask {
+    display: block;
+    flex: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .cardMask .cardContainer {
+    color: var(--palette-black);
+    z-index: 31;
+  }
+
+  .saveTheDate {
+    font-size: 3.5rem;
+  }
+
+  .names {
+    font-size: 1.5rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .date {
+    font-size: 1rem;
+    letter-spacing: 0.25rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .textOverlay {
-    bottom: 3rem;
+  .saveTheDate {
+    font-size: 4.5rem;
   }
-}
 
-@media (min-width: 1680px) {
-  .container {
-    padding: 3rem;
+  .names {
+    font-size: 2.25rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .date {
+    font-size: 1.25rem;
+    letter-spacing: 0.5rem;
   }
 }
