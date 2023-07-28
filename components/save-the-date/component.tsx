@@ -43,7 +43,7 @@ const SaveTheDateComponent: FC = () => {
         const timeline = gsap.timeline({
           overwrite: true,
           scrollTrigger: {
-            end: '+=10000px',
+            end: '+=200%',
             invalidateOnRefresh: true,
             pin: true,
             scroller: '.' + navigationStyles.content,
