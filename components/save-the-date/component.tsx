@@ -1,6 +1,8 @@
 'use client';
 
-import coverImageJPG from 'assets/images/VD-72.jpg';
+import GoogleCalendarSVG from 'assets/icons/google-calendar.svg';
+import OutlookCalendarSVG from 'assets/icons/outlook-calendar.svg';
+import CoverImageJPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
@@ -91,10 +93,12 @@ const SaveTheDateComponent: FC = () => {
       <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
       <div className={styles.calendarRow}>
         <a className={styles.calendarButton} href={CalendarLinks.getGoogle()} target="_blank">
-          {t('components.save-the-date.calendar-links.google')}
+          <GoogleCalendarSVG height="24" />
+          <span>{t('components.save-the-date.calendar-links.google')}</span>
         </a>
         <a className={styles.calendarButton} href={CalendarLinks.getOutlook()} target="_blank">
-          {t('components.save-the-date.calendar-links.outlook')}
+          <OutlookCalendarSVG height="30" />
+          <span>{t('components.save-the-date.calendar-links.outlook')}</span>
         </a>
       </div>
     </div>
@@ -110,7 +114,7 @@ const SaveTheDateComponent: FC = () => {
             fill
             priority
             sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
-            src={coverImageJPG}
+            src={CoverImageJPG}
           />
         </div>
         <div className={styles.backgroundCard}>{renderCard()}</div>

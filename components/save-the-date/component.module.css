@@ -61,8 +61,38 @@
   margin-top: 1rem;
 }
 
+.calendarButton {
+  align-items: center;
+  background-color: var(--palette-persian-orange);
+  border: 0;
+  border-radius: 100rem;
+  color: var(--color-on-primary);
+  display: flex;
+  font-size: 1rem;
+  font-weight: 400;
+  height: 50px;
+  justify-content: center;
+  outline: none;
+  padding: 1rem;
+  transition: background-color 300ms ease-in-out;
+}
+
+.calendarButton:hover {
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.calendarButton:disabled {
+  background-color: var(--palette-persian-orange);
+  cursor: not-allowed;
+}
+
 .calendarButton:not(:first-child) {
   margin-left: 1rem;
+}
+
+.calendarButton svg {
+  margin-right: 0.5rem;
 }
 
 @media (min-width: 768px) {
@@ -87,6 +117,7 @@
     flex: 0;
     overflow: hidden;
     position: relative;
+    transition: flex 150ms ease-in-out;
   }
 
   .backgroundCard .cardContainer {
