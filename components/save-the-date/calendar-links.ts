@@ -10,7 +10,7 @@ class CalendarLinks {
   }
 
   static getOutlook(): string {
-    const url = new URL('https://outlook.live.com/calendar/0/deeplink/compose');
+    const url = new URL('https://outlook.live.com/calendar/deeplink/compose');
     url.searchParams.set('allday', 'true');
     url.searchParams.set('body', 'https://vivian-and-davy.com/');
     url.searchParams.set('enddt', '2024-06-23');
