@@ -10,15 +10,15 @@ class CalendarLinks {
   }
 
   static getOutlook(): string {
-    const url = new URL('https://outlook.live.com/calendar/deeplink/compose');
+    // https://github.com/InteractionDesignFoundation/add-event-to-calendar-docs/discussions/47
+    const url = new URL('https://outlook.live.com/calendar/action/compose');
     url.searchParams.set('allday', 'true');
     url.searchParams.set('body', 'https://vivian-and-davy.com/');
-    url.searchParams.set('enddt', '2024-06-23');
     url.searchParams.set('location', '');
     url.searchParams.set('path', '/calendar/action/compose');
     url.searchParams.set('rru', 'addevent');
     url.searchParams.set('startdt', '2024-06-23');
-    url.searchParams.set('subject', "Save The Date: Vivian & Davy's Wedding");
+    url.searchParams.set('subject', "Save The Date: Vivian and Davy's Wedding");
     return url.href;
   }
 }
