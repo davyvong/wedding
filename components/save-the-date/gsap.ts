@@ -21,6 +21,7 @@ export const createGSAPContext = (): gsap.Context =>
       duration: 2,
       flex: 1,
     });
+    firstSectionTimeline.addPause('>0.1');
     firstSectionTimeline.add(() => {
       if (firstSectionTimeline.scrollTrigger?.direction === 1) {
         gsap.to('.' + styles.cardContainer, {
@@ -38,6 +39,7 @@ export const createGSAPContext = (): gsap.Context =>
         });
       }
     });
+    firstSectionTimeline.addPause('>0.1');
     const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {

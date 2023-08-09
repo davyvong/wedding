@@ -11,6 +11,7 @@ import localFont from 'next/font/local';
 import Image from 'next/image';
 import { Fragment, useEffect } from 'react';
 import type { FC } from 'react';
+import smoothscroll from 'smoothscroll-polyfill';
 import { waitForElement } from 'utils/browser';
 
 import CalendarLinks from './calendar-links';
@@ -38,9 +39,10 @@ const SaveTheDateComponent: FC = () => {
   const { t } = useTranslate();
 
   useEffect(() => {
+    smoothscroll.polyfill();
+    gsap.registerPlugin(ScrollTrigger);
     let context: gsap.Context;
     waitForElement('.' + styles.foregroundCard).then(() => {
-      gsap.registerPlugin(ScrollTrigger);
       const matchMedia = gsap.matchMedia();
       matchMedia.add('(min-width: 768px)', () => {
         context = createGSAPContext();
