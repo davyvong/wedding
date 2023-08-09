@@ -78,6 +78,7 @@ const SaveTheDateComponent: FC = () => {
       <Image
         alt={image.alt}
         fill
+        priority
         sizes="(max-width: 425px) 100vw, (max-width: 768px) 35vw, (max-width: 1024px) 35vw, (max-width: 1280px) 35vw, (max-width: 1440px) 35vw, 35vw"
         src={image.src}
         style={image.style}
