@@ -2,20 +2,22 @@
 
 import GoogleCalendarSVG from 'assets/icons/google-calendar.svg';
 import OutlookCalendarSVG from 'assets/icons/outlook-calendar.svg';
-import CoverImageJPG from 'assets/images/VD-72.jpg';
+import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
-import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
 import localFont from 'next/font/local';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import type { FC } from 'react';
 import { waitForElement } from 'utils/browser';
 
 import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
+import { horizontalPhotoStripImageList } from './constants';
+import { createGSAPContext } from './gsap';
+import type { HorizontalPhotoStripImage } from './types';
 
 const brittanySignatureFont = localFont({
   display: 'swap',
@@ -36,49 +38,16 @@ const SaveTheDateComponent: FC = () => {
   const { t } = useTranslate();
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let context: gsap.Context;
     waitForElement('.' + styles.foregroundCard).then(() => {
+      gsap.registerPlugin(ScrollTrigger);
       const matchMedia = gsap.matchMedia();
       matchMedia.add('(min-width: 768px)', () => {
-        ScrollTrigger.normalizeScroll({
-          target: '.' + navigationStyles.content,
-        });
-        const timeline = gsap.timeline({
-          overwrite: true,
-          scrollTrigger: {
-            end: '+=200%',
-            invalidateOnRefresh: true,
-            pin: true,
-            scroller: '.' + navigationStyles.content,
-            scrub: true,
-            start: 'start start',
-            trigger: '.' + styles.container,
-          },
-        });
-        timeline.to('.' + styles.backgroundCard, { flex: 1 });
-        timeline.addPause('>0.1');
-        timeline.add(() => {
-          if (timeline.scrollTrigger?.direction === 1) {
-            gsap.to('.' + styles.cardContainer, {
-              bottom: '50%',
-              left: '50%',
-              translateX: '-50%',
-              translateY: '50%',
-            });
-          } else {
-            gsap.to('.' + styles.cardContainer, {
-              bottom: '3rem',
-              left: '3rem',
-              translateX: '0',
-              translateY: '0',
-            });
-          }
-        });
-        timeline.addPause('>0.1');
+        context = createGSAPContext();
       });
     });
     return () => {
-      ScrollTrigger.normalizeScroll(false);
+      context?.revert();
     };
   }, []);
 
@@ -104,23 +73,39 @@ const SaveTheDateComponent: FC = () => {
     </div>
   );
 
+  const renderImageInPhotoStrip = (image: HorizontalPhotoStripImage): JSX.Element => (
+    <figure className={styles.photoInHorizontalStrip} key={image.alt}>
+      <Image
+        alt={image.alt}
+        fill
+        sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, 50vw"
+        src={image.src}
+        style={image.style}
+      />
+    </figure>
+  );
+
   return (
-    <div className={styles.container}>
-      <div className={styles.innerContainer}>
-        <div className={styles.coverImageContainer}>
-          <Image
-            alt={t('components.save-the-date')}
-            className={styles.coverImage}
-            fill
-            priority
-            sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
-            src={CoverImageJPG}
-          />
+    <Fragment>
+      <div className={classNames(styles.section, styles.firstSection)}>
+        <div className={styles.innerSection}>
+          <figure className={styles.coverImage}>
+            <Image
+              alt="VD72"
+              fill
+              priority
+              sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
+              src={VD72JPG}
+            />
+          </figure>
+          <div className={styles.backgroundCard}>{renderCard()}</div>
+          <div className={styles.foregroundCard}>{renderCard()}</div>
         </div>
-        <div className={styles.backgroundCard}>{renderCard()}</div>
-        <div className={styles.foregroundCard}>{renderCard()}</div>
       </div>
-    </div>
+      <div className={classNames(styles.section, styles.secondSection)}>
+        <div className={styles.horizontalPhotoStrip}>{horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}</div>
+      </div>
+    </Fragment>
   );
 };
 

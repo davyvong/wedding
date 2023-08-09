@@ -1,9 +1,9 @@
-.container {
-  height: 100%;
+.section {
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
 }
 
-.innerContainer {
+.innerSection {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -11,12 +11,12 @@
   width: 100%;
 }
 
-.coverImageContainer {
+.coverImage {
   min-height: calc(var(--vh, 1vh) * 100);
   position: relative;
 }
 
-.coverImage {
+.coverImage img {
   object-fit: cover;
   object-position: bottom;
   user-select: none;
@@ -96,11 +96,15 @@
 }
 
 @media (min-width: 768px) {
-  .innerContainer {
+  .firstSection {
+    position: relative;
+  }
+
+  .innerSection {
     flex-direction: row-reverse;
   }
 
-  .coverImageContainer {
+  .coverImage {
     flex: 1;
   }
 
@@ -152,6 +156,38 @@
   .date {
     font-size: 1rem;
     letter-spacing: 0.25rem;
+  }
+
+  .secondSection {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .horizontalPhotoStrip {
+    display: flex;
+    flex-direction: row;
+    padding: 2rem;
+  }
+
+  .photoInHorizontalStrip {
+    padding-top: 26%;
+    position: relative;
+    max-width: calc(var(--vw, 1vw) * 35);
+    min-width: calc(var(--vw, 1vw) * 35);
+  }
+
+  .photoInHorizontalStrip:not(:first-child) {
+    margin-left: 2rem;
+  }
+
+  .photoInHorizontalStrip:nth-child(n) {
+    transform: translateY(calc(var(--nth-child) * 20%));
+  }
+
+  .photoInHorizontalStrip img {
+    object-fit: cover;
   }
 }
 
