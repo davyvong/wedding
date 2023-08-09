@@ -63,6 +63,10 @@ const config = {
       test: /\.eml$/,
       use: 'raw-loader',
     });
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      handlebars: 'handlebars/dist/handlebars.js',
+    };
     return config;
   },
 };
