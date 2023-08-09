@@ -78,7 +78,7 @@ const SaveTheDateComponent: FC = () => {
       <Image
         alt={image.alt}
         fill
-        sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, 50vw"
+        sizes="(max-width: 425px) 100vw, (max-width: 768px) 35vw, (max-width: 1024px) 35vw, (max-width: 1280px) 35vw, (max-width: 1440px) 35vw, 35vw"
         src={image.src}
         style={image.style}
       />
