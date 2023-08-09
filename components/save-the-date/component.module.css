@@ -3,12 +3,10 @@
   width: 100%;
 }
 
-.innerSection {
+.firstSection {
   display: flex;
   flex-direction: column;
-  height: 100%;
   position: relative;
-  width: 100%;
 }
 
 .coverImage {
@@ -22,7 +20,7 @@
   user-select: none;
 }
 
-.backgroundCard {
+.backgroundMask {
   display: none;
 }
 
@@ -97,15 +95,30 @@
 
 @media (min-width: 768px) {
   .firstSection {
-    position: relative;
-  }
-
-  .innerSection {
     flex-direction: row-reverse;
   }
 
   .coverImage {
     flex: 1;
+  }
+
+  .backgroundMask {
+    bottom: 0;
+    display: block;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 100%;
+    top: 0;
+  }
+
+  .backgroundCard,
+  .foregroundCard {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: calc(var(--vw, 1vw) * 50);
   }
 
   .cardContainer {
@@ -116,24 +129,9 @@
     position: absolute;
   }
 
-  .backgroundCard {
-    display: block;
-    flex: 0;
-    overflow: hidden;
-    position: relative;
-  }
-
   .backgroundCard .cardContainer {
     color: var(--palette-black);
     z-index: 31;
-  }
-
-  .foregroundCard {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 50%;
-    top: 0;
   }
 
   .foregroundCard .cardContainer {
