@@ -8,14 +8,10 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
     const firstSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
-        anticipatePin: 1,
-        end: '+=100%',
+        once: true,
         invalidateOnRefresh: true,
-        pin: true,
-        preventOverlaps: true,
         scroller: '.' + navigationStyles.content,
-        scrub: 1,
-        start: 'top top',
+        start: 'top bottom',
         trigger: '.' + styles.firstSection,
       },
     });
@@ -32,6 +28,14 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       {
         duration: 1,
         right: '50%',
+      },
+      'shiftToRight',
+    );
+    firstSectionTimeline.to(
+      '.' + styles.coverImageSpacer,
+      {
+        duration: 1,
+        padding: '2rem',
       },
       'shiftToRight',
     );

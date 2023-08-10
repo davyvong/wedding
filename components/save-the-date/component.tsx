@@ -100,15 +100,17 @@ const SaveTheDateComponent: FC = () => {
   return (
     <Fragment>
       <div className={classNames(styles.section, styles.firstSection)}>
-        <figure className={styles.coverImage}>
-          <Image
-            alt="VD72"
-            fill
-            priority
-            sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
-            src={VD72JPG}
-          />
-        </figure>
+        <div className={styles.coverImageSpacer}>
+          <figure className={styles.coverImage}>
+            <Image
+              alt="VD72"
+              fill
+              priority
+              sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
+              src={VD72JPG}
+            />
+          </figure>
+        </div>
         <div className={styles.backgroundMask}>
           <div className={styles.backgroundCard}>{renderCard()}</div>
         </div>
