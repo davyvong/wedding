@@ -4,7 +4,6 @@ import GoogleCalendarSVG from 'assets/icons/google-calendar.svg';
 import OutlookCalendarSVG from 'assets/icons/outlook-calendar.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
-import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
@@ -12,7 +11,6 @@ import localFont from 'next/font/local';
 import Image from 'next/image';
 import { Fragment, useEffect } from 'react';
 import type { FC } from 'react';
-import smoothscroll from 'smoothscroll-polyfill';
 import { waitForElement } from 'utils/browser';
 
 import CalendarLinks from './calendar-links';
@@ -40,24 +38,19 @@ const SaveTheDateComponent: FC = () => {
   const { t } = useTranslate();
 
   useEffect(() => {
-    smoothscroll.polyfill();
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.normalizeScroll({
-      target: '.' + navigationStyles.content,
-    });
     let context: gsap.Context;
     waitForElement('.' + styles.foregroundCard).then(() => {
+      gsap.registerPlugin(ScrollTrigger);
       gsap
         .matchMedia()
-        .add('(min-width: 768px) and (max-width: 1439px)', () => {
+        .add('(min-width: 768px) and (max-width: 1679px)', () => {
           context = createGSAPContext();
         })
-        .add('(min-width: 1440px)', () => {
+        .add('(min-width: 1680px)', () => {
           context = createGSAPContext(true);
         });
     });
     return () => {
-      ScrollTrigger.normalizeScroll(false);
       context?.revert();
     };
   }, []);
@@ -119,6 +112,7 @@ const SaveTheDateComponent: FC = () => {
       <div className={classNames(styles.section, styles.secondSection)}>
         <div className={styles.horizontalPhotoStrip}>{horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}</div>
       </div>
+      <div className={classNames(styles.section, styles.thirdSection)} />
     </Fragment>
   );
 };

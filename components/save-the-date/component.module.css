@@ -176,10 +176,9 @@
   }
 
   .photoInHorizontalStrip {
-    padding-top: 26%;
     position: relative;
-    max-width: calc(var(--vw, 1vw) * 35);
-    min-width: calc(var(--vw, 1vw) * 35);
+    height: calc(var(--vh, 1vh) * 70);
+    width: calc(var(--vh, 1vh) * 50);
   }
 
   .photoInHorizontalStrip:not(:first-child) {
@@ -211,14 +210,9 @@
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1680px) {
   .backgroundCard,
   .foregroundCard {
-    width: 720px;
-  }
-
-  .photoInHorizontalStrip {
-    max-width: 504px;
-    min-width: 504px;
+    width: 840px;
   }
 }

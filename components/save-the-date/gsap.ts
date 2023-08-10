@@ -15,6 +15,9 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
         trigger: '.' + styles.firstSection,
       },
     });
+    firstSectionTimeline.to('.' + styles.firstSection, {
+      duration: 1,
+    });
     firstSectionTimeline.to(
       '.' + styles.firstSection,
       {
@@ -67,8 +70,6 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       '.' + styles.photoInHorizontalStrip,
       {
         duration: 3,
-        maxWidth: () => (isMaxBreakpoint ? '403.2px' : '28vw'),
-        minWidth: () => (isMaxBreakpoint ? '403.2px' : '28vw'),
       },
       'shrinkAndScroll',
     );
@@ -76,8 +77,16 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       '.' + styles.horizontalPhotoStrip,
       {
         duration: 3,
-        transform: () => (isMaxBreakpoint ? 'translateX(calc(-338px - 12rem))' : 'translateX(calc(-40vw - 12rem))'),
+        transform: (index: number, horizontalPhotoStrip: Element) => {
+          return `translateX(calc(${isMaxBreakpoint ? '1680px' : '100vw'} - ${horizontalPhotoStrip.clientWidth}px))`;
+        },
       },
       'shrinkAndScroll',
     );
+    secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+      duration: 1,
+      transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
+        return `translateY(${photosInHorizontalStrip.length - 1 - index} * 20%)`;
+      },
+    });
   });

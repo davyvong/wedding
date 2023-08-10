@@ -5,8 +5,10 @@ import ClientEnvironment from 'client/environment';
 import Link from 'components/link';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
 import NextLink from 'next/link';
+import normalizeWheel from 'normalize-wheel';
 import type { FC, ReactNode } from 'react';
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 
@@ -72,6 +74,26 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
         pageCarousel.removeEventListener('mouseleave', onMouseLeave);
         pageCarousel.removeEventListener('mousemove', onMouseMove);
         pageCarousel.removeEventListener('wheel', onWheel);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.normalizeScroll({
+      target: '.' + styles.content,
+    });
+    return () => {
+      ScrollTrigger.normalizeScroll(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    const content = document.querySelector('.' + styles.content);
+    if (content) {
+      content.addEventListener(normalizeWheel.getEventType(), normalizeWheel);
+      return () => {
+        content.removeEventListener(normalizeWheel.getEventType(), normalizeWheel);
       };
     }
   }, []);
