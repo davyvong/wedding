@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 import styles from './component.module.css';
 
-export const createGSAPContext = (): gsap.Context =>
+export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Context =>
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
       overwrite: true,
@@ -63,8 +63,8 @@ export const createGSAPContext = (): gsap.Context =>
       '.' + styles.photoInHorizontalStrip,
       {
         duration: 3,
-        maxWidth: '28vw',
-        minWidth: '28vw',
+        maxWidth: () => (isMaxBreakpoint ? '403.2px' : '28vw'),
+        minWidth: () => (isMaxBreakpoint ? '403.2px' : '28vw'),
       },
       'shrinkAndScroll',
     );
@@ -72,7 +72,7 @@ export const createGSAPContext = (): gsap.Context =>
       '.' + styles.horizontalPhotoStrip,
       {
         duration: 3,
-        transform: 'translateX(calc(-40vw - 12rem))',
+        transform: () => (isMaxBreakpoint ? 'translateX(calc(-338px - 12rem))' : 'translateX(calc(-40vw - 12rem))'),
       },
       'shrinkAndScroll',
     );

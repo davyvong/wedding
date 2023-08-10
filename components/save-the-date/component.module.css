@@ -204,3 +204,15 @@
     letter-spacing: 0.5rem;
   }
 }
+
+@media (min-width: 1440px) {
+  .backgroundCard,
+  .foregroundCard {
+    width: 720px;
+  }
+
+  .photoInHorizontalStrip {
+    max-width: 504px;
+    min-width: 504px;
+  }
+}

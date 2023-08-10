@@ -47,10 +47,14 @@ const SaveTheDateComponent: FC = () => {
     });
     let context: gsap.Context;
     waitForElement('.' + styles.foregroundCard).then(() => {
-      const matchMedia = gsap.matchMedia();
-      matchMedia.add('(min-width: 768px)', () => {
-        context = createGSAPContext();
-      });
+      gsap
+        .matchMedia()
+        .add('(min-width: 768px) and (max-width: 1439px)', () => {
+          context = createGSAPContext();
+        })
+        .add('(min-width: 1440px)', () => {
+          context = createGSAPContext(true);
+        });
     });
     return () => {
       ScrollTrigger.normalizeScroll(false);
