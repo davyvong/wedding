@@ -83,7 +83,8 @@ const StoryComponent: FC = () => {
         alt={image.alt}
         fill
         priority
-        sizes="(max-width: 425px) 100vw, (max-width: 768px) 35vw, (max-width: 1024px) 35vw, (max-width: 1280px) 35vw, (max-width: 1440px) 35vw, 35vw"
+        quality={100}
+        sizes="(max-width: 425px) 70vh, (max-width: 768px) 70vh, (max-width: 1024px) 70vh, (max-width: 1280px) 70vh, (max-width: 1440px) 70vh, 70vh"
         src={image.src}
         style={image.style}
       />
@@ -99,6 +100,7 @@ const StoryComponent: FC = () => {
               alt="VD72"
               fill
               priority
+              quality={100}
               sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
               src={VD72JPG}
             />

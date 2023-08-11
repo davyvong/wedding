@@ -15,7 +15,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <Image
           alt=""
           fill
-          quality={80}
+          quality={100}
           src="https://images.unsplash.com/photo-1519307212971-dd9561667ffb?auto=format&fit=crop&w=2787&q=80"
           style={{ objectFit: 'cover' }}
         />

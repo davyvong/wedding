@@ -23,7 +23,7 @@ const GalleryComponent: FC<GalleryComponentProps> = ({ data = [], ...containerPr
             fill
             key={index}
             priority={priority}
-            quality={80}
+            quality={100}
             sizes="(max-width: 425px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, 50vw"
             src={image}
           />

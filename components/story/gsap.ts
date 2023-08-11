@@ -7,6 +7,10 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
       onComplete: () => {
+        const foregroundCard = document.querySelector('.' + styles.foregroundCard);
+        if (foregroundCard) {
+          foregroundCard.remove();
+        }
         const content = document.querySelector('.' + navigationStyles.content);
         if (content) {
           content.classList.remove(navigationStyles.contentScrollLocked);
@@ -64,7 +68,7 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       overwrite: true,
       scrollTrigger: {
         anticipatePin: 1,
-        end: '+=300%',
+        end: '+=200%',
         invalidateOnRefresh: true,
         pin: true,
         preventOverlaps: true,
