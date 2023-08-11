@@ -1,7 +1,7 @@
-import SaveTheDate from 'components/save-the-date';
+import Story from 'components/story';
 
 const Page = async (): Promise<JSX.Element> => {
-  return <SaveTheDate />;
+  return <Story />;
 };
 
 export default Page;

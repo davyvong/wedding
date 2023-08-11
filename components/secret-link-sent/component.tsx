@@ -1,6 +1,6 @@
 'use client';
 
-import InboxEmailOpenedSVG from 'assets/inbox-email-opened.svg';
+import InboxEmailOpenedSVG from 'assets/icons/inbox-email-opened.svg';
 import classNames from 'classnames';
 import secretLinkFormStyles from 'components/secret-link-form/component.module.css';
 import useTranslate from 'hooks/translate';

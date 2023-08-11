@@ -26,6 +26,10 @@
   cursor: pointer;
 }
 
+.contentScrollLocked {
+  overflow: hidden;
+}
+
 .menu {
   background-color: var(--palette-black);
   color: var(--color-on-primary);

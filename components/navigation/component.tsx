@@ -1,5 +1,6 @@
 'use client';
 
+import GScroll from '@grcmichael/gscroll';
 import classNames from 'classnames';
 import ClientEnvironment from 'client/environment';
 import Link from 'components/link';
@@ -74,6 +75,17 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
         pageCarousel.removeEventListener('wheel', onWheel);
       };
     }
+  }, []);
+
+  useEffect(() => {
+    const scroll = new GScroll('.' + styles.content);
+    scroll.init();
+    scroll.wheel();
+    window.addEventListener('resize', scroll.resize);
+    return () => {
+      window.removeEventListener('resize', scroll.resize);
+      scroll.destroy();
+    };
   }, []);
 
   return (
