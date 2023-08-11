@@ -1,14 +1,13 @@
 'use client';
 
+import GScroll from '@grcmichael/gscroll';
 import classNames from 'classnames';
 import ClientEnvironment from 'client/environment';
 import Link from 'components/link';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
 import NextLink from 'next/link';
-import normalizeWheel from 'normalize-wheel';
 import type { FC, ReactNode } from 'react';
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 
@@ -79,23 +78,14 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
   }, []);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.normalizeScroll({
-      target: '.' + styles.content,
-    });
+    const scroll = new GScroll('.' + styles.content);
+    scroll.init();
+    scroll.wheel();
+    window.addEventListener('resize', scroll.resize);
     return () => {
-      ScrollTrigger.normalizeScroll(false);
+      window.removeEventListener('resize', scroll.resize);
+      scroll.destroy();
     };
-  }, []);
-
-  useEffect(() => {
-    const content = document.querySelector('.' + styles.content);
-    if (content) {
-      content.addEventListener(normalizeWheel.getEventType(), normalizeWheel);
-      return () => {
-        content.removeEventListener(normalizeWheel.getEventType(), normalizeWheel);
-      };
-    }
   }, []);
 
   return (
