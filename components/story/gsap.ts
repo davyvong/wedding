@@ -64,7 +64,7 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       overwrite: true,
       scrollTrigger: {
         anticipatePin: 1,
-        end: '+=100%',
+        end: '+=300%',
         invalidateOnRefresh: true,
         pin: true,
         preventOverlaps: true,
@@ -98,7 +98,7 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
     secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
       duration: 1,
       transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
-        return `translateY(${photosInHorizontalStrip.length - 1 - index} * 20%)`;
+        return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
       },
     });
   });

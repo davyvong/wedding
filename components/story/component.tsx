@@ -34,7 +34,7 @@ const playfairDislayFont = localFont({
   src: '../../assets/fonts/playfair-display.woff2',
 });
 
-const SaveTheDateComponent: FC = () => {
+const StoryComponent: FC = () => {
   const { t } = useTranslate();
 
   useEffect(() => {
@@ -117,4 +117,4 @@ const SaveTheDateComponent: FC = () => {
   );
 };
 
-export default SaveTheDateComponent;
+export default StoryComponent;
