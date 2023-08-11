@@ -6,6 +6,18 @@ import styles from './component.module.css';
 export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Context =>
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
+      onComplete: () => {
+        const content = document.querySelector('.' + navigationStyles.content);
+        if (content) {
+          content.classList.remove(navigationStyles.contentScrollLocked);
+        }
+      },
+      onStart: () => {
+        const content = document.querySelector('.' + navigationStyles.content);
+        if (content) {
+          content.classList.add(navigationStyles.contentScrollLocked);
+        }
+      },
       overwrite: true,
       scrollTrigger: {
         once: true,
