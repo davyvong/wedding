@@ -1,7 +1,7 @@
 'use client';
 
-import GoogleCalendarSVG from 'assets/icons/google-calendar.svg';
-import OutlookCalendarSVG from 'assets/icons/outlook-calendar.svg';
+import GoogleLogoSVG from 'assets/icons/google-logo.svg';
+import OutlookLogoSVG from 'assets/icons/outlook-logo.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import gsap from 'gsap';
@@ -66,11 +66,11 @@ const StoryComponent: FC = () => {
       <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
       <div className={styles.calendarRow}>
         <a className={styles.calendarButton} href={CalendarLinks.getGoogle()} target="_blank">
-          <GoogleCalendarSVG height="24" />
+          <GoogleLogoSVG height="24" />
           <span>{t('components.save-the-date.calendar-links.google')}</span>
         </a>
         <a className={styles.calendarButton} href={CalendarLinks.getOutlook()} target="_blank">
-          <OutlookCalendarSVG height="30" />
+          <OutlookLogoSVG height="24" />
           <span>{t('components.save-the-date.calendar-links.outlook')}</span>
         </a>
       </div>
