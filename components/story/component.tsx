@@ -4,6 +4,7 @@ import GoogleLogoSVG from 'assets/icons/google-logo.svg';
 import OutlookLogoSVG from 'assets/icons/outlook-logo.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
+import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
@@ -43,6 +44,10 @@ const StoryComponent: FC = () => {
       let context: gsap.Context;
       waitForElement('.' + styles.eventInfo).then(() => {
         gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.normalizeScroll({
+          target: '.' + navigationStyles.content,
+          type: 'touch',
+        });
         gsap
           .matchMedia()
           .add('(max-width: 767px)', () => {
@@ -59,6 +64,7 @@ const StoryComponent: FC = () => {
           });
       });
       return () => {
+        ScrollTrigger.normalizeScroll(false);
         context?.revert();
       };
     }
