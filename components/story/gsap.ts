@@ -3,14 +3,17 @@ import gsap from 'gsap';
 
 import styles from './component.module.css';
 
-export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Context =>
+export enum StoryBreakpoints {
+  Mobile,
+  Tablet,
+  Desktop,
+  Ultrawide,
+}
+
+export const createGSAPContext = (breakpoint: StoryBreakpoints): gsap.Context =>
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
       onComplete: () => {
-        const foregroundCard = document.querySelector('.' + styles.foregroundCard);
-        if (foregroundCard) {
-          foregroundCard.remove();
-        }
         const content = document.querySelector('.' + navigationStyles.content);
         if (content) {
           content.classList.remove(navigationStyles.contentScrollLocked);
@@ -34,36 +37,68 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
     firstSectionTimeline.to('.' + styles.firstSection, {
       duration: 1,
     });
-    firstSectionTimeline.to(
-      '.' + styles.firstSection,
-      {
+    firstSectionTimeline.to('.' + styles.eventSaveTheDate, {
+      duration: 0.75,
+      translateY: 0,
+    });
+    firstSectionTimeline.to('.' + styles.eventCoupleNames, {
+      duration: 0.75,
+      translateY: 0,
+    });
+    firstSectionTimeline.to('.' + styles.eventDate, {
+      duration: 0.75,
+      translateY: 0,
+    });
+    firstSectionTimeline.to('.' + styles.firstSection, {
+      duration: 0.5,
+    });
+    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+      firstSectionTimeline.to('.' + styles.eventInfoOverlay, {
         duration: 1,
-        paddingLeft: '50%',
-      },
-      'shiftToRight',
-    );
-    firstSectionTimeline.to(
-      '.' + styles.backgroundMask,
-      {
-        duration: 1,
-        right: '50%',
-      },
-      'shiftToRight',
-    );
+        right: '60%',
+      });
+    }
     firstSectionTimeline.to(
       '.' + styles.coverImageSpacer,
       {
         duration: 1,
-        padding: '2rem',
+        opacity: 1,
+        padding: breakpoint === StoryBreakpoints.Mobile ? 0 : '2rem',
       },
-      'shiftToRight',
+      'imageFadeIn',
     );
-    firstSectionTimeline.to('.' + styles.cardContainer, {
-      bottom: '50%',
-      left: '50%',
-      translateX: '-50%',
-      translateY: '50%',
-    });
+    firstSectionTimeline.to(
+      '.' + styles.eventInfo,
+      {
+        color: '#ffffff',
+        duration: 1,
+      },
+      'imageFadeIn',
+    );
+    firstSectionTimeline.to(
+      '.' + styles.eventInfoBackground,
+      {
+        duration: 1,
+        opacity: 0.35,
+      },
+      'imageFadeIn',
+    );
+    firstSectionTimeline.to(
+      '.' + styles.eventCalendar,
+      {
+        duration: 1,
+        opacity: 1,
+      },
+      'imageFadeIn',
+    );
+    firstSectionTimeline.to(
+      '.' + styles.eventCalendarButton,
+      {
+        duration: 0.25,
+        translateY: 0,
+      },
+      'imageFadeIn',
+    );
     const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
@@ -78,10 +113,12 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
         trigger: '.' + styles.secondSection,
       },
     });
-    secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
-      duration: 1,
-      transform: 'translateY(0)',
-    });
+    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+        duration: 1,
+        transform: 'translateY(0)',
+      });
+    }
     secondSectionTimeline.to(
       '.' + styles.photoInHorizontalStrip,
       {
@@ -94,15 +131,18 @@ export const createGSAPContext = (isMaxBreakpoint: boolean = false): gsap.Contex
       {
         duration: 3,
         transform: (index: number, horizontalPhotoStrip: Element) => {
-          return `translateX(calc(${isMaxBreakpoint ? '1680px' : '100vw'} - ${horizontalPhotoStrip.clientWidth}px))`;
+          const fullWidth = breakpoint === StoryBreakpoints.Ultrawide ? '1680px' : '100vw';
+          return `translateX(calc(${fullWidth} - ${horizontalPhotoStrip.clientWidth}px))`;
         },
       },
       'shrinkAndScroll',
     );
-    secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
-      duration: 1,
-      transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
-        return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
-      },
-    });
+    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+        duration: 1,
+        transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
+          return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+        },
+      });
+    }
   });

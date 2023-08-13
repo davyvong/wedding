@@ -9,14 +9,14 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import useTranslate from 'hooks/translate';
 import localFont from 'next/font/local';
 import Image from 'next/image';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { waitForElement } from 'utils/browser';
 
 import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
 import { horizontalPhotoStripImageList } from './constants';
-import { createGSAPContext } from './gsap';
+import { StoryBreakpoints, createGSAPContext } from './gsap';
 import type { HorizontalPhotoStripImage } from './types';
 
 const brittanySignatureFont = localFont({
@@ -36,46 +36,33 @@ const playfairDislayFont = localFont({
 
 const StoryComponent: FC = () => {
   const { t } = useTranslate();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
-    let context: gsap.Context;
-    waitForElement('.' + styles.foregroundCard).then(() => {
-      gsap.registerPlugin(ScrollTrigger);
-      gsap
-        .matchMedia()
-        .add('(min-width: 768px) and (max-width: 1679px)', () => {
-          context = createGSAPContext();
-        })
-        .add('(min-width: 1680px)', () => {
-          context = createGSAPContext(true);
-        });
-    });
-    return () => {
-      context?.revert();
-    };
-  }, []);
-
-  const renderCard = (): JSX.Element => (
-    <div className={styles.cardContainer}>
-      <div className={classNames(brittanySignatureFont.className, styles.saveTheDate)}>
-        {t('components.save-the-date')}
-      </div>
-      <div className={classNames(playfairDislayFont.className, styles.names)}>
-        {t('components.save-the-date.names')}
-      </div>
-      <div className={classNames(kollektifFont.className, styles.date)}>{t('components.save-the-date.date')}</div>
-      <div className={styles.calendarRow}>
-        <a className={styles.calendarButton} href={CalendarLinks.getGoogle()} target="_blank">
-          <GoogleLogoSVG height="24" />
-          <span>{t('components.save-the-date.calendar-links.google')}</span>
-        </a>
-        <a className={styles.calendarButton} href={CalendarLinks.getOutlook()} target="_blank">
-          <OutlookLogoSVG height="24" />
-          <span>{t('components.save-the-date.calendar-links.outlook')}</span>
-        </a>
-      </div>
-    </div>
-  );
+    if (isImageLoaded) {
+      let context: gsap.Context;
+      waitForElement('.' + styles.eventInfo).then(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap
+          .matchMedia()
+          .add('(max-width: 767px)', () => {
+            context = createGSAPContext(StoryBreakpoints.Mobile);
+          })
+          .add('(min-width: 768px) and (max-width: 1023px)', () => {
+            context = createGSAPContext(StoryBreakpoints.Tablet);
+          })
+          .add('(min-width: 1024px) and (max-width: 1679px)', () => {
+            context = createGSAPContext(StoryBreakpoints.Desktop);
+          })
+          .add('(min-width: 1680px)', () => {
+            context = createGSAPContext(StoryBreakpoints.Ultrawide);
+          });
+      });
+      return () => {
+        context?.revert();
+      };
+    }
+  }, [isImageLoaded]);
 
   const renderImageInPhotoStrip = (image: HorizontalPhotoStripImage): JSX.Element => (
     <figure className={styles.photoInHorizontalStrip} key={image.alt}>
@@ -99,6 +86,7 @@ const StoryComponent: FC = () => {
             <Image
               alt="VD72"
               fill
+              onLoad={() => setIsImageLoaded(true)}
               priority
               quality={100}
               sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
@@ -106,10 +94,36 @@ const StoryComponent: FC = () => {
             />
           </figure>
         </div>
-        <div className={styles.backgroundMask}>
-          <div className={styles.backgroundCard}>{renderCard()}</div>
+        <div className={styles.eventInfoOverlay}>
+          <div className={styles.eventInfo}>
+            <div className={styles.eventInfoBackground} />
+            <div className={classNames(styles.textWrapper, styles.saveTheDateTextWrapper)}>
+              <div className={classNames(brittanySignatureFont.className, styles.eventSaveTheDate)}>
+                {t('components.save-the-date')}
+              </div>
+            </div>
+            <div className={styles.textWrapper}>
+              <div className={classNames(playfairDislayFont.className, styles.eventCoupleNames)}>
+                {t('components.save-the-date.names')}
+              </div>
+            </div>
+            <div className={styles.textWrapper}>
+              <div className={classNames(kollektifFont.className, styles.eventDate)}>
+                {t('components.save-the-date.date')}
+              </div>
+            </div>
+            <div className={styles.eventCalendar}>
+              <a className={styles.eventCalendarButton} href={CalendarLinks.getGoogle()} target="_blank">
+                <GoogleLogoSVG height="24" />
+                <span>{t('components.save-the-date.calendar-links.google')}</span>
+              </a>
+              <a className={styles.eventCalendarButton} href={CalendarLinks.getOutlook()} target="_blank">
+                <OutlookLogoSVG height="24" />
+                <span>{t('components.save-the-date.calendar-links.outlook')}</span>
+              </a>
+            </div>
+          </div>
         </div>
-        <div className={styles.foregroundCard}>{renderCard()}</div>
       </div>
       <div className={classNames(styles.section, styles.secondSection)}>
         <div className={styles.horizontalPhotoStrip}>{horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}</div>
