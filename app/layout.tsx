@@ -38,7 +38,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <title>{t('app.layout.title')}</title>
       </head>
