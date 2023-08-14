@@ -10,6 +10,7 @@ import useTranslate from 'hooks/translate';
 import NextLink from 'next/link';
 import type { FC, ReactNode } from 'react';
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { waitForElement } from 'utils/browser';
 
 import styles from './component.module.css';
 import { pageList } from './constants';
@@ -78,13 +79,19 @@ const NavigationComponent: FC<NavigationComponentProps> = ({ children, isOpen, t
   }, []);
 
   useEffect(() => {
-    const scroll = new GScroll('.' + styles.content);
-    scroll.init();
-    scroll.wheel();
-    window.addEventListener('resize', scroll.resize);
+    let scroll: GScroll;
+    const onResize = () => {
+      scroll?.resize();
+    };
+    waitForElement('.' + styles.content).then(() => {
+      scroll = new GScroll('.' + styles.content);
+      scroll.init();
+      scroll.wheel();
+      window.addEventListener('resize', onResize);
+    });
     return () => {
-      window.removeEventListener('resize', scroll.resize);
-      scroll.destroy();
+      window.removeEventListener('resize', onResize);
+      scroll?.destroy();
     };
   }, []);
 

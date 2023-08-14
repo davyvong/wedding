@@ -5,12 +5,13 @@
 
 .firstSection {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   position: relative;
 }
 
 .coverImageSpacer {
   min-height: calc(var(--vh, 1vh) * 100);
+  opacity: 0;
   width: 100%;
 }
 
@@ -26,193 +27,186 @@
   user-select: none;
 }
 
-.backgroundMask {
-  display: none;
+.eventInfoOverlay {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-.cardContainer {
-  align-items: center;
+.eventInfo {
   color: var(--palette-black);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: calc(var(--vh, 1vh) * 100);
+  display: inline-block;
+  padding: 2rem;
+  position: relative;
   text-align: center;
   white-space: nowrap;
 }
 
-.saveTheDate {
-  font-size: 4.5rem;
+.eventInfo * {
+  position: relative;
+  z-index: 11;
 }
 
-.names {
-  font-size: 2.25rem;
+.eventInfoBackground {
+  background-color: var(--palette-black);
+  bottom: 0;
+  display: block;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10 !important;
+}
+
+.textWrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.textWrapper * {
+  transform: translateY(150%);
+}
+
+.saveTheDateTextWrapper {
+  padding: 1rem;
+}
+
+.eventSaveTheDate {
+  font-size: 3.5rem;
+  left: -0.75rem;
+  line-height: normal;
+  position: relative;
+}
+
+.eventCoupleNames {
+  font-size: 1.75rem;
+  letter-spacing: 0.25rem;
+}
+
+.eventDate {
+  font-size: 1.25rem;
   letter-spacing: 0.25rem;
   margin-top: 1rem;
 }
 
-.date {
-  font-size: 1.25rem;
-  letter-spacing: 0.5rem;
-  margin-top: 1rem;
-}
-
-.calendarRow {
+.eventCalendar {
   align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  opacity: 0;
 }
 
-.calendarButton {
+.eventCalendarButton {
   align-items: center;
-  background-color: var(--palette-persian-orange);
+  background-color: var(--color-surface);
   border: 0;
   border-radius: 100rem;
-  color: var(--color-on-primary);
+  color: var(--palette-black);
   display: flex;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 400;
-  height: 50px;
+  height: 44px;
   justify-content: center;
   outline: none;
-  padding: 1rem;
-  transition: background-color 300ms ease-in-out;
+  padding: 0.875rem;
+  transform: translateY(25%);
+  transition:
+    color 300ms ease-in-out,
+    transform 300ms linear;
 }
 
-.calendarButton:hover {
-  background-color: var(--color-primary);
+.eventCalendarButton:hover {
+  color: var(--color-primary);
   cursor: pointer;
 }
 
-.calendarButton:disabled {
-  background-color: var(--palette-persian-orange);
-  cursor: not-allowed;
-}
-
-.calendarButton:not(:first-child) {
+.eventCalendarButton:not(:first-child) {
   margin-left: 1rem;
 }
 
-.calendarButton svg {
+.eventCalendarButton svg {
   margin-right: 0.5rem;
 }
 
-@media (min-width: 768px) {
-  .firstSection {
-    flex-direction: row-reverse;
-  }
+.secondSection {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
 
-  .coverImage {
-    flex: 1;
-  }
+.horizontalPhotoStrip {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem;
+}
 
-  .backgroundMask {
-    bottom: 0;
-    display: block;
-    left: 0;
-    overflow: hidden;
-    position: absolute;
-    right: 100%;
-    top: 0;
-  }
+.photoInHorizontalStrip {
+  position: relative;
+  height: calc(var(--vh, 1vh) * 70);
+  width: calc(var(--vh, 1vh) * 50);
+}
 
-  .backgroundCard,
-  .foregroundCard {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: calc(var(--vw, 1vw) * 50);
-  }
+.photoInHorizontalStrip:not(:first-child) {
+  margin-left: 2rem;
+}
 
-  .cardContainer {
-    bottom: 3rem;
-    color: var(--color-surface);
-    left: 3rem;
-    min-height: auto;
-    position: absolute;
-  }
+.photoInHorizontalStrip img {
+  object-fit: cover;
+}
 
-  .backgroundCard .cardContainer {
-    color: var(--palette-black);
-    z-index: 31;
-  }
-
-  .foregroundCard .cardContainer {
-    z-index: 30;
-  }
-
-  .foregroundCard .cardContainer .calendarRow {
-    visibility: hidden;
-  }
-
-  .saveTheDate {
-    font-size: 3.5rem;
-  }
-
-  .names {
-    font-size: 1.5rem;
-    letter-spacing: 0.25rem;
-  }
-
-  .date {
-    font-size: 1rem;
-    letter-spacing: 0.25rem;
-  }
-
-  .secondSection {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-
-  .horizontalPhotoStrip {
-    display: flex;
-    flex-direction: row;
-    padding: 2rem;
-  }
-
-  .photoInHorizontalStrip {
+@media (min-width: 1024px) {
+  .eventSaveTheDate {
+    font-size: 3rem;
     position: relative;
-    height: calc(var(--vh, 1vh) * 70);
-    width: calc(var(--vh, 1vh) * 50);
+    left: -1rem;
   }
 
-  .photoInHorizontalStrip:not(:first-child) {
-    margin-left: 2rem;
+  .eventCalendarButton {
+    font-size: 0.875rem;
+    height: 44px;
+    padding: 0.875rem;
   }
 
   .photoInHorizontalStrip:nth-child(n) {
     transform: translateY(calc(var(--nth-child) * 20%));
   }
+}
 
-  .photoInHorizontalStrip img {
-    object-fit: cover;
+@media (min-width: 1200px) {
+  .eventSaveTheDate {
+    font-size: 3.5rem;
+    position: relative;
+    left: -1rem;
+  }
+
+  .eventCalendarButton {
+    font-size: 1rem;
+    height: 50px;
+    padding: 1rem;
   }
 }
 
-@media (min-width: 1024px) {
-  .saveTheDate {
+@media (min-width: 1440px) {
+  .eventSaveTheDate {
     font-size: 4.5rem;
   }
 
-  .names {
+  .eventCoupleNames {
     font-size: 2.25rem;
     letter-spacing: 0.25rem;
   }
 
-  .date {
+  .eventDate {
     font-size: 1.25rem;
     letter-spacing: 0.5rem;
-  }
-}
-
-@media (min-width: 1680px) {
-  .backgroundCard,
-  .foregroundCard {
-    width: 840px;
   }
 }

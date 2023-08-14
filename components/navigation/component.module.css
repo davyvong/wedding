@@ -10,7 +10,8 @@
   height: 100%;
   margin: 0 auto;
   max-width: 1680px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   transform: translateY(0);
   transition: transform 0.65s cubic-bezier(0.45, 0.02, 0.09, 0.98) 0s;
   width: 100%;
