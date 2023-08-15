@@ -16,6 +16,7 @@ const getLocalIdent = (context, localIdentName, localName) => {
     .replace(/^(-?\d|--)/, '_$1');
 };
 
+/** @type {import('next').NextConfig} */
 const config = {
   experimental: {
     appDir: true,
