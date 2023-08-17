@@ -10,18 +10,21 @@ export enum StoryBreakpoints {
   Ultrawide,
 }
 
-export const createGSAPContext = (breakpoint: StoryBreakpoints): gsap.Context =>
+export const createGSAPContext = (breakpoint: StoryBreakpoints, scrollObserver: Observer | undefined): gsap.Context =>
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
       onComplete: () => {
+        scrollObserver?.enable();
         const content = document.querySelector('.' + navigationStyles.content);
         if (content) {
           content.classList.remove(navigationStyles.contentScrollLocked);
         }
       },
       onStart: () => {
+        scrollObserver?.disable();
         const content = document.querySelector('.' + navigationStyles.content);
         if (content) {
+          content.scrollTop = 0;
           content.classList.add(navigationStyles.contentScrollLocked);
         }
       },

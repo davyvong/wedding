@@ -37,38 +37,39 @@ const playfairDislayFont = localFont({
 
 const StoryComponent: FC = () => {
   const { t } = useTranslate();
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isCoverImageLoaded, setIsCoverImageLoaded] = useState(false);
 
   useEffect(() => {
-    if (isImageLoaded) {
+    if (isCoverImageLoaded) {
       let context: gsap.Context;
-      waitForElement('.' + styles.eventInfo).then(() => {
+      let scrollObserver: Observer | undefined;
+      waitForElement('.' + navigationStyles.content).then((content: Element): void => {
         gsap.registerPlugin(ScrollTrigger);
-        ScrollTrigger.normalizeScroll({
-          target: '.' + navigationStyles.content,
-          type: 'touch',
+        scrollObserver = ScrollTrigger.normalizeScroll({
+          target: content,
+          wheelSpeed: 0.25,
         });
         gsap
           .matchMedia()
           .add('(max-width: 767px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Mobile);
+            context = createGSAPContext(StoryBreakpoints.Mobile, scrollObserver);
           })
           .add('(min-width: 768px) and (max-width: 1023px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Tablet);
+            context = createGSAPContext(StoryBreakpoints.Tablet, scrollObserver);
           })
           .add('(min-width: 1024px) and (max-width: 1679px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Desktop);
+            context = createGSAPContext(StoryBreakpoints.Desktop, scrollObserver);
           })
           .add('(min-width: 1680px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Ultrawide);
+            context = createGSAPContext(StoryBreakpoints.Ultrawide, scrollObserver);
           });
       });
       return () => {
-        ScrollTrigger.normalizeScroll(false);
+        scrollObserver?.kill();
         context?.revert();
       };
     }
-  }, [isImageLoaded]);
+  }, [isCoverImageLoaded]);
 
   const renderImageInPhotoStrip = (image: HorizontalPhotoStripImage): JSX.Element => (
     <figure className={styles.photoInHorizontalStrip} key={image.alt}>
@@ -92,7 +93,7 @@ const StoryComponent: FC = () => {
             <Image
               alt="VD72"
               fill
-              onLoad={() => setIsImageLoaded(true)}
+              onLoad={() => setIsCoverImageLoaded(true)}
               priority
               quality={100}
               sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
