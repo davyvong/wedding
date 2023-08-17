@@ -1,4 +1,5 @@
 import styles from 'components/navigation/component.module.css';
+import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 class ScrollObserver {
@@ -6,6 +7,7 @@ class ScrollObserver {
 
   public static create(): Observer | undefined {
     if (!ScrollObserver.instance) {
+      gsap.registerPlugin(ScrollTrigger);
       ScrollObserver.instance = ScrollTrigger.normalizeScroll({
         target: '.' + styles.content,
         wheelSpeed: 0.25,
