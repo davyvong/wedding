@@ -17,7 +17,7 @@ import { waitForElement } from 'utils/browser';
 import CalendarLinks from './calendar-links';
 import styles from './component.module.css';
 import { horizontalPhotoStripImageList } from './constants';
-import { StoryBreakpoints, createGSAPContext } from './gsap';
+import { StoryBreakpoints, createStoryContext } from './gsap';
 import type { HorizontalPhotoStripImage } from './types';
 
 const brittanySignatureFont = localFont({
@@ -37,35 +37,29 @@ const playfairDislayFont = localFont({
 
 const StoryComponent: FC = () => {
   const { t } = useTranslate();
-  const [isCoverImageLoaded, setIsCoverImageLoaded] = useState(false);
+  const [isCoverImageLoaded, setIsCoverImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (isCoverImageLoaded) {
       let context: gsap.Context;
-      let scrollObserver: Observer | undefined;
-      waitForElement('.' + navigationStyles.content).then((content: Element): void => {
+      waitForElement('.' + navigationStyles.content).then((): void => {
         gsap.registerPlugin(ScrollTrigger);
-        scrollObserver = ScrollTrigger.normalizeScroll({
-          target: content,
-          wheelSpeed: 0.25,
-        });
         gsap
           .matchMedia()
           .add('(max-width: 767px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Mobile, scrollObserver);
+            context = createStoryContext(StoryBreakpoints.Mobile);
           })
           .add('(min-width: 768px) and (max-width: 1023px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Tablet, scrollObserver);
+            context = createStoryContext(StoryBreakpoints.Tablet);
           })
           .add('(min-width: 1024px) and (max-width: 1679px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Desktop, scrollObserver);
+            context = createStoryContext(StoryBreakpoints.Desktop);
           })
           .add('(min-width: 1680px)', () => {
-            context = createGSAPContext(StoryBreakpoints.Ultrawide, scrollObserver);
+            context = createStoryContext(StoryBreakpoints.Ultrawide);
           });
       });
       return () => {
-        scrollObserver?.kill();
         context?.revert();
       };
     }

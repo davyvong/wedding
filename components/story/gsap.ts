@@ -1,5 +1,6 @@
 import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
+import ScrollObserver from 'utils/scroll-observer';
 
 import styles from './component.module.css';
 
@@ -10,23 +11,15 @@ export enum StoryBreakpoints {
   Ultrawide,
 }
 
-export const createGSAPContext = (breakpoint: StoryBreakpoints, scrollObserver: Observer | undefined): gsap.Context =>
+export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =>
   gsap.context(() => {
     const firstSectionTimeline = gsap.timeline({
       onComplete: () => {
-        scrollObserver?.enable();
         const content = document.querySelector('.' + navigationStyles.content);
         if (content) {
           content.classList.remove(navigationStyles.contentScrollLocked);
         }
-      },
-      onStart: () => {
-        scrollObserver?.disable();
-        const content = document.querySelector('.' + navigationStyles.content);
-        if (content) {
-          content.scrollTop = 0;
-          content.classList.add(navigationStyles.contentScrollLocked);
-        }
+        ScrollObserver.enable();
       },
       overwrite: true,
       scrollTrigger: {

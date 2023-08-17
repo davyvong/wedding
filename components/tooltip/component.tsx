@@ -23,7 +23,7 @@ interface TooltipProps {
 }
 
 const Tooltip: FC<TooltipProps> = ({ children, disabled = false, renderContent }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { context, floatingStyles, refs } = useFloating({
     middleware: [offset(8), shift({ padding: 32 })],
