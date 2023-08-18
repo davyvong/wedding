@@ -10,7 +10,7 @@ class ScrollObserver {
       gsap.registerPlugin(ScrollTrigger);
       ScrollObserver.instance = ScrollTrigger.normalizeScroll({
         target: '.' + styles.content,
-        wheelSpeed: 0.25,
+        wheelSpeed: 0.6,
       });
     }
     return ScrollObserver.instance;
