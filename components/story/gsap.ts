@@ -34,21 +34,21 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
       duration: 1,
     });
     firstSectionTimeline.to('.' + styles.eventSaveTheDate, {
-      duration: 0.75,
+      duration: 0.5,
       translateY: 0,
     });
     firstSectionTimeline.to('.' + styles.eventCoupleNames, {
-      duration: 0.75,
+      duration: 0.5,
       translateY: 0,
     });
     firstSectionTimeline.to('.' + styles.eventDate, {
-      duration: 0.75,
+      duration: 0.5,
       translateY: 0,
     });
     firstSectionTimeline.to('.' + styles.firstSection, {
       duration: 0.5,
     });
-    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+    if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
       firstSectionTimeline.to('.' + styles.eventInfoOverlay, {
         duration: 1,
         right: '60%',
@@ -74,8 +74,12 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
     firstSectionTimeline.to(
       '.' + styles.eventInfoBackground,
       {
+        bottom: breakpoint.valueOf() < StoryBreakpoints.Tablet.valueOf() ? 0 : '2rem',
         duration: 1,
+        left: breakpoint.valueOf() < StoryBreakpoints.Tablet.valueOf() ? 0 : '2rem',
         opacity: 0.35,
+        right: breakpoint === StoryBreakpoints.Tablet ? '2rem' : 0,
+        top: breakpoint.valueOf() < StoryBreakpoints.Tablet.valueOf() ? 0 : '2rem',
       },
       'imageFadeIn',
     );
@@ -84,14 +88,6 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
       {
         duration: 1,
         opacity: 1,
-      },
-      'imageFadeIn',
-    );
-    firstSectionTimeline.to(
-      '.' + styles.eventCalendarButton,
-      {
-        duration: 0.25,
-        translateY: 0,
       },
       'imageFadeIn',
     );
@@ -109,7 +105,7 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
         trigger: '.' + styles.secondSection,
       },
     });
-    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+    if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
       secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
         duration: 1,
         transform: 'translateY(0)',
@@ -133,7 +129,7 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
       },
       'shrinkAndScroll',
     );
-    if (breakpoint === StoryBreakpoints.Desktop || breakpoint === StoryBreakpoints.Ultrawide) {
+    if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
       secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
         duration: 1,
         transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {

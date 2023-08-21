@@ -39,12 +39,17 @@
 }
 
 .eventInfo {
+  align-items: center;
   color: var(--palette-black);
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
   padding: 2rem;
   position: relative;
   text-align: center;
   white-space: nowrap;
+  width: 100%;
 }
 
 .eventInfo * {
@@ -73,14 +78,11 @@
   transform: translateY(150%);
 }
 
-.saveTheDateTextWrapper {
-  padding: 1rem;
-}
-
 .eventSaveTheDate {
   font-size: 3.5rem;
   left: -0.75rem;
-  line-height: normal;
+  line-height: 1.5;
+  margin: 1rem;
   position: relative;
 }
 
@@ -117,10 +119,7 @@
   justify-content: center;
   outline: none;
   padding: 0.875rem;
-  transform: translateY(25%);
-  transition:
-    color 300ms ease-in-out,
-    transform 300ms linear;
+  transition: color 300ms ease-in-out;
 }
 
 .eventCalendarButton:hover {
@@ -164,10 +163,14 @@
 }
 
 @media (min-width: 1024px) {
+  .eventInfo {
+    padding-right: 0;
+  }
+
   .eventSaveTheDate {
     font-size: 3rem;
     position: relative;
-    left: -1rem;
+    left: -0.5rem;
   }
 
   .eventCalendarButton {
@@ -184,8 +187,6 @@
 @media (min-width: 1200px) {
   .eventSaveTheDate {
     font-size: 3.5rem;
-    position: relative;
-    left: -1rem;
   }
 
   .eventCalendarButton {

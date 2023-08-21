@@ -96,9 +96,9 @@ const StoryComponent: FC = () => {
           </figure>
         </div>
         <div className={styles.eventInfoOverlay}>
+          <div className={styles.eventInfoBackground} />
           <div className={styles.eventInfo}>
-            <div className={styles.eventInfoBackground} />
-            <div className={classNames(styles.textWrapper, styles.saveTheDateTextWrapper)}>
+            <div className={styles.textWrapper}>
               <div className={classNames(brittanySignatureFont.className, styles.eventSaveTheDate)}>
                 {t('components.save-the-date')}
               </div>
