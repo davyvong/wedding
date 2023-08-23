@@ -4,6 +4,7 @@ import GoogleLogoSVG from 'assets/icons/google-logo.svg';
 import OutlookLogoSVG from 'assets/icons/outlook-logo.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
+import ClientEnvironment from 'client/environment';
 import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -126,10 +127,16 @@ const StoryComponent: FC = () => {
           </div>
         </div>
       </div>
-      <div className={classNames(styles.section, styles.secondSection)}>
-        <div className={styles.horizontalPhotoStrip}>{horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}</div>
-      </div>
-      <div className={classNames(styles.section, styles.thirdSection)} />
+      {!ClientEnvironment.isProduction && (
+        <Fragment>
+          <div className={classNames(styles.section, styles.secondSection)}>
+            <div className={styles.horizontalPhotoStrip}>
+              {horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}
+            </div>
+          </div>
+          <div className={classNames(styles.section, styles.thirdSection)} />
+        </Fragment>
+      )}
     </Fragment>
   );
 };

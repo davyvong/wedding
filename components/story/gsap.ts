@@ -1,3 +1,4 @@
+import ClientEnvironment from 'client/environment';
 import navigationStyles from 'components/navigation/component.module.css';
 import gsap from 'gsap';
 import ScrollObserver from 'utils/scroll-observer';
@@ -91,50 +92,52 @@ export const createStoryContext = (breakpoint: StoryBreakpoints): gsap.Context =
       },
       'imageFadeIn',
     );
-    const secondSectionTimeline = gsap.timeline({
-      overwrite: true,
-      scrollTrigger: {
-        anticipatePin: 1,
-        end: '+=200%',
-        invalidateOnRefresh: true,
-        pin: true,
-        preventOverlaps: true,
-        scroller: '.' + navigationStyles.content,
-        scrub: 1,
-        start: 'top top',
-        trigger: '.' + styles.secondSection,
-      },
-    });
-    if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
-      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
-        duration: 1,
-        transform: 'translateY(0)',
-      });
-    }
-    secondSectionTimeline.to(
-      '.' + styles.photoInHorizontalStrip,
-      {
-        duration: 3,
-      },
-      'shrinkAndScroll',
-    );
-    secondSectionTimeline.to(
-      '.' + styles.horizontalPhotoStrip,
-      {
-        duration: 3,
-        transform: (index: number, horizontalPhotoStrip: Element) => {
-          const fullWidth = breakpoint === StoryBreakpoints.Ultrawide ? '1680px' : '100vw';
-          return `translateX(calc(${fullWidth} - ${horizontalPhotoStrip.clientWidth}px))`;
-        },
-      },
-      'shrinkAndScroll',
-    );
-    if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
-      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
-        duration: 1,
-        transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
-          return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+    if (!ClientEnvironment.isProduction) {
+      const secondSectionTimeline = gsap.timeline({
+        overwrite: true,
+        scrollTrigger: {
+          anticipatePin: 1,
+          end: '+=200%',
+          invalidateOnRefresh: true,
+          pin: true,
+          preventOverlaps: true,
+          scroller: '.' + navigationStyles.content,
+          scrub: 1,
+          start: 'top top',
+          trigger: '.' + styles.secondSection,
         },
       });
+      if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
+        secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+          duration: 1,
+          transform: 'translateY(0)',
+        });
+      }
+      secondSectionTimeline.to(
+        '.' + styles.photoInHorizontalStrip,
+        {
+          duration: 3,
+        },
+        'shrinkAndScroll',
+      );
+      secondSectionTimeline.to(
+        '.' + styles.horizontalPhotoStrip,
+        {
+          duration: 3,
+          transform: (index: number, horizontalPhotoStrip: Element) => {
+            const fullWidth = breakpoint === StoryBreakpoints.Ultrawide ? '1680px' : '100vw';
+            return `translateX(calc(${fullWidth} - ${horizontalPhotoStrip.clientWidth}px))`;
+          },
+        },
+        'shrinkAndScroll',
+      );
+      if (breakpoint.valueOf() >= StoryBreakpoints.Desktop.valueOf()) {
+        secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+          duration: 1,
+          transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
+            return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+          },
+        });
+      }
     }
   });
