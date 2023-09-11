@@ -11,35 +11,37 @@ export enum LandingBreakpoints {
 
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
   gsap.context(() => {
-    const firstSectionTimeline = gsap.timeline({
-      overwrite: true,
-      scrollTrigger: {
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        pin: true,
-        scrub: 1,
-        start: 'top top',
-        trigger: '.' + styles.firstSection,
-      },
-    });
-    firstSectionTimeline.to(
-      '.' + styles.firstSection,
-      {
-        duration: 1,
-        paddingBottom: '6vw',
-        paddingLeft: '6vw',
-        paddingRight: '6vw',
-      },
-      'zoomCoverImage',
-    );
-    firstSectionTimeline.to(
-      '.' + styles.coverImage,
-      {
-        borderRadius: '2rem',
-        duration: 1,
-      },
-      'zoomCoverImage',
-    );
+    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
+      const firstSectionTimeline = gsap.timeline({
+        overwrite: true,
+        scrollTrigger: {
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          trigger: '.' + styles.firstSection,
+        },
+      });
+      firstSectionTimeline.to(
+        '.' + styles.firstSection,
+        {
+          duration: 1,
+          paddingBottom: '6vw',
+          paddingLeft: '6vw',
+          paddingRight: '6vw',
+        },
+        'zoomCoverImage',
+      );
+      firstSectionTimeline.to(
+        '.' + styles.coverImage,
+        {
+          borderRadius: '2rem',
+          duration: 1,
+        },
+        'zoomCoverImage',
+      );
+    }
     const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
