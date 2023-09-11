@@ -27,9 +27,9 @@ const config = {
   },
   redirects: () => [
     {
-      destination: '/api/secret-link/verify',
+      destination: '/api/secret/:code*',
       permanent: false,
-      source: '/secret-link/verify',
+      source: '/secret/:code*',
     },
     {
       destination: '/api/sign-out',

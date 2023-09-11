@@ -10,7 +10,7 @@ import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
 
-export const GET = async (request: NextRequest): Promise<Response> => {
+export const GET = async (request: NextRequest, { params }: { params: { code: string } }): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
       scope: RateLimiterScope.Global,
@@ -19,10 +19,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       return new Response(undefined, { status: 429 });
     }
-    const requestURL = new URL(request.url);
-    const params = {
-      code: requestURL.searchParams.get('code'),
-    };
     const paramsSchema = object({
       code: string()
         .required()

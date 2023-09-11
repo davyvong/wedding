@@ -4,6 +4,7 @@ import Translate from 'client/translate';
 import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
+import LoadingHeart from 'components/loading-heart';
 import { FC, useCallback, useMemo } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
@@ -12,6 +13,7 @@ import { MDBResponseData } from 'server/models/response';
 import useSWR from 'swr';
 
 import RSVPFlyoutComponent from './component';
+import styles from './index.module.css';
 
 interface RSVPFlyoutProps {
   token?: GuestTokenPayload;
@@ -31,7 +33,7 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
     return responseJson;
   }, []);
 
-  const { data: rsvpData } = useSWR('/api/rsvp', fetchRSVP, {
+  const { data: rsvpData, isLoading: rsvpIsLoading } = useSWR('/api/rsvp', fetchRSVP, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -45,10 +47,17 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
   }, [rsvpData, token]);
 
   const renderContent = useCallback(
-    (contentProps: FlyoutContentComponentProps): JSX.Element => (
-      <RSVPFlyoutComponent {...contentProps} initialValues={initialValues} isEditMode={!!token} />
-    ),
-    [initialValues, token],
+    (contentProps: FlyoutContentComponentProps): JSX.Element => {
+      if (rsvpIsLoading) {
+        return (
+          <div className={styles.contentLoading}>
+            <LoadingHeart />
+          </div>
+        );
+      }
+      return <RSVPFlyoutComponent {...contentProps} initialValues={initialValues} isEditMode={!!initialValues} />;
+    },
+    [initialValues, rsvpIsLoading],
   );
 
   const renderReference = useCallback(

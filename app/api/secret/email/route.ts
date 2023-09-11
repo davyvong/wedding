@@ -3,7 +3,7 @@ import Handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
 import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
-import secretLinkTemplate from 'server/emails/secret-link.eml';
+import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
@@ -43,8 +43,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return new Response(undefined, { status: 401 });
     }
     const code = getRandomWords(4).join('-');
-    const url = new URL(ServerEnvironment.getBaseURL() + '/secret-link/verify');
-    url.searchParams.set('code', code);
+    const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: url.href });
     const transporter = NodemailerClientFactory.getInstance();

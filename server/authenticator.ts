@@ -26,16 +26,17 @@ class Authenticator {
 
   public static async verifyTokenOrRedirect(
     cookies: RequestCookies | ReadonlyRequestCookies,
+    redirectURL: string,
   ): Promise<GuestTokenPayload | never> {
     const tokenCookie = cookies.get('token');
     if (!tokenCookie) {
-      return redirect('/secret-link');
+      return redirect(redirectURL);
     }
     try {
       const payload = await JWT.verify(tokenCookie.value);
       return payload as GuestTokenPayload;
     } catch {
-      return redirect('/secret-link');
+      return redirect(redirectURL);
     }
   }
 }

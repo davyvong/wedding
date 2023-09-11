@@ -34,7 +34,7 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
         return;
       }
       setIsSending(true);
-      const response = await fetch('/api/secret-link/email', {
+      const response = await fetch('/api/secret/email', {
         body: JSON.stringify({ email: email.toLowerCase() }),
         cache: 'no-store',
         method: 'POST',
