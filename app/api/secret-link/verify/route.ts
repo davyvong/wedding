@@ -42,7 +42,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const token = await JWT.sign({ id: cachedGuestId });
-    const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/rsvp');
+    const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/?flyout=rsvp');
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
     response.cookies.set('token', token, { expires: expiryDate });

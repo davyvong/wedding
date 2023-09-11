@@ -1,0 +1,140 @@
+.firstSection {
+  padding-top: 80px;
+  width: 100%;
+}
+
+.coverImage {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.coverImage img {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+@media (min-width: 768px) {
+  .coverImage {
+    height: auto;
+    padding-top: 66.67%;
+  }
+}
+
+.eventInfo {
+  bottom: 65%;
+  color: var(--color-on-primary);
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .eventInfo {
+    bottom: 6vw;
+    left: 6vw;
+    top: auto;
+    transform: none;
+  }
+}
+
+.saveTheDate {
+  font-size: 6vh;
+  line-height: 1.5;
+}
+
+.brideAndGroom {
+  font-size: 3vh;
+  letter-spacing: 0.5vh;
+  margin-top: 1vh;
+}
+
+.eventDate {
+  font-size: 2vh;
+  letter-spacing: 0.5vh;
+  margin-top: 1vh;
+}
+
+.secondSection {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.horizontalPhotoStrip {
+  display: flex;
+  flex-direction: row;
+  padding: 6vw;
+}
+
+.photoInHorizontalStrip {
+  height: 70vh;
+  max-width: calc(100vw - 12vw);
+  width: 50vh;
+}
+
+@media (min-width: 768px) {
+  .photoInHorizontalStrip {
+    max-width: none;
+  }
+}
+
+.photoInHorizontalStripZoom {
+  border-radius: 1rem;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 300ms ease-in-out;
+  width: 100%;
+}
+
+.photoInHorizontalStripZoom:hover {
+  transform: scale(1.05);
+}
+
+@media (hover: none) {
+  .photoInHorizontalStripZoom:hover {
+    transform: none;
+  }
+}
+
+.photoInHorizontalStrip img {
+  object-fit: cover;
+}
+
+.photoInHorizontalStrip:not(:first-child) {
+  margin-left: 6vw;
+}
+
+@media (min-width: 768px) {
+  .photoInHorizontalStrip:nth-child(1) {
+    transform: translateY(20%);
+  }
+
+  .photoInHorizontalStrip:nth-child(2) {
+    transform: translateY(40%);
+  }
+
+  .photoInHorizontalStrip:nth-child(3) {
+    transform: translateY(60%);
+  }
+
+  .photoInHorizontalStrip:nth-child(4) {
+    transform: translateY(80%);
+  }
+
+  .photoInHorizontalStrip:nth-child(5) {
+    transform: translateY(100%);
+  }
+}
+
+.thirdSection {
+  height: 100vh;
+  width: 100%;
+}

@@ -51,7 +51,7 @@ class MongoDBQueryTemplate {
             as: 'responsesLookup',
             foreignField: 'guest',
             from: 'responses',
-            localField: 'guests._id',
+            localField: 'guests',
           },
         },
       ])
@@ -69,6 +69,25 @@ class MongoDBQueryTemplate {
         return MDBResponse.fromDocument(responseDoc).toPlainObject();
       }),
     };
+  }
+
+  public static async findAndUpdateResponse(
+    guestId: string,
+    data: Partial<MDBResponseData>,
+  ): Promise<MDBResponseData | null> {
+    const db = await MongoDBClientFactory.getInstance();
+    const doc = await db.collection('responses').findOneAndUpdate(
+      { guest: new ObjectId(guestId) },
+      {
+        $set: data,
+        $setOnInsert: { guest: new ObjectId(guestId) },
+      },
+      { returnDocument: 'after', upsert: true },
+    );
+    if (!doc.value) {
+      return null;
+    }
+    return MDBResponse.fromDocument(doc.value);
   }
 }
 

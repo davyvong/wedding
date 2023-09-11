@@ -7,6 +7,9 @@ node_modules/
 # Logs
 *.log
 
+# Minified JS
+smoother.js
+
 # Next.js
 .next/
 .swc/

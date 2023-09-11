@@ -1,0 +1,42 @@
+.textInput {
+  background-color: var(--palette-transparent);
+  border: 0;
+  border-bottom: 1px solid var(--color-placeholder);
+  border-radius: 0;
+  color: var(--color-on-surface);
+  font-size: 1rem;
+  font-weight: 300;
+  opacity: 1;
+  outline: none;
+  padding: 0.75rem 0;
+  transition: border 300ms ease-in-out;
+  width: 100%;
+}
+
+.textInput:focus,
+.textInput:hover {
+  border-bottom-color: var(--color-on-surface);
+}
+
+.textInput::placeholder,
+.textInput:-ms-input-placeholder,
+.textInput::-ms-input-placeholder {
+  color: var(--color-placeholder);
+  opacity: 1;
+}
+
+.textInputInverse {
+  border-bottom-color: var(--color-inverse-placeholder);
+  color: var(--color-inverse-on-surface);
+}
+
+.textInputInverse:focus,
+.textInputInverse:hover {
+  border-bottom-color: var(--color-inverse-on-surface);
+}
+
+.textInputInverse::placeholder,
+.textInputInverse:-ms-input-placeholder,
+.textInputInverse::-ms-input-placeholder {
+  color: var(--color-inverse-placeholder);
+}

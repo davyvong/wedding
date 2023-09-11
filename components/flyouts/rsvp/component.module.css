@@ -1,0 +1,48 @@
+.title {
+  font-size: 2.5rem;
+}
+
+.form {
+  padding: 3rem;
+  width: 100%;
+}
+
+.question {
+  margin-bottom: 0.25rem;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.error {
+  color: var(--color-error);
+  margin-top: 0.75rem;
+}
+
+.buttons {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.buttons button {
+  margin-left: 1rem;
+}
+
+.buttons button:first-child {
+  margin-left: 0;
+}
+
+.submitButton {
+  flex-direction: row;
+}
+
+.submitButtonLoading {
+  height: 18.5px;
+  margin-right: 0.5rem;
+}
+
+.submitButtonLoadingHeart {
+  top: -1px;
+}

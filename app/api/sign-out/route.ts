@@ -14,11 +14,11 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       return new Response(undefined, { status: 429 });
     }
-    const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/secret-link');
+    const response = NextResponse.redirect(ServerEnvironment.getBaseURL());
     response.cookies.delete('token');
     return response;
   } catch (error: unknown) {
     ServerError.handle(error);
-    return NextResponse.redirect(ServerEnvironment.getBaseURL() + '/secret-link');
+    return NextResponse.redirect(ServerEnvironment.getBaseURL());
   }
 };

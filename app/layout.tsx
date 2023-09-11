@@ -1,54 +1,29 @@
-'use client';
-
 import 'minireset.css';
 
 import './global.css';
 
 import { Analytics } from '@vercel/analytics/react';
-import Navigation from 'components/navigation';
-import { NavigationProvider } from 'contexts/navigation';
-import useTranslate from 'hooks/translate';
-import { Inter } from 'next/font/google';
-import { useEffect } from 'react';
-import type { FC, ReactNode } from 'react';
-import { setViewportUnits } from 'utils/browser';
-
-const inter = Inter({
-  display: 'swap',
-  subsets: ['latin'],
-});
-
-setViewportUnits();
+import { poppins } from 'client/fonts';
+import Translate from 'client/translate';
+import type { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
-  const { t } = useTranslate();
-
-  useEffect(() => {
-    setViewportUnits();
-    window.addEventListener('resize', setViewportUnits);
-    return () => {
-      window.removeEventListener('resize', setViewportUnits);
-    };
-  }, []);
-
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <title>{t('app.layout.title')}</title>
-      </head>
-      <body className={inter.className}>
-        <NavigationProvider>
-          <Navigation>{children}</Navigation>
-        </NavigationProvider>
-        <Analytics />
-      </body>
-    </html>
-  );
-};
+const Layout = async ({ children }: LayoutProps): Promise<JSX.Element> => (
+  <html lang="en">
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      <title>{Translate.t('app.layout.title')}</title>
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script src="./smoother.js" />
+    </head>
+    <body className={poppins.className}>
+      {children}
+      <Analytics />
+    </body>
+  </html>
+);
 
 export default Layout;

@@ -1,7 +1,15 @@
+import classNames from 'classnames';
+import type { FC } from 'react';
+
 import styles from './component.module.css';
 
-const LoadingHeart = () => (
-  <div className={styles.loadingHeart}>
+interface LoadingHeartProps {
+  className?: string;
+  inverse?: boolean;
+}
+
+const LoadingHeart: FC<LoadingHeartProps> = ({ className, inverse = false }) => (
+  <div className={classNames(styles.loadingHeart, inverse && styles.loadingHeartInverse, className)}>
     <div />
   </div>
 );

@@ -1,0 +1,38 @@
+.suggestionList {
+  background: var(--color-primary);
+  border-radius: 0.5rem;
+  color: var(--color-on-primary);
+  max-width: 768px;
+  padding: 0.5rem;
+  width: 100%;
+  z-index: 3;
+}
+
+.suggestionItem {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 150ms ease-in-out;
+}
+
+.suggestionItem:hover {
+  background-color: var(--palette-persian-orange);
+  cursor: pointer;
+}
+
+.suggestionListInverse {
+  background-color: var(--color-inverse-popover);
+}
+
+.suggestionItemInverse:hover {
+  background-color: var(--color-inverse-surface);
+}
+
+.suggestionListEmpty,
+.suggestionListLoading {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+  width: 100%;
+}
