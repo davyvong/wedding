@@ -3,7 +3,7 @@ import 'minireset.css';
 import './global.css';
 
 import { Analytics } from '@vercel/analytics/react';
-import { poppins } from 'client/fonts';
+import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import type { ReactNode } from 'react';
 
@@ -19,7 +19,7 @@ const Layout = async ({ children }: LayoutProps): Promise<JSX.Element> => (
       {/* eslint-disable-next-line @next/next/no-sync-scripts */}
       <script src="./scroll-smoother.js" />
     </head>
-    <body className={poppins.className}>
+    <body className={openSans.className}>
       {children}
       <Analytics />
     </body>

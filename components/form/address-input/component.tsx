@@ -13,7 +13,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import { poppins } from 'client/fonts';
+import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
 import LoadingHeart from 'components/loading-heart';
@@ -126,7 +126,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
         className={classNames(
           textInputStyles.textInput,
           inverse && textInputStyles.textInputInverse,
-          poppins.className,
+          openSans.className,
           className,
         )}
         onChange={event => onChange(name, event.target.value)}

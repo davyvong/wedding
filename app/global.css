@@ -55,7 +55,7 @@ body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
   scrollbar-width: none;
 }

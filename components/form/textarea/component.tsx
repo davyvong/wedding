@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { poppins } from 'client/fonts';
+import { openSans } from 'client/fonts';
 import type { TextareaHTMLAttributes } from 'react';
 
 import styles from './component.module.css';
@@ -13,7 +13,7 @@ const TextareaComponent = ({ className, inverse = false, value, ...props }: Text
     <div className={styles.hiddenValue}>{value + ' '}</div>
     <textarea
       {...props}
-      className={classNames(styles.textarea, inverse && styles.textareaInverse, poppins.className, className)}
+      className={classNames(styles.textarea, inverse && styles.textareaInverse, openSans.className, className)}
       value={value}
     />
   </div>

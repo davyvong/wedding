@@ -19,7 +19,6 @@ export class Scroll {
     }
     return ScrollSmoother.create({
       content: '.' + styles.smoothContent,
-      ignoreMobileResize: true,
       normalizeScroll: true,
       smooth: 1,
       wrapper: '.' + styles.smoothWrapper,

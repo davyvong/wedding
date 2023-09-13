@@ -13,7 +13,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import { poppins } from 'client/fonts';
+import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
@@ -97,7 +97,7 @@ const Select: FC<SelectProps> = ({ className, inverse = false, onChange, name, o
         className={classNames(
           textInputStyles.textInput,
           inverse && textInputStyles.textInputInverse,
-          poppins.className,
+          openSans.className,
           className,
         )}
         name={name}

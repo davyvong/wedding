@@ -55,7 +55,7 @@ const LandingComponent: FC = () => {
 
   const renderCoupleQuestion = useCallback(
     (coupleQuestion: CoupleQuestion, index: number): JSX.Element => (
-      <div className={classNames(styles.coupleQuestionSet, italiana.className)} key={coupleQuestion.question + index}>
+      <div className={classNames(styles.coupleQACard, italiana.className)} key={coupleQuestion.question + index}>
         <div className={styles.coupleQuestion}>{Translate.t(coupleQuestion.question)}</div>
         <div className={styles.coupleAnswer}>{Translate.t(coupleQuestion.answer)}</div>
       </div>

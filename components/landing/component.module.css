@@ -164,13 +164,24 @@
 
 .tidbits {
   font-size: 4vh;
-  position: sticky;
-  top: 0;
-  z-index: 5;
 }
 
-.coupleQuestionSet {
-  margin-top: 6vh;
+.coupleQACard {
+  background-color: var(--color-primary);
+  border-radius: 1rem;
+  height: 50vw;
+  margin-top: 6vw;
+  max-width: calc(100vw - 12vw);
+  padding: 6vw;
+  width: 100vw;
+}
+
+@media (min-width: 768px) {
+  .coupleQACard {
+    height: 25vw;
+    padding: 3vw;
+    width: 41vw;
+  }
 }
 
 .coupleQuestion {
