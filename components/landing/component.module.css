@@ -86,25 +86,25 @@
   width: 100%;
 }
 
-.horizontalPhotoStrip {
+.engagementPhotoSet {
   display: flex;
   flex-direction: row;
   padding: 0 6vw;
 }
 
-.photoInHorizontalStrip {
+.engagementPhoto {
   height: 70vh;
   max-width: calc(100vw - 12vw);
   width: 50vh;
 }
 
 @media (min-width: 768px) {
-  .photoInHorizontalStrip {
+  .engagementPhoto {
     max-width: none;
   }
 }
 
-.photoInHorizontalStripZoom {
+.engagementPhotoZoom {
   border-radius: 1rem;
   height: 100%;
   overflow: hidden;
@@ -113,47 +113,70 @@
   width: 100%;
 }
 
-.photoInHorizontalStripZoom:hover {
+.engagementPhotoZoom:hover {
   transform: scale(1.05);
 }
 
 @media (hover: none) {
-  .photoInHorizontalStripZoom:hover {
+  .engagementPhotoZoom:hover {
     transform: none;
   }
 }
 
-.photoInHorizontalStrip img {
+.engagementPhoto img {
   object-fit: cover;
 }
 
-.photoInHorizontalStrip:not(:first-child) {
+.engagementPhoto:not(:first-child) {
   margin-left: 6vw;
 }
 
 @media (min-width: 768px) {
-  .photoInHorizontalStrip:nth-child(1) {
+  .engagementPhoto:nth-child(1) {
     transform: translateY(20%);
   }
 
-  .photoInHorizontalStrip:nth-child(2) {
+  .engagementPhoto:nth-child(2) {
     transform: translateY(40%);
   }
 
-  .photoInHorizontalStrip:nth-child(3) {
+  .engagementPhoto:nth-child(3) {
     transform: translateY(60%);
   }
 
-  .photoInHorizontalStrip:nth-child(4) {
+  .engagementPhoto:nth-child(4) {
     transform: translateY(80%);
   }
 
-  .photoInHorizontalStrip:nth-child(5) {
+  .engagementPhoto:nth-child(5) {
     transform: translateY(100%);
   }
 }
 
 .thirdSection {
-  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 6vw;
+  padding-left: 6vw;
+  padding-right: 6vw;
+  padding-top: 80px;
   width: 100%;
+}
+
+.tidbits {
+  font-size: 4vh;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.coupleQuestionSet {
+  margin-top: 6vh;
+}
+
+.coupleQuestion {
+  font-size: 3vh;
+}
+
+.coupleAnswer {
+  font-size: 3vh;
 }

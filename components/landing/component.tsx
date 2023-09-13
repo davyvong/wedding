@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { FC, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
-import { HorizontalPhotoStripImage, horizontalPhotoStripImageList } from './constants';
+import { CoupleQuestion, EngagementPhoto, coupleQuestions, engagementPhotos } from './constants';
 import { LandingBreakpoints, createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
@@ -34,10 +34,10 @@ const LandingComponent: FC = () => {
     };
   }, []);
 
-  const renderImageInPhotoStrip = useCallback(
-    (image: HorizontalPhotoStripImage): JSX.Element => (
-      <div className={styles.photoInHorizontalStrip} key={image.alt}>
-        <div className={styles.photoInHorizontalStripZoom}>
+  const renderEngagementPhoto = useCallback(
+    (image: EngagementPhoto): JSX.Element => (
+      <div className={styles.engagementPhoto} key={image.alt}>
+        <div className={styles.engagementPhotoZoom}>
           <Image
             alt={image.alt}
             fill
@@ -48,6 +48,16 @@ const LandingComponent: FC = () => {
             style={image.style}
           />
         </div>
+      </div>
+    ),
+    [],
+  );
+
+  const renderCoupleQuestion = useCallback(
+    (coupleQuestion: CoupleQuestion): JSX.Element => (
+      <div className={classNames(styles.coupleQuestionSet, italiana.className)} key={coupleQuestion.question}>
+        <div className={styles.coupleQuestion}>{Translate.t(coupleQuestion.question)}</div>
+        <div className={styles.coupleAnswer}>{Translate.t(coupleQuestion.answer)}</div>
       </div>
     ),
     [],
@@ -80,11 +90,14 @@ const LandingComponent: FC = () => {
           </div>
         </div>
         <div className={styles.secondSection}>
-          <div className={styles.horizontalPhotoStrip}>
-            {horizontalPhotoStripImageList.map(renderImageInPhotoStrip)}
-          </div>
+          <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
         </div>
-        <div className={styles.thirdSection} />
+        <div className={styles.thirdSection}>
+          <div className={classNames(styles.tidbits, italiana.className)}>
+            {Translate.t('components.landing.tidbits.title')}
+          </div>
+          {coupleQuestions.map(renderCoupleQuestion)}
+        </div>
       </div>
     </div>
   );

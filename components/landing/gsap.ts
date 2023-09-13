@@ -55,34 +55,23 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       },
     });
     if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+      secondSectionTimeline.to('.' + styles.engagementPhoto, {
         duration: 1,
         transform: 'translateY(0)',
       });
     }
-    secondSectionTimeline.to('.' + styles.horizontalPhotoStrip, {
+    secondSectionTimeline.to('.' + styles.engagementPhotoSet, {
       duration: 5,
-      transform: (index: number, horizontalPhotoStrip: Element) => {
-        return `translateX(calc(100vw - ${horizontalPhotoStrip.clientWidth}px))`;
+      transform: (index: number, engagementPhotoSet: Element) => {
+        return `translateX(calc(100vw - ${engagementPhotoSet.clientWidth}px))`;
       },
     });
     if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      secondSectionTimeline.to('.' + styles.photoInHorizontalStrip, {
+      secondSectionTimeline.to('.' + styles.engagementPhoto, {
         duration: 1,
-        transform: (index: number, photoInHorizontalStrip: Element, photosInHorizontalStrip: Element[]) => {
+        transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
           return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
         },
       });
     }
-    gsap.timeline({
-      overwrite: true,
-      scrollTrigger: {
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        pin: true,
-        scrub: 1,
-        start: 'top top',
-        trigger: '.' + styles.thirdSection,
-      },
-    });
   });

@@ -1,5 +1,5 @@
 import Landing from 'components/landing';
-import NavigationBar from 'components/navigationbar';
+import NavigationBar from 'components/navigation-bar';
 import { cookies } from 'next/headers';
 import { Fragment } from 'react';
 import Authenticator, { GuestTokenPayload } from 'server/authenticator';

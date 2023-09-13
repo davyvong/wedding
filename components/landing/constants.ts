@@ -6,13 +6,13 @@ import VD83JPG from 'assets/images/VD-83.jpg';
 import { StaticImageData } from 'next/image';
 import { CSSProperties } from 'react';
 
-export interface HorizontalPhotoStripImage {
+export interface EngagementPhoto {
   alt: string;
   src: StaticImageData;
   style?: CSSProperties;
 }
 
-export const horizontalPhotoStripImageList: HorizontalPhotoStripImage[] = [
+export const engagementPhotos: EngagementPhoto[] = [
   {
     alt: 'VD22',
     src: VD22JPG,
@@ -35,5 +35,41 @@ export const horizontalPhotoStripImageList: HorizontalPhotoStripImage[] = [
     alt: 'VD26',
     src: VD26JPG,
     style: { objectPosition: '51% center' },
+  },
+];
+
+export interface CoupleQuestion {
+  answer: string;
+  question: string;
+}
+
+export const coupleQuestions: CoupleQuestion[] = [
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.tidbits.answers.how-did-you-meet',
+    question: 'components.landing.tidbits.questions.how-did-you-meet',
   },
 ];

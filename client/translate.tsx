@@ -8,13 +8,16 @@ export default class Translate {
   public static t(key: string, values?: Record<string, string>): string {
     try {
       const message = messages[key];
+      if (!message) {
+        throw new Error('Unable to translate: ' + key);
+      }
       const options = {
         interpolate: /{{([\s\S]+?)}}/g,
       };
       return template(message, options)(values);
-    } catch {
+    } catch (error: unknown) {
       if (ClientEnvironment.isDevelopment) {
-        console.log('Unable to translate:', key);
+        console.log((error as Error).message);
       }
       return '';
     }
