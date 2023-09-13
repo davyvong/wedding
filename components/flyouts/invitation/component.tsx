@@ -27,10 +27,10 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
         return;
       }
       if (!email) {
-        setError('components.flyouts.guest-list.errors.missing-email');
+        setError('components.flyouts.invitation.errors.missing-email');
         return;
       } else if (!string().email().required().isValidSync(email)) {
-        setError('components.flyouts.guest-list.errors.invalid-email');
+        setError('components.flyouts.invitation.errors.invalid-email');
         return;
       }
       setIsSending(true);
@@ -41,7 +41,7 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
       });
       setIsSending(false);
       if (response.status === 401) {
-        setError('components.flyouts.guest-list.errors.not-invited');
+        setError('components.flyouts.invitation.errors.not-invited');
         return;
       }
       if (error) {
@@ -54,7 +54,7 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
 
   const renderSubmitButtonContent = useCallback((): JSX.Element => {
     if (isSent) {
-      return <span>{Translate.t('components.flyouts.guest-list.buttons.send-again')}</span>;
+      return <span>{Translate.t('components.flyouts.invitation.buttons.send-again')}</span>;
     }
     if (isSending) {
       return (
@@ -62,28 +62,28 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
           <div className={rsvpFlyoutStyles.submitButtonLoading}>
             <LoadingHeart className={rsvpFlyoutStyles.submitButtonLoadingHeart} inverse />
           </div>
-          <span>{Translate.t('components.flyouts.guest-list.buttons.sending')}</span>
+          <span>{Translate.t('components.flyouts.invitation.buttons.sending')}</span>
         </Fragment>
       );
     }
-    return <span>{Translate.t('components.flyouts.guest-list.buttons.send-secret-link')}</span>;
+    return <span>{Translate.t('components.flyouts.invitation.buttons.send-secret-link')}</span>;
   }, [isSending, isSent]);
 
   return (
     <form className={rsvpFlyoutStyles.form} onSubmit={sendLoginCode}>
-      <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.guest-list.title')}</div>
-      <div className={rsvpFlyoutStyles.question}>{Translate.t('components.flyouts.guest-list.description')}</div>
+      <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.invitation.title')}</div>
+      <div className={rsvpFlyoutStyles.question}>{Translate.t('components.flyouts.invitation.description')}</div>
       <TextInput
         inverse
         onChange={(event): void => setEmail(event.target.value)}
-        placeholder={Translate.t('components.flyouts.guest-list.placeholders.email')}
-        readOnly={isSent}
+        placeholder={Translate.t('components.flyouts.invitation.placeholders.email')}
+        readOnly={isSending}
         value={email}
       />
       {error && <div className={rsvpFlyoutStyles.error}>{Translate.html(error)}</div>}
       {isSent && (
         <div className={styles.success}>
-          {Translate.html('components.flyouts.guest-list.messages.email-sent', { email })}
+          {Translate.html('components.flyouts.invitation.messages.email-sent', { email })}
         </div>
       )}
       <div className={rsvpFlyoutStyles.buttons}>
@@ -92,8 +92,8 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
         </Button>
         <Button inverse onClick={() => setIsOpen(false)}>
           {isSent
-            ? Translate.t('components.flyouts.guest-list.buttons.close')
-            : Translate.t('components.flyouts.guest-list.buttons.cancel')}
+            ? Translate.t('components.flyouts.invitation.buttons.close')
+            : Translate.t('components.flyouts.invitation.buttons.cancel')}
         </Button>
       </div>
     </form>

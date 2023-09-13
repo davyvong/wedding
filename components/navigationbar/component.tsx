@@ -1,4 +1,7 @@
-import GuestListFlyout from 'components/flyouts/guest-list';
+import classNames from 'classnames';
+import { italiana } from 'client/fonts';
+import Translate from 'client/translate';
+import GuestListFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
 import { FC } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
@@ -12,7 +15,8 @@ interface NavigationBarComponentProps {
 const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => {
   return (
     <div className={styles.navigationBar}>
-      <div className={styles.navigationBarSpcaer} />
+      <div className={classNames(styles.title, italiana.className)}>{Translate.t('app.layout.title')}</div>
+      <div className={styles.spacer} />
       {token ? <RSVPFlyout token={token} /> : <GuestListFlyout />}
     </div>
   );

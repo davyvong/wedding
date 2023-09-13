@@ -2,7 +2,7 @@
 
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
-import { brittanySignature, kollektif, playfairDisplay } from 'client/fonts';
+import { brittanySignature, italiana, kollektif } from 'client/fonts';
 import { Scroll } from 'client/scroll';
 import scrollStyles from 'client/scroll.module.css';
 import Translate from 'client/translate';
@@ -70,7 +70,7 @@ const LandingComponent: FC = () => {
               <div className={classNames(styles.saveTheDate, brittanySignature.className)}>
                 {Translate.t('components.landing.event-info.save-the-date')}
               </div>
-              <div className={classNames(styles.brideAndGroom, playfairDisplay.className)}>
+              <div className={classNames(styles.brideAndGroom, italiana.className)}>
                 {Translate.t('components.landing.event-info.bride-and-groom')}
               </div>
               <div className={classNames(styles.eventDate, kollektif.className)}>

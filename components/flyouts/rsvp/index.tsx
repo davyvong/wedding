@@ -1,5 +1,6 @@
 'use client';
 
+import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import Flyout from 'components/flyout';
@@ -62,7 +63,10 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
 
   const renderReference = useCallback(
     (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
-      <Button {...referenceProps}>{Translate.t('components.flyouts.rsvp.buttons.check-rsvp')}</Button>
+      <Button {...referenceProps}>
+        <MarkEmailReadIconSVG />
+        <span className={styles.buttonText}>{Translate.t('components.flyouts.rsvp.buttons.rsvp')}</span>
+      </Button>
     ),
     [],
   );

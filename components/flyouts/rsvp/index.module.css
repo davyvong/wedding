@@ -1,3 +1,7 @@
+.buttonText {
+  margin-left: 0.75rem;
+}
+
 .contentLoading {
   align-items: center;
   display: flex;

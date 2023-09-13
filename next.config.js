@@ -6,7 +6,7 @@ const getLocalIdent = (context, localIdentName, localName) => {
   let bufferStr = `filePath:${path
     .relative(context.rootContext, context.resourcePath)
     .replace(/\\+/g, '/')}#className:${localName}`;
-  if (context.resourcePath.includes('next/font/local')) {
+  if (context.resourcePath.includes('next/font')) {
     const resourceQuery = JSON.parse(context.resourceQuery.substring(1));
     bufferStr += resourceQuery.variableName;
   }
