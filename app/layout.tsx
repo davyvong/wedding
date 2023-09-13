@@ -17,7 +17,7 @@ const Layout = async ({ children }: LayoutProps): Promise<JSX.Element> => (
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       <title>{Translate.t('app.layout.title')}</title>
       {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script src="./smoother.js" />
+      <script src="./scroll-smoother.js" />
     </head>
     <body className={poppins.className}>
       {children}

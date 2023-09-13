@@ -8,7 +8,7 @@ node_modules/
 *.log
 
 # Minified JS
-smoother.js
+scroll-smoother.js
 
 # Next.js
 .next/

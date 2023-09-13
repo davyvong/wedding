@@ -37,10 +37,11 @@
 }
 
 html {
+  -ms-overflow-style: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   font-size: 87.5%;
-  overflow: hidden;
+  scrollbar-width: none;
 }
 
 @media (min-width: 768px) {
@@ -50,11 +51,16 @@ html {
 }
 
 body {
+  -ms-overflow-style: none;
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.5;
-  overflow-x: hidden;
-  position: relative;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }

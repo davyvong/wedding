@@ -26,14 +26,6 @@ export class Scroll {
     });
   }
 
-  public static pause(): void {
-    Scroll.getInstance()?.paused(true);
-  }
-
-  public static unpause(): void {
-    Scroll.getInstance()?.paused(false);
-  }
-
   public static kill(): void {
     Scroll.getInstance()?.kill();
   }

@@ -42,7 +42,7 @@ const LandingComponent: FC = () => {
             alt={image.alt}
             fill
             priority
-            quality={100}
+            quality={80}
             sizes="(max-width: 425px) 70vh, (max-width: 768px) 70vh, (max-width: 1024px) 70vh, (max-width: 1280px) 70vh, (max-width: 1440px) 70vh, 70vh"
             src={image.src}
             style={image.style}
@@ -54,8 +54,8 @@ const LandingComponent: FC = () => {
   );
 
   const renderCoupleQuestion = useCallback(
-    (coupleQuestion: CoupleQuestion): JSX.Element => (
-      <div className={classNames(styles.coupleQuestionSet, italiana.className)} key={coupleQuestion.question}>
+    (coupleQuestion: CoupleQuestion, index: number): JSX.Element => (
+      <div className={classNames(styles.coupleQuestionSet, italiana.className)} key={coupleQuestion.question + index}>
         <div className={styles.coupleQuestion}>{Translate.t(coupleQuestion.question)}</div>
         <div className={styles.coupleAnswer}>{Translate.t(coupleQuestion.answer)}</div>
       </div>
@@ -72,7 +72,7 @@ const LandingComponent: FC = () => {
               alt={Translate.t('components.landing.event-info.bride-and-groom')}
               fill
               priority
-              quality={100}
+              quality={80}
               src={VD72JPG}
               sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
             />

@@ -15,9 +15,9 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       const firstSectionTimeline = gsap.timeline({
         overwrite: true,
         scrollTrigger: {
-          anticipatePin: 1,
           invalidateOnRefresh: true,
           pin: true,
+          pinType: 'transform',
           scrub: 1,
           start: 'top top',
           trigger: '.' + styles.firstSection,
@@ -45,10 +45,10 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
     const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
-        anticipatePin: 1,
         end: '+300%',
         invalidateOnRefresh: true,
         pin: true,
+        pinType: 'transform',
         scrub: 1,
         start: 'top top',
         trigger: '.' + styles.secondSection,
