@@ -9,7 +9,6 @@ import LoadingHeart from 'components/loading-heart';
 import { FC, useCallback, useMemo } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
-import { MDBInviteData } from 'server/models/invite';
 import { MDBResponseData } from 'server/models/response';
 import useSWR from 'swr';
 
@@ -23,7 +22,6 @@ interface RSVPFlyoutProps {
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
-    invite: MDBInviteData;
     responses: MDBResponseData[];
   } | null> => {
     const response = await fetch('/api/rsvp', {

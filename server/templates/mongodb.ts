@@ -1,7 +1,6 @@
 import { Document, ObjectId } from 'mongodb';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import MDBGuest, { MDBGuestData } from 'server/models/guest';
-import MDBInvite, { MDBInviteData } from 'server/models/invite';
 import MDBResponse, { MDBResponseData } from 'server/models/response';
 
 class MongoDBQueryTemplate {
@@ -25,10 +24,10 @@ class MongoDBQueryTemplate {
 
   public static async findRSVPFromGuestId(
     id: string,
-  ): Promise<{ guests: MDBGuestData[]; invite: MDBInviteData; responses: MDBResponseData[] } | null> {
+  ): Promise<{ guests: MDBGuestData[]; responses: MDBResponseData[] } | null> {
     const db = await MongoDBClientFactory.getInstance();
     const aggregation = await db
-      .collection('invites')
+      .collection('guestGroups')
       .aggregate([
         {
           $limit: 1,
@@ -56,19 +55,26 @@ class MongoDBQueryTemplate {
         },
       ])
       .toArray();
-    if (aggregation.length === 0) {
-      return null;
+    if (aggregation.length > 0) {
+      const [inviteDoc] = aggregation;
+      return {
+        guests: inviteDoc.guestsLookup.map((guestDoc: Document): MDBGuestData => {
+          return MDBGuest.fromDocument(guestDoc).toPlainObject();
+        }),
+        responses: inviteDoc.responsesLookup.map((responseDoc: Document): MDBResponseData => {
+          return MDBResponse.fromDocument(responseDoc).toPlainObject();
+        }),
+      };
     }
-    const [inviteDoc] = aggregation;
-    return {
-      guests: inviteDoc.guestsLookup.map((guestDoc: Document): MDBGuestData => {
-        return MDBGuest.fromDocument(guestDoc).toPlainObject();
-      }),
-      invite: MDBInvite.fromDocument(inviteDoc).toPlainObject(),
-      responses: inviteDoc.responsesLookup.map((responseDoc: Document): MDBResponseData => {
-        return MDBResponse.fromDocument(responseDoc).toPlainObject();
-      }),
-    };
+    const guest = await MongoDBQueryTemplate.findGuestFromId(id);
+    if (guest) {
+      const response = await MongoDBQueryTemplate.findResponseFromGuestId(id);
+      return {
+        guests: [guest],
+        responses: response ? [response] : [],
+      };
+    }
+    return null;
   }
 
   public static async findAndUpdateResponse(
@@ -88,6 +94,15 @@ class MongoDBQueryTemplate {
       return null;
     }
     return MDBResponse.fromDocument(doc.value);
+  }
+
+  public static async findResponseFromGuestId(guestId: string): Promise<MDBResponse | null> {
+    const db = await MongoDBClientFactory.getInstance();
+    const doc = await db.collection('responses').findOne({ guest: new ObjectId(guestId) });
+    if (!doc) {
+      return null;
+    }
+    return MDBResponse.fromDocument(doc);
   }
 }
 

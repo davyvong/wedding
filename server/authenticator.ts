@@ -4,6 +4,8 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { redirect } from 'next/navigation';
 import JWT from 'server/jwt';
 
+import MongoDBQueryTemplate from './templates/mongodb';
+
 export interface GuestTokenPayload extends JWTPayload {
   id: string;
 }
@@ -17,8 +19,12 @@ class Authenticator {
       return undefined;
     }
     try {
-      const payload = await JWT.verify(tokenCookie.value);
-      return payload as GuestTokenPayload;
+      const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
+      const guest = await MongoDBQueryTemplate.findGuestFromId(payload.id);
+      if (!guest) {
+        return undefined;
+      }
+      return payload;
     } catch {
       return undefined;
     }
@@ -28,16 +34,11 @@ class Authenticator {
     cookies: RequestCookies | ReadonlyRequestCookies,
     redirectURL: string,
   ): Promise<GuestTokenPayload | never> {
-    const tokenCookie = cookies.get('token');
-    if (!tokenCookie) {
+    const payload = await Authenticator.verifyToken(cookies);
+    if (!payload) {
       return redirect(redirectURL);
     }
-    try {
-      const payload = await JWT.verify(tokenCookie.value);
-      return payload as GuestTokenPayload;
-    } catch {
-      return redirect(redirectURL);
-    }
+    return payload;
   }
 }
 

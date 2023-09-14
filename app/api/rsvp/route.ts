@@ -9,7 +9,6 @@ import { boolean, mixed, object, string } from 'yup';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      requestsPerInterval: 1000,
       scope: RateLimiterScope.RSVP,
     });
     const checkResults = await rateLimiter.checkRequest(request);
@@ -33,7 +32,6 @@ export const GET = async (request: NextRequest): Promise<Response> => {
 export const PUT = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      requestsPerInterval: 1000,
       scope: RateLimiterScope.RSVP,
     });
     const checkResults = await rateLimiter.checkRequest(request);
