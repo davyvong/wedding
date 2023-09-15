@@ -1,5 +1,6 @@
 'use client';
 
+import navigationBarStyles from 'components/navigation-bar/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -19,7 +20,20 @@ export class Scroll {
     }
     return ScrollSmoother.create({
       content: '.' + styles.smoothContent,
+      ignoreMobileResize: true,
       normalizeScroll: true,
+      onUpdate: (self: ScrollSmoother): void => {
+        const navigationBar = document.querySelector('.' + navigationBarStyles.navigationBar);
+        const velocity = self.getVelocity();
+        if (navigationBar && velocity) {
+          if (velocity > 0) {
+            navigationBar.classList.add(navigationBarStyles.navigationBarHidden);
+          }
+          if (velocity < 0) {
+            navigationBar.classList.remove(navigationBarStyles.navigationBarHidden);
+          }
+        }
+      },
       smooth: 1,
       wrapper: '.' + styles.smoothWrapper,
     });

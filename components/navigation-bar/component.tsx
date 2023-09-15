@@ -12,14 +12,12 @@ interface NavigationBarComponentProps {
   token?: GuestTokenPayload;
 }
 
-const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => {
-  return (
-    <div className={styles.navigationBar}>
-      <div className={classNames(styles.title, italiana.className)}>{Translate.t('app.layout.title')}</div>
-      <div className={styles.spacer} />
-      {token ? <RSVPFlyout token={token} /> : <GuestListFlyout />}
-    </div>
-  );
-};
+const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => (
+  <div className={styles.navigationBar}>
+    <div className={classNames(styles.title, italiana.className)}>{Translate.t('app.layout.title')}</div>
+    <div className={styles.spacer} />
+    {token ? <RSVPFlyout token={token} /> : <GuestListFlyout />}
+  </div>
+);
 
 export default NavigationBarComponent;

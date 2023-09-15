@@ -92,12 +92,7 @@ const LandingComponent: FC = () => {
         <div className={styles.secondSection}>
           <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
         </div>
-        <div className={styles.thirdSection}>
-          <div className={classNames(styles.tidbits, italiana.className)}>
-            {Translate.t('components.landing.tidbits.title')}
-          </div>
-          {coupleQuestions.map(renderCoupleQuestion)}
-        </div>
+        <div className={styles.thirdSection}>{coupleQuestions.map(renderCoupleQuestion)}</div>
       </div>
     </div>
   );
