@@ -40,8 +40,9 @@ html {
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   font-size: 87.5%;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -55,28 +56,10 @@ body {
   color: var(--color-on-surface);
   font-size: 1rem;
   font-weight: 400;
-  height: 100vh;
+  height: 100%;
   line-height: 1.5;
-  width: 100vw;
-}
-
-html.has-scroll-smooth {
-  overflow: hidden;
-}
-
-html.has-scroll-dragging {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.has-scroll-smooth body {
-  overflow: hidden;
-}
-
-.has-scroll-smooth [data-scroll-container] {
-  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 [data-scroll-direction='horizontal'] [data-scroll-container] {

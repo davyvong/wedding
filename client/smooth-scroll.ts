@@ -9,7 +9,7 @@ import styles from './smooth-scroll.module.css';
 
 declare global {
   interface Window {
-    deltaY: number;
+    previousScrollY: number;
   }
 }
 
@@ -20,29 +20,31 @@ class SmoothScroll {
     gsap.registerPlugin(ScrollTrigger);
     const scroller = document.querySelector<HTMLElement>(scrollerSelector);
     SmoothScroll.instance = new LocomotiveScroll({
+      draggingClass: styles.hasScrollDragging,
       el: scroller,
+      gestureDirection: 'vertical',
+      reloadOnContextChange: true,
       repeat: true,
-      resetNativeScroll: false,
       scrollbarClass: styles.scrollbar,
       smartphone: {
-        smooth: 1,
+        smooth: true,
       },
       smooth: true,
+      smoothClass: styles.hasScrollSmooth,
       tablet: {
-        breakpoint: 768,
-        smooth: 1,
+        smooth: true,
       },
       touchMultiplier: 3,
     });
-    window.deltaY = 0;
+    window.scrollY = 0;
     SmoothScroll.instance.on('scroll', (event): void => {
       const navigationBar = document.querySelector('.' + navigationStyles.navigationBar);
-      if (window.deltaY > event.delta.y) {
+      if (window.previousScrollY > event.scroll.y) {
         navigationBar?.classList.remove(navigationStyles.navigationBarHidden);
-      } else if (window.deltaY < event.delta.y) {
+      } else if (window.previousScrollY < event.scroll.y) {
         navigationBar?.classList.add(navigationStyles.navigationBarHidden);
       }
-      window.deltaY = event.delta.y;
+      window.previousScrollY = event.scroll.y;
       ScrollTrigger.update();
     });
     ScrollTrigger.scrollerProxy(scroller, {
