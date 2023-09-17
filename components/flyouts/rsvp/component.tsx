@@ -90,31 +90,55 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({ initialValues, isEd
   }, [values]);
 
   const onSubmit = useCallback(
-    async (event): Promise<void> => {
+    (event): void => {
       event.preventDefault();
       if (onValidate()) {
-        setIsSaving(true);
-        const response = await fetch('/api/rsvp', {
-          body: JSON.stringify({
-            attendance: values.attendance,
-            dietaryRestrictions: values.dietaryRestrictions,
-            entree: values.entree,
-            mailingAddress: values.mailingAddress,
-            message: values.message,
-          }),
-          cache: 'no-store',
-          method: 'PUT',
-        });
-        setIsSaving(false);
-        const body: MDBResponseData = await response.json();
-        setValues({
-          attendance: body.attendance,
-          dietaryRestrictions: body.dietaryRestrictions,
-          entree: body.entree,
-          mailingAddress: body.mailingAddress,
-          message: body.message,
-        });
-        mutate('/api/rsvp');
+        mutate(
+          '/api/rsvp',
+          async () => {
+            setIsSaving(true);
+            const response = await fetch('/api/rsvp', {
+              body: JSON.stringify({
+                attendance: values.attendance,
+                dietaryRestrictions: values.dietaryRestrictions,
+                entree: values.entree,
+                mailingAddress: values.mailingAddress,
+                message: values.message,
+              }),
+              cache: 'no-store',
+              method: 'PUT',
+            });
+            setIsSaving(false);
+            const body: MDBResponseData = await response.json();
+            setValues({
+              attendance: body.attendance,
+              dietaryRestrictions: body.dietaryRestrictions,
+              entree: body.entree,
+              mailingAddress: body.mailingAddress,
+              message: body.message,
+            });
+            return body;
+          },
+          {
+            populateCache: (updatedResponse, rsvp) => {
+              const responses: MDBResponseData[] = rsvp?.responses || [];
+              const index = responses.findIndex((response: MDBResponseData): boolean => {
+                return response.guest === updatedResponse.guest;
+              });
+              if (index > -1) {
+                Object.assign(responses[index], updatedResponse);
+              } else {
+                responses.push(updatedResponse);
+              }
+              return {
+                guests: [],
+                ...rsvp,
+                responses,
+              };
+            },
+            revalidate: false,
+          },
+        );
       }
     },
     [mutate, onValidate, values],

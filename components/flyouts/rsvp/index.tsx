@@ -32,22 +32,22 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
     return responseJson;
   }, []);
 
-  const { data: rsvpData, isLoading: rsvpIsLoading } = useSWR('/api/rsvp', fetchRSVP, {
+  const { data, isLoading } = useSWR('/api/rsvp', fetchRSVP, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
 
   const initialValues = useMemo<MDBResponseData | undefined>(() => {
-    if (!rsvpData || !token) {
+    if (!data || !token) {
       return undefined;
     }
-    return rsvpData.responses.find((response: MDBResponseData): boolean => response.guest === token.id);
-  }, [rsvpData, token]);
+    return data.responses.find((response: MDBResponseData): boolean => response.guest === token.id);
+  }, [data, token]);
 
   const renderContent = useCallback(
     (contentProps: FlyoutContentComponentProps): JSX.Element => {
-      if (rsvpIsLoading) {
+      if (isLoading) {
         return (
           <div className={styles.contentLoading}>
             <LoadingHeart />
@@ -56,7 +56,7 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
       }
       return <RSVPFlyoutComponent {...contentProps} initialValues={initialValues} isEditMode={!!initialValues} />;
     },
-    [initialValues, rsvpIsLoading],
+    [initialValues, isLoading],
   );
 
   const renderReference = useCallback(

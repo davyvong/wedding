@@ -53,7 +53,13 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
-    const response = await MongoDBQueryTemplate.findAndUpdateResponse(token.id, body);
+    const response = await MongoDBQueryTemplate.findAndUpdateResponse(token.id, {
+      attendance: body.attendance,
+      dietaryRestrictions: body.dietaryRestrictions,
+      entree: body.entree,
+      mailingAddress: body.mailingAddress,
+      message: body.message,
+    });
     if (!response) {
       return new Response(undefined, { status: 401 });
     }
