@@ -3,8 +3,7 @@
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import { brittanySignature, italiana, kollektif } from 'client/fonts';
-import { Scroll } from 'client/scroll';
-import scrollStyles from 'client/scroll.module.css';
+import SmoothScroll from 'client/smooth-scroll';
 import Translate from 'client/translate';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -17,8 +16,8 @@ import { LandingBreakpoints, createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-    Scroll.create();
+    gsap.registerPlugin(ScrollTrigger);
+    SmoothScroll.create('.' + styles.landing);
     let context: gsap.Context;
     gsap
       .matchMedia()
@@ -29,7 +28,7 @@ const LandingComponent: FC = () => {
         context = createLandingContext(LandingBreakpoints.Tablet);
       });
     return () => {
-      Scroll.kill();
+      SmoothScroll.destroy();
       context?.revert();
     };
   }, []);
@@ -64,36 +63,35 @@ const LandingComponent: FC = () => {
   );
 
   return (
-    <div className={scrollStyles.smoothWrapper}>
-      <div className={scrollStyles.smoothContent}>
-        <div className={styles.firstSection}>
-          <div className={styles.coverImage}>
-            <Image
-              alt={Translate.t('components.landing.event-info.bride-and-groom')}
-              fill
-              priority
-              quality={80}
-              src={VD72JPG}
-              sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
-            />
-            <div className={styles.eventInfo}>
-              <div className={classNames(styles.saveTheDate, brittanySignature.className)}>
-                {Translate.t('components.landing.event-info.save-the-date')}
-              </div>
-              <div className={classNames(styles.brideAndGroom, italiana.className)}>
-                {Translate.t('components.landing.event-info.bride-and-groom')}
-              </div>
-              <div className={classNames(styles.eventDate, kollektif.className)}>
-                {Translate.t('components.landing.event-info.event-date')}
-              </div>
+    <div className={styles.landing}>
+      <div className={styles.firstSection}>
+        <div className={styles.navigationBarPlaceholder} />
+        <div className={styles.coverImage}>
+          <Image
+            alt={Translate.t('components.landing.event-info.bride-and-groom')}
+            fill
+            priority
+            quality={80}
+            src={VD72JPG}
+            sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
+          />
+          <div className={styles.eventInfo}>
+            <div className={classNames(styles.saveTheDate, brittanySignature.className)}>
+              {Translate.t('components.landing.event-info.save-the-date')}
+            </div>
+            <div className={classNames(styles.brideAndGroom, italiana.className)}>
+              {Translate.t('components.landing.event-info.bride-and-groom')}
+            </div>
+            <div className={classNames(styles.eventDate, kollektif.className)}>
+              {Translate.t('components.landing.event-info.event-date')}
             </div>
           </div>
         </div>
-        <div className={styles.secondSection}>
-          <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
-        </div>
-        <div className={styles.thirdSection}>{coupleQuestions.map(renderCoupleQuestion)}</div>
       </div>
+      <div className={styles.secondSection}>
+        <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
+      </div>
+      <div className={styles.thirdSection}>{coupleQuestions.map(renderCoupleQuestion)}</div>
     </div>
   );
 };

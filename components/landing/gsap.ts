@@ -1,4 +1,7 @@
+'use client';
+
 import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 import styles from './component.module.css';
 
@@ -17,7 +20,8 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         scrollTrigger: {
           invalidateOnRefresh: true,
           pin: true,
-          scrub: 1,
+          scroller: '.' + styles.landing,
+          scrub: true,
           start: 'top top',
           trigger: '.' + styles.firstSection,
         },
@@ -25,29 +29,25 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       firstSectionTimeline.to(
         '.' + styles.firstSection,
         {
-          duration: 1,
           paddingBottom: '6vw',
           paddingLeft: '6vw',
           paddingRight: '6vw',
         },
         'zoomCoverImage',
       );
-      firstSectionTimeline.to(
-        '.' + styles.coverImage,
-        {
-          borderRadius: '2rem',
-          duration: 1,
-        },
-        'zoomCoverImage',
-      );
+      firstSectionTimeline.to('.' + styles.coverImage, { borderRadius: '2rem' }, 'zoomCoverImage');
     }
     const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
-        end: breakpoint.valueOf() === LandingBreakpoints.Mobile.valueOf() ? '+200%' : '+300%',
+        end: (self: ScrollTrigger) => {
+          const engagementPhotoSet = self.trigger?.firstChild as HTMLElement;
+          return 'bottom +=' + (window.innerWidth - engagementPhotoSet.clientWidth);
+        },
         invalidateOnRefresh: true,
         pin: true,
-        scrub: 1,
+        scroller: '.' + styles.landing,
+        scrub: true,
         start: 'top top',
         trigger: '.' + styles.secondSection,
       },
@@ -72,4 +72,5 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         },
       });
     }
+    ScrollTrigger.refresh();
   });
