@@ -90,10 +90,10 @@ class MongoDBQueryTemplate {
       },
       { returnDocument: 'after', upsert: true },
     );
-    if (!doc.value) {
+    if (!doc) {
       return null;
     }
-    return MDBResponse.fromDocument(doc.value);
+    return MDBResponse.fromDocument(doc);
   }
 
   public static async findResponseFromGuestId(guestId: string): Promise<MDBResponse | null> {
