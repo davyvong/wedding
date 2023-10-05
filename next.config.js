@@ -19,7 +19,6 @@ const getLocalIdent = (context, localIdentName, localName) => {
 /** @type {import('next').NextConfig} */
 const config = {
   experimental: {
-    appDir: true,
     mdxRs: true,
   },
   images: {
