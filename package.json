@@ -19,7 +19,7 @@
     "gsap": "^3.12.2",
     "handlebars": "^4.7.8",
     "html-react-parser": "^4.2.2",
-    "jose": "^4.14.6",
+    "jose": "^4.15.1",
     "lodash.merge": "^4.6.2",
     "lodash.template": "^4.5.0",
     "minireset.css": "^0.0.7",
