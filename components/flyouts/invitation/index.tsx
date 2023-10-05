@@ -8,11 +8,11 @@ import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'comp
 import rsvpFlyoutStyles from 'components/flyouts/rsvp/index.module.css';
 import { FC } from 'react';
 
-import GuestListFlyoutComponent from './component';
+import InvitationFlyoutComponent from './component';
 
-const GuestListFlyout: FC = () => {
+const InvitationFlyout: FC = () => {
   const renderContent = (contentProps: FlyoutContentComponentProps): JSX.Element => (
-    <GuestListFlyoutComponent {...contentProps} />
+    <InvitationFlyoutComponent {...contentProps} />
   );
 
   const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
@@ -24,7 +24,7 @@ const GuestListFlyout: FC = () => {
     </Button>
   );
 
-  return <Flyout openWithURLParam="guest-invitation" renderContent={renderContent} renderReference={renderReference} />;
+  return <Flyout openWithURLParam="invitation" renderContent={renderContent} renderReference={renderReference} />;
 };
 
-export default GuestListFlyout;
+export default InvitationFlyout;

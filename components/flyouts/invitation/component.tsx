@@ -12,9 +12,9 @@ import { string } from 'yup';
 
 import styles from './component.module.css';
 
-interface GuestListFlyoutComponentProps extends FlyoutContentComponentProps {}
+interface InvitationFlyoutComponentProps extends FlyoutContentComponentProps {}
 
-const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen }) => {
+const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOpen }) => {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>();
   const [isSending, setIsSending] = useState<boolean>(false);
@@ -100,4 +100,4 @@ const GuestListFlyoutComponent: FC<GuestListFlyoutComponentProps> = ({ setIsOpen
   );
 };
 
-export default GuestListFlyoutComponent;
+export default InvitationFlyoutComponent;
