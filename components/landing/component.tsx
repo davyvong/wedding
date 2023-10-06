@@ -1,5 +1,6 @@
 'use client';
 
+import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import { brittanySignature, italiana, kollektif } from 'client/fonts';
@@ -91,7 +92,11 @@ const LandingComponent: FC = () => {
       <div className={styles.secondSection}>
         <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
       </div>
-      <div className={styles.thirdSection}>{coupleQuestions.map(renderCoupleQuestion)}</div>
+      <div className={styles.thirdSection}>
+        <BackgroundStrokeSVG className={styles.backgroundStroke} />
+        <div className={styles.fullHeightSpacer} />
+        {coupleQuestions.map(renderCoupleQuestion)}
+      </div>
     </div>
   );
 };

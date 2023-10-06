@@ -72,5 +72,27 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         },
       });
     }
+    const thirdSectionTimeline = gsap.timeline({
+      overwrite: true,
+      scrollTrigger: {
+        invalidateOnRefresh: true,
+        scroller: '.' + styles.landing,
+        scrub: true,
+        start: 'top 200px',
+        trigger: '.' + styles.thirdSection,
+      },
+    });
+    thirdSectionTimeline.fromTo(
+      '.' + styles.backgroundStroke + ' path',
+      {
+        strokeDashoffset: 40626,
+      },
+      {
+        strokeDashoffset: (index: number, backgroundStroke: Element) => {
+          const section = backgroundStroke.parentNode?.parentNode as Element;
+          return 40626 - section.clientHeight;
+        },
+      },
+    );
     ScrollTrigger.refresh();
   });
