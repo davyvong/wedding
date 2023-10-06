@@ -1,4 +1,5 @@
-const withMDX = require('@next/mdx')();
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const loaderUtils = require('loader-utils');
 const path = require('path');
 
@@ -17,10 +18,7 @@ const getLocalIdent = (context, localIdentName, localName) => {
 };
 
 /** @type {import('next').NextConfig} */
-const config = {
-  experimental: {
-    mdxRs: true,
-  },
+module.exports = {
   images: {
     domains: ['images.unsplash.com'],
   },
@@ -70,5 +68,3 @@ const config = {
     return config;
   },
 };
-
-module.exports = withMDX(config);
