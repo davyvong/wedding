@@ -176,7 +176,7 @@
   height: 100%;
   left: 50%;
   position: absolute;
-  top: 0;
+  top: 250px;
   transform: translateX(-50%);
   z-index: -1;
 }
@@ -189,7 +189,7 @@
 }
 
 .fullHeightSpacer {
-  height: 70vh;
+  height: 500px;
   width: 100%;
 }
 
@@ -205,16 +205,13 @@
 
 @media (min-width: 768px) {
   .coupleQACard {
-    height: 25vw;
-    padding: 3vw;
-    width: 41vw;
+    height: 15vw;
+    padding: 1.5vw 2vw;
+    width: 30vw;
   }
 }
 
-.coupleQuestion {
-  font-size: 3vh;
-}
-
+.coupleQuestion,
 .coupleAnswer {
-  font-size: 3vh;
+  font-size: 2vh;
 }

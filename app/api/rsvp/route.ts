@@ -21,7 +21,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
     const response = await MongoDBQueryTemplate.findRSVPFromGuestId(token.id);
     if (!response) {
-      return new Response(undefined, { status: 401 });
+      return new Response(undefined, { status: 403 });
     }
     return NextResponse.json(response, { status: 200 });
   } catch (error: unknown) {
@@ -47,13 +47,22 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
       attendance: boolean().required(),
       dietaryRestrictions: string(),
       entree: mixed<EntreeOptions>().oneOf(Object.values(EntreeOptions)).required(),
+      guest: string()
+        .required()
+        .matches(/^[0-9a-fA-F]{24}$/),
       mailingAddress: string(),
       message: string().required(),
     });
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
-    const response = await MongoDBQueryTemplate.findAndUpdateResponse(token.id, {
+    if (body.guest !== token.id) {
+      const guestGroup = await MongoDBQueryTemplate.findGuestGroupFromGuestIds([token.id, body.guest]);
+      if (!guestGroup) {
+        return new Response(undefined, { status: 403 });
+      }
+    }
+    const response = await MongoDBQueryTemplate.findAndUpdateResponse(body.guest, {
       attendance: body.attendance,
       dietaryRestrictions: body.dietaryRestrictions,
       entree: body.entree,
@@ -61,7 +70,7 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
       message: body.message,
     });
     if (!response) {
-      return new Response(undefined, { status: 401 });
+      return new Response(undefined, { status: 403 });
     }
     return NextResponse.json(response, { status: 200 });
   } catch (error: unknown) {

@@ -1,5 +1,6 @@
 'use client';
 
+import CheckIconSVG from 'assets/icons/check.svg';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import { FlyoutContentComponentProps } from 'components/flyout/component';
@@ -8,8 +9,9 @@ import Select from 'components/form/select';
 import TextInput from 'components/form/text-input';
 import Textarea from 'components/form/textarea';
 import LoadingHeart from 'components/loading-heart';
-import { Fragment, useCallback, useState } from 'react';
-import type { FC } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
 import { useSWRConfig } from 'swr';
 import { boolean, mixed, string } from 'yup';
@@ -18,8 +20,11 @@ import styles from './component.module.css';
 import { EntreeOptions, attendanceOptions, entreeOptions } from './constants';
 
 interface RSVPFlyoutComponentProps extends FlyoutContentComponentProps {
+  guests: MDBGuestData[];
   initialValues?: Partial<RSVPFlyoutComponentValues>;
   isEditMode: boolean;
+  selectedGuestId: string;
+  setSelectedGuestId: Dispatch<SetStateAction<string>>;
 }
 
 export interface RSVPFlyoutComponentValues {
@@ -46,7 +51,14 @@ const defaultValues: RSVPFlyoutComponentValues = {
   message: '',
 };
 
-const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({ initialValues, isEditMode, setIsOpen }) => {
+const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
+  guests,
+  initialValues,
+  isEditMode,
+  selectedGuestId,
+  setSelectedGuestId,
+  setIsOpen,
+}) => {
   const [values, setValues] = useState<RSVPFlyoutComponentValues>({
     ...defaultValues,
     ...initialValues,
@@ -102,6 +114,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({ initialValues, isEd
                 attendance: values.attendance,
                 dietaryRestrictions: values.dietaryRestrictions,
                 entree: values.entree,
+                guest: selectedGuestId,
                 mailingAddress: values.mailingAddress,
                 message: values.message,
               }),
@@ -141,8 +154,35 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({ initialValues, isEd
         );
       }
     },
-    [mutate, onValidate, values],
+    [mutate, onValidate, selectedGuestId, values],
   );
+
+  const renderGuestPartySelector = useCallback(() => {
+    if (guests.length <= 1) {
+      return null;
+    }
+    return (
+      <div className={styles.guests}>
+        <div>{Translate.t('components.flyouts.rsvp.guests.description')}</div>
+        <div className={styles.guestButtons}>
+          {guests.map((guest: MDBGuestData) => {
+            const isSelected = guest.id === selectedGuestId;
+            return (
+              <Button
+                className={isSelected ? styles.selectedGuestButton : styles.guestButton}
+                key={guest.id}
+                onClick={() => setSelectedGuestId(guest.id)}
+                type="button"
+              >
+                {isSelected && <CheckIconSVG />}
+                {guest.name}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }, [guests, selectedGuestId, setSelectedGuestId]);
 
   const renderSubmitButtonContent = useCallback(() => {
     if (isSaving) {
@@ -161,9 +201,22 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({ initialValues, isEd
     return Translate.t('components.flyouts.rsvp.buttons.submit');
   }, [isEditMode, isSaving]);
 
+  useEffect(() => {
+    setValues({
+      ...defaultValues,
+      ...initialValues,
+    });
+  }, [initialValues]);
+
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
+      {renderGuestPartySelector()}
+      <div className={styles.header}>
+        {Translate.t('components.flyouts.rsvp.headers.response', {
+          name: guests.find((guest: MDBGuestData) => guest.id === selectedGuestId)?.name || '',
+        })}
+      </div>
       <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.attendance')}</div>
       <Select
         inverse

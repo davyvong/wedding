@@ -40,7 +40,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
         method: 'POST',
       });
       setIsSending(false);
-      if (response.status === 401) {
+      if (!response.ok) {
         setError('components.flyouts.invitation.errors.not-invited');
         return;
       }

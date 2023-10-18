@@ -1,6 +1,7 @@
 import { Document, ObjectId } from 'mongodb';
 import MongoDBClientFactory from 'server/clients/mongodb';
 import MDBGuest, { MDBGuestData } from 'server/models/guest';
+import MDBGuestGroup from 'server/models/guest-group';
 import MDBResponse, { MDBResponseData } from 'server/models/response';
 
 class MongoDBQueryTemplate {
@@ -103,6 +104,19 @@ class MongoDBQueryTemplate {
       return null;
     }
     return MDBResponse.fromDocument(doc);
+  }
+
+  public static async findGuestGroupFromGuestIds(guestIds: string[]): Promise<MDBGuestGroup | null> {
+    const db = await MongoDBClientFactory.getInstance();
+    const doc = await db.collection('guestGroups').findOne({
+      guests: {
+        $all: guestIds.map((guestId: string) => new ObjectId(guestId)),
+      },
+    });
+    if (!doc) {
+      return null;
+    }
+    return MDBGuestGroup.fromDocument(doc);
   }
 }
 

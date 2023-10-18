@@ -40,7 +40,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const email = body.email.toLowerCase();
     const guest = await MongoDBQueryTemplate.findGuestFromEmail(email);
     if (!guest) {
-      return new Response(undefined, { status: 401 });
+      return new Response(undefined, { status: 403 });
     }
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);

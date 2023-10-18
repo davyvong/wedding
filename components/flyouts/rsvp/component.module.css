@@ -7,6 +7,48 @@
   width: 100%;
 }
 
+.guests {
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  color: var(--color-on-surface);
+  margin-top: 3rem;
+  padding: 1.5rem;
+}
+
+.guestButtons {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+.guestButtons button:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.guestButtons .guestButton {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 2px var(--color-inverse-surface);
+  color: var(--color-on-surface);
+}
+
+.guestButtons .selectedGuestButton {
+  background-color: var(--color-inverse-surface);
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.guestButtons .selectedGuestButton svg {
+  position: absolute;
+  left: 0.75rem;
+}
+
+.header {
+  font-size: 1.75rem;
+  margin-top: 3rem;
+}
+
 .question {
   margin-bottom: 0.25rem;
   margin-top: 3rem;

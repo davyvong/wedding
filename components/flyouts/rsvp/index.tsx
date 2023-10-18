@@ -6,7 +6,7 @@ import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import LoadingHeart from 'components/loading-heart';
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
@@ -20,6 +20,8 @@ interface RSVPFlyoutProps {
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(token?.id || '');
+
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
     responses: MDBResponseData[];
@@ -42,8 +44,8 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
     if (!data || !token) {
       return undefined;
     }
-    return data.responses.find((response: MDBResponseData): boolean => response.guest === token.id);
-  }, [data, token]);
+    return data.responses.find((response: MDBResponseData): boolean => response.guest === selectedGuestId);
+  }, [data, selectedGuestId, token]);
 
   const renderContent = useCallback(
     (contentProps: FlyoutContentComponentProps): JSX.Element => {
@@ -54,9 +56,18 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
           </div>
         );
       }
-      return <RSVPFlyoutComponent {...contentProps} initialValues={initialValues} isEditMode={!!initialValues} />;
+      return (
+        <RSVPFlyoutComponent
+          {...contentProps}
+          guests={data?.guests || []}
+          initialValues={initialValues}
+          isEditMode={!!initialValues}
+          selectedGuestId={selectedGuestId}
+          setSelectedGuestId={setSelectedGuestId}
+        />
+      );
     },
-    [initialValues, isLoading],
+    [data, initialValues, isLoading, selectedGuestId],
   );
 
   const renderReference = useCallback(
