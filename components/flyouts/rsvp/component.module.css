@@ -16,15 +16,13 @@
 }
 
 .guestButtons {
-  align-items: center;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin-top: 1rem;
+  flex-direction: column;
+  margin-top: 1.5rem;
 }
 
 .guestButtons button:not(:first-child) {
-  margin-left: 1rem;
+  margin-top: 1.5rem;
 }
 
 .guestButtons .guestButton {
@@ -36,12 +34,30 @@
 .guestButtons .selectedGuestButton {
   background-color: var(--color-inverse-surface);
   position: relative;
-  padding-left: 2.75rem;
+  width: 100%;
 }
 
 .guestButtons .selectedGuestButton svg {
   position: absolute;
   left: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .guestButtons {
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .guestButtons button:not(:first-child) {
+    margin-left: 1.5rem;
+    margin-top: 0;
+  }
+
+  .guestButtons .selectedGuestButton {
+    padding-left: 2.75rem;
+    width: auto;
+  }
 }
 
 .header {
