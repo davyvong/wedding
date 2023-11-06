@@ -19,6 +19,9 @@ const getLocalIdent = (context, localIdentName, localName) => {
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+  experimental: {
+    webpackBuildWorker: true,
+  },
   images: {
     domains: ['images.unsplash.com'],
   },
