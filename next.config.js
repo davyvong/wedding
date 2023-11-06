@@ -20,6 +20,7 @@ const getLocalIdent = (context, localIdentName, localName) => {
 const config = {
   experimental: {
     mdxRs: true,
+    webpackBuildWorker: true,
   },
   images: {
     domains: ['images.unsplash.com'],
