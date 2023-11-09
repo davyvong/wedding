@@ -56,4 +56,12 @@ export const coupleQuestions: CoupleQuestion[] = [
     answer: 'components.landing.answers.how-did-you-meet',
     question: 'components.landing.questions.how-did-you-meet',
   },
+  {
+    answer: 'components.landing.answers.how-did-you-meet',
+    question: 'components.landing.questions.how-did-you-meet',
+  },
+  {
+    answer: 'components.landing.answers.how-did-you-meet',
+    question: 'components.landing.questions.how-did-you-meet',
+  },
 ];

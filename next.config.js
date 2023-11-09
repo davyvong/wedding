@@ -22,9 +22,6 @@ module.exports = {
   experimental: {
     webpackBuildWorker: true,
   },
-  images: {
-    domains: ['images.unsplash.com'],
-  },
   redirects: () => [
     {
       destination: '/api/secret/:code*',

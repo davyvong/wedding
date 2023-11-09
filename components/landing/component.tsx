@@ -3,13 +3,13 @@
 import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
-import { brittanySignature, italiana, kollektif } from 'client/fonts';
+import { brittanySignature, italiana, kollektif, openSans } from 'client/fonts';
 import SmoothScroll from 'client/smooth-scroll';
 import Translate from 'client/translate';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, Fragment, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
 import { CoupleQuestion, EngagementPhoto, coupleQuestions, engagementPhotos } from './constants';
@@ -55,10 +55,12 @@ const LandingComponent: FC = () => {
 
   const renderCoupleQuestion = useCallback(
     (coupleQuestion: CoupleQuestion, index: number): JSX.Element => (
-      <div className={classNames(styles.coupleQACard, italiana.className)} key={coupleQuestion.question + index}>
-        <div className={styles.coupleQuestion}>{Translate.t(coupleQuestion.question)}</div>
-        <div className={styles.coupleAnswer}>{Translate.t(coupleQuestion.answer)}</div>
-      </div>
+      <Fragment key={coupleQuestion.question + index}>
+        <div className={classNames(styles.coupleQuestion, openSans.className)}>
+          {Translate.t(coupleQuestion.question)}
+        </div>
+        <div className={classNames(styles.coupleAnswer, italiana.className)}>{Translate.t(coupleQuestion.answer)}</div>
+      </Fragment>
     ),
     [],
   );
@@ -94,8 +96,7 @@ const LandingComponent: FC = () => {
       </div>
       <div className={styles.thirdSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
-        <div className={styles.fullHeightSpacer} />
-        {coupleQuestions.map(renderCoupleQuestion)}
+        <div className={styles.coupleQuestionAnswerList}>{coupleQuestions.map(renderCoupleQuestion)}</div>
       </div>
     </div>
   );

@@ -102,15 +102,15 @@
 
 .engagementPhoto {
   height: 70vh;
-  max-width: calc(100vw - 12vw);
+  max-width: 88vw;
   width: 50vh;
 }
 
 @media (min-width: 768px) {
   .engagementPhoto {
-    height: 50vh;
+    height: 65vh;
     max-width: none;
-    width: 35vh;
+    width: 45vh;
   }
 }
 
@@ -165,53 +165,49 @@
 
 .thirdSection {
   overflow: hidden;
-  padding-bottom: 6vw;
-  padding-left: 6vw;
-  padding-right: 6vw;
+  padding: 6vw;
   position: relative;
   width: 100%;
 }
 
 .backgroundStroke {
+  display: none;
   height: 100%;
-  left: 50%;
+  left: -10rem;
   position: absolute;
-  top: 250px;
-  transform: translateX(-50%);
+  top: calc(15rem + 6vw);
   z-index: -1;
 }
 
 .backgroundStroke path {
-  stroke: var(--color-primary);
+  stroke: var(--color-on-background);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 3px;
 }
 
-.fullHeightSpacer {
-  height: 500px;
-  width: 100%;
-}
+@media (min-width: 1024px) {
+  .backgroundStroke {
+    display: block;
+  }
 
-.coupleQACard {
-  background-color: var(--color-primary);
-  border-radius: 1rem;
-  height: 50vw;
-  margin-top: 6vw;
-  max-width: calc(100vw - 12vw);
-  padding: 6vw;
-  width: 100vw;
-}
-
-@media (min-width: 768px) {
-  .coupleQACard {
-    height: 15vw;
-    padding: 1.5vw 2vw;
-    width: 30vw;
+  .coupleQuestionAnswerList {
+    margin-left: 20rem;
+    margin-top: 15rem;
   }
 }
 
-.coupleQuestion,
+.coupleQuestion {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 6rem;
+}
+
+.coupleQuestion:first-child {
+  margin-top: 0;
+}
+
 .coupleAnswer {
-  font-size: 2vh;
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
 }
