@@ -59,7 +59,7 @@ const LandingComponent: FC = () => {
         <div className={classNames(styles.coupleQuestion, openSans.className)}>
           {Translate.t(coupleQuestion.question)}
         </div>
-        <div className={classNames(styles.coupleAnswer, italiana.className)}>{Translate.t(coupleQuestion.answer)}</div>
+        <div className={classNames(styles.coupleAnswer, openSans.className)}>{Translate.t(coupleQuestion.answer)}</div>
       </Fragment>
     ),
     [],
