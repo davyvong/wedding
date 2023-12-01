@@ -1,0 +1,224 @@
+.landing {
+  width: 100%;
+}
+
+.firstSection {
+  padding-bottom: 6vw;
+  padding-left: 6vw;
+  padding-right: 6vw;
+  width: 100%;
+}
+
+.navigationBarPlaceholder {
+  height: 80px;
+  width: 100%;
+}
+
+.coverImage {
+  border-radius: 2rem;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.coverImage img {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+@media (min-width: 768px) {
+  .firstSection {
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .coverImage {
+    border-radius: 0;
+    height: auto;
+    padding-top: 66.67%;
+  }
+}
+
+.eventInfo {
+  bottom: 65%;
+  color: var(--color-on-primary);
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.saveTheDate {
+  font-size: 7vh;
+  line-height: 1.5;
+}
+
+.brideAndGroom {
+  font-size: 3.5vh;
+  letter-spacing: 0.5vh;
+  margin-top: 1vh;
+}
+
+.eventDate {
+  font-size: 2vh;
+  letter-spacing: 0.5vh;
+  margin-top: 1vh;
+}
+
+@media (min-width: 768px) {
+  .eventInfo {
+    bottom: 6vw;
+    left: 6vw;
+    top: auto;
+    transform: none;
+  }
+
+  .saveTheDate {
+    font-size: 8vh;
+  }
+
+  .brideAndGroom {
+    font-size: 4vh;
+  }
+}
+
+.secondSection {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  width: 100%;
+}
+
+.engagementPhotoSet {
+  display: flex;
+  flex-direction: row;
+  padding: 0 6vw;
+}
+
+.engagementPhoto {
+  height: 70vh;
+  max-width: 88vw;
+  width: 50vh;
+}
+
+@media (min-width: 768px) {
+  .engagementPhoto {
+    height: 65vh;
+    max-width: none;
+    width: 45vh;
+  }
+}
+
+.engagementPhotoZoom {
+  border-radius: 1rem;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 300ms ease-in-out;
+  width: 100%;
+}
+
+.engagementPhotoZoom:hover {
+  transform: scale(1.05);
+}
+
+@media (hover: none) {
+  .engagementPhotoZoom:hover {
+    transform: none;
+  }
+}
+
+.engagementPhoto img {
+  object-fit: cover;
+}
+
+.engagementPhoto:not(:first-child) {
+  margin-left: 6vw;
+}
+
+@media (min-width: 768px) {
+  .engagementPhoto:nth-child(1) {
+    transform: translateY(20%);
+  }
+
+  .engagementPhoto:nth-child(2) {
+    transform: translateY(40%);
+  }
+
+  .engagementPhoto:nth-child(3) {
+    transform: translateY(60%);
+  }
+
+  .engagementPhoto:nth-child(4) {
+    transform: translateY(80%);
+  }
+
+  .engagementPhoto:nth-child(5) {
+    transform: translateY(100%);
+  }
+}
+
+.thirdSection {
+  overflow: hidden;
+  padding: 6vw;
+  position: relative;
+  width: 100%;
+}
+
+.backgroundStroke {
+  display: none;
+  height: 100%;
+  left: -10rem;
+  position: absolute;
+  top: calc(15rem + 6vw);
+  z-index: -1;
+}
+
+.backgroundStroke path {
+  stroke: var(--color-on-background);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}
+
+@media (min-width: 1024px) {
+  .backgroundStroke {
+    display: block;
+  }
+
+  .coupleQuestionAnswerSection {
+    margin-left: 20rem;
+    margin-top: 15rem;
+  }
+}
+
+.coupleQuestionAnswerTitle {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.coupleQuestion {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 3rem;
+}
+
+.coupleAnswer {
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .coupleQuestion {
+    margin-top: 4.5rem;
+  }
+
+  .coupleAnswer {
+    margin-top: 1.5rem;
+  }
+}

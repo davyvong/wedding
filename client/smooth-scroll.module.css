@@ -1,0 +1,22 @@
+html.hasScrollSmooth {
+  overflow: hidden;
+}
+
+html.hasScrollDragging {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.hasScrollSmooth body {
+  overflow: hidden;
+}
+
+.hasScrollSmooth [data-scroll-container] {
+  min-height: 100vh;
+}
+
+.scrollbar {
+  display: none;
+}

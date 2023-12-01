@@ -1,0 +1,28 @@
+.optionList {
+  background: var(--color-primary);
+  border-radius: 0.5rem;
+  color: var(--color-on-primary);
+  max-width: 768px;
+  padding: 0.5rem;
+  width: 100%;
+  z-index: 3;
+}
+
+.optionItem {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 150ms ease-in-out;
+}
+
+.optionItem:hover {
+  background-color: var(--palette-persian-orange);
+  cursor: pointer;
+}
+
+.optionListInverse {
+  background-color: var(--color-inverse-popover);
+}
+
+.optionItemInverse:hover {
+  background-color: var(--color-inverse-surface);
+}

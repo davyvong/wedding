@@ -1,50 +1,31 @@
-'use client';
-
 import 'minireset.css';
 
 import './global.css';
 
 import { Analytics } from '@vercel/analytics/react';
-import Navigation from 'components/navigation';
-import { NavigationProvider } from 'contexts/navigation';
-import useTranslate from 'hooks/translate';
-import { Inter } from 'next/font/google';
-import { useEffect } from 'react';
-import type { FC, ReactNode } from 'react';
-import { setViewportUnits } from 'utils/browser';
-
-const inter = Inter({
-  display: 'swap',
-  subsets: ['latin'],
-});
-
-setViewportUnits();
+import { openSans } from 'client/fonts';
+import Translate from 'client/translate';
+import NavigationBar from 'components/navigation-bar';
+import { cookies } from 'next/headers';
+import type { ReactNode } from 'react';
+import Authenticator, { GuestTokenPayload } from 'server/authenticator';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
-  const { t } = useTranslate();
-
-  useEffect(() => {
-    setViewportUnits();
-    window.addEventListener('resize', setViewportUnits);
-    return () => {
-      window.removeEventListener('resize', setViewportUnits);
-    };
-  }, []);
+const Layout = async ({ children }: LayoutProps): Promise<JSX.Element> => {
+  const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <title>{t('app.layout.title')}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>{Translate.t('app.layout.title')}</title>
       </head>
-      <body className={inter.className}>
-        <NavigationProvider>
-          <Navigation>{children}</Navigation>
-        </NavigationProvider>
+      <body className={openSans.className}>
+        <NavigationBar token={token} />
+        {children}
         <Analytics />
       </body>
     </html>

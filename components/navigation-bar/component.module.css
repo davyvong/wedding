@@ -1,0 +1,32 @@
+.navigationBar {
+  align-items: center;
+  background-color: var(--color-surface);
+  display: flex;
+  left: 0;
+  height: 80px;
+  padding: 0 6vw;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform: translateY(0);
+  transition: transform 300ms ease-in-out;
+  z-index: 1;
+}
+
+.navigationBarHidden {
+  transform: translateY(-100%);
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}

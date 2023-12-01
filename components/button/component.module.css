@@ -1,0 +1,40 @@
+.button {
+  align-items: center;
+  background-color: var(--color-inverse-surface);
+  border: 0;
+  border-radius: 100rem;
+  color: var(--color-inverse-on-surface);
+  display: flex;
+  font-size: 1rem;
+  font-weight: 600;
+  justify-content: center;
+  outline: none;
+  padding: 0.75rem 1.25rem;
+  transition:
+    background-color 300ms ease-in-out,
+    opacity 300ms ease-in-out;
+}
+
+.button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.button:disabled {
+  background-color: var(--color-placeholder);
+  cursor: not-allowed;
+}
+
+.buttonInverse:hover {
+  cursor: pointer;
+}
+
+.buttonInverse:disabled {
+  background-color: var(--color-inverse-placeholder);
+  cursor: not-allowed;
+}
+
+.buttonInverse {
+  background-color: var(--color-inverse-on-surface);
+  color: var(--color-inverse-surface);
+}

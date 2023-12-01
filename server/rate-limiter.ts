@@ -6,8 +6,10 @@ import RedisKey from 'server/models/redis-key';
 import { string } from 'yup';
 
 export enum RateLimiterScope {
+  Address = 'Address',
   Global = 'Global',
   EmailAuthentication = 'EmailAuthentication',
+  RSVP = 'RSVP',
   Spotify = 'Spotify',
 }
 

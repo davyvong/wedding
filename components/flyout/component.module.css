@@ -1,0 +1,68 @@
+.flyout {
+  background-color: var(--color-inverse-surface);
+  bottom: 0;
+  color: var(--color-inverse-on-surface);
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 0;
+  position: fixed;
+  top: 0;
+  transform: translateX(100%);
+  width: 100vw;
+  z-index: 2;
+}
+
+.flyout::-webkit-scrollbar {
+  background-color: var(--color-inverse-scrollbar);
+  display: block;
+}
+
+.flyout::-webkit-scrollbar:hover {
+  background-color: var(--color-inverse-scrollbar-hover);
+}
+
+.flyout::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+}
+
+.flyout::-webkit-scrollbar:vertical {
+  width: 0.5rem;
+}
+
+.flyout::-webkit-scrollbar-thumb {
+  background-color: var(--color-inverse-scrollbar-thumb);
+  border-radius: 0.25rem;
+}
+
+.flyout::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-inverse-scrollbar-thumb-active);
+}
+
+.closeButton {
+  background-color: var(--palette-transparent);
+  border: 0;
+  color: var(--color-inverse-on-surface);
+  height: 2.5rem;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 2.5rem;
+}
+
+.closeButton:hover {
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .flyout {
+    width: 65vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .flyout {
+    width: 50vw;
+  }
+}

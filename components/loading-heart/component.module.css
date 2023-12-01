@@ -37,6 +37,15 @@
   top: -0.45rem;
 }
 
+.loadingHeartInverse div {
+  background-color: var(--color-on-surface);
+}
+
+.loadingHeartInverse div:after,
+.loadingHeartInverse div:before {
+  background-color: var(--color-on-surface);
+}
+
 @keyframes heartBeat {
   0% {
     transform: scale(0.95);

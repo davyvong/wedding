@@ -1,0 +1,63 @@
+import words from 'constants/words.json';
+import Handlebars from 'handlebars';
+import { NextRequest } from 'next/server';
+import NodemailerClientFactory from 'server/clients/nodemailer';
+import RedisClientFactory from 'server/clients/redis';
+import secretLinkTemplate from 'server/emails/secret.eml';
+import ServerEnvironment from 'server/environment';
+import ServerError from 'server/error';
+import RedisKey from 'server/models/redis-key';
+import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
+import MongoDBQueryTemplate from 'server/templates/mongodb';
+import { object, string } from 'yup';
+
+const getRandomWords = (count: number): string[] => {
+  const set = new Set<string>();
+  while (set.size < count) {
+    const index = Math.floor(Math.random() * words.length);
+    set.add(words[index]);
+  }
+  return Array.from(set);
+};
+
+export const POST = async (request: NextRequest): Promise<Response> => {
+  try {
+    const rateLimiter = new RateLimiter({
+      requestsPerInterval: 10,
+      scope: RateLimiterScope.EmailAuthentication,
+    });
+    const checkResults = await rateLimiter.checkRequest(request);
+    if (checkResults.exceeded) {
+      return new Response(undefined, { status: 429 });
+    }
+    const body = await request.json();
+    const bodySchema = object({
+      email: string().email().required(),
+    });
+    if (!bodySchema.isValidSync(body)) {
+      return new Response(undefined, { status: 400 });
+    }
+    const email = body.email.toLowerCase();
+    const guest = await MongoDBQueryTemplate.findGuestFromEmail(email);
+    if (!guest) {
+      return new Response(undefined, { status: 403 });
+    }
+    const code = getRandomWords(4).join('-');
+    const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
+    const template = Handlebars.compile(secretLinkTemplate);
+    const html = template({ url: url.href });
+    const transporter = NodemailerClientFactory.getInstance();
+    await transporter.sendMail({
+      from: process.env.NODEMAILER_ADDRESS,
+      html,
+      subject: 'Your secret link from Vivian & Davy',
+      to: email,
+    });
+    const redisClient = await RedisClientFactory.getInstance();
+    const redisKey = RedisKey.create('codes', code);
+    await redisClient.set(redisKey, guest.id, { EX: 900 });
+    return new Response(undefined, { status: 202 });
+  } catch (error: unknown) {
+    return ServerError.handle(error);
+  }
+};

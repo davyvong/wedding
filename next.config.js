@@ -1,4 +1,5 @@
-const withMDX = require('@next/mdx')();
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const loaderUtils = require('loader-utils');
 const path = require('path');
 
@@ -6,7 +7,7 @@ const getLocalIdent = (context, localIdentName, localName) => {
   let bufferStr = `filePath:${path
     .relative(context.rootContext, context.resourcePath)
     .replace(/\\+/g, '/')}#className:${localName}`;
-  if (context.resourcePath.includes('next/font/local')) {
+  if (context.resourcePath.includes('next/font')) {
     const resourceQuery = JSON.parse(context.resourceQuery.substring(1));
     bufferStr += resourceQuery.variableName;
   }
@@ -17,19 +18,15 @@ const getLocalIdent = (context, localIdentName, localName) => {
 };
 
 /** @type {import('next').NextConfig} */
-const config = {
+module.exports = {
   experimental: {
-    mdxRs: true,
     webpackBuildWorker: true,
-  },
-  images: {
-    domains: ['images.unsplash.com'],
   },
   redirects: () => [
     {
-      destination: '/api/secret-link/verify',
+      destination: '/api/secret/:code*',
       permanent: false,
-      source: '/secret-link/verify',
+      source: '/secret/:code*',
     },
     {
       destination: '/api/sign-out',
@@ -71,5 +68,3 @@ const config = {
     return config;
   },
 };
-
-module.exports = withMDX(config);
