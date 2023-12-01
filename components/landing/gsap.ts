@@ -78,7 +78,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         invalidateOnRefresh: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: 'top top',
+        start: 'top center',
         trigger: '.' + styles.thirdSection,
       },
     });

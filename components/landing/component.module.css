@@ -164,6 +164,7 @@
 }
 
 .thirdSection {
+  margin-top: 4.5rem;
   overflow: hidden;
   padding: 6vw;
   position: relative;
@@ -175,7 +176,7 @@
   height: 100%;
   left: -10rem;
   position: absolute;
-  top: calc(15rem + 6vw);
+  top: 6vw;
   z-index: -1;
 }
 
@@ -187,13 +188,16 @@
 }
 
 @media (min-width: 1024px) {
+  .thirdSection {
+    margin-top: 0;
+  }
+
   .backgroundStroke {
     display: block;
   }
 
   .coupleQuestionAnswerSection {
     margin-left: 20rem;
-    margin-top: 15rem;
   }
 }
 
