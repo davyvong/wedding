@@ -64,14 +64,14 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         return `translateX(calc(100vw - ${engagementPhotoSet.clientWidth}px))`;
       },
     });
-    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      secondSectionTimeline.to('.' + styles.engagementPhoto, {
-        duration: 1,
-        transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
-          return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
-        },
-      });
-    }
+    // if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
+    //   secondSectionTimeline.to('.' + styles.engagementPhoto, {
+    //     duration: 1,
+    //     transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
+    //       return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+    //     },
+    //   });
+    // }
     const thirdSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {

@@ -45,23 +45,15 @@ export interface CoupleQuestion {
 
 export const coupleQuestions: CoupleQuestion[] = [
   {
-    answer: 'components.landing.answers.how-did-you-meet',
-    question: 'components.landing.questions.how-did-you-meet',
+    answer: 'components.landing.answers.where-is-the-ceremoney-and-reception',
+    question: 'components.landing.questions.where-is-the-ceremoney-and-reception',
   },
   {
-    answer: 'components.landing.answers.how-did-you-meet',
-    question: 'components.landing.questions.how-did-you-meet',
+    answer: 'components.landing.answers.i-did-not-receive-an-email',
+    question: 'components.landing.questions.i-did-not-receive-an-email',
   },
   {
-    answer: 'components.landing.answers.how-did-you-meet',
-    question: 'components.landing.questions.how-did-you-meet',
-  },
-  {
-    answer: 'components.landing.answers.how-did-you-meet',
-    question: 'components.landing.questions.how-did-you-meet',
-  },
-  {
-    answer: 'components.landing.answers.how-did-you-meet',
-    question: 'components.landing.questions.how-did-you-meet',
+    answer: 'components.landing.answers.how-to-respond-to-invitation',
+    question: 'components.landing.questions.how-to-respond-to-invitation',
   },
 ];

@@ -41,10 +41,16 @@
   "components.flyouts.rsvp.questions.mailingAddress": "4. What is your mailing address for post-wedding postage. Leave this blank if you do not wish to receive it.",
   "components.flyouts.rsvp.questions.message": "5. Share how you know the couple, wish them well or some wisdom for the future!",
   "components.flyouts.rsvp.title": "RSVP",
-  "components.landing.answers.how-did-you-meet": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  "components.landing.answers.how-to-respond-to-invitation": "You can respond on our wedding website by clicking on the \"Invitation\" button at the top. You will be prompted for your email address to receive an email with a secret link to submit your RSVP. After accessing the secret link, the \"Invitation\" button will be replaced with a \"RSVP\" button to modify your RSVP in the future.",
+  "components.landing.answers.i-did-not-receive-an-email": "The email may be sent to your junk mail. Please add <b>host@vivian-and-davy.com</b> to your whitelist to ensure our emails arrive in your inbox.",
+  "components.landing.answers.when-is-the-rsvp-deadline": "Please submit your RSVP by [deadline].",
+  "components.landing.answers.where-is-the-ceremoney-and-reception": "The event details will be emailed to guests in an official invitation at a later date. Please occasionally visit this website because more updates will be available leading up to the event.",
   "components.landing.event-info.bride-and-groom": "Vivian & Davy",
   "components.landing.event-info.event-date": "2023 . 09 . 23",
   "components.landing.event-info.save-the-date": "Save the date",
-  "components.landing.questions.how-did-you-meet": "How did you first meet?",
+  "components.landing.questions.how-to-respond-to-invitation": "How can I respond to the invitation?",
+  "components.landing.questions.i-did-not-receive-an-email": "I did not receive any emails for the event. What do I do?",
+  "components.landing.questions.when-is-the-rsvp-deadline": "When is the RSVP deadline?",
+  "components.landing.questions.where-is-the-ceremoney-and-reception": "Where will the ceremony and reception take place?",
   "components.select.no-options": "There are no options available."
 }

@@ -191,23 +191,34 @@
     display: block;
   }
 
-  .coupleQuestionAnswerList {
+  .coupleQuestionAnswerSection {
     margin-left: 20rem;
     margin-top: 15rem;
   }
 }
 
-.coupleQuestion {
-  font-size: 1.25rem;
+.coupleQuestionAnswerTitle {
+  font-size: 2rem;
   font-weight: 600;
-  margin-top: 6rem;
 }
 
-.coupleQuestion:first-child {
-  margin-top: 0;
+.coupleQuestion {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 3rem;
 }
 
 .coupleAnswer {
-  font-size: 1.5rem;
-  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .coupleQuestion {
+    margin-top: 4.5rem;
+  }
+
+  .coupleAnswer {
+    margin-top: 1.5rem;
+  }
 }

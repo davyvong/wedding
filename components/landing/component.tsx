@@ -59,7 +59,9 @@ const LandingComponent: FC = () => {
         <div className={classNames(styles.coupleQuestion, openSans.className)}>
           {Translate.t(coupleQuestion.question)}
         </div>
-        <div className={classNames(styles.coupleAnswer, openSans.className)}>{Translate.t(coupleQuestion.answer)}</div>
+        <div className={classNames(styles.coupleAnswer, openSans.className)}>
+          {Translate.html(coupleQuestion.answer)}
+        </div>
       </Fragment>
     ),
     [],
@@ -91,12 +93,15 @@ const LandingComponent: FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.secondSection}>
-        <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
-      </div>
       <div className={styles.thirdSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
-        <div className={styles.coupleQuestionAnswerList}>{coupleQuestions.map(renderCoupleQuestion)}</div>
+        <div className={styles.coupleQuestionAnswerSection}>
+          <div className={styles.coupleQuestionAnswerTitle}>Questions & Answers</div>
+          {coupleQuestions.map(renderCoupleQuestion)}
+        </div>
+      </div>
+      <div className={styles.secondSection}>
+        <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
       </div>
     </div>
   );
