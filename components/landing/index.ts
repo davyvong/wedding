@@ -1,3 +1,7 @@
-import Landing from './component';
+import dynamic from 'next/dynamic';
 
-export default Landing;
+const DynamicLanding = dynamic(() => import('./component'), {
+  ssr: false,
+});
+
+export default DynamicLanding;
