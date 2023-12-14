@@ -15,11 +15,11 @@ const Page = async (): Promise<JSX.Element> => {
     return <ErrorPage statusCode={404} />;
   }
 
-  const guestGroups = await MongoDBQueryTemplate.findAllGuestGroups();
+  const guestList = await MongoDBQueryTemplate.findGuestList();
 
   return (
     <div className={styles.page}>
-      <GuestList guestGroups={guestGroups} />
+      <GuestList guestList={guestList} />
     </div>
   );
 };

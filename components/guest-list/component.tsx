@@ -9,14 +9,15 @@ import Translate from 'client/translate';
 import cloneDeep from 'lodash.clonedeep';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { MDBGuestData } from 'server/models/guest';
+import { MDBResponseData } from 'server/models/response';
 
 import styles from './component.module.css';
 
 export interface GuestListComponentProps {
-  guestGroups: { guests: MDBGuestData[]; id?: string }[];
+  guestList: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[];
 }
 
-const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
+const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
   const [copiedGuestId, setCopiedGuestId] = useState<Set<string>>(new Set());
 
@@ -40,14 +41,25 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
     [],
   );
 
-  const sortedGuestGroups = useMemo(() => {
-    const guestGroupClone = cloneDeep(guestGroups);
-    guestGroupClone.sort(sortByKey('id'));
-    for (const guestGroup of guestGroupClone) {
+  const sortedGuestList = useMemo(() => {
+    const guestListClone = cloneDeep(guestList);
+    guestListClone.sort(sortByKey('id'));
+    for (const guestGroup of guestListClone) {
       guestGroup.guests.sort(sortByKey('name'));
     }
-    return guestGroupClone;
-  }, [guestGroups, sortByKey]);
+    return guestListClone;
+  }, [guestList, sortByKey]);
+
+  const renderCollapsibleCell = useCallback(
+    (children?: JSX.Element): JSX.Element => (
+      <td>
+        <div>
+          <div className={styles.guestGroupGuestsCell}>{children}</div>
+        </div>
+      </td>
+    ),
+    [],
+  );
 
   const renderGuestGroup = useCallback(
     (guestGroup, index: number): JSX.Element => (
@@ -70,7 +82,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
               });
             }}
           >
-            <td colSpan={3}>
+            <td colSpan={4}>
               <div className={styles.guestGroupHeaderText}>
                 <GroupIconSVG className={styles.guestGroupIcon} />
                 {guestGroup.id
@@ -91,52 +103,51 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
           >
             {guestGroup.guests.map(guest => (
               <tr key={guest.id}>
-                <td>
-                  <div>
-                    <div className={styles.guestGroupGuestsCell}>
-                      {guest.id}
-                      {copiedGuestId.has(guest.id) ? (
-                        <CheckIconSVG />
-                      ) : (
-                        <CopyIconSVG
-                          className={styles.guestIdCopyIcon}
-                          onClick={(): void => {
-                            navigator.clipboard.writeText(guest.id);
+                {renderCollapsibleCell(
+                  <Fragment>
+                    {guest.id}
+                    {copiedGuestId.has(guest.id) ? (
+                      <CheckIconSVG />
+                    ) : (
+                      <CopyIconSVG
+                        className={styles.guestIdCopyIcon}
+                        onClick={(): void => {
+                          navigator.clipboard.writeText(guest.id);
+                          setCopiedGuestId((prevState: Set<string>): Set<string> => {
+                            const nextState = new Set(prevState);
+                            nextState.add(guest.id);
+                            return nextState;
+                          });
+                          setTimeout(() => {
                             setCopiedGuestId((prevState: Set<string>): Set<string> => {
                               const nextState = new Set(prevState);
-                              nextState.add(guest.id);
+                              nextState.delete(guest.id);
                               return nextState;
                             });
-                            setTimeout(() => {
-                              setCopiedGuestId((prevState: Set<string>): Set<string> => {
-                                const nextState = new Set(prevState);
-                                nextState.delete(guest.id);
-                                return nextState;
-                              });
-                            }, 2000);
-                          }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <div className={styles.guestGroupGuestsCell}>{guest.name}</div>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <div className={styles.guestGroupGuestsCell}>{guest.email}</div>
-                  </div>
-                </td>
+                          }, 2000);
+                        }}
+                      />
+                    )}
+                  </Fragment>,
+                )}
+                {renderCollapsibleCell(guest.name)}
+                {renderCollapsibleCell(guest.email)}
+                {renderCollapsibleCell(
+                  guestGroup.responses.some((response: MDBResponseData): boolean => {
+                    return response.guest === guest.id;
+                  }) ? (
+                    <Fragment>{Translate.t('components.guest-list.guest-table.rows.rsvp.yes')}</Fragment>
+                  ) : (
+                    <Fragment>{Translate.t('components.guest-list.guest-table.rows.rsvp.no')}</Fragment>
+                  ),
+                )}
               </tr>
             ))}
           </tbody>
         )}
       </Fragment>
     ),
-    [collapsedGuestGroups, copiedGuestId],
+    [collapsedGuestGroups, copiedGuestId, renderCollapsibleCell],
   );
 
   return (
@@ -147,9 +158,10 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
             <th>{Translate.t('components.guest-list.guest-table.columns.id')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.name')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.email')}</th>
+            <th>{Translate.t('components.guest-list.guest-table.columns.rsvp')}</th>
           </tr>
         </thead>
-        {sortedGuestGroups.map(renderGuestGroup)}
+        {sortedGuestList.map(renderGuestGroup)}
       </table>
     </div>
   );
