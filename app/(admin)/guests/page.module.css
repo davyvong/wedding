@@ -22,7 +22,7 @@
 .guestTable td {
   padding: 1rem 1.5rem;
   text-align: left;
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .guestTableSeparator td {

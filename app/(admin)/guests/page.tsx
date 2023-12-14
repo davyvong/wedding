@@ -21,17 +21,17 @@ const Page = async (): Promise<JSX.Element> => {
 
   const guestGroups = await MongoDBQueryTemplate.findAllGuestGroups();
 
-  const sortById = (a, b) => {
-    if (!a.id) {
+  const sortByKey = (key: string) => (a, b) => {
+    if (!a[key]) {
       return 1;
     }
-    if (!b.id) {
+    if (!b[key]) {
       return -1;
     }
-    if (a.id > b.id) {
+    if (a[key] > b[key]) {
       return 1;
     }
-    if (a.id < b.id) {
+    if (a[key] < b[key]) {
       return -1;
     }
     return 0;
@@ -55,7 +55,7 @@ const Page = async (): Promise<JSX.Element> => {
             : Translate.t('app.guests.guest-groups.individual')}
         </td>
       </tr>
-      {guestGroup.guests.sort(sortById).map(guest => (
+      {guestGroup.guests.sort(sortByKey('name')).map(guest => (
         <tr key={guest.id}>
           <td>{guest.id}</td>
           <td>{guest.name}</td>
@@ -77,7 +77,7 @@ const Page = async (): Promise<JSX.Element> => {
                 <th>{Translate.t('app.guests.guest-table.columns.email')}</th>
               </tr>
             </thead>
-            <tbody>{guestGroups.sort(sortById).map(renderGuestGroup)}</tbody>
+            <tbody>{guestGroups.sort(sortByKey('id')).map(renderGuestGroup)}</tbody>
           </table>
         </div>
       </div>
