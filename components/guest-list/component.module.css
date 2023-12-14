@@ -1,0 +1,56 @@
+.guestList {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.guestTable {
+  border-radius: 0.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--color-inverse-on-surface);
+  overflow: hidden;
+  width: 100%;
+}
+
+.guestTable tr {
+  background-color: var(--color-inverse-surface);
+}
+
+.guestTable thead tr:hover {
+  opacity: 1;
+}
+
+.guestTable th,
+.guestTable td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.guestGroupHeader {
+  transition: opacity 300ms ease-in-out;
+}
+
+.guestGroupHeader:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.guestGroupHeaderText {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.guestGroupHeaderText svg {
+  margin-right: 0.5rem;
+  transition: transform 300ms ease-in-out;
+}
+
+.guestGroupHeaderCollapsed svg {
+  transform: rotate(180deg);
+}
+
+.guestTableSeparator td {
+  padding: 0;
+}
