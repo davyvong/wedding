@@ -1,4 +1,3 @@
-import Layout from 'app/(public)/layout';
 import Translate from 'client/translate';
 import ErrorPage from 'components/error-page';
 import { cookies } from 'next/headers';
@@ -66,22 +65,20 @@ const Page = async (): Promise<JSX.Element> => {
   );
 
   return (
-    <Layout>
-      <div className={styles.page}>
-        <div className={styles.guestList}>
-          <table className={styles.guestTable}>
-            <thead>
-              <tr>
-                <th>{Translate.t('app.guests.guest-table.columns.id')}</th>
-                <th>{Translate.t('app.guests.guest-table.columns.name')}</th>
-                <th>{Translate.t('app.guests.guest-table.columns.email')}</th>
-              </tr>
-            </thead>
-            <tbody>{guestGroups.sort(sortByKey('id')).map(renderGuestGroup)}</tbody>
-          </table>
-        </div>
+    <div className={styles.page}>
+      <div className={styles.guestList}>
+        <table className={styles.guestTable}>
+          <thead>
+            <tr>
+              <th>{Translate.t('app.guests.guest-table.columns.id')}</th>
+              <th>{Translate.t('app.guests.guest-table.columns.name')}</th>
+              <th>{Translate.t('app.guests.guest-table.columns.email')}</th>
+            </tr>
+          </thead>
+          <tbody>{guestGroups.sort(sortByKey('id')).map(renderGuestGroup)}</tbody>
+        </table>
       </div>
-    </Layout>
+    </div>
   );
 };
 

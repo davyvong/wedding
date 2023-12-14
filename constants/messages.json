@@ -1,4 +1,5 @@
 {
+  "app.errorPage.404.title": "404: This page could not be found.",
   "app.guests.guest-groups.individual": "Individual guests",
   "app.guests.guest-groups.name": "Group {{name}}",
   "app.guests.guest-table.columns.email": "Email",
