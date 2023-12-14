@@ -70,7 +70,6 @@ const LandingComponent: FC = () => {
   return (
     <div className={styles.landing}>
       <div className={styles.firstSection}>
-        <div className={styles.navigationBarPlaceholder} />
         <div className={styles.coverImage}>
           <Image
             alt={Translate.t('components.landing.event-info.bride-and-groom')}

@@ -1,6 +1,6 @@
 import 'minireset.css';
 
-import './global.css';
+import '../global.css';
 
 import { Analytics } from '@vercel/analytics/react';
 import { openSans } from 'client/fonts';

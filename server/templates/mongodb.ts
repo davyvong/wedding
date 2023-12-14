@@ -118,6 +118,45 @@ class MongoDBQueryTemplate {
     }
     return MDBGuestGroup.fromDocument(doc);
   }
+
+  public static async findAllGuestGroups(): Promise<{ guests: MDBGuestData[]; id?: string }[]> {
+    const db = await MongoDBClientFactory.getInstance();
+    const aggregation = await db
+      .collection('guestGroups')
+      .aggregate([
+        {
+          $lookup: {
+            as: 'guestsLookup',
+            foreignField: '_id',
+            from: 'guests',
+            localField: 'guests',
+          },
+        },
+      ])
+      .toArray();
+    const guestList: ObjectId[] = [];
+    const guestGroups = aggregation.reduce<{ guests: MDBGuestData[]; id?: string }[]>(
+      (accumulatedGuestGroups, guestGroup) => {
+        const guests = guestGroup.guestsLookup.map((guestDoc: Document): MDBGuestData => {
+          return MDBGuest.fromDocument(guestDoc).toPlainObject();
+        });
+        guestList.push(...guests.map((guest: MDBGuestData): ObjectId => new ObjectId(guest.id)));
+        accumulatedGuestGroups.push({ id: guestGroup._id.toString(), guests });
+        return accumulatedGuestGroups;
+      },
+      [],
+    );
+    const individualGuests = await db
+      .collection('guests')
+      .find({ _id: { $nin: guestList } })
+      .toArray();
+    guestGroups.push({
+      guests: individualGuests.map((guestDoc: Document): MDBGuestData => {
+        return MDBGuest.fromDocument(guestDoc).toPlainObject();
+      }),
+    });
+    return guestGroups;
+  }
 }
 
 export default MongoDBQueryTemplate;

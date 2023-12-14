@@ -1,0 +1,30 @@
+.page {
+  padding: 6vw;
+  padding-top: 0;
+  width: 100%;
+}
+
+.guestList {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.guestTable {
+  background-color: var(--color-inverse-surface);
+  border-radius: 0.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--color-inverse-on-surface);
+  width: 100%;
+}
+
+.guestTable th,
+.guestTable td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.guestTableSeparator td {
+  padding: 0;
+}

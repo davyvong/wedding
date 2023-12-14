@@ -1,4 +1,9 @@
 {
+  "app.guests.guest-groups.individual": "Individual guests",
+  "app.guests.guest-groups.name": "Group {{name}}",
+  "app.guests.guest-table.columns.email": "Email",
+  "app.guests.guest-table.columns.id": "ID",
+  "app.guests.guest-table.columns.name": "Name",
   "app.layout.title": "Vivian & Davy",
   "components.address-input.no-suggestions": "No suggestions found for <b>{{value}}</b>.",
   "components.flyouts.invitation.buttons.cancel": "Cancel",
