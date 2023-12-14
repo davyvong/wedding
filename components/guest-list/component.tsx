@@ -1,6 +1,9 @@
 'use client';
 
-import ExpandLessSVG from 'assets/icons/expand-less.svg';
+import CheckIconSVG from 'assets/icons/check.svg';
+import CopyIconSVG from 'assets/icons/copy.svg';
+import ExpandLessIconSVG from 'assets/icons/expand-less.svg';
+import GroupIconSVG from 'assets/icons/group.svg';
 import classNames from 'classnames';
 import Translate from 'client/translate';
 import cloneDeep from 'lodash.clonedeep';
@@ -15,6 +18,7 @@ export interface GuestListComponentProps {
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
+  const [copiedGuestId, setCopiedGuestId] = useState<Set<string>>(new Set());
 
   const sortByKey = useCallback(
     (key: string) =>
@@ -54,7 +58,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
               styles.guestGroupHeader,
               collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupHeaderCollapsed,
             )}
-            onClick={() => {
+            onClick={(): void => {
               setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
                 const nextState = new Set(prevState);
                 if (nextState.has(guestGroup.id)) {
@@ -68,10 +72,12 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
           >
             <td colSpan={3}>
               <div className={styles.guestGroupHeaderText}>
-                <ExpandLessSVG />
+                <GroupIconSVG className={styles.guestGroupIcon} />
                 {guestGroup.id
                   ? Translate.t('components.guest-list.guest-groups.name', { name: guestGroup.id })
                   : Translate.t('components.guest-list.guest-groups.individual')}
+                <div className={styles.spacer} />
+                <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
               </div>
             </td>
           </tr>
@@ -87,17 +93,41 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
               <tr key={guest.id}>
                 <td>
                   <div>
-                    <div>{guest.id}</div>
+                    <div className={styles.guestGroupGuestsCell}>
+                      {guest.id}
+                      {copiedGuestId.has(guest.id) ? (
+                        <CheckIconSVG />
+                      ) : (
+                        <CopyIconSVG
+                          className={styles.guestIdCopyIcon}
+                          onClick={(): void => {
+                            navigator.clipboard.writeText(guest.id);
+                            setCopiedGuestId((prevState: Set<string>): Set<string> => {
+                              const nextState = new Set(prevState);
+                              nextState.add(guest.id);
+                              return nextState;
+                            });
+                            setTimeout(() => {
+                              setCopiedGuestId((prevState: Set<string>): Set<string> => {
+                                const nextState = new Set(prevState);
+                                nextState.delete(guest.id);
+                                return nextState;
+                              });
+                            }, 2000);
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td>
                   <div>
-                    <div>{guest.name}</div>
+                    <div className={styles.guestGroupGuestsCell}>{guest.name}</div>
                   </div>
                 </td>
                 <td>
                   <div>
-                    <div>{guest.email}</div>
+                    <div className={styles.guestGroupGuestsCell}>{guest.email}</div>
                   </div>
                 </td>
               </tr>
@@ -106,7 +136,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestGroups }) => {
         )}
       </Fragment>
     ),
-    [collapsedGuestGroups],
+    [collapsedGuestGroups, copiedGuestId],
   );
 
   return (
