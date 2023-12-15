@@ -29,6 +29,19 @@
   white-space: nowrap;
 }
 
+.guestTableActionHeader {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.guestTableActionHeader > div {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
 .guestGroupHeader {
   transition: opacity 300ms ease-in-out;
 }
@@ -85,11 +98,15 @@
   margin-left: 1rem;
 }
 
+.collapseAllIcon,
+.expandAllIcon,
 .guestIdCopyIcon,
 .guestGroupIdCopyIcon {
   transition: opacity 300ms ease-in-out;
 }
 
+.collapseAllIcon:hover,
+.expandAllIcon:hover,
 .guestIdCopyIcon:hover,
 .guestGroupIdCopyIcon:hover {
   cursor: pointer;

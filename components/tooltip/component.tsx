@@ -23,7 +23,7 @@ interface TooltipProps {
   children: ReactElement;
   disabled?: boolean;
   inverse?: boolean;
-  placement?: Placement;
+  placement?: string;
   renderContent: () => JSX.Element | ReactElement | ReactNode | string;
 }
 
@@ -34,7 +34,7 @@ const Tooltip: FC<TooltipProps> = ({ children, disabled = false, inverse = false
     middleware: [offset(8), shift({ padding: 32 })],
     onOpenChange: setIsOpen,
     open: isOpen,
-    placement,
+    placement: placement as Placement,
     whileElementsMounted: autoUpdate,
   });
 

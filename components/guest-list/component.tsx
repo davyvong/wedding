@@ -1,7 +1,9 @@
 'use client';
 
 import CheckIconSVG from 'assets/icons/check.svg';
+import CollapseAllIconSVG from 'assets/icons/collapse-all.svg';
 import CopyIconSVG from 'assets/icons/copy.svg';
+import ExpandAllIconSVG from 'assets/icons/expand-all.svg';
 import ExpandLessIconSVG from 'assets/icons/expand-less.svg';
 import GroupIconSVG from 'assets/icons/group.svg';
 import classNames from 'classnames';
@@ -51,7 +53,26 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
     return guestListClone;
   }, [guestList, sortByKey]);
 
-  const copyObjectId = (objectId: string): void => {
+  const areAllGuestGroupsExpanded = useMemo<boolean>(() => {
+    return !guestList.some(
+      (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): boolean => {
+        return collapsedGuestGroups.has(guestGroup.id);
+      },
+    );
+  }, [collapsedGuestGroups, guestList]);
+
+  const collapseAllGuestGroups = useCallback((): void => {
+    setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
+      const guestGroupIds = guestList.map(
+        (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): string => {
+          return guestGroup.id;
+        },
+      );
+      return new Set([...prevState, ...guestGroupIds]);
+    });
+  }, [guestList]);
+
+  const copyObjectId = useCallback((objectId: string): void => {
     navigator.clipboard.writeText(objectId);
     setCopiedObjectIds((prevState: Set<string>): Set<string> => {
       const nextState = new Set(prevState);
@@ -65,7 +86,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
         return nextState;
       });
     }, 2000);
-  };
+  }, []);
 
   const renderGuestGroupHeader = useCallback(
     (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => {
@@ -90,7 +111,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             )}
             onClick={collapseGuestGroup}
           >
-            <td colSpan={4}>
+            <td colSpan={5}>
               <div className={styles.guestGroupHeaderText}>
                 <GroupIconSVG className={styles.guestGroupIcon} />
                 {guestGroup.id ? (
@@ -102,8 +123,8 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                       </div>
                     ) : (
                       <Tooltip
-                        placement="right-end"
-                        renderContent={() => Translate.t('components.guest-list.guest-table.tooltips.copy')}
+                        placement="right-middle"
+                        renderContent={(): string => Translate.t('components.guest-list.guest-table.tooltips.copy')}
                       >
                         <div>
                           <CopyIconSVG
@@ -121,14 +142,25 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                   Translate.t('components.guest-list.guest-groups.individual')
                 )}
                 <div className={styles.spacer} />
-                <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
+                <Tooltip
+                  placement="left-middle"
+                  renderContent={(): string => {
+                    return collapsedGuestGroups.has(guestGroup.id)
+                      ? Translate.t('components.guest-list.guest-table.tooltips.expand')
+                      : Translate.t('components.guest-list.guest-table.tooltips.collapse');
+                  }}
+                >
+                  <div>
+                    <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
+                  </div>
+                </Tooltip>
               </div>
             </td>
           </tr>
         </tbody>
       );
     },
-    [collapsedGuestGroups, copiedObjectIds],
+    [collapsedGuestGroups, copiedObjectIds, copyObjectId],
   );
 
   const renderCollapsibleCell = useCallback(
@@ -162,8 +194,8 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                 </div>
               ) : (
                 <Tooltip
-                  placement="right-end"
-                  renderContent={() => Translate.t('components.guest-list.guest-table.tooltips.copy')}
+                  placement="right-middle"
+                  renderContent={(): string => Translate.t('components.guest-list.guest-table.tooltips.copy')}
                 >
                   <div>
                     <CopyIconSVG
@@ -184,10 +216,11 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               ? Translate.t('components.guest-list.guest-table.rows.rsvp.yes')
               : Translate.t('components.guest-list.guest-table.rows.rsvp.no'),
           )}
+          {renderCollapsibleCell()}
         </tr>
       );
     },
-    [copiedObjectIds, renderCollapsibleCell],
+    [copiedObjectIds, copyObjectId, renderCollapsibleCell],
   );
 
   const renderGuestGroupMembers = useCallback(
@@ -228,6 +261,31 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             <th>{Translate.t('components.guest-list.guest-table.columns.name')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.email')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.rsvp')}</th>
+            <th>
+              <div className={styles.guestTableActionHeader}>
+                <Tooltip
+                  placement="left-middle"
+                  renderContent={(): string => {
+                    return areAllGuestGroupsExpanded
+                      ? Translate.t('components.guest-list.guest-table.tooltips.collapse-all')
+                      : Translate.t('components.guest-list.guest-table.tooltips.expand-all');
+                  }}
+                >
+                  <div>
+                    {areAllGuestGroupsExpanded ? (
+                      <CollapseAllIconSVG className={styles.collapseAllIcon} onClick={collapseAllGuestGroups} />
+                    ) : (
+                      <ExpandAllIconSVG
+                        className={styles.expandAllIcon}
+                        onClick={(): void => {
+                          setCollapsedGuestGroups(new Set());
+                        }}
+                      />
+                    )}
+                  </div>
+                </Tooltip>
+              </div>
+            </th>
           </tr>
         </thead>
         {sortedGuestList.map(renderGuestGroup)}
