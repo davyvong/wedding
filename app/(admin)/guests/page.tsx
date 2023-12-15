@@ -1,20 +1,9 @@
-import ErrorPage from 'components/error-page';
 import GuestList from 'components/guest-list';
-import { cookies } from 'next/headers';
-import Authenticator, { GuestTokenPayload } from 'server/authenticator';
 import RedisClientFactory from 'server/clients/redis';
 import RedisKey from 'server/models/redis-key';
 import MongoDBQueryTemplate from 'server/templates/mongodb';
 
-const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-
 const Page = async (): Promise<JSX.Element> => {
-  const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
-
-  if (!token || !adminGuestIds.has(token.id)) {
-    return <ErrorPage statusCode={404} />;
-  }
-
   const redisClient = await RedisClientFactory.getInstance();
   const redisKey = RedisKey.create('guest-list');
   const cachedGuestList = await redisClient.get(redisKey);

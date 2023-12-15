@@ -16,11 +16,11 @@ import RSVPFlyoutComponent from './component';
 import styles from './index.module.css';
 
 interface RSVPFlyoutProps {
-  token?: GuestTokenPayload;
+  token: GuestTokenPayload;
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
-  const [selectedGuestId, setSelectedGuestId] = useState<string>(token?.id || '');
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(token.id || '');
 
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
@@ -41,11 +41,13 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
   });
 
   const initialValues = useMemo<MDBResponseData | undefined>(() => {
-    if (!data || !token) {
+    if (!data) {
       return undefined;
     }
-    return data.responses.find((response: MDBResponseData): boolean => response.guest === selectedGuestId);
-  }, [data, selectedGuestId, token]);
+    return data.responses.find((response: MDBResponseData): boolean => {
+      return response.guest === selectedGuestId;
+    });
+  }, [data, selectedGuestId]);
 
   const renderContent = useCallback(
     (contentProps: FlyoutContentComponentProps): JSX.Element => {

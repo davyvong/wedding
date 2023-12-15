@@ -1,6 +1,7 @@
 {
-  "app.errorPage.404.title": "404: This page could not be found.",
-  "app.layout.title": "Vivian & Davy",
+  "app.admin.layout.404-title": "404: This page could not be found.",
+  "app.admin.layout.title": "Vivian & Davy",
+  "app.public.layout.title": "Vivian & Davy",
   "components.address-input.no-suggestions": "No suggestions found for <b>{{value}}</b>.",
   "components.flyouts.invitation.buttons.cancel": "Cancel",
   "components.flyouts.invitation.buttons.close": "Close",
@@ -66,5 +67,6 @@
   "components.landing.questions.i-did-not-receive-an-email": "I did not receive any emails for the event. What do I do?",
   "components.landing.questions.when-is-the-rsvp-deadline": "When is the RSVP deadline?",
   "components.landing.questions.where-is-the-ceremoney-and-reception": "Where will the ceremony and reception take place?",
+  "components.navigation-bar.title": "Vivian & Davy",
   "components.select.no-options": "There are no options available."
 }
