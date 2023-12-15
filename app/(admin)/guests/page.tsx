@@ -13,7 +13,7 @@ const Page = async (): Promise<JSX.Element> => {
   }
 
   const guestList = await MongoDBQueryTemplate.findGuestList();
-  await redisClient.set(redisKey, JSON.stringify(guestList), { EX: 900 });
+  await redisClient.set(redisKey, JSON.stringify(guestList), { EX: 60 });
 
   return <GuestList guestList={guestList} />;
 };
