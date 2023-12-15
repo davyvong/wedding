@@ -95,10 +95,11 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
           isEditMode={!!initialValues}
           selectedGuestId={selectedGuestId}
           setSelectedGuestId={setSelectedGuestId}
+          swrKey={swrKey}
         />
       );
     },
-    [data, initialValues, isLoading, selectedGuestId],
+    [data, initialValues, isLoading, selectedGuestId, swrKey],
   );
 
   const renderReference = useCallback(

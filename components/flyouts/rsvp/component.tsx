@@ -25,6 +25,7 @@ interface RSVPFlyoutComponentProps extends FlyoutContentComponentProps {
   isEditMode: boolean;
   selectedGuestId: string;
   setSelectedGuestId: Dispatch<SetStateAction<string>>;
+  swrKey: string;
 }
 
 export interface RSVPFlyoutComponentValues {
@@ -58,6 +59,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
   selectedGuestId,
   setSelectedGuestId,
   setIsOpen,
+  swrKey,
 }) => {
   const [values, setValues] = useState<RSVPFlyoutComponentValues>({
     ...defaultValues,
@@ -106,7 +108,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       event.preventDefault();
       if (onValidate()) {
         mutate(
-          '/api/rsvp',
+          swrKey,
           async () => {
             setIsSaving(true);
             const response = await fetch('/api/rsvp', {
@@ -130,14 +132,21 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               mailingAddress: body.mailingAddress,
               message: body.message,
             });
-            return body;
           },
           {
-            populateCache: (updatedResponse, currentCache) => {
-              const responses: MDBResponseData[] = [...(currentCache?.responses || [])];
+            optimisticData: currentData => {
+              const responses = [...(currentData?.responses || [])];
               const index = responses.findIndex((response: MDBResponseData): boolean => {
-                return response.guest === updatedResponse.guest;
+                return response.guest === selectedGuestId;
               });
+              const updatedResponse = {
+                attendance: values.attendance,
+                dietaryRestrictions: values.dietaryRestrictions,
+                entree: values.entree,
+                guest: selectedGuestId,
+                mailingAddress: values.mailingAddress,
+                message: values.message,
+              };
               if (index > -1) {
                 Object.assign(responses[index], updatedResponse);
               } else {
@@ -145,16 +154,17 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               }
               return {
                 guests: [],
-                ...currentCache,
+                ...currentData,
                 responses,
               };
             },
+            populateCache: true,
             revalidate: false,
           },
         );
       }
     },
-    [mutate, onValidate, selectedGuestId, values],
+    [mutate, onValidate, selectedGuestId, swrKey, values],
   );
 
   const renderGuestPartySelector = useCallback(() => {
