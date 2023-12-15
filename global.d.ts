@@ -13,6 +13,7 @@ namespace NodeJS {
     SPOTIFY_CLIENT_SECRET: string;
     SPOTIFY_PLAYLIST_ID: string;
     SPOTIFY_REFRESH_TOKEN: string;
+    SUPER_ADMINS: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
     VERCEL_ENV: string;
     VERCEL_URL: string;

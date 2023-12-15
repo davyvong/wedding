@@ -6,7 +6,7 @@ import RedisClientFactory from 'server/clients/redis';
 import RedisKey from 'server/models/redis-key';
 import MongoDBQueryTemplate from 'server/templates/mongodb';
 
-const adminGuestIds = new Set<string>(['63fe7a21f84a8c95268a690d', '6411d98cc0b167e3e42eb851']);
+const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
 
 const Page = async (): Promise<JSX.Element> => {
   const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
