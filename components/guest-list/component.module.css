@@ -1,8 +1,18 @@
 .guestList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   overflow-x: auto;
-  padding: 6vw;
-  padding-top: 0;
+  padding-bottom: 6vw;
+  padding-left: 6vw;
   width: 100%;
+}
+
+.guestList::after {
+  content: "";
+  display: block;
+  min-height: 100%;
+  min-width: 6vw;
 }
 
 .guestTable {

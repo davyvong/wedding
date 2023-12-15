@@ -8,7 +8,10 @@ class MongoDBClientFactory {
 
   public static async getInstance(): Promise<Db> {
     if (!MongoDBClientFactory.instance) {
-      MongoDBClientFactory.instance = new MongoClient(MongoDBClientFactory.uri);
+      MongoDBClientFactory.instance = new MongoClient(MongoDBClientFactory.uri, {
+        maxPoolSize: 5,
+        minPoolSize: 2,
+      });
       await MongoDBClientFactory.instance.connect();
     }
     return MongoDBClientFactory.instance.db(MongoDBClientFactory.database);
