@@ -1,5 +1,7 @@
 .guestList {
   overflow-x: auto;
+  padding: 6vw;
+  padding-top: 0;
   width: 100%;
 }
 
@@ -83,13 +85,20 @@
   margin-left: 1rem;
 }
 
-.guestIdCopyIcon {
+.guestIdCopyIcon,
+.guestGroupIdCopyIcon {
   transition: opacity 300ms ease-in-out;
 }
 
-.guestIdCopyIcon:hover {
+.guestIdCopyIcon:hover,
+.guestGroupIdCopyIcon:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+
+.guestGroupIdCopyIcon,
+.guestGroupIdCopiedIcon {
+  margin-left: 1rem;
 }
 
 .spacer {

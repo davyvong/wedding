@@ -163,6 +163,11 @@ class MongoDBQueryTemplate {
         responses: responsesInGroup,
       });
     }
+    guestList.push({
+      guests: Array.from(guests.values()),
+      id: '',
+      responses: Array.from(responses.values()),
+    });
     return guestList;
   }
 }
