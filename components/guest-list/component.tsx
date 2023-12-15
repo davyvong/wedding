@@ -97,7 +97,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             )}
             onClick={collapseGuestGroup}
           >
-            <td colSpan={5}>
+            <td colSpan={6}>
               <div className={styles.guestGroupHeaderText}>
                 <GroupIconSVG className={styles.guestGroupIcon} />
                 {guestGroup.id ? (
@@ -165,9 +165,18 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
       guest: MDBGuestData,
       guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] },
     ): JSX.Element => {
-      const hasRSVP: boolean = guestGroup.responses.some((response: MDBResponseData): boolean => {
-        return response.guest === guest.id;
-      });
+      const guestResponse: MDBResponseData | undefined = guestGroup.responses.find(
+        (response: MDBResponseData): boolean => response.guest === guest.id,
+      );
+
+      const renderGuestAttendance = (): JSX.Element | string => {
+        if (!guestResponse) {
+          return <Fragment />;
+        }
+        return guestResponse.attendance
+          ? Translate.t('components.guest-list.guest-table.rows.attendance.yes')
+          : Translate.t('components.guest-list.guest-table.rows.attendance.no');
+      };
 
       return (
         <tr key={guest.id}>
@@ -198,10 +207,11 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           {renderCollapsibleCell(guest.name)}
           {renderCollapsibleCell(guest.email)}
           {renderCollapsibleCell(
-            hasRSVP
+            guestResponse
               ? Translate.t('components.guest-list.guest-table.rows.rsvp.yes')
               : Translate.t('components.guest-list.guest-table.rows.rsvp.no'),
           )}
+          {renderCollapsibleCell(renderGuestAttendance())}
           {renderCollapsibleCell(
             <Fragment>
               <div className={styles.spacer} />
@@ -266,6 +276,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             <th>{Translate.t('components.guest-list.guest-table.columns.name')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.email')}</th>
             <th>{Translate.t('components.guest-list.guest-table.columns.rsvp')}</th>
+            <th>{Translate.t('components.guest-list.guest-table.columns.attendance')}</th>
             <th>
               <div className={styles.guestTableActionHeader}>
                 <Tooltip
