@@ -23,18 +23,13 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const params = {
       spoofAs: requestURL.searchParams.get('spoofAs'),
     };
-    const paramsSchema = object({
-      spoofAs: string()
-        .nullable()
-        .matches(/^[0-9a-fA-F]{24}$/),
-    });
-    if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
-    }
     if (params.spoofAs) {
       const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
       if (adminGuestIds.has(token.id)) {
-        token.id = params.spoofAs;
+        const spoofedGuest = await MongoDBQueryTemplate.findGuestFromId(params.spoofAs);
+        if (spoofedGuest) {
+          token.id = params.spoofAs;
+        }
       }
     }
     const response = await MongoDBQueryTemplate.findRSVPFromGuestId(token.id);

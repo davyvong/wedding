@@ -12,6 +12,7 @@ import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
 import useSWR from 'swr';
+import { sortByKey } from 'utils/sort';
 
 import RSVPFlyoutComponent from './component';
 import styles from './index.module.css';
@@ -32,7 +33,7 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
     return null;
   }, []);
 
-  const [selectedGuestId, setSelectedGuestId] = useState<string>(spoofAs || token.id);
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(token.id);
 
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
@@ -44,7 +45,14 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
       method: 'GET',
     });
     const responseJson = await response.json();
-    return responseJson;
+    const guests = (responseJson.guests || []).sort(sortByKey('name'));
+    if (guests.some((guest: MDBGuestData): boolean => guest.id === spoofAs)) {
+      setSelectedGuestId((prevState: string): string => spoofAs || prevState);
+    }
+    return {
+      ...responseJson,
+      guests,
+    };
   }, [spoofAs]);
 
   const { data, isLoading } = useSWR('/api/rsvp', fetchRSVP, {

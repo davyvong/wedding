@@ -13,6 +13,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
+import { sortByKey } from 'utils/sort';
 
 import styles from './component.module.css';
 
@@ -24,26 +25,6 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
   const [copiedObjectIds, setCopiedObjectIds] = useState<Set<string>>(new Set());
 
-  const sortByKey = useCallback(
-    (key: string) =>
-      (a, b): number => {
-        if (!a[key]) {
-          return 1;
-        }
-        if (!b[key]) {
-          return -1;
-        }
-        if (a[key] > b[key]) {
-          return 1;
-        }
-        if (a[key] < b[key]) {
-          return -1;
-        }
-        return 0;
-      },
-    [],
-  );
-
   const sortedGuestList = useMemo<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(() => {
     const guestListClone = cloneDeep(guestList);
     guestListClone.sort(sortByKey('id'));
@@ -51,7 +32,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
       guestGroup.guests.sort(sortByKey('name'));
     }
     return guestListClone;
-  }, [guestList, sortByKey]);
+  }, [guestList]);
 
   const areAllGuestGroupsExpanded = useMemo<boolean>(() => {
     return !guestList.some(
