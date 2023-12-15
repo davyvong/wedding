@@ -7,6 +7,7 @@ import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import LoadingHeart from 'components/loading-heart';
+import { useSearchParams } from 'next/navigation';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
@@ -22,25 +23,32 @@ interface RSVPFlyoutProps {
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
+  const searchParams = useSearchParams();
+
   const spoofAs = useMemo<string | null>(() => {
     if (!isBrowser()) {
       return null;
     }
-    const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('spoofAs')) {
       return searchParams.get('spoofAs');
     }
     return null;
-  }, []);
+  }, [searchParams]);
 
   const [selectedGuestId, setSelectedGuestId] = useState<string>(token.id);
+
+  const swrKey = useMemo<string>(() => {
+    if (spoofAs) {
+      return '/api/rsvp?spoofAs=' + spoofAs;
+    }
+    return '/api/rsvp';
+  }, [spoofAs]);
 
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
     responses: MDBResponseData[];
   } | null> => {
-    const url = spoofAs ? '/api/rsvp?spoofAs=' + spoofAs : '/api/rsvp';
-    const response = await fetch(url, {
+    const response = await fetch(swrKey, {
       cache: 'no-store',
       method: 'GET',
     });
@@ -53,9 +61,9 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
       ...responseJson,
       guests,
     };
-  }, [spoofAs]);
+  }, [spoofAs, swrKey]);
 
-  const { data, isLoading } = useSWR('/api/rsvp', fetchRSVP, {
+  const { data, isLoading } = useSWR(swrKey, fetchRSVP, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

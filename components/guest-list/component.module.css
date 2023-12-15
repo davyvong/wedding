@@ -111,14 +111,16 @@
 .collapseAllIcon,
 .expandAllIcon,
 .guestIdCopyIcon,
-.guestGroupIdCopyIcon {
+.guestGroupIdCopyIcon,
+.spoofAsIcon {
   transition: opacity 300ms ease-in-out;
 }
 
 .collapseAllIcon:hover,
 .expandAllIcon:hover,
 .guestIdCopyIcon:hover,
-.guestGroupIdCopyIcon:hover {
+.guestGroupIdCopyIcon:hover,
+.spoofAsIcon:hover {
   cursor: pointer;
   opacity: 0.8;
 }

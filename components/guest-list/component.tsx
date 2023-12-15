@@ -6,10 +6,12 @@ import CopyIconSVG from 'assets/icons/copy.svg';
 import ExpandAllIconSVG from 'assets/icons/expand-all.svg';
 import ExpandLessIconSVG from 'assets/icons/expand-less.svg';
 import GroupIconSVG from 'assets/icons/group.svg';
+import PasskeyIconSVG from 'assets/icons/passkey.svg';
 import classNames from 'classnames';
 import Translate from 'client/translate';
 import Tooltip from 'components/tooltip';
 import cloneDeep from 'lodash.clonedeep';
+import { usePathname, useRouter } from 'next/navigation';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
@@ -22,6 +24,9 @@ export interface GuestListComponentProps {
 }
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
   const [copiedObjectIds, setCopiedObjectIds] = useState<Set<string>>(new Set());
 
@@ -97,7 +102,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                 <GroupIconSVG className={styles.guestGroupIcon} />
                 {guestGroup.id ? (
                   <Fragment>
-                    {Translate.t('components.guest-list.guest-groups.name', { name: guestGroup.id.substr(-7) })}
+                    {guestGroup.id.substr(-7)}
                     {copiedObjectIds.has(guestGroup.id) ? (
                       <div>
                         <CheckIconSVG className={styles.guestGroupIdCopiedIcon} />
@@ -197,11 +202,30 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               ? Translate.t('components.guest-list.guest-table.rows.rsvp.yes')
               : Translate.t('components.guest-list.guest-table.rows.rsvp.no'),
           )}
-          {renderCollapsibleCell()}
+          {renderCollapsibleCell(
+            <Fragment>
+              <div className={styles.spacer} />
+              <Tooltip
+                placement="left-middle"
+                renderContent={(): string => {
+                  return Translate.t('components.guest-list.guest-table.tooltips.spoofAs', { name: guest.name });
+                }}
+              >
+                <div>
+                  <PasskeyIconSVG
+                    className={styles.spoofAsIcon}
+                    onClick={(): void => {
+                      router.replace(pathname + '?spoofAs=' + guest.id, { scroll: false });
+                    }}
+                  />
+                </div>
+              </Tooltip>
+            </Fragment>,
+          )}
         </tr>
       );
     },
-    [copiedObjectIds, copyObjectId, renderCollapsibleCell],
+    [copiedObjectIds, copyObjectId, pathname, renderCollapsibleCell, router],
   );
 
   const renderGuestGroupMembers = useCallback(
