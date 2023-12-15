@@ -1,6 +1,7 @@
 'use client';
 
 import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
+import { isBrowser } from 'client/browser';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import Flyout from 'components/flyout';
@@ -20,19 +21,31 @@ interface RSVPFlyoutProps {
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
-  const [selectedGuestId, setSelectedGuestId] = useState<string>(token.id || '');
+  const spoofAs = useMemo<string | null>(() => {
+    if (!isBrowser()) {
+      return null;
+    }
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('spoofAs')) {
+      return searchParams.get('spoofAs');
+    }
+    return null;
+  }, []);
+
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(spoofAs || token.id);
 
   const fetchRSVP = useCallback(async (): Promise<{
     guests: MDBGuestData[];
     responses: MDBResponseData[];
   } | null> => {
-    const response = await fetch('/api/rsvp', {
+    const url = spoofAs ? '/api/rsvp?spoofAs=' + spoofAs : '/api/rsvp';
+    const response = await fetch(url, {
       cache: 'no-store',
       method: 'GET',
     });
     const responseJson = await response.json();
     return responseJson;
-  }, []);
+  }, [spoofAs]);
 
   const { data, isLoading } = useSWR('/api/rsvp', fetchRSVP, {
     revalidateIfStale: false,

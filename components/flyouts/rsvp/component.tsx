@@ -133,8 +133,8 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
             return body;
           },
           {
-            populateCache: (updatedResponse, rsvp) => {
-              const responses: MDBResponseData[] = rsvp?.responses || [];
+            populateCache: (updatedResponse, currentCache) => {
+              const responses: MDBResponseData[] = [...(currentCache?.responses || [])];
               const index = responses.findIndex((response: MDBResponseData): boolean => {
                 return response.guest === updatedResponse.guest;
               });
@@ -145,7 +145,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               }
               return {
                 guests: [],
-                ...rsvp,
+                ...currentCache,
                 responses,
               };
             },

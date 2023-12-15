@@ -9,7 +9,7 @@
 }
 
 .guestList::after {
-  content: "";
+  content: '';
   display: block;
   min-height: 100%;
   min-width: 6vw;

@@ -31,12 +31,12 @@ class MongoDBQueryTemplate {
       .collection('guestGroups')
       .aggregate([
         {
-          $limit: 1,
-        },
-        {
           $match: {
             guests: new ObjectId(id),
           },
+        },
+        {
+          $limit: 1,
         },
         {
           $lookup: {
