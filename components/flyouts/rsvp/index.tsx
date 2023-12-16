@@ -8,7 +8,7 @@ import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import LoadingHeart from 'components/loading-heart';
 import { useSearchParams } from 'next/navigation';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
@@ -53,15 +53,11 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
       method: 'GET',
     });
     const responseJson = await response.json();
-    const guests = (responseJson.guests || []).sort(sortByKey('name'));
-    if (guests.some((guest: MDBGuestData): boolean => guest.id === spoofAs)) {
-      setSelectedGuestId((prevState: string): string => spoofAs || prevState);
-    }
     return {
       ...responseJson,
-      guests,
+      guests: (responseJson.guests || []).sort(sortByKey('name')),
     };
-  }, [spoofAs, swrKey]);
+  }, [swrKey]);
 
   const { data, isLoading } = useSWR(swrKey, fetchRSVP, {
     revalidateIfStale: false,
@@ -69,13 +65,17 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ token }) => {
     revalidateOnReconnect: false,
   });
 
+  useEffect(() => {
+    if (spoofAs && data?.guests.some((guest: MDBGuestData): boolean => guest.id === spoofAs)) {
+      setSelectedGuestId(spoofAs);
+    }
+  }, [data, spoofAs]);
+
   const initialValues = useMemo<MDBResponseData | undefined>(() => {
     if (!data) {
       return undefined;
     }
-    return data.responses.find((response: MDBResponseData): boolean => {
-      return response.guest === selectedGuestId;
-    });
+    return data.responses.find((response: MDBResponseData): boolean => response.guest === selectedGuestId);
   }, [data, selectedGuestId]);
 
   const renderContent = useCallback(

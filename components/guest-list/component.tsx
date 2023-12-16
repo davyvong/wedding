@@ -29,6 +29,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
 
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
   const [copiedObjectIds, setCopiedObjectIds] = useState<Set<string>>(new Set());
+  const [spoofedGuests, setSpoofedGuests] = useState<Set<string>>(new Set());
 
   const sortedGuestList = useMemo<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(() => {
     const guestListClone = cloneDeep(guestList);
@@ -74,93 +75,110 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
     }, 2000);
   }, []);
 
-  const renderGuestGroupHeader = useCallback(
-    (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => {
-      const collapseGuestGroup = (): void => {
-        setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
+  const spoofAsGuest = useCallback(
+    (guestId: string): void => {
+      router.replace(pathname + '?spoofAs=' + guestId, { scroll: false });
+      setSpoofedGuests((prevState: Set<string>): Set<string> => {
+        const nextState = new Set(prevState);
+        nextState.add(guestId);
+        return nextState;
+      });
+      setTimeout(() => {
+        setSpoofedGuests((prevState: Set<string>): Set<string> => {
           const nextState = new Set(prevState);
-          if (nextState.has(guestGroup.id)) {
-            nextState.delete(guestGroup.id);
-          } else {
-            nextState.add(guestGroup.id);
-          }
+          nextState.delete(guestId);
           return nextState;
         });
-      };
-
-      return (
-        <tbody>
-          <tr
-            className={classNames(
-              styles.guestGroupHeader,
-              collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupHeaderCollapsed,
-            )}
-            onClick={collapseGuestGroup}
-          >
-            <td colSpan={6}>
-              <div className={styles.guestGroupHeaderText}>
-                <GroupIconSVG className={styles.guestGroupIcon} />
-                {guestGroup.id ? (
-                  <Fragment>
-                    {guestGroup.id.substr(-7)}
-                    {copiedObjectIds.has(guestGroup.id) ? (
-                      <div>
-                        <CheckIconSVG className={styles.guestGroupIdCopiedIcon} />
-                      </div>
-                    ) : (
-                      <Tooltip
-                        placement="right-middle"
-                        renderContent={(): string => Translate.t('components.guest-list.guest-table.tooltips.copy')}
-                      >
-                        <div>
-                          <CopyIconSVG
-                            className={styles.guestGroupIdCopyIcon}
-                            onClick={(event): void => {
-                              event.stopPropagation();
-                              copyObjectId(guestGroup.id);
-                            }}
-                          />
-                        </div>
-                      </Tooltip>
-                    )}
-                  </Fragment>
-                ) : (
-                  Translate.t('components.guest-list.guest-groups.individual')
-                )}
-                <div className={styles.spacer} />
-                <Tooltip
-                  placement="left-middle"
-                  renderContent={(): string => {
-                    return collapsedGuestGroups.has(guestGroup.id)
-                      ? Translate.t('components.guest-list.guest-table.tooltips.expand')
-                      : Translate.t('components.guest-list.guest-table.tooltips.collapse');
-                  }}
-                >
-                  <div>
-                    <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
-                  </div>
-                </Tooltip>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      );
+      }, 2000);
     },
-    [collapsedGuestGroups, copiedObjectIds, copyObjectId],
+    [pathname, router],
+  );
+
+  const collapseGuestGroup = useCallback((guestGroupId: string): void => {
+    setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
+      const nextState = new Set(prevState);
+      if (nextState.has(guestGroupId)) {
+        nextState.delete(guestGroupId);
+      } else {
+        nextState.add(guestGroupId);
+      }
+      return nextState;
+    });
+  }, []);
+
+  const renderGuestGroupHeader = useCallback(
+    (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => (
+      <tbody>
+        <tr
+          className={classNames(
+            styles.guestGroupHeader,
+            collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupHeaderCollapsed,
+          )}
+          onClick={(): void => collapseGuestGroup(guestGroup.id)}
+        >
+          <td colSpan={100}>
+            <div className={styles.guestGroupId}>
+              <GroupIconSVG className={styles.guestGroupIcon} />
+              {guestGroup.id ? (
+                <Fragment>
+                  {guestGroup.id.substr(-7)}
+                  {copiedObjectIds.has(guestGroup.id) ? (
+                    <div>
+                      <CheckIconSVG className={styles.copiedGuestGroupIdIcon} />
+                    </div>
+                  ) : (
+                    <Tooltip
+                      placement="right-middle"
+                      renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
+                    >
+                      <div>
+                        <CopyIconSVG
+                          className={classNames(styles.iconButton, styles.copyGuestGroupIdIcon)}
+                          onClick={(event): void => {
+                            event.stopPropagation();
+                            copyObjectId(guestGroup.id);
+                          }}
+                        />
+                      </div>
+                    </Tooltip>
+                  )}
+                </Fragment>
+              ) : (
+                Translate.t('components.guest-list.individuals')
+              )}
+              <div className={styles.spacer} />
+              <Tooltip
+                placement="left-middle"
+                renderContent={(): string => {
+                  return collapsedGuestGroups.has(guestGroup.id)
+                    ? Translate.t('components.guest-list.tooltips.expand')
+                    : Translate.t('components.guest-list.tooltips.collapse');
+                }}
+              >
+                <div>
+                  <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
+                </div>
+              </Tooltip>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    ),
+    [collapseGuestGroup, collapsedGuestGroups, copiedObjectIds, copyObjectId],
   );
 
   const renderCollapsibleCell = useCallback(
     (children?: JSX.Element | string): JSX.Element => (
       <td>
         <div>
-          <div className={styles.guestGroupGuestsCell}>{children}</div>
+          <div className={styles.collapsibleCell}>{children}</div>
         </div>
       </td>
     ),
     [],
   );
 
-  const renderGuestGroupMember = useCallback(
+  const renderGuest = useCallback(
     (
       guest: MDBGuestData,
       guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] },
@@ -174,8 +192,8 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           return <Fragment />;
         }
         return guestResponse.attendance
-          ? Translate.t('components.guest-list.guest-table.rows.attendance.yes')
-          : Translate.t('components.guest-list.guest-table.rows.attendance.no');
+          ? Translate.t('components.guest-list.rows.attendance.yes')
+          : Translate.t('components.guest-list.rows.attendance.no');
       };
 
       return (
@@ -190,11 +208,11 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               ) : (
                 <Tooltip
                   placement="right-middle"
-                  renderContent={(): string => Translate.t('components.guest-list.guest-table.tooltips.copy')}
+                  renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
                 >
                   <div>
                     <CopyIconSVG
-                      className={styles.guestIdCopyIcon}
+                      className={classNames(styles.iconButton, styles.copyGuestIdIcon)}
                       onClick={(): void => {
                         copyObjectId(guest.id);
                       }}
@@ -208,37 +226,41 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           {renderCollapsibleCell(guest.email)}
           {renderCollapsibleCell(
             guestResponse
-              ? Translate.t('components.guest-list.guest-table.rows.rsvp.yes')
-              : Translate.t('components.guest-list.guest-table.rows.rsvp.no'),
+              ? Translate.t('components.guest-list.rows.rsvp.yes')
+              : Translate.t('components.guest-list.rows.rsvp.no'),
           )}
           {renderCollapsibleCell(renderGuestAttendance())}
           {renderCollapsibleCell(
             <Fragment>
               <div className={styles.spacer} />
-              <Tooltip
-                placement="left-middle"
-                renderContent={(): string => {
-                  return Translate.t('components.guest-list.guest-table.tooltips.spoofAs', { name: guest.name });
-                }}
-              >
+              {spoofedGuests.has(guest.id) ? (
                 <div>
-                  <PasskeyIconSVG
-                    className={styles.spoofAsIcon}
-                    onClick={(): void => {
-                      router.replace(pathname + '?spoofAs=' + guest.id, { scroll: false });
-                    }}
-                  />
+                  <CheckIconSVG />
                 </div>
-              </Tooltip>
+              ) : (
+                <Tooltip
+                  placement="left-middle"
+                  renderContent={(): string => {
+                    return Translate.t('components.guest-list.tooltips.spoofAs', { name: guest.name });
+                  }}
+                >
+                  <div>
+                    <PasskeyIconSVG
+                      className={classNames(styles.iconButton, styles.spoofAsIcon)}
+                      onClick={(): void => spoofAsGuest(guest.id)}
+                    />
+                  </div>
+                </Tooltip>
+              )}
             </Fragment>,
           )}
         </tr>
       );
     },
-    [copiedObjectIds, copyObjectId, pathname, renderCollapsibleCell, router],
+    [copiedObjectIds, copyObjectId, renderCollapsibleCell, spoofAsGuest, spoofedGuests],
   );
 
-  const renderGuestGroupMembers = useCallback(
+  const renderGuestGroup = useCallback(
     (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => {
       if (guestGroup.guests.length === 0) {
         return <Fragment />;
@@ -246,25 +268,25 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
       return (
         <tbody
           className={classNames(
-            styles.guestGroupGuests,
-            collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupGuestsCollapsed,
+            styles.guestGroup,
+            collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupCollapsed,
           )}
         >
-          {guestGroup.guests.map((guest: MDBGuestData): JSX.Element => renderGuestGroupMember(guest, guestGroup))}
+          {guestGroup.guests.map((guest: MDBGuestData): JSX.Element => renderGuest(guest, guestGroup))}
         </tbody>
       );
     },
-    [collapsedGuestGroups, renderGuestGroupMember],
+    [collapsedGuestGroups, renderGuest],
   );
 
-  const renderGuestGroup = useCallback(
+  const renderGuestGroupWithHeader = useCallback(
     (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }, index: number): JSX.Element => (
       <Fragment key={guestGroup.id || index}>
         {renderGuestGroupHeader(guestGroup)}
-        {renderGuestGroupMembers(guestGroup)}
+        {renderGuestGroup(guestGroup)}
       </Fragment>
     ),
-    [renderGuestGroupHeader, renderGuestGroupMembers],
+    [renderGuestGroupHeader, renderGuestGroup],
   );
 
   return (
@@ -272,27 +294,27 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
       <table className={styles.guestTable}>
         <thead>
           <tr>
-            <th>{Translate.t('components.guest-list.guest-table.columns.id')}</th>
-            <th>{Translate.t('components.guest-list.guest-table.columns.name')}</th>
-            <th>{Translate.t('components.guest-list.guest-table.columns.email')}</th>
-            <th>{Translate.t('components.guest-list.guest-table.columns.rsvp')}</th>
-            <th>{Translate.t('components.guest-list.guest-table.columns.attendance')}</th>
+            <th>{Translate.t('components.guest-list.columns.id')}</th>
+            <th>{Translate.t('components.guest-list.columns.name')}</th>
+            <th>{Translate.t('components.guest-list.columns.email')}</th>
+            <th>{Translate.t('components.guest-list.columns.rsvp')}</th>
+            <th>{Translate.t('components.guest-list.columns.attendance')}</th>
             <th>
               <div className={styles.guestTableActionHeader}>
                 <Tooltip
                   placement="left-middle"
                   renderContent={(): string => {
                     return areAllGuestGroupsExpanded
-                      ? Translate.t('components.guest-list.guest-table.tooltips.collapse-all')
-                      : Translate.t('components.guest-list.guest-table.tooltips.expand-all');
+                      ? Translate.t('components.guest-list.tooltips.collapse-all')
+                      : Translate.t('components.guest-list.tooltips.expand-all');
                   }}
                 >
                   <div>
                     {areAllGuestGroupsExpanded ? (
-                      <CollapseAllIconSVG className={styles.collapseAllIcon} onClick={collapseAllGuestGroups} />
+                      <CollapseAllIconSVG className={styles.iconButton} onClick={collapseAllGuestGroups} />
                     ) : (
                       <ExpandAllIconSVG
-                        className={styles.expandAllIcon}
+                        className={styles.iconButton}
                         onClick={(): void => {
                           setCollapsedGuestGroups(new Set());
                         }}
@@ -304,7 +326,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             </th>
           </tr>
         </thead>
-        {sortedGuestList.map(renderGuestGroup)}
+        {sortedGuestList.map(renderGuestGroupWithHeader)}
       </table>
     </div>
   );

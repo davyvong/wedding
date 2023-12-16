@@ -53,11 +53,8 @@
 }
 
 .guestGroupHeader {
-  transition: opacity 300ms ease-in-out;
-}
-
-.guestGroupHeader {
   opacity: 0.9;
+  transition: opacity 300ms ease-in-out;
 }
 
 .guestGroupHeader:hover {
@@ -65,7 +62,7 @@
   opacity: 0.8;
 }
 
-.guestGroupHeaderText {
+.guestGroupId {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -83,50 +80,42 @@
   transform: rotate(180deg);
 }
 
-.guestGroupGuests td {
+.guestGroup td {
   padding: 0;
 }
 
-.guestGroupGuests td > div {
+.guestGroup td > div {
   max-height: 56px;
   overflow: hidden;
   transition: max-height 300ms ease-in-out;
 }
 
-.guestGroupGuestsCollapsed td > div {
+.guestGroupCollapsed td > div {
   max-height: 0;
 }
 
-.guestGroupGuestsCell {
+.collapsibleCell {
   align-items: center;
   display: flex;
   flex-direction: row;
   padding: 1rem 1.5rem;
 }
 
-.guestGroupGuestsCell svg {
+.collapsibleCell svg {
   margin-left: 1rem;
 }
 
-.collapseAllIcon,
-.expandAllIcon,
-.guestIdCopyIcon,
-.guestGroupIdCopyIcon,
-.spoofAsIcon {
+.iconButton {
   transition: opacity 300ms ease-in-out;
 }
 
-.collapseAllIcon:hover,
-.expandAllIcon:hover,
-.guestIdCopyIcon:hover,
-.guestGroupIdCopyIcon:hover,
-.spoofAsIcon:hover {
+.iconButton:hover {
   cursor: pointer;
   opacity: 0.8;
 }
 
-.guestGroupIdCopyIcon,
-.guestGroupIdCopiedIcon {
+.copiedGuestGroupIdIcon,
+.copyGuestGroupIdIcon {
   margin-left: 1rem;
 }
 
