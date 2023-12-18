@@ -109,7 +109,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       if (onValidate()) {
         mutate(
           swrKey,
-          async () => {
+          async (): Promise<MDBResponseData> => {
             setIsSaving(true);
             const response = await fetch('/api/rsvp', {
               body: JSON.stringify({
@@ -124,33 +124,21 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               method: 'PUT',
             });
             setIsSaving(false);
-            const body: MDBResponseData = await response.json();
-            setValues({
-              attendance: body.attendance,
-              dietaryRestrictions: body.dietaryRestrictions,
-              entree: body.entree,
-              mailingAddress: body.mailingAddress,
-              message: body.message,
-            });
+            return response.json();
           },
           {
-            optimisticData: currentData => {
+            populateCache: (
+              result: MDBResponseData,
+              currentData: { guests?: MDBGuestData[]; responses?: MDBResponseData[] },
+            ): { guests: MDBGuestData[]; responses: MDBResponseData[] } => {
               const responses = [...(currentData?.responses || [])];
               const index = responses.findIndex((response: MDBResponseData): boolean => {
                 return response.guest === selectedGuestId;
               });
-              const updatedResponse = {
-                attendance: values.attendance,
-                dietaryRestrictions: values.dietaryRestrictions,
-                entree: values.entree,
-                guest: selectedGuestId,
-                mailingAddress: values.mailingAddress,
-                message: values.message,
-              };
               if (index > -1) {
-                Object.assign(responses[index], updatedResponse);
+                Object.assign(responses[index], result);
               } else {
-                responses.push(updatedResponse);
+                responses.push(result);
               }
               return {
                 guests: [],
@@ -158,7 +146,6 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
                 responses,
               };
             },
-            populateCache: true,
             revalidate: false,
           },
         );
@@ -216,7 +203,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       ...defaultValues,
       ...initialValues,
     });
-  }, [initialValues]);
+  }, [initialValues, selectedGuestId]);
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
