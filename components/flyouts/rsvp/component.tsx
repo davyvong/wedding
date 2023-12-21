@@ -25,7 +25,6 @@ interface RSVPFlyoutComponentProps extends FlyoutContentComponentProps {
   isEditMode: boolean;
   selectedGuestId: string;
   setSelectedGuestId: Dispatch<SetStateAction<string>>;
-  swrKey: string;
 }
 
 export interface RSVPFlyoutComponentValues {
@@ -59,7 +58,6 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
   selectedGuestId,
   setSelectedGuestId,
   setIsOpen,
-  swrKey,
 }) => {
   const [values, setValues] = useState<RSVPFlyoutComponentValues>({
     ...defaultValues,
@@ -108,20 +106,19 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       event.preventDefault();
       if (onValidate()) {
         mutate(
-          swrKey,
+          '/api/rsvp/' + selectedGuestId,
           async (): Promise<MDBResponseData> => {
             setIsSaving(true);
-            const response = await fetch('/api/rsvp', {
+            const response = await fetch('/api/rsvp/' + selectedGuestId, {
               body: JSON.stringify({
                 attendance: values.attendance,
                 dietaryRestrictions: values.dietaryRestrictions,
                 entree: values.entree,
-                guest: selectedGuestId,
                 mailingAddress: values.mailingAddress,
                 message: values.message,
               }),
               cache: 'no-store',
-              method: 'PUT',
+              method: 'POST',
             });
             setIsSaving(false);
             return response.json();
@@ -151,7 +148,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         );
       }
     },
-    [mutate, onValidate, selectedGuestId, swrKey, values],
+    [mutate, onValidate, selectedGuestId, values],
   );
 
   const renderGuestPartySelector = useCallback(() => {
@@ -168,7 +165,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               <Button
                 className={isSelected ? styles.selectedGuestButton : styles.guestButton}
                 key={guest.id}
-                onClick={() => setSelectedGuestId(guest.id)}
+                onClick={(): void => setSelectedGuestId(guest.id)}
                 type="button"
               >
                 {isSelected && <CheckIconSVG />}

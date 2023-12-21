@@ -101,10 +101,6 @@
   padding: 1rem 1.5rem;
 }
 
-.collapsibleCell svg {
-  margin-left: 1rem;
-}
-
 .iconButton {
   transition: opacity 300ms ease-in-out;
 }
@@ -115,7 +111,8 @@
 }
 
 .copiedGuestGroupIdIcon,
-.copyGuestGroupIdIcon {
+.copyGuestGroupIdIcon,
+.copyGuestIdIcon {
   margin-left: 1rem;
 }
 

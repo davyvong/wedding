@@ -29,22 +29,34 @@ export interface FlyoutContentComponentProps {
 }
 
 interface FlyoutComponentProps {
+  onToggleFlyout?: (open: boolean) => void;
   openWithURLParam?: string;
   renderContent: (props: FlyoutContentComponentProps) => JSX.Element;
   renderReference: (props: FlyoutReferenceComponentProps) => JSX.Element;
 }
 
-const FlyoutComponent: FC<FlyoutComponentProps> = ({ openWithURLParam, renderContent, renderReference }) => {
+const FlyoutComponent: FC<FlyoutComponentProps> = ({
+  onToggleFlyout,
+  openWithURLParam,
+  renderContent,
+  renderReference,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleFlyout = useCallback((open: boolean): void => {
-    setIsOpen(open);
-    if (!open) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete('flyout');
-      window.history.pushState({ path: url.href }, '', url.href);
-    }
-  }, []);
+  const toggleFlyout = useCallback(
+    (open: boolean): void => {
+      setIsOpen(open);
+      if (onToggleFlyout) {
+        onToggleFlyout(open);
+      }
+      if (!open) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('flyout');
+        window.history.pushState({ path: url.href }, '', url.href);
+      }
+    },
+    [onToggleFlyout],
+  );
 
   const { refs, context } = useFloating({
     onOpenChange: toggleFlyout,
@@ -70,9 +82,11 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({ openWithURLParam, renderCon
   useEffect(() => {
     if (isBrowser() && openWithURLParam) {
       const searchParams = new URLSearchParams(window.location.search);
-      setIsOpen(searchParams.get('flyout') === openWithURLParam);
+      if (searchParams.get('flyout') === openWithURLParam) {
+        toggleFlyout(true);
+      }
     }
-  }, [openWithURLParam]);
+  }, [openWithURLParam, toggleFlyout]);
 
   useEffect(() => {
     if (isOpen) {

@@ -6,12 +6,13 @@ import CopyIconSVG from 'assets/icons/copy.svg';
 import ExpandAllIconSVG from 'assets/icons/expand-all.svg';
 import ExpandLessIconSVG from 'assets/icons/expand-less.svg';
 import GroupIconSVG from 'assets/icons/group.svg';
-import PasskeyIconSVG from 'assets/icons/passkey.svg';
+import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
 import classNames from 'classnames';
 import Translate from 'client/translate';
+import { FlyoutReferenceComponentProps } from 'components/flyout/component';
+import RSVPFlyout from 'components/flyouts/rsvp';
 import Tooltip from 'components/tooltip';
 import cloneDeep from 'lodash.clonedeep';
-import { usePathname, useRouter } from 'next/navigation';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { MDBGuestData } from 'server/models/guest';
 import { MDBResponseData } from 'server/models/response';
@@ -24,12 +25,8 @@ export interface GuestListComponentProps {
 }
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
-  const router = useRouter();
-  const pathname = usePathname();
-
+  const [clickedIconButtons, setClickedIconButtons] = useState<Set<string>>(new Set());
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
-  const [copiedObjectIds, setCopiedObjectIds] = useState<Set<string>>(new Set());
-  const [spoofedGuests, setSpoofedGuests] = useState<Set<string>>(new Set());
 
   const sortedGuestList = useMemo<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(() => {
     const guestListClone = cloneDeep(guestList);
@@ -59,40 +56,20 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
     });
   }, [guestList]);
 
-  const copyObjectId = useCallback((objectId: string): void => {
-    navigator.clipboard.writeText(objectId);
-    setCopiedObjectIds((prevState: Set<string>): Set<string> => {
+  const onClickIconButton = useCallback((objectId: string): void => {
+    setClickedIconButtons((prevState: Set<string>): Set<string> => {
       const nextState = new Set(prevState);
       nextState.add(objectId);
       return nextState;
     });
     setTimeout(() => {
-      setCopiedObjectIds((prevState: Set<string>): Set<string> => {
+      setClickedIconButtons((prevState: Set<string>): Set<string> => {
         const nextState = new Set(prevState);
         nextState.delete(objectId);
         return nextState;
       });
     }, 2000);
   }, []);
-
-  const spoofAsGuest = useCallback(
-    (guestId: string): void => {
-      router.replace(pathname + '?spoofAs=' + guestId, { scroll: false });
-      setSpoofedGuests((prevState: Set<string>): Set<string> => {
-        const nextState = new Set(prevState);
-        nextState.add(guestId);
-        return nextState;
-      });
-      setTimeout(() => {
-        setSpoofedGuests((prevState: Set<string>): Set<string> => {
-          const nextState = new Set(prevState);
-          nextState.delete(guestId);
-          return nextState;
-        });
-      }, 2000);
-    },
-    [pathname, router],
-  );
 
   const collapseGuestGroup = useCallback((guestGroupId: string): void => {
     setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
@@ -122,7 +99,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               {guestGroup.id ? (
                 <Fragment>
                   {guestGroup.id.substr(-7)}
-                  {copiedObjectIds.has(guestGroup.id) ? (
+                  {clickedIconButtons.has('copiedGuestGroupId-' + guestGroup.id) ? (
                     <div>
                       <CheckIconSVG className={styles.copiedGuestGroupIdIcon} />
                     </div>
@@ -131,12 +108,12 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                       placement="right-middle"
                       renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
                     >
-                      <div>
+                      <div className={classNames(styles.iconButton, styles.copyGuestGroupIdIcon)}>
                         <CopyIconSVG
-                          className={classNames(styles.iconButton, styles.copyGuestGroupIdIcon)}
                           onClick={(event): void => {
                             event.stopPropagation();
-                            copyObjectId(guestGroup.id);
+                            navigator.clipboard.writeText(guestGroup.id);
+                            onClickIconButton('copiedGuestGroupId-' + guestGroup.id);
                           }}
                         />
                       </div>
@@ -164,7 +141,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
         </tr>
       </tbody>
     ),
-    [collapseGuestGroup, collapsedGuestGroups, copiedObjectIds, copyObjectId],
+    [collapseGuestGroup, collapsedGuestGroups, clickedIconButtons, onClickIconButton],
   );
 
   const renderCollapsibleCell = useCallback(
@@ -201,7 +178,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           {renderCollapsibleCell(
             <Fragment>
               {guest.id.substr(-7)}
-              {copiedObjectIds.has(guest.id) ? (
+              {clickedIconButtons.has('copiedGuestId-' + guest.id) ? (
                 <div>
                   <CheckIconSVG />
                 </div>
@@ -210,11 +187,11 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                   placement="right-middle"
                   renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
                 >
-                  <div>
+                  <div className={classNames(styles.iconButton, styles.copyGuestIdIcon)}>
                     <CopyIconSVG
-                      className={classNames(styles.iconButton, styles.copyGuestIdIcon)}
                       onClick={(): void => {
-                        copyObjectId(guest.id);
+                        navigator.clipboard.writeText(guest.id);
+                        onClickIconButton('copiedGuestId-' + guest.id);
                       }}
                     />
                   </div>
@@ -233,31 +210,28 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           {renderCollapsibleCell(
             <Fragment>
               <div className={styles.spacer} />
-              {spoofedGuests.has(guest.id) ? (
-                <div>
-                  <CheckIconSVG />
-                </div>
-              ) : (
-                <Tooltip
-                  placement="left-middle"
-                  renderContent={(): string => {
-                    return Translate.t('components.guest-list.tooltips.spoofAs', { name: guest.name });
-                  }}
-                >
-                  <div>
-                    <PasskeyIconSVG
-                      className={classNames(styles.iconButton, styles.spoofAsIcon)}
-                      onClick={(): void => spoofAsGuest(guest.id)}
-                    />
+              <RSVPFlyout
+                openWithURLParam=""
+                renderReference={(referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
+                  <div {...referenceProps}>
+                    <Tooltip
+                      placement="left-middle"
+                      renderContent={(): string => Translate.t('components.guest-list.tooltips.view-rsvp')}
+                    >
+                      <div className={styles.iconButton}>
+                        <MarkEmailReadIconSVG />
+                      </div>
+                    </Tooltip>
                   </div>
-                </Tooltip>
-              )}
+                )}
+                token={{ id: guest.id }}
+              />
             </Fragment>,
           )}
         </tr>
       );
     },
-    [copiedObjectIds, copyObjectId, renderCollapsibleCell, spoofAsGuest, spoofedGuests],
+    [clickedIconButtons, onClickIconButton, renderCollapsibleCell],
   );
 
   const renderGuestGroup = useCallback(
@@ -309,16 +283,11 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                       : Translate.t('components.guest-list.tooltips.expand-all');
                   }}
                 >
-                  <div>
+                  <div className={styles.iconButton}>
                     {areAllGuestGroupsExpanded ? (
-                      <CollapseAllIconSVG className={styles.iconButton} onClick={collapseAllGuestGroups} />
+                      <CollapseAllIconSVG onClick={collapseAllGuestGroups} />
                     ) : (
-                      <ExpandAllIconSVG
-                        className={styles.iconButton}
-                        onClick={(): void => {
-                          setCollapsedGuestGroups(new Set());
-                        }}
-                      />
+                      <ExpandAllIconSVG onClick={(): void => setCollapsedGuestGroups(new Set())} />
                     )}
                   </div>
                 </Tooltip>

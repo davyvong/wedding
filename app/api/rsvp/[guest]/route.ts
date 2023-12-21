@@ -6,7 +6,7 @@ import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { boolean, mixed, object, string } from 'yup';
 
-export const GET = async (request: NextRequest): Promise<Response> => {
+export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
       scope: RateLimiterScope.RSVP,
@@ -19,22 +19,23 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!token) {
       return new Response(undefined, { status: 401 });
     }
-    const requestURL = new URL(request.url);
-    const params = {
-      spoofAs: requestURL.searchParams.get('spoofAs'),
-    };
-    if (params.spoofAs) {
+    const paramsSchema = object({
+      guest: string()
+        .required()
+        .matches(/^[0-9a-fA-F]{24}$/),
+    });
+    if (!paramsSchema.isValidSync(params)) {
+      return new Response(undefined, { status: 400 });
+    }
+    if (token.id !== params.guest) {
       const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-      if (adminGuestIds.has(token.id)) {
-        const spoofedGuest = await MongoDBQueryTemplate.findGuestFromId(params.spoofAs);
-        if (spoofedGuest) {
-          token.id = params.spoofAs;
-        }
+      if (!adminGuestIds.has(token.id)) {
+        return new Response(undefined, { status: 403 });
       }
     }
-    const response = await MongoDBQueryTemplate.findRSVPFromGuestId(token.id);
+    const response = await MongoDBQueryTemplate.findRSVPFromGuestId(params.guest);
     if (!response) {
-      return new Response(undefined, { status: 403 });
+      return new Response(undefined, { status: 404 });
     }
     return NextResponse.json(response, { status: 200 });
   } catch (error: unknown) {
@@ -42,7 +43,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
   }
 };
 
-export const PUT = async (request: NextRequest): Promise<Response> => {
+export const POST = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
       scope: RateLimiterScope.RSVP,
@@ -55,28 +56,35 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
     if (!token) {
       return new Response(undefined, { status: 401 });
     }
+    const paramsSchema = object({
+      guest: string()
+        .required()
+        .matches(/^[0-9a-fA-F]{24}$/),
+    });
+    if (!paramsSchema.isValidSync(params)) {
+      return new Response(undefined, { status: 400 });
+    }
     const body = await request.json();
     const bodySchema = object({
       attendance: boolean().required(),
       dietaryRestrictions: string(),
       entree: mixed<EntreeOptions>().oneOf(Object.values(EntreeOptions)).required(),
-      guest: string()
-        .required()
-        .matches(/^[0-9a-fA-F]{24}$/),
       mailingAddress: string(),
       message: string().required(),
     });
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
-    const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-    if (body.guest !== token.id && !adminGuestIds.has(token.id)) {
-      const guestGroup = await MongoDBQueryTemplate.findGuestGroupFromGuestIds([token.id, body.guest]);
-      if (!guestGroup) {
-        return new Response(undefined, { status: 403 });
+    if (params.guest !== token.id) {
+      const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
+      if (!adminGuestIds.has(token.id)) {
+        const guestGroup = await MongoDBQueryTemplate.findGuestGroupFromGuestIds([token.id, params.guest]);
+        if (!guestGroup) {
+          return new Response(undefined, { status: 403 });
+        }
       }
     }
-    const response = await MongoDBQueryTemplate.findAndUpdateResponse(body.guest, {
+    const response = await MongoDBQueryTemplate.findAndUpdateResponse(params.guest, {
       attendance: body.attendance,
       dietaryRestrictions: body.dietaryRestrictions,
       entree: body.entree,
@@ -84,7 +92,7 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
       message: body.message,
     });
     if (!response) {
-      return new Response(undefined, { status: 403 });
+      return new Response(undefined, { status: 204 });
     }
     return NextResponse.json(response, { status: 200 });
   } catch (error: unknown) {
