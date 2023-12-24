@@ -72,8 +72,23 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
       transform: 'translateX(100%)',
     },
     duration: 650,
+    initial: {
+      transform: 'translateX(100%)',
+    },
     open: {
       transform: 'translateX(0%)',
+    },
+  });
+  const { styles: backdropStyles } = useTransitionStyles(context, {
+    close: {
+      opacity: 0,
+    },
+    duration: 650,
+    initial: {
+      opacity: 0,
+    },
+    open: {
+      opacity: 1,
     },
   });
 
@@ -106,7 +121,9 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
       {isMounted &&
         createPortal(
           <Fragment>
-            <FloatingOverlay lockScroll />
+            <FloatingOverlay className={styles.overlay} lockScroll>
+              <div className={styles.overlayBlur} style={backdropStyles} />
+            </FloatingOverlay>
             <FloatingFocusManager context={context}>
               <div
                 className={styles.flyout}

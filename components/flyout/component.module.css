@@ -38,6 +38,16 @@
   background-color: var(--color-inverse-scrollbar-thumb-active);
 }
 
+.overlay {
+  z-index: 2;
+}
+
+.overlayBlur {
+  backdrop-filter: blur(0.25rem);
+  height: 100%;
+  width: 100%;
+}
+
 .closeButton {
   background-color: var(--palette-transparent);
   border: 0;
