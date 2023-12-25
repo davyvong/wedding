@@ -6,11 +6,13 @@ import RedisKey from 'server/models/redis-key';
 import { string } from 'yup';
 
 export enum RateLimiterScope {
-  Address = 'Address',
-  Global = 'Global',
-  EmailAuthentication = 'EmailAuthentication',
+  AddressSearch = 'AddressSearch',
   RSVP = 'RSVP',
-  Spotify = 'Spotify',
+  SecretCode = 'SecretCode',
+  SecretEmail = 'SecretEmail',
+  SignOut = 'SignOut',
+  SpotifyPlaylist = 'SpotifyPlaylist',
+  SpotifySearch = 'SpotifySearch',
 }
 
 interface RateLimiterOptions {
@@ -57,7 +59,7 @@ class RateLimiter {
       });
     }
     try {
-      const redisKey = RedisKey.create('rate-limit', this.scope, ip);
+      const redisKey = RedisKey.create('rate-limit', this.scope.valueOf().toLowerCase(), ip);
       if (!(await kv.exists(redisKey))) {
         await kv.set(redisKey, 0, { ex: this.interval });
       }

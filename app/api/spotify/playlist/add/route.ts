@@ -8,7 +8,7 @@ import { array, object, string } from 'yup';
 export const POST = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.Spotify,
+      scope: RateLimiterScope.SpotifyPlaylist,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {

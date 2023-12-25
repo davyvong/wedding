@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.Global,
+      scope: RateLimiterScope.SignOut,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {

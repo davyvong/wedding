@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.Spotify,
+      scope: RateLimiterScope.SpotifyPlaylist,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
@@ -21,7 +21,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
-    return NextResponse.json(playlist, { status: 200 });
+    return NextResponse.json(playlist, {
+      headers: { 'Cache-Control': 's-maxage=120, stale-while-revalidate=60' },
+      status: 200,
+    });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }

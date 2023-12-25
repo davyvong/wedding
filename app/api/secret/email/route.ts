@@ -23,8 +23,8 @@ const getRandomWords = (count: number): string[] => {
 export const POST = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      requestsPerInterval: 10,
-      scope: RateLimiterScope.EmailAuthentication,
+      requestsPerInterval: 25,
+      scope: RateLimiterScope.SecretEmail,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {

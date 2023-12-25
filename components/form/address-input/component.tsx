@@ -64,7 +64,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
 
   const fetchAddresses = useCallback(async (): Promise<string[]> => {
     try {
-      const response = await fetch('/api/address?lookup=' + value);
+      const response = await fetch('/api/address/search?lookup=' + value);
       return response.json();
     } catch (error: unknown) {
       return [];
@@ -72,7 +72,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
   }, [value]);
 
   const { data: suggestionsData, isLoading: suggestionsLoading } = useSWR(
-    value ? '/api/address?lookup=' + value : null,
+    value ? '/api/address/search?lookup=' + value : null,
     fetchAddresses,
     {
       revalidateIfStale: false,

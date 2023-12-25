@@ -16,8 +16,8 @@ export interface CanadaPostSearchResult {
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      requestsPerInterval: 5000,
-      scope: RateLimiterScope.Address,
+      requestsPerInterval: 3000,
+      scope: RateLimiterScope.AddressSearch,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
@@ -65,6 +65,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       .filter(Boolean);
     return NextResponse.json(addresses, {
       headers: { 'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400' },
+      status: 200,
     });
   } catch (error: unknown) {
     return ServerError.handle(error);
