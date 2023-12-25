@@ -9,80 +9,65 @@ export enum LandingBreakpoints {
   Mobile,
   Tablet,
   Desktop,
-  Ultrawide,
 }
+
+const getSpacing = (breakpoint: LandingBreakpoints): string => {
+  switch (breakpoint) {
+    case LandingBreakpoints.Mobile: {
+      return '2rem';
+    }
+    case LandingBreakpoints.Tablet: {
+      return '3rem';
+    }
+    case LandingBreakpoints.Desktop: {
+      return '4rem';
+    }
+    default: {
+      return '2rem';
+    }
+  }
+};
 
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
   gsap.context(() => {
-    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      const firstSectionTimeline = gsap.timeline({
-        overwrite: true,
-        scrollTrigger: {
-          invalidateOnRefresh: true,
-          pin: true,
-          scroller: '.' + styles.landing,
-          scrub: true,
-          start: 'top top',
-          trigger: '.' + styles.firstSection,
-        },
-      });
-      firstSectionTimeline.to(
-        '.' + styles.firstSection,
-        {
-          paddingBottom: '6vw',
-          paddingLeft: '6vw',
-          paddingRight: '6vw',
-        },
-        'zoomCoverImage',
-      );
-      firstSectionTimeline.to('.' + styles.coverImage, { borderRadius: '2rem' }, 'zoomCoverImage');
-    }
-    const secondSectionTimeline = gsap.timeline({
+    const firstSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
-        end: (self: ScrollTrigger) => {
-          const engagementPhotoSet = self.trigger?.firstChild as HTMLElement;
-          return 'bottom +=' + (window.innerWidth - engagementPhotoSet.clientWidth);
-        },
         invalidateOnRefresh: true,
         pin: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: 'top top',
-        trigger: '.' + styles.secondSection,
+        start: 'top 80px',
+        trigger: '.' + styles.firstSection,
       },
     });
-    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      secondSectionTimeline.to('.' + styles.engagementPhoto, {
-        duration: 1,
-        transform: 'translateY(0)',
-      });
-    }
-    secondSectionTimeline.to('.' + styles.engagementPhotoSet, {
-      duration: 5,
-      transform: (index: number, engagementPhotoSet: Element) => {
-        return `translateX(calc(100vw - ${engagementPhotoSet.clientWidth}px))`;
+    firstSectionTimeline.to(
+      '.' + styles.firstSection,
+      {
+        paddingLeft: getSpacing(breakpoint),
+        paddingRight: getSpacing(breakpoint),
       },
-    });
-    // if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-    //   secondSectionTimeline.to('.' + styles.engagementPhoto, {
-    //     duration: 1,
-    //     transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
-    //       return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
-    //     },
-    //   });
-    // }
-    const thirdSectionTimeline = gsap.timeline({
+      'zoomCoverImage',
+    );
+    firstSectionTimeline.to(
+      '.' + styles.coverImage,
+      {
+        borderRadius: '1rem',
+        height: `calc(100vh - 80px - ${getSpacing(breakpoint)})`,
+      },
+      'zoomCoverImage',
+    );
+    const secondSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
         invalidateOnRefresh: true,
         scroller: '.' + styles.landing,
         scrub: true,
         start: 'top center',
-        trigger: '.' + styles.thirdSection,
+        trigger: '.' + styles.secondSection,
       },
     });
-    thirdSectionTimeline.fromTo(
+    secondSectionTimeline.fromTo(
       '.' + styles.backgroundStroke + ' path',
       {
         strokeDashoffset: 40626,
@@ -94,5 +79,38 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         },
       },
     );
+    const thirdSectionTimeline = gsap.timeline({
+      overwrite: true,
+      scrollTrigger: {
+        end: (self: ScrollTrigger) => {
+          const engagementPhotoSet = self.trigger?.firstChild as HTMLElement;
+          return 'bottom +=' + (window.innerWidth - engagementPhotoSet.clientWidth);
+        },
+        invalidateOnRefresh: true,
+        pin: true,
+        scroller: '.' + styles.landing,
+        scrub: true,
+        start: '50% 50%',
+        trigger: '.' + styles.thirdSection,
+      },
+    });
+    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
+      thirdSectionTimeline.to('.' + styles.engagementPhoto, {
+        duration: 1,
+        transform: 'translateY(0)',
+      });
+    }
+    thirdSectionTimeline.to('.' + styles.engagementPhotoSet, {
+      duration: 5,
+      transform: 'translateX(calc(100vw - 100%))',
+    });
+    // if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
+    //   thirdSectionTimeline.to('.' + styles.engagementPhoto, {
+    //     duration: 1,
+    //     transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
+    //       return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+    //     },
+    //   });
+    // }
     ScrollTrigger.refresh();
   });

@@ -25,8 +25,11 @@ const LandingComponent: FC = () => {
       .add('(max-width: 767px)', () => {
         context = createLandingContext(LandingBreakpoints.Mobile);
       })
-      .add('(min-width: 768px)', () => {
+      .add('(min-width: 768px) and (max-width: 1023px)', () => {
         context = createLandingContext(LandingBreakpoints.Tablet);
+      })
+      .add('(min-width: 1024px)', () => {
+        context = createLandingContext(LandingBreakpoints.Desktop);
       });
     return () => {
       SmoothScroll.destroy();
@@ -92,14 +95,14 @@ const LandingComponent: FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.thirdSection}>
+      <div className={styles.secondSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
         <div className={styles.coupleQuestionAnswerSection}>
           <div className={styles.coupleQuestionAnswerTitle}>Questions & Answers</div>
           {coupleQuestions.map(renderCoupleQuestion)}
         </div>
       </div>
-      <div className={styles.secondSection}>
+      <div className={styles.thirdSection}>
         <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
       </div>
     </div>

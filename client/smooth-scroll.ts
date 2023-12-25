@@ -1,6 +1,6 @@
 'use client';
 
-import navigationStyles from 'components/navigation-bar/component.module.css';
+// import navigationStyles from 'components/navigation-bar/component.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import LocomotiveScroll from 'locomotive-scroll';
@@ -38,12 +38,12 @@ class SmoothScroll {
     });
     window.scrollY = 0;
     SmoothScroll.instance.on('scroll', (event): void => {
-      const navigationBar = document.querySelector('.' + navigationStyles.navigationBar);
-      if (window.previousScrollY > event.scroll.y) {
-        navigationBar?.classList.remove(navigationStyles.navigationBarHidden);
-      } else if (window.previousScrollY < event.scroll.y) {
-        navigationBar?.classList.add(navigationStyles.navigationBarHidden);
-      }
+      // const navigationBar = document.querySelector('.' + navigationStyles.navigationBar);
+      // if (window.previousScrollY > event.scroll.y) {
+      //   navigationBar?.classList.remove(navigationStyles.navigationBarHidden);
+      // } else if (window.previousScrollY < event.scroll.y) {
+      //   navigationBar?.classList.add(navigationStyles.navigationBarHidden);
+      // }
       window.previousScrollY = event.scroll.y;
       ScrollTrigger.update();
     });
