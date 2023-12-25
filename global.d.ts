@@ -3,12 +3,15 @@
 namespace NodeJS {
   interface ProcessEnv {
     JWT_SECRET: string;
+    KV_URL: string;
+    KV_REST_API_READ_ONLY_TOKEN: string;
+    KV_REST_API_TOKEN: string;
+    KV_REST_API_URL: string;
     MONGODB_URI: string;
     NODEMAILER_ADDRESS: string;
     NODEMAILER_PASSWORD: string;
     NODEMAILER_SERVICE: string;
     NODEMAILER_USERNAME: string;
-    REDIS_URL: string;
     SPOTIFY_CLIENT_ID: string;
     SPOTIFY_CLIENT_SECRET: string;
     SPOTIFY_PLAYLIST_ID: string;

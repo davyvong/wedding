@@ -1,7 +1,7 @@
+import { kv } from '@vercel/kv';
 import { NextRequest, NextResponse } from 'next/server';
-import SpotifyAPI from 'server/apis/spotify';
+import SpotifyAPI, { SpotifyTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
-import RedisClientFactory from 'server/clients/redis';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
@@ -27,15 +27,14 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
-    const redisClient = await RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('spotify', 'search', body.query);
-    const cachedResults = await redisClient.get(redisKey);
+    const cachedResults = await kv.get<SpotifyTrack[]>(redisKey);
     if (cachedResults) {
-      return NextResponse.json(JSON.parse(cachedResults), { status: 200 });
+      return NextResponse.json(cachedResults, { status: 200 });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const results = await SpotifyAPI.searchForItem(accessToken, body.query);
-    await redisClient.set(redisKey, JSON.stringify(results));
+    await kv.set(redisKey, results);
     return NextResponse.json(results, { status: 200 });
   } catch (error: unknown) {
     return ServerError.handle(error);

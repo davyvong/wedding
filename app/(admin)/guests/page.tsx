@@ -1,19 +1,24 @@
+import { kv } from '@vercel/kv';
 import GuestList from 'components/guest-list';
-import RedisClientFactory from 'server/clients/redis';
+import { unstable_noStore as noStore } from 'next/cache';
+import { MDBGuestData } from 'server/models/guest';
 import RedisKey from 'server/models/redis-key';
+import { MDBResponseData } from 'server/models/response';
 import MongoDBQueryTemplate from 'server/templates/mongodb';
 
 const Page = async (): Promise<JSX.Element> => {
-  const redisClient = await RedisClientFactory.getInstance();
+  noStore();
+
   const redisKey = RedisKey.create('guest-list');
-  const cachedGuestList = await redisClient.get(redisKey);
+  const cachedGuestList =
+    await kv.get<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(redisKey);
 
   if (cachedGuestList) {
-    return <GuestList guestList={JSON.parse(cachedGuestList)} />;
+    return <GuestList guestList={cachedGuestList} />;
   }
 
   const guestList = await MongoDBQueryTemplate.findGuestList();
-  await redisClient.set(redisKey, JSON.stringify(guestList), { EX: 300 });
+  await kv.set(redisKey, guestList, { ex: 300 });
 
   return <GuestList guestList={guestList} />;
 };

@@ -1,4 +1,4 @@
-interface SpotifyTrack {
+export interface SpotifyTrack {
   artists: string[];
   duration: number;
   explicit: boolean;

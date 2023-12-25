@@ -1,8 +1,8 @@
+import { kv } from '@vercel/kv';
 import words from 'constants/words.json';
 import Handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
 import NodemailerClientFactory from 'server/clients/nodemailer';
-import RedisClientFactory from 'server/clients/redis';
 import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
@@ -53,9 +53,8 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       subject: 'Your secret link from Vivian & Davy',
       to: email,
     });
-    const redisClient = await RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', code);
-    await redisClient.set(redisKey, guest.id, { EX: 900 });
+    await kv.set(redisKey, guest.id, { ex: 900 });
     return new Response(undefined, { status: 202 });
   } catch (error: unknown) {
     return ServerError.handle(error);

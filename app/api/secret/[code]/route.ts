@@ -1,5 +1,5 @@
+import { kv } from '@vercel/kv';
 import { NextRequest, NextResponse } from 'next/server';
-import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import JWT from 'server/jwt';
@@ -27,9 +27,8 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (!paramsSchema.isValidSync(params)) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    const redisClient = await RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', params.code);
-    const cachedGuestId = await redisClient.get(redisKey);
+    const cachedGuestId = await kv.get<string>(redisKey);
     if (!cachedGuestId) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
