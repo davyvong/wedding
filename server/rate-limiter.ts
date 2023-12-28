@@ -1,9 +1,10 @@
-import { kv } from '@vercel/kv';
 import { NextRequest } from 'next/server';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import { string } from 'yup';
+
+import RedisClientFactory from './clients/redis';
 
 export enum RateLimiterScope {
   AddressSearch = 'AddressSearch',
@@ -59,16 +60,17 @@ class RateLimiter {
       });
     }
     try {
+      const redisClient = RedisClientFactory.getInstance();
       const redisKey = RedisKey.create('rate-limit', this.scope.valueOf().toLowerCase(), ip);
-      if (!(await kv.exists(redisKey))) {
-        await kv.set(redisKey, 0, { ex: this.interval });
+      if (!(await redisClient.exists(redisKey))) {
+        await redisClient.set(redisKey, 0, { ex: this.interval });
       }
-      const requestCount = await kv.incr(redisKey);
+      const requestCount = await redisClient.incr(redisKey);
       return {
         exceeded: requestCount > this.requestsPerInterval,
         limit: this.requestsPerInterval,
         remaining: Math.max(0, this.requestsPerInterval - requestCount),
-        reset: await kv.ttl(redisKey),
+        reset: await redisClient.ttl(redisKey),
       };
     } catch (error: unknown) {
       console.log(error);
