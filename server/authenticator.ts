@@ -4,7 +4,7 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { redirect } from 'next/navigation';
 import JWT from 'server/jwt';
 
-import MongoDBQueryTemplate from './templates/mongodb';
+import MySQLQueries from './queries/mysql';
 
 export interface GuestTokenPayload extends JWTPayload {
   id: string;
@@ -20,7 +20,7 @@ class Authenticator {
     }
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
-      const guest = await MongoDBQueryTemplate.findGuestFromId(payload.id);
+      const guest = await MySQLQueries.findGuestFromId(payload.id);
       if (!guest) {
         return undefined;
       }

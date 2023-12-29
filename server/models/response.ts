@@ -1,25 +1,35 @@
 import type { Document } from 'mongodb';
 
-export interface MDBResponseData {
+export interface ResponseData {
   attendance: boolean;
-  dietaryRestrictions: string;
+  dietaryRestrictions?: string;
   entree: string;
   guest: string;
   id: string;
-  mailingAddress: string;
+  mailingAddress?: string;
   message: string;
 }
 
-class MDBResponse {
+export interface ResponseRowData {
+  attendance: number;
+  dietary_restrictions?: string;
+  entree: string;
+  guest_id: string;
+  mailing_address?: string;
+  message: string;
+  public_id: string;
+}
+
+class Response {
   public attendance: boolean;
-  public dietaryRestrictions: string;
+  public dietaryRestrictions?: string;
   public entree: string;
   public guest: string;
   public id: string;
-  public mailingAddress: string;
+  public mailingAddress?: string;
   public message: string;
 
-  constructor(data: MDBResponseData) {
+  constructor(data: ResponseData) {
     this.attendance = data.attendance;
     this.dietaryRestrictions = data.dietaryRestrictions;
     this.entree = data.entree;
@@ -29,8 +39,8 @@ class MDBResponse {
     this.message = data.message;
   }
 
-  public static fromDocument(doc: Document): MDBResponse {
-    const data: MDBResponseData = {
+  public static fromDocument(doc: Document): Response {
+    const data: ResponseData = {
       attendance: doc.attendance,
       dietaryRestrictions: doc.dietaryRestrictions,
       entree: doc.entree,
@@ -39,10 +49,23 @@ class MDBResponse {
       mailingAddress: doc.mailingAddress,
       message: doc.message,
     };
-    return new MDBResponse(data);
+    return new Response(data);
   }
 
-  public toPlainObject(): MDBResponseData {
+  public static fromRow(row: ResponseRowData): Response {
+    const data: ResponseData = {
+      attendance: Boolean(row.attendance),
+      dietaryRestrictions: row.dietary_restrictions || '',
+      entree: row.entree,
+      guest: row.guest_id,
+      id: row.public_id,
+      mailingAddress: row.mailing_address || '',
+      message: row.message,
+    };
+    return new Response(data);
+  }
+
+  public toPlainObject(): ResponseData {
     return {
       attendance: this.attendance,
       dietaryRestrictions: this.dietaryRestrictions,
@@ -55,4 +78,4 @@ class MDBResponse {
   }
 }
 
-export default MDBResponse;
+export default Response;

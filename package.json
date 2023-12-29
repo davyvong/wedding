@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.4",
+    "@planetscale/database": "^1.13.0",
     "@upstash/redis": "^1.27.1",
     "@vercel/analytics": "^1.1.1",
+    "bson-objectid": "^2.0.4",
     "classnames": "^2.3.3",
     "gsap": "^3.12.4",
     "handlebars": "^4.7.8",

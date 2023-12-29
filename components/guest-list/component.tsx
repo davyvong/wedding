@@ -14,21 +14,21 @@ import RSVPFlyout from 'components/flyouts/rsvp';
 import Tooltip from 'components/tooltip';
 import cloneDeep from 'lodash.clonedeep';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
-import { MDBGuestData } from 'server/models/guest';
-import { MDBResponseData } from 'server/models/response';
+import { GuestData } from 'server/models/guest';
+import { ResponseData } from 'server/models/response';
 import { sortByKey } from 'utils/sort';
 
 import styles from './component.module.css';
 
 export interface GuestListComponentProps {
-  guestList: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[];
+  guestList: { guests: GuestData[]; id: string; responses: ResponseData[] }[];
 }
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   const [clickedIconButtons, setClickedIconButtons] = useState<Set<string>>(new Set());
   const [collapsedGuestGroups, setCollapsedGuestGroups] = useState<Set<string>>(new Set());
 
-  const sortedGuestList = useMemo<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(() => {
+  const sortedGuestList = useMemo<{ guests: GuestData[]; id: string; responses: ResponseData[] }[]>(() => {
     const guestListClone = cloneDeep(guestList);
     guestListClone.sort(sortByKey('id'));
     for (const guestGroup of guestListClone) {
@@ -38,17 +38,15 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   }, [guestList]);
 
   const areAllGuestGroupsExpanded = useMemo<boolean>(() => {
-    return !guestList.some(
-      (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): boolean => {
-        return collapsedGuestGroups.has(guestGroup.id);
-      },
-    );
+    return !guestList.some((guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }): boolean => {
+      return collapsedGuestGroups.has(guestGroup.id);
+    });
   }, [collapsedGuestGroups, guestList]);
 
   const collapseAllGuestGroups = useCallback((): void => {
     setCollapsedGuestGroups((prevState: Set<string>): Set<string> => {
       const guestGroupIds = guestList.map(
-        (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): string => {
+        (guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }): string => {
           return guestGroup.id;
         },
       );
@@ -84,7 +82,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   }, []);
 
   const renderGuestGroupHeader = useCallback(
-    (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => (
+    (guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }): JSX.Element => (
       <tbody>
         <tr
           className={classNames(
@@ -156,12 +154,9 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   );
 
   const renderGuest = useCallback(
-    (
-      guest: MDBGuestData,
-      guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] },
-    ): JSX.Element => {
-      const guestResponse: MDBResponseData | undefined = guestGroup.responses.find(
-        (response: MDBResponseData): boolean => response.guest === guest.id,
+    (guest: GuestData, guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }): JSX.Element => {
+      const guestResponse: ResponseData | undefined = guestGroup.responses.find(
+        (response: ResponseData): boolean => response.guest === guest.id,
       );
 
       const renderGuestAttendance = (): JSX.Element | string => {
@@ -235,7 +230,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   );
 
   const renderGuestGroup = useCallback(
-    (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }): JSX.Element => {
+    (guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }): JSX.Element => {
       if (guestGroup.guests.length === 0) {
         return <Fragment />;
       }
@@ -246,7 +241,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             collapsedGuestGroups.has(guestGroup.id) && styles.guestGroupCollapsed,
           )}
         >
-          {guestGroup.guests.map((guest: MDBGuestData): JSX.Element => renderGuest(guest, guestGroup))}
+          {guestGroup.guests.map((guest: GuestData): JSX.Element => renderGuest(guest, guestGroup))}
         </tbody>
       );
     },
@@ -254,7 +249,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
   );
 
   const renderGuestGroupWithHeader = useCallback(
-    (guestGroup: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }, index: number): JSX.Element => (
+    (guestGroup: { guests: GuestData[]; id: string; responses: ResponseData[] }, index: number): JSX.Element => (
       <Fragment key={guestGroup.id || index}>
         {renderGuestGroupHeader(guestGroup)}
         {renderGuestGroup(guestGroup)}

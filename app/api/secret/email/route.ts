@@ -7,8 +7,8 @@ import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
+import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { object, string } from 'yup';
 
 const getRandomWords = (count: number): string[] => {
@@ -38,7 +38,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return new Response(undefined, { status: 400 });
     }
     const email = body.email.toLowerCase();
-    const guest = await MongoDBQueryTemplate.findGuestFromEmail(email);
+    const guest = await MySQLQueries.findGuestFromEmail(email);
     if (!guest) {
       return new Response(undefined, { status: 403 });
     }

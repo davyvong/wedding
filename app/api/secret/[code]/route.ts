@@ -4,8 +4,8 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import JWT from 'server/jwt';
 import RedisKey from 'server/models/redis-key';
+import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -34,7 +34,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (!cachedGuestId) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    const guest = await MongoDBQueryTemplate.findGuestFromId(cachedGuestId);
+    const guest = await MySQLQueries.findGuestFromId(cachedGuestId);
     if (!guest) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }

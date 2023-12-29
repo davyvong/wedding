@@ -2,8 +2,8 @@ import { EntreeOptions } from 'components/flyouts/rsvp/constants';
 import { NextRequest, NextResponse } from 'next/server';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
+import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import MongoDBQueryTemplate from 'server/templates/mongodb';
 import { boolean, mixed, object, string } from 'yup';
 
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
@@ -33,7 +33,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         return new Response(undefined, { status: 403 });
       }
     }
-    const response = await MongoDBQueryTemplate.findRSVPFromGuestId(params.guest);
+    const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
     if (!response) {
       return new Response(undefined, { status: 404 });
     }
@@ -78,13 +78,13 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (params.guest !== token.id) {
       const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
       if (!adminGuestIds.has(token.id)) {
-        const guestGroup = await MongoDBQueryTemplate.findGuestGroupFromGuestIds([token.id, params.guest]);
+        const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.id, params.guest]);
         if (!guestGroup) {
           return new Response(undefined, { status: 403 });
         }
       }
     }
-    const response = await MongoDBQueryTemplate.findAndUpdateResponse(params.guest, {
+    const response = await MySQLQueries.findAndUpdateResponse(params.guest, {
       attendance: body.attendance,
       dietaryRestrictions: body.dietaryRestrictions,
       entree: body.entree,

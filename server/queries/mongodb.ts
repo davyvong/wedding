@@ -1,31 +1,31 @@
 import { Document, ObjectId } from 'mongodb';
 import MongoDBClientFactory from 'server/clients/mongodb';
-import MDBGuest, { MDBGuestData } from 'server/models/guest';
-import MDBGuestGroup, { MDBGuestGroupData } from 'server/models/guest-group';
-import MDBResponse, { MDBResponseData } from 'server/models/response';
+import Guest, { GuestData } from 'server/models/guest';
+import GuestGroup, { GuestGroupData } from 'server/models/guest-group';
+import Response, { ResponseData } from 'server/models/response';
 
-class MongoDBQueryTemplate {
-  public static async findGuestFromId(id: string): Promise<MDBGuest | null> {
+class MongoDBQueries {
+  public static async findGuestFromId(id: string): Promise<Guest | null> {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guests').findOne({ _id: new ObjectId(id) });
     if (!doc) {
       return null;
     }
-    return MDBGuest.fromDocument(doc);
+    return Guest.fromDocument(doc);
   }
 
-  public static async findGuestFromEmail(email: string): Promise<MDBGuest | null> {
+  public static async findGuestFromEmail(email: string): Promise<Guest | null> {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guests').findOne({ email });
     if (!doc) {
       return null;
     }
-    return MDBGuest.fromDocument(doc);
+    return Guest.fromDocument(doc);
   }
 
   public static async findRSVPFromGuestId(
     id: string,
-  ): Promise<{ guests: MDBGuestData[]; responses: MDBResponseData[] } | null> {
+  ): Promise<{ guests: GuestData[]; responses: ResponseData[] } | null> {
     const db = await MongoDBClientFactory.getInstance();
     const aggregation = await db
       .collection('guestGroups')
@@ -59,17 +59,17 @@ class MongoDBQueryTemplate {
     if (aggregation.length > 0) {
       const [inviteDoc] = aggregation;
       return {
-        guests: inviteDoc.guestsLookup.map((guestDoc: Document): MDBGuestData => {
-          return MDBGuest.fromDocument(guestDoc).toPlainObject();
+        guests: inviteDoc.guestsLookup.map((guestDoc: Document): GuestData => {
+          return Guest.fromDocument(guestDoc).toPlainObject();
         }),
-        responses: inviteDoc.responsesLookup.map((responseDoc: Document): MDBResponseData => {
-          return MDBResponse.fromDocument(responseDoc).toPlainObject();
+        responses: inviteDoc.responsesLookup.map((responseDoc: Document): ResponseData => {
+          return Response.fromDocument(responseDoc).toPlainObject();
         }),
       };
     }
-    const guest = await MongoDBQueryTemplate.findGuestFromId(id);
+    const guest = await MongoDBQueries.findGuestFromId(id);
     if (guest) {
-      const response = await MongoDBQueryTemplate.findResponseFromGuestId(id);
+      const response = await MongoDBQueries.findResponseFromGuestId(id);
       return {
         guests: [guest],
         responses: response ? [response] : [],
@@ -80,8 +80,8 @@ class MongoDBQueryTemplate {
 
   public static async findAndUpdateResponse(
     guestId: string,
-    data: Partial<MDBResponseData>,
-  ): Promise<MDBResponseData | null> {
+    data: Partial<ResponseData>,
+  ): Promise<ResponseData | null> {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('responses').findOneAndUpdate(
       { guest: new ObjectId(guestId) },
@@ -94,19 +94,19 @@ class MongoDBQueryTemplate {
     if (!doc) {
       return null;
     }
-    return MDBResponse.fromDocument(doc);
+    return Response.fromDocument(doc);
   }
 
-  public static async findResponseFromGuestId(guestId: string): Promise<MDBResponse | null> {
+  public static async findResponseFromGuestId(guestId: string): Promise<Response | null> {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('responses').findOne({ guest: new ObjectId(guestId) });
     if (!doc) {
       return null;
     }
-    return MDBResponse.fromDocument(doc);
+    return Response.fromDocument(doc);
   }
 
-  public static async findGuestGroupFromGuestIds(guestIds: string[]): Promise<MDBGuestGroup | null> {
+  public static async findGuestGroupFromGuestIds(guestIds: string[]): Promise<GuestGroup | null> {
     const db = await MongoDBClientFactory.getInstance();
     const doc = await db.collection('guestGroups').findOne({
       guests: {
@@ -116,47 +116,47 @@ class MongoDBQueryTemplate {
     if (!doc) {
       return null;
     }
-    return MDBGuestGroup.fromDocument(doc);
+    return GuestGroup.fromDocument(doc);
   }
 
-  public static async findGuestList(): Promise<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]> {
+  public static async findGuestList(): Promise<{ guests: GuestData[]; id: string; responses: ResponseData[] }[]> {
     const db = await MongoDBClientFactory.getInstance();
     const [guestDocs, guestGroupDocs, responseDocs] = await Promise.all([
       db.collection('guests').find().toArray(),
       db.collection('guestGroups').find().toArray(),
       db.collection('responses').find().toArray(),
     ]);
-    const guests = new Map<string, MDBGuestData>();
+    const guests = new Map<string, GuestData>();
     for (const guestDoc of guestDocs) {
-      const guestData = MDBGuest.fromDocument(guestDoc).toPlainObject();
+      const guestData = Guest.fromDocument(guestDoc).toPlainObject();
       guests.set(guestData.id, guestData);
     }
-    const guestGroups = new Set<MDBGuestGroupData>();
+    const guestGroups = new Set<GuestGroupData>();
     for (const guestGroupDoc of guestGroupDocs) {
-      const guestGroupData = MDBGuestGroup.fromDocument(guestGroupDoc).toPlainObject();
+      const guestGroupData = GuestGroup.fromDocument(guestGroupDoc).toPlainObject();
       guestGroups.add(guestGroupData);
     }
-    const responses = new Map<string, MDBResponseData>();
+    const responses = new Map<string, ResponseData>();
     for (const responseDoc of responseDocs) {
-      const responseData = MDBResponse.fromDocument(responseDoc).toPlainObject();
+      const responseData = Response.fromDocument(responseDoc).toPlainObject();
       responses.set(responseData.guest, responseData);
     }
-    const guestList: { guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[] = [];
+    const guestList: { guests: GuestData[]; id: string; responses: ResponseData[] }[] = [];
     for (const guestGroup of guestGroups) {
       const guestsInGroup = guestGroup.guests
-        .map((guestId: string): MDBGuestData | undefined => {
+        .map((guestId: string): GuestData | undefined => {
           const guestData = guests.get(guestId);
           guests.delete(guestId);
           return guestData;
         })
-        .filter((guestData: MDBGuestData | undefined): boolean => !!guestData) as MDBGuestData[];
+        .filter((guestData: GuestData | undefined): boolean => !!guestData) as GuestData[];
       const responsesInGroup = guestsInGroup
-        .map((guestData: MDBGuestData): MDBResponseData | undefined => {
+        .map((guestData: GuestData): ResponseData | undefined => {
           const responseData = responses.get(guestData.id);
           responses.delete(guestData.id);
           return responseData;
         })
-        .filter((responseData: MDBResponseData | undefined): boolean => !!responseData) as MDBResponseData[];
+        .filter((responseData: ResponseData | undefined): boolean => !!responseData) as ResponseData[];
       guestList.push({
         guests: guestsInGroup,
         id: guestGroup.id,
@@ -172,4 +172,4 @@ class MongoDBQueryTemplate {
   }
 }
 
-export default MongoDBQueryTemplate;
+export default MongoDBQueries;

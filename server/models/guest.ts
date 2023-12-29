@@ -1,32 +1,48 @@
 import type { Document } from 'mongodb';
 
-export interface MDBGuestData {
+export interface GuestData {
   email: string;
   id: string;
   name: string;
 }
 
-class MDBGuest {
+export interface GuestRowData {
+  email: string;
+  guest_group_id: number | null;
+  name: string;
+  public_id: string;
+}
+
+class Guest {
   public email: string;
   public id: string;
   public name: string;
 
-  constructor(data: MDBGuestData) {
+  constructor(data: GuestData) {
     this.email = data.email;
     this.id = data.id;
     this.name = data.name;
   }
 
-  public static fromDocument(doc: Document): MDBGuest {
-    const data: MDBGuestData = {
+  public static fromDocument(doc: Document): Guest {
+    const data: GuestData = {
       email: doc.email,
       id: doc._id.toString(),
       name: doc.name,
     };
-    return new MDBGuest(data);
+    return new Guest(data);
   }
 
-  public toPlainObject(): MDBGuestData {
+  public static fromRow(row: GuestRowData): Guest {
+    const data: GuestData = {
+      email: row.email || '',
+      id: row.public_id,
+      name: row.name,
+    };
+    return new Guest(data);
+  }
+
+  public toPlainObject(): GuestData {
     return {
       email: this.email,
       id: this.id,
@@ -35,4 +51,4 @@ class MDBGuest {
   }
 }
 
-export default MDBGuest;
+export default Guest;

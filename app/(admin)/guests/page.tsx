@@ -1,24 +1,29 @@
 import GuestList from 'components/guest-list';
 import RedisClientFactory from 'server/clients/redis';
-import { MDBGuestData } from 'server/models/guest';
+import { GuestData } from 'server/models/guest';
 import RedisKey from 'server/models/redis-key';
-import { MDBResponseData } from 'server/models/response';
-import MongoDBQueryTemplate from 'server/templates/mongodb';
+import { ResponseData } from 'server/models/response';
+import MySQLQueries from 'server/queries/mysql';
 
 const Page = async (): Promise<JSX.Element> => {
   const redisClient = RedisClientFactory.getInstance();
   const redisKey = RedisKey.create('guest-list');
   const cachedGuestList =
-    await redisClient.get<{ guests: MDBGuestData[]; id: string; responses: MDBResponseData[] }[]>(redisKey);
+    await redisClient.get<{ guests: GuestData[]; id: string; responses: ResponseData[] }[]>(redisKey);
 
   if (cachedGuestList) {
     return <GuestList guestList={cachedGuestList} />;
   }
 
-  const guestList = await MongoDBQueryTemplate.findGuestList();
-  await redisClient.set(redisKey, guestList, { ex: 300 });
+  const guestList = await MySQLQueries.findGuestList();
+  const guestListData = guestList.map(guestGroup => ({
+    guests: guestGroup.guests.map(guest => guest.toPlainObject()),
+    id: guestGroup.id,
+    responses: guestGroup.responses.map(guest => guest.toPlainObject()),
+  }));
+  await redisClient.set(redisKey, guestListData, { ex: 300 });
 
-  return <GuestList guestList={guestList} />;
+  return <GuestList guestList={guestListData} />;
 };
 
 export default Page;

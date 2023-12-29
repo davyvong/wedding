@@ -11,8 +11,8 @@ import Textarea from 'components/form/textarea';
 import LoadingHeart from 'components/loading-heart';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { MDBGuestData } from 'server/models/guest';
-import { MDBResponseData } from 'server/models/response';
+import { GuestData } from 'server/models/guest';
+import { ResponseData } from 'server/models/response';
 import { useSWRConfig } from 'swr';
 import { boolean, mixed, string } from 'yup';
 
@@ -20,7 +20,7 @@ import styles from './component.module.css';
 import { EntreeOptions, attendanceOptions, entreeOptions } from './constants';
 
 interface RSVPFlyoutComponentProps extends FlyoutContentComponentProps {
-  guests: MDBGuestData[];
+  guests: GuestData[];
   initialValues?: Partial<RSVPFlyoutComponentValues>;
   isEditMode: boolean;
   selectedGuestId: string;
@@ -107,7 +107,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       if (onValidate()) {
         mutate(
           '/api/rsvp/' + selectedGuestId,
-          async (): Promise<MDBResponseData> => {
+          async (): Promise<ResponseData> => {
             setIsSaving(true);
             const response = await fetch('/api/rsvp/' + selectedGuestId, {
               body: JSON.stringify({
@@ -125,11 +125,11 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
           },
           {
             populateCache: (
-              result: MDBResponseData,
-              currentData: { guests?: MDBGuestData[]; responses?: MDBResponseData[] },
-            ): { guests: MDBGuestData[]; responses: MDBResponseData[] } => {
+              result: ResponseData,
+              currentData: { guests?: GuestData[]; responses?: ResponseData[] },
+            ): { guests: GuestData[]; responses: ResponseData[] } => {
               const responses = [...(currentData?.responses || [])];
-              const index = responses.findIndex((response: MDBResponseData): boolean => {
+              const index = responses.findIndex((response: ResponseData): boolean => {
                 return response.guest === selectedGuestId;
               });
               if (index > -1) {
@@ -159,7 +159,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       <div className={styles.guests}>
         <div>{Translate.t('components.flyouts.rsvp.guests.description')}</div>
         <div className={styles.guestButtons}>
-          {guests.map((guest: MDBGuestData) => {
+          {guests.map((guest: GuestData) => {
             const isSelected = guest.id === selectedGuestId;
             return (
               <Button
@@ -208,7 +208,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       {renderGuestPartySelector()}
       <div className={styles.header}>
         {Translate.t('components.flyouts.rsvp.headers.response', {
-          name: guests.find((guest: MDBGuestData) => guest.id === selectedGuestId)?.name || '',
+          name: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
         })}
       </div>
       <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.attendance')}</div>

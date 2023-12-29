@@ -8,8 +8,8 @@ import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'comp
 import LoadingHeart from 'components/loading-heart';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
-import { MDBGuestData } from 'server/models/guest';
-import { MDBResponseData } from 'server/models/response';
+import { GuestData } from 'server/models/guest';
+import { ResponseData } from 'server/models/response';
 import useSWR from 'swr';
 import { sortByKey } from 'utils/sort';
 
@@ -27,8 +27,8 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
 
   const fetchRSVP = useCallback(async (): Promise<{
-    guests: MDBGuestData[];
-    responses: MDBResponseData[];
+    guests: GuestData[];
+    responses: ResponseData[];
   } | null> => {
     const response = await fetch('/api/rsvp/' + selectedGuestId, {
       cache: 'no-store',
@@ -46,11 +46,11 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
     fetchRSVP,
   );
 
-  const initialValues = useMemo<MDBResponseData | undefined>(() => {
+  const initialValues = useMemo<ResponseData | undefined>(() => {
     if (!data) {
       return undefined;
     }
-    return data.responses.find((response: MDBResponseData): boolean => response.guest === selectedGuestId);
+    return data.responses.find((response: ResponseData): boolean => response.guest === selectedGuestId);
   }, [data, selectedGuestId]);
 
   const renderContent = useCallback(

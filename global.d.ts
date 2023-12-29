@@ -9,6 +9,11 @@ namespace NodeJS {
     NODEMAILER_PASSWORD: string;
     NODEMAILER_SERVICE: string;
     NODEMAILER_USERNAME: string;
+    PLANETSCALE_DB_HOST: string;
+    PLANETSCALE_DB_PASSWORD: string;
+    PLANETSCALE_DB_USERNAME: string;
+    PLANETSCALE_DB: string;
+    PLANETSCALE_SSL_CERT_PATH: string;
     REDIS_URL: string;
     SPOTIFY_CLIENT_ID: string;
     SPOTIFY_CLIENT_SECRET: string;

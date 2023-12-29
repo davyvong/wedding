@@ -66,7 +66,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
     try {
       const response = await fetch('/api/address/search?lookup=' + value);
       return response.json();
-    } catch (error: unknown) {
+    } catch {
       return [];
     }
   }, [value]);
