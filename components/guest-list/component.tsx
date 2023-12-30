@@ -175,7 +175,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               {guest.id.substr(-7)}
               {clickedIconButtons.has('copiedGuestId-' + guest.id) ? (
                 <div>
-                  <CheckIconSVG />
+                  <CheckIconSVG className={styles.copiedGuestIdIcon} />
                 </div>
               ) : (
                 <Tooltip
