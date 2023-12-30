@@ -1,6 +1,8 @@
+import pkg from 'package.json';
+
 class RedisKey {
   public static create(...paths: string[]): string {
-    return process.env.VERCEL_ENV + ':' + paths.join(':');
+    return [pkg.name, process.env.VERCEL_ENV, ...paths].join(':');
   }
 }
 
