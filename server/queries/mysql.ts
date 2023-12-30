@@ -97,17 +97,19 @@ class MySQLQueries {
             public_id: row.guest_public_id,
           });
         }),
-        responses: results.rows.map((row): Response => {
-          return Response.fromRow({
-            attendance: row.response_attendance,
-            dietary_restrictions: row.response_dietary_restrictions,
-            entree: row.response_entree,
-            guest_id: row.guest_public_id,
-            mailing_address: row.response_mailing_address,
-            message: row.response_message,
-            public_id: row.response_public_id,
-          });
-        }),
+        responses: results.rows
+          .filter((row): boolean => !!row.response_public_id)
+          .map((row): Response => {
+            return Response.fromRow({
+              attendance: row.response_attendance,
+              dietary_restrictions: row.response_dietary_restrictions,
+              entree: row.response_entree,
+              guest_id: row.guest_public_id,
+              mailing_address: row.response_mailing_address,
+              message: row.response_message,
+              public_id: row.response_public_id,
+            });
+          }),
       };
     } catch {
       return null;
@@ -333,7 +335,7 @@ class MySQLQueries {
         }),
         id: guestGroup[0].guest_group_public_id || '',
         responses: guestGroup
-          .filter((row): boolean => row.response_public_id !== null)
+          .filter((row): boolean => !!row.response_public_id)
           .map((row): Response => {
             return Response.fromRow({
               attendance: row.response_attendance,
