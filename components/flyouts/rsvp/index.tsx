@@ -44,6 +44,11 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
   const { data, isLoading } = useSWR(
     (): null | string => (shouldFetch ? '/api/rsvp/' + selectedGuestId : null),
     fetchRSVP,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
 
   const initialValues = useMemo<ResponseData | undefined>(() => {
