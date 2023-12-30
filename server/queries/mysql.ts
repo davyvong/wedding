@@ -11,10 +11,10 @@ class MySQLQueries {
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        SELECT *
-        FROM wedding_guests
-        WHERE public_id = :publicId
-        LIMIT 1
+        select *
+        from wedding_guests
+        where public_id = :publicId
+        limit 1
       `;
       const results = await connection.execute<GuestRowData>(query, { publicId: id });
       if (results.rows.length === 0) {
@@ -33,10 +33,10 @@ class MySQLQueries {
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        SELECT *
-        FROM wedding_guests
-        WHERE email = :email
-        LIMIT 1
+        select *
+        from wedding_guests
+        where email = :email
+        limit 1
       `;
       const results = await connection.execute<GuestRowData>(query, { email });
       if (results.rows.length === 0) {
@@ -55,7 +55,7 @@ class MySQLQueries {
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        SELECT
+        select
           wedding_guests.email as guest_email,
           wedding_guests.name as guest_name,
           wedding_guests.public_id as guest_public_id,
@@ -65,13 +65,13 @@ class MySQLQueries {
           wedding_responses.mailing_address as response_mailing_address,
           wedding_responses.message as response_message,
           wedding_responses.public_id as response_public_id
-        FROM wedding_guests
-        LEFT JOIN wedding_responses ON wedding_responses.guest_id = wedding_guests.id
-        WHERE guest_group_id = (
-          SELECT guest_group_id
-          FROM wedding_guests
-          WHERE public_id = :guestId
-          LIMIT 1
+        from wedding_guests
+        left join wedding_responses on wedding_responses.guest_id = wedding_guests.id
+        where guest_group_id = (
+          select guest_group_id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
         )
       `;
       const results = await connection.execute<{
@@ -114,14 +114,17 @@ class MySQLQueries {
     }
   }
 
-  public static async insertResponse(guestId: string, data: Omit<ResponseData, 'guest' | 'id'>): Promise<boolean> {
+  public static async insertResponseFromGuestId(
+    guestId: string,
+    data: Omit<ResponseData, 'guest' | 'id'>,
+  ): Promise<boolean> {
     if (!guestId || !data) {
       return false;
     }
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        INSERT INTO wedding_responses (
+        insert into wedding_responses (
           public_id,
           guest_id,
           attendance,
@@ -130,7 +133,7 @@ class MySQLQueries {
           mailing_address,
           message,
         )
-        VALUES (
+        values (
           :publicId,
           :guestId,
           :attendance,
@@ -155,25 +158,28 @@ class MySQLQueries {
     }
   }
 
-  public static async updateResponse(guestId: string, data: Omit<ResponseData, 'guest' | 'id'>): Promise<boolean> {
+  public static async updateResponseFromGuestId(
+    guestId: string,
+    data: Omit<ResponseData, 'guest' | 'id'>,
+  ): Promise<boolean> {
     if (!guestId || !data) {
       return false;
     }
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        UPDATE wedding_responses
-        SET
+        update wedding_responses
+        set
           attendance = :attendance,
           dietary_restrictions = :dietaryRestrictions,
           entree = :entree,
           mailing_address = :mailingAddress,
           message = :message
-        WHERE guest_id = (
-          SELECT id
-          FROM wedding_guests
-          WHERE public_id = :guestId
-          LIMIT 1
+        where guest_id = (
+          select id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
         )
       `;
       const results = await connection.execute<ResponseRowData>(query, {
@@ -190,27 +196,22 @@ class MySQLQueries {
     }
   }
 
-  public static async findAndUpdateResponse(
-    guestId: string,
-    data: Omit<ResponseData, 'guest' | 'id'>,
-  ): Promise<Response | null> {
-    if (!guestId || !data) {
+  public static async findResponseFromGuestId(guestId: string): Promise<Response | null> {
+    if (!guestId) {
       return null;
     }
     try {
-      if (!(await MySQLQueries.updateResponse(guestId, data))) {
-        await MySQLQueries.insertResponse(guestId, data);
-      }
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        SELECT *
-        FROM wedding_responses
-        WHERE guest_id = (
-          SELECT id
-          FROM wedding_guests
-          WHERE public_id = :guestId
-          LIMIT 1
+        select *
+        from wedding_responses
+        where guest_id = (
+          select id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
         )
+        limit 1
       `;
       const results = await connection.execute<ResponseRowData>(query, { guestId });
       if (results.rows.length === 0) {
@@ -225,28 +226,18 @@ class MySQLQueries {
     }
   }
 
-  public static async findResponseFromGuestId(guestId: string): Promise<Response | null> {
-    if (!guestId) {
+  public static async upsertResponseFromGuestId(
+    guestId: string,
+    data: Omit<ResponseData, 'guest' | 'id'>,
+  ): Promise<Response | null> {
+    if (!guestId || !data) {
       return null;
     }
     try {
-      const connection = await MySQLClientFactory.getInstance();
-      const query = `
-        SELECT *
-        FROM wedding_responses
-        WHERE guest_id = (
-          SELECT *
-          FROM wedding_guests
-          WHERE public_id = :guestId
-          LIMIT 1
-        )
-        LIMIT 1
-      `;
-      const results = await connection.execute<ResponseRowData>(query, { guestId });
-      if (results.rows.length === 0) {
-        return null;
+      if (!(await MySQLQueries.updateResponseFromGuestId(guestId, data))) {
+        await MySQLQueries.insertResponseFromGuestId(guestId, data);
       }
-      return Response.fromRow(results.rows[0]);
+      return MySQLQueries.findResponseFromGuestId(guestId);
     } catch {
       return null;
     }
@@ -259,9 +250,9 @@ class MySQLQueries {
     try {
       const connection = await MySQLClientFactory.getInstance();
       const query = `
-        SELECT *
-        FROM wedding_guests
-        WHERE public_id IN (:guestIds)
+        select *
+        from wedding_guests
+        where public_id in (:guestIds)
       `;
       const results = await connection.execute<GuestRowData>(query, { guestIds });
       if (results.rows.length < guestIds.length) {
@@ -284,7 +275,7 @@ class MySQLQueries {
   public static async findGuestList(): Promise<{ guests: Guest[]; id: string; responses: Response[] }[]> {
     const connection = await MySQLClientFactory.getInstance();
     const query = `
-      SELECT
+      select
         wedding_guests.email as guest_email,
         wedding_guests.name as guest_name,
         wedding_guests.public_id as guest_public_id,
@@ -295,9 +286,9 @@ class MySQLQueries {
         wedding_responses.message as response_message,
         wedding_responses.public_id as response_public_id,
         wedding_guest_groups.public_id as guest_group_public_id
-      FROM wedding_guests
-      LEFT JOIN wedding_responses ON wedding_responses.guest_id = wedding_guests.id
-      LEFT JOIN wedding_guest_groups ON wedding_guest_groups.id = wedding_guests.guest_group_id
+      from wedding_guests
+      left join wedding_responses on wedding_responses.guest_id = wedding_guests.id
+      left join wedding_guest_groups on wedding_guest_groups.id = wedding_guests.guest_group_id
     `;
     const results = await connection.execute<{
       guest_email: string;

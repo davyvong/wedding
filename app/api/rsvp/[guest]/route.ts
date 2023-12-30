@@ -84,7 +84,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
         }
       }
     }
-    const response = await MySQLQueries.findAndUpdateResponse(params.guest, {
+    const response = await MySQLQueries.upsertResponseFromGuestId(params.guest, {
       attendance: body.attendance,
       dietaryRestrictions: body.dietaryRestrictions,
       entree: body.entree,
