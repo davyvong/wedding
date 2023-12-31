@@ -41,7 +41,7 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
     };
   }, [selectedGuestId]);
 
-  const { data, isLoading } = useSWR(
+  const { data, isLoading, mutate } = useSWR(
     (): null | string => (shouldFetch ? '/api/rsvp/' + selectedGuestId : null),
     fetchRSVP,
     {
@@ -73,12 +73,13 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
           guests={data?.guests || []}
           initialValues={initialValues}
           isEditMode={!!initialValues}
+          mutateDataCache={mutate}
           selectedGuestId={selectedGuestId}
           setSelectedGuestId={setSelectedGuestId}
         />
       );
     },
-    [data, initialValues, isLoading, selectedGuestId],
+    [data?.guests, initialValues, isLoading, mutate, selectedGuestId],
   );
 
   const renderDefaultReference = useCallback(
