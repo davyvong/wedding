@@ -45,7 +45,7 @@ const LandingComponent: FC = () => {
             alt={image.alt}
             fill
             priority
-            quality={80}
+            quality={100}
             sizes="(max-width: 425px) 70vh, (max-width: 768px) 70vh, (max-width: 1024px) 70vh, (max-width: 1280px) 70vh, (max-width: 1440px) 70vh, 70vh"
             src={image.src}
             style={image.style}
@@ -78,7 +78,7 @@ const LandingComponent: FC = () => {
             alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
             priority
-            quality={80}
+            quality={100}
             src={VD72JPG}
             sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, 100vw"
           />
