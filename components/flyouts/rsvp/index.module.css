@@ -1,11 +1,3 @@
 .buttonText {
   margin-left: 0.75rem;
 }
-
-.contentLoading {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-}

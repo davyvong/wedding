@@ -1,0 +1,32 @@
+.skeleton {
+  animation: placeholder 2s infinite ease;
+  border-radius: 0.5rem;
+}
+
+.skeletonInverse {
+  animation: placeholderInverse 2s infinite ease;
+}
+
+@keyframes placeholder {
+  from {
+    background-color: var(--color-popover);
+  }
+  50% {
+    background-color: var(--color-placeholder);
+  }
+  to {
+    background-color: var(--color-popover);
+  }
+}
+
+@keyframes placeholderInverse {
+  from {
+    background-color: var(--color-inverse-popover);
+  }
+  50% {
+    background-color: var(--color-inverse-placeholder);
+  }
+  to {
+    background-color: var(--color-inverse-popover);
+  }
+}

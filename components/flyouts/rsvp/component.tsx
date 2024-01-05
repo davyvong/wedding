@@ -89,14 +89,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     }
     return false;
   }, [initialValues, values]);
-  console.log({
-    unchangedValues: {
-      ...defaultValues,
-      ...initialValues,
-    },
-    values,
-    didValuesChange,
-  });
+
   const onAddressInputChange = useCallback((name: string, value: string): void => {
     setValues(
       (prevState: RSVPFlyoutComponentValues): RSVPFlyoutComponentValues => ({
