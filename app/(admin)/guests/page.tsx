@@ -21,7 +21,7 @@ const Page = async (): Promise<JSX.Element> => {
     id: guestGroup.id,
     responses: guestGroup.responses.map(guest => guest.toPlainObject()),
   }));
-  await redisClient.set(redisKey, guestListData, { ex: 300 });
+  await redisClient.set(redisKey, guestListData, { ex: 60 });
 
   return <GuestList guestList={guestListData} />;
 };
