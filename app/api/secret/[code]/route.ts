@@ -13,7 +13,6 @@ export const dynamic = 'force-dynamic';
 export const GET = async (request: NextRequest, { params }: { params: { code: string } }): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      requestsPerInterval: 100,
       scope: RateLimiterScope.SecretCode,
     });
     const checkResults = await rateLimiter.checkRequest(request);
