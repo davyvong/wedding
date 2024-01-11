@@ -32,7 +32,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       return new Response(undefined, { status: 400 });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const results = await SpotifyAPI.searchForItem(accessToken, params.query);
+    const results = await SpotifyAPI.searchForTrack(accessToken, params.query);
     return NextResponse.json(results, {
       headers: { 'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400' },
       status: 200,

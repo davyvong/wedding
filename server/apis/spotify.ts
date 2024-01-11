@@ -9,11 +9,11 @@ export interface SpotifyTrack {
   uri: string;
 }
 
-interface SpotifyPlaylistTrack extends SpotifyTrack {
+export interface SpotifyPlaylistTrack extends SpotifyTrack {
   addedAt: string;
 }
 
-interface SpotifyPlaylist {
+export interface SpotifyPlaylist {
   href: string;
   id: string;
   name: string;
@@ -113,7 +113,7 @@ class SpotifyAPI {
     });
   }
 
-  public static async searchForItem(accessToken: string, query: string): Promise<SpotifyTrack[]> {
+  public static async searchForTrack(accessToken: string, query: string): Promise<SpotifyTrack[]> {
     const url = new URL('https://api.spotify.com/v1/search');
     url.searchParams.set('q', query);
     url.searchParams.set('type', 'track');
