@@ -52,6 +52,34 @@ class SpotifyAPI {
     };
   }
 
+  public static getAuthorizationURL(): string {
+    const url = new URL('https://accounts.spotify.com/authorize?response_type=code');
+    url.searchParams.set('client_id', process.env.SPOTIFY_CLIENT_ID);
+    url.searchParams.set('redirect_uri', process.env.SPOTIFY_REDIRECT_URI);
+    url.searchParams.set('scope', 'playlist-modify-public playlist-modify-private');
+    return url.href;
+  }
+
+  public static async getRefreshToken(authorizationCode: string): Promise<string> {
+    const body = new URLSearchParams();
+    body.set('code', authorizationCode);
+    body.set('grant_type', 'authorization_code');
+    body.set('redirect_uri', process.env.SPOTIFY_REDIRECT_URI);
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      body,
+      cache: 'no-store',
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'POST',
+    });
+    const responseJson = await response.json();
+    return responseJson.refresh_token;
+  }
+
   public static async getAccessToken(): Promise<string> {
     const body = new URLSearchParams();
     body.set('grant_type', 'refresh_token');

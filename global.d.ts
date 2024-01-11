@@ -18,6 +18,7 @@ namespace NodeJS {
     SPOTIFY_CLIENT_ID: string;
     SPOTIFY_CLIENT_SECRET: string;
     SPOTIFY_PLAYLIST_ID: string;
+    SPOTIFY_REDIRECT_URI: string;
     SPOTIFY_REFRESH_TOKEN: string;
     SUPER_ADMINS: string;
     UPSTASH_REDIS_REST_TOKEN: string;
