@@ -27,11 +27,8 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!paramsSchema.isValidSync(params)) {
       return new Response(undefined, { status: 400 });
     }
-    if (token.id !== params.guest) {
-      const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-      if (!adminGuestIds.has(token.id)) {
-        return new Response(undefined, { status: 403 });
-      }
+    if (token.guestId !== params.guest && !token.isAdmin) {
+      return new Response(undefined, { status: 403 });
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
     if (!response) {
@@ -75,13 +72,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!bodySchema.isValidSync(body)) {
       return new Response(undefined, { status: 400 });
     }
-    if (params.guest !== token.id) {
-      const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-      if (!adminGuestIds.has(token.id)) {
-        const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.id, params.guest]);
-        if (!guestGroup) {
-          return new Response(undefined, { status: 403 });
-        }
+    if (params.guest !== token.guestId && !token.isAdmin) {
+      const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
+      if (!guestGroup) {
+        return new Response(undefined, { status: 403 });
       }
     }
     const response = await MySQLQueries.upsertResponseFromGuestId(params.guest, {

@@ -3,7 +3,6 @@
 namespace NodeJS {
   interface ProcessEnv {
     JWT_SECRET: string;
-    MONGODB_URI: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
     NODEMAILER_ADDRESS: string;
     NODEMAILER_PASSWORD: string;
@@ -20,7 +19,6 @@ namespace NodeJS {
     SPOTIFY_PLAYLIST_ID: string;
     SPOTIFY_REDIRECT_URI: string;
     SPOTIFY_REFRESH_TOKEN: string;
-    SUPER_ADMINS: string;
     TOKEN_SIGNING_KEY: string;
     UPSTASH_REDIS_REST_TOKEN: string;
     UPSTASH_REDIS_REST_URL: string;

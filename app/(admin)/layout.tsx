@@ -12,9 +12,7 @@ interface AdminGuestsLayoutProps {
 const AdminGuestsLayout = async ({ children }: AdminGuestsLayoutProps): Promise<JSX.Element> => {
   const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
 
-  const adminGuestIds = new Set<string>(process.env.SUPER_ADMINS.split(','));
-
-  if (!token || !adminGuestIds.has(token.id)) {
+  if (!token || !token.isAdmin) {
     return (
       <Fragment>
         <head>

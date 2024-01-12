@@ -37,7 +37,10 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (!guest) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    const token = await JWT.sign({ id: cachedGuestId });
+    const token = await JWT.sign({
+      guestId: cachedGuestId,
+      isAdmin: guest.isAdmin,
+    });
     const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/?flyout=rsvp');
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);

@@ -24,7 +24,7 @@ interface RSVPFlyoutProps {
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderReference, token }) => {
-  const [selectedGuestId, setSelectedGuestId] = useState<string>(token.id);
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(token.guestId);
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
 
   const fetchRSVP = useCallback(async (): Promise<{

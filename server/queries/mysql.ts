@@ -57,6 +57,7 @@ class MySQLQueries {
       const query = `
         select
           wedding_guests.email as guest_email,
+          wedding_guests.is_admin as guest_is_admin,
           wedding_guests.name as guest_name,
           wedding_guests.public_id as guest_public_id,
           wedding_responses.attendance as response_attendance,
@@ -76,6 +77,7 @@ class MySQLQueries {
       `;
       const results = await connection.execute<{
         guest_email: string;
+        guest_is_admin: number;
         guest_name: string;
         guest_public_id: string;
         response_attendance: number;
@@ -92,6 +94,7 @@ class MySQLQueries {
         guests: results.rows.map((row): Guest => {
           return Guest.fromRow({
             email: row.guest_email,
+            is_admin: row.guest_is_admin,
             guest_group_id: null,
             name: row.guest_name,
             public_id: row.guest_public_id,
@@ -279,6 +282,7 @@ class MySQLQueries {
     const query = `
       select
         wedding_guests.email as guest_email,
+        wedding_guests.is_admin as guest_is_admin,
         wedding_guests.name as guest_name,
         wedding_guests.public_id as guest_public_id,
         wedding_responses.attendance as response_attendance,
@@ -295,6 +299,7 @@ class MySQLQueries {
     const results = await connection.execute<{
       guest_email: string;
       guest_group_public_id: string | null;
+      guest_is_admin: number;
       guest_name: string;
       guest_public_id: string;
       response_attendance: number;
@@ -309,6 +314,7 @@ class MySQLQueries {
       {
         guest_email: string;
         guest_group_public_id: string | null;
+        guest_is_admin: number;
         guest_name: string;
         guest_public_id: string;
         response_attendance: number;
@@ -329,6 +335,7 @@ class MySQLQueries {
           return Guest.fromRow({
             email: row.guest_email,
             guest_group_id: null,
+            is_admin: row.guest_is_admin,
             name: row.guest_name,
             public_id: row.guest_public_id,
           });

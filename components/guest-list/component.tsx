@@ -219,7 +219,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                     </Tooltip>
                   </div>
                 )}
-                token={{ id: guest.id }}
+                token={{ guestId: guest.id }}
               />
             </Fragment>,
           )}

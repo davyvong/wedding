@@ -7,7 +7,8 @@ import JWT from 'server/jwt';
 import MySQLQueries from './queries/mysql';
 
 export interface GuestTokenPayload extends JWTPayload {
-  id: string;
+  guestId: string;
+  isAdmin?: boolean;
 }
 
 class Authenticator {
@@ -20,7 +21,7 @@ class Authenticator {
     }
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
-      const guest = await MySQLQueries.findGuestFromId(payload.id);
+      const guest = await MySQLQueries.findGuestFromId(payload.guestId);
       if (!guest) {
         return undefined;
       }

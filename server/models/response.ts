@@ -1,5 +1,3 @@
-import type { Document } from 'mongodb';
-
 export interface ResponseData {
   attendance: boolean;
   dietaryRestrictions?: string;
@@ -37,19 +35,6 @@ class Response {
     this.id = data.id;
     this.mailingAddress = data.mailingAddress;
     this.message = data.message;
-  }
-
-  public static fromDocument(doc: Document): Response {
-    const data: ResponseData = {
-      attendance: doc.attendance,
-      dietaryRestrictions: doc.dietaryRestrictions,
-      entree: doc.entree,
-      guest: doc.guest.toString(),
-      id: doc._id.toString(),
-      mailingAddress: doc.mailingAddress,
-      message: doc.message,
-    };
-    return new Response(data);
   }
 
   public static fromRow(row: ResponseRowData): Response {
