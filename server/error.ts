@@ -1,3 +1,5 @@
+import ServerEnvironment from './environment';
+
 export enum ServerErrorCode {
   InvalidRequestIP = 'InvalidRequestIP',
   UnexpectedError = 'UnexpectedError',
@@ -19,6 +21,17 @@ class ServerError {
     return {
       status: this.status,
     };
+  }
+
+  public static async to404Page(): Promise<Response> {
+    const response = await fetch(ServerEnvironment.getBaseURL() + '/404');
+    const responseText = await response.text();
+    return new Response(responseText, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+      },
+      status: 404,
+    });
   }
 
   public static handle(error: unknown) {
