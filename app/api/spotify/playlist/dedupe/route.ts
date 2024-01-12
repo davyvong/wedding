@@ -4,6 +4,8 @@ import ServerError from 'server/error';
 import Token from 'server/token';
 import { object, string } from 'yup';
 
+export const dynamic = 'force-dynamic';
+
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const requestURL = new URL(request.url);
@@ -28,10 +30,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const uris = tracks.map((track: SpotifyPlaylistTrack): string => track.uri);
     await SpotifyAPI.removeFromPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, uris);
     await SpotifyAPI.addToPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, uris);
-    return new Response(undefined, {
-      headers: { 'Cache-Control': 's-maxage=86400, stale-while-revalidate=3600' },
-      status: 202,
-    });
+    return new Response(undefined, { status: 202 });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }

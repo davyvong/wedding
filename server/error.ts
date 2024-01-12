@@ -23,12 +23,13 @@ class ServerError {
     };
   }
 
-  public static async to404Page(): Promise<Response> {
+  public static async to404Page(headers: Record<string, string> = {}): Promise<Response> {
     const response = await fetch(ServerEnvironment.getBaseURL() + '/404');
     const responseText = await response.text();
     return new Response(responseText, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
+        ...headers,
       },
       status: 404,
     });
