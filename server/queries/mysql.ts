@@ -136,16 +136,21 @@ class MySQLQueries {
           dietary_restrictions,
           entree,
           mailing_address,
-          message,
+          message
         )
         values (
           :publicId,
-          :guestId,
+          (
+            select id
+            from wedding_guests
+            where public_id = :guestId
+            limit 1
+          ),
           :attendance,
           :dietaryRestrictions,
           :entree,
           :mailingAddress,
-          :message,
+          :message
         )
       `;
       const results = await connection.execute<ResponseRowData>(query, {
