@@ -110,7 +110,51 @@ class SpotifyAPI {
       method: 'GET',
     });
     const responseJson = await response.json();
-    return SpotifyAPI.toSpotifyPlaylist(responseJson);
+    const tracks = new Map<string, SpotifyPlaylistTrack>();
+    for (const item of responseJson.tracks.items) {
+      const track = SpotifyAPI.toSpotifyPlaylistTrack(item);
+      tracks.set(track.uri, track);
+    }
+    let next = responseJson.tracks.next;
+    while (next) {
+      const nextTracks = await this.getNextTracksInPlaylist(accessToken, next);
+      for (const track of nextTracks.tracks) {
+        tracks.set(track.uri, track);
+      }
+      next = nextTracks.next;
+    }
+    return {
+      ...SpotifyAPI.toSpotifyPlaylist(responseJson),
+      tracks: Array.from(tracks.values()),
+    };
+  }
+
+  public static async getNextTracksInPlaylist(
+    accessToken: string,
+    next: null | string,
+  ): Promise<{
+    next: null | string;
+    tracks: SpotifyPlaylistTrack[];
+  }> {
+    if (!next) {
+      return {
+        next: null,
+        tracks: [],
+      };
+    }
+    const response = await fetch(next, {
+      cache: 'no-store',
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    });
+    const responseJson = await response.json();
+    return {
+      next: responseJson.next,
+      tracks: responseJson.items.map(SpotifyAPI.toSpotifyPlaylistTrack),
+    };
   }
 
   public static async addToPlaylist(accessToken: string, playlistId: string, uris: string[]): Promise<void> {
@@ -155,6 +199,29 @@ class SpotifyAPI {
     });
     const responseJson = await response.json();
     return responseJson.tracks.items.map(SpotifyAPI.toSpotifyTrack);
+  }
+
+  public static async getDuplicateTracksInPlaylist(
+    accessToken: string,
+    playlistId: string,
+  ): Promise<SpotifyPlaylistTrack[]> {
+    const tracks = new Map<string, SpotifyPlaylistTrack>();
+    const duplicateTracks = new Set<string>();
+    const url = new URL('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks');
+    let next: null | string = url.href;
+    while (next) {
+      const nextTracks = await this.getNextTracksInPlaylist(accessToken, next);
+      for (const track of nextTracks.tracks) {
+        if (tracks.has(track.uri)) {
+          duplicateTracks.add(track.uri);
+        }
+        tracks.set(track.uri, track);
+      }
+      next = nextTracks.next;
+    }
+    return Array.from(tracks.values()).filter((track: SpotifyPlaylistTrack): boolean => {
+      return duplicateTracks.has(track.uri);
+    });
   }
 }
 

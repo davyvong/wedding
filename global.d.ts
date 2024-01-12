@@ -21,6 +21,7 @@ namespace NodeJS {
     SPOTIFY_REDIRECT_URI: string;
     SPOTIFY_REFRESH_TOKEN: string;
     SUPER_ADMINS: string;
+    TOKEN_SIGNING_KEY: string;
     UPSTASH_REDIS_REST_TOKEN: string;
     UPSTASH_REDIS_REST_URL: string;
     VERCEL_ENV: string;
