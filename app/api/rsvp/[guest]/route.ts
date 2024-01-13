@@ -34,7 +34,13 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!response) {
       return new Response(undefined, { status: 404 });
     }
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json(
+      {
+        guests: response.guests.map(guest => guest.valueOf()),
+        responses: response.responses.map(response => response.valueOf()),
+      },
+      { status: 200 },
+    );
   } catch (error: unknown) {
     return ServerError.handle(error);
   }

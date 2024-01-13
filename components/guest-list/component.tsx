@@ -21,7 +21,7 @@ import { sortByKey } from 'utils/sort';
 import styles from './component.module.css';
 
 export interface GuestListComponentProps {
-  guestList: { guests: GuestData[]; id: string; responses: ResponseData[] }[];
+  guestList: { guests: Omit<GuestData, 'isAdmin'>[]; id: string; responses: ResponseData[] }[];
 }
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {

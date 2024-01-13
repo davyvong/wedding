@@ -17,9 +17,9 @@ const Page = async (): Promise<JSX.Element> => {
 
   const guestList = await MySQLQueries.findGuestList();
   const guestListData = guestList.map(guestGroup => ({
-    guests: guestGroup.guests.map(guest => guest.toPlainObject()),
+    guests: guestGroup.guests.map(guest => guest.valueOf()),
     id: guestGroup.id,
-    responses: guestGroup.responses.map(guest => guest.toPlainObject()),
+    responses: guestGroup.responses.map(response => response.valueOf()),
   }));
   await redisClient.set(redisKey, guestListData, { ex: 60 });
 

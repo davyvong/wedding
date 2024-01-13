@@ -38,7 +38,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const token = await JWT.sign({
-      guestId: cachedGuestId,
+      guestId: guest.id,
       isAdmin: guest.isAdmin,
     });
     const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/?flyout=rsvp');

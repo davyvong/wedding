@@ -36,11 +36,10 @@ class Guest {
     return new Guest(data);
   }
 
-  public toPlainObject(): GuestData {
+  public valueOf(): Omit<GuestData, 'isAdmin'> {
     return {
       email: this.email,
       id: this.id,
-      isAdmin: this.isAdmin,
       name: this.name,
     };
   }

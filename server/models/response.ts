@@ -50,7 +50,7 @@ class Response {
     return new Response(data);
   }
 
-  public toPlainObject(): ResponseData {
+  public valueOf(): ResponseData {
     return {
       attendance: this.attendance,
       dietaryRestrictions: this.dietaryRestrictions,
