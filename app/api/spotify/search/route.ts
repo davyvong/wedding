@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
@@ -15,11 +15,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
-    }
-    const token = await Authenticator.verifyToken(request.cookies);
-    if (!token) {
-      return new Response(undefined, { status: 401 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const requestURL = new URL(request.url);
     const params = {
@@ -29,7 +28,17 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       query: string().required().min(1).max(256),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
+    }
+    const token = await Authenticator.verifyToken(request.cookies);
+    if (!token) {
+      throw new ServerError({
+        code: ServerErrorCode.Unauthorized,
+        status: 401,
+      });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const results = await SpotifyAPI.searchForTrack(accessToken, params.query);

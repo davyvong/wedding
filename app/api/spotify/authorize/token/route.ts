@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI from 'server/apis/spotify';
 import ServerEnvironment from 'server/environment';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import { object, string } from 'yup';
 
+export const dynamic = 'force-dynamic';
+
 export const GET = async (request: NextRequest): Promise<Response> => {
-  if (!ServerEnvironment.isDevelopment) {
-    return ServerError.to404Page();
-  }
   try {
+    if (!ServerEnvironment.isDevelopment) {
+      throw new ServerError({
+        code: ServerErrorCode.MethodNotAllowed,
+        status: 405,
+      });
+    }
     const requestURL = new URL(request.url);
     const params = {
       code: requestURL.searchParams.get('code'),
@@ -17,11 +22,14 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       code: string().required().min(1),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
     }
     const refreshToken = await SpotifyAPI.getRefreshToken(params.code);
     return NextResponse.json({ token: refreshToken }, { status: 200 });
-  } catch (error) {
-    return new Response(undefined, { status: 500 });
+  } catch (error: unknown) {
+    return ServerError.handle(error);
   }
 };

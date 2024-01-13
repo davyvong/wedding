@@ -5,11 +5,13 @@ import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
 import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
+
+export const dynamic = 'force-dynamic';
 
 const getRandomWords = (count: number): string[] => {
   const set = new Set<string>();
@@ -28,19 +30,28 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const body = await request.json();
     const bodySchema = object({
       email: string().email().required(),
     });
     if (!bodySchema.isValidSync(body)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
     }
     const email = body.email.toLowerCase();
     const guest = await MySQLQueries.findGuestFromEmail(email);
     if (!guest) {
-      return new Response(undefined, { status: 403 });
+      throw new ServerError({
+        code: ServerErrorCode.Forbidden,
+        status: 403,
+      });
     }
     const code = getRandomWords(4).join('-');
     const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);

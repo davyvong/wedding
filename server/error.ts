@@ -1,8 +1,11 @@
-import ServerEnvironment from './environment';
-
 export enum ServerErrorCode {
-  InvalidRequestIP = 'InvalidRequestIP',
-  UnexpectedError = 'UnexpectedError',
+  BadRequest = 'BadRequest',
+  Forbidden = 'Forbidden',
+  InternalServerError = 'InternalServerError',
+  MethodNotAllowed = 'MethodNotAllowed',
+  NotFound = 'NotFound',
+  TooManyRequests = 'TooManyRequests',
+  Unauthorized = 'Unauthorized',
 }
 
 interface ServerErrorOptions {
@@ -17,25 +20,7 @@ class ServerError {
     Object.assign(this, options);
   }
 
-  public toRequest() {
-    return {
-      status: this.status,
-    };
-  }
-
-  public static async to404Page(headers: Record<string, string> = {}): Promise<Response> {
-    const response = await fetch(ServerEnvironment.getBaseURL() + '/404');
-    const responseText = await response.text();
-    return new Response(responseText, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        ...headers,
-      },
-      status: 404,
-    });
-  }
-
-  public static handle(error: unknown) {
+  public static handle(error: unknown): Response {
     console.log(error);
     if (error instanceof ServerError) {
       return new Response(undefined, { status: error.status });

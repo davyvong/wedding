@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import JWT from 'server/jwt';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
@@ -17,7 +17,10 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const paramsSchema = object({
       code: string()

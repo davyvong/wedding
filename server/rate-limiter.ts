@@ -55,7 +55,7 @@ class RateLimiter {
       .matches(/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/);
     if (!ipSchema.isValidSync(ip)) {
       throw new ServerError({
-        code: ServerErrorCode.InvalidRequestIP,
+        code: ServerErrorCode.BadRequest,
         status: 400,
       });
     }
@@ -75,7 +75,7 @@ class RateLimiter {
     } catch (error: unknown) {
       console.log(error);
       throw new ServerError({
-        code: ServerErrorCode.UnexpectedError,
+        code: ServerErrorCode.InternalServerError,
         status: 500,
       });
     }

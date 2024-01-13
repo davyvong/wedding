@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
@@ -21,7 +21,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const requestURL = new URL(request.url);
     const params = {
@@ -31,7 +34,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       lookup: string().min(1).required(),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
     }
     const url = new URL('https://ws1.postescanada-canadapost.ca/Capture/Interactive/Find/v1.00/json3ex.ws');
     url.searchParams.set('Countries', 'CAN');

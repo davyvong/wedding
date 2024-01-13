@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 
 export const dynamic = 'force-dynamic';
@@ -13,11 +13,17 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const token = await Authenticator.verifyToken(request.cookies);
     if (!token) {
-      return new Response(undefined, { status: 401 });
+      throw new ServerError({
+        code: ServerErrorCode.Unauthorized,
+        status: 401,
+      });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);

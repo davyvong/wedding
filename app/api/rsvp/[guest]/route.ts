@@ -1,10 +1,12 @@
 import { EntreeOptions } from 'components/flyouts/rsvp/constants';
 import { NextRequest, NextResponse } from 'next/server';
 import Authenticator from 'server/authenticator';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { boolean, mixed, object, string } from 'yup';
+
+export const dynamic = 'force-dynamic';
 
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
@@ -13,11 +15,10 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
-    }
-    const token = await Authenticator.verifyToken(request.cookies);
-    if (!token) {
-      return new Response(undefined, { status: 401 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const paramsSchema = object({
       guest: string()
@@ -25,14 +26,30 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         .matches(/^[0-9a-fA-F]{24}$/),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
+    }
+    const token = await Authenticator.verifyToken(request.cookies);
+    if (!token) {
+      throw new ServerError({
+        code: ServerErrorCode.Unauthorized,
+        status: 401,
+      });
     }
     if (token.guestId !== params.guest && !token.isAdmin) {
-      return new Response(undefined, { status: 403 });
+      throw new ServerError({
+        code: ServerErrorCode.Forbidden,
+        status: 403,
+      });
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
     if (!response) {
-      return new Response(undefined, { status: 404 });
+      throw new ServerError({
+        code: ServerErrorCode.NotFound,
+        status: 404,
+      });
     }
     return NextResponse.json(
       {
@@ -53,11 +70,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
-      return new Response(undefined, { status: 429 });
-    }
-    const token = await Authenticator.verifyToken(request.cookies);
-    if (!token) {
-      return new Response(undefined, { status: 401 });
+      throw new ServerError({
+        code: ServerErrorCode.TooManyRequests,
+        status: 429,
+      });
     }
     const paramsSchema = object({
       guest: string()
@@ -65,7 +81,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
         .matches(/^[0-9a-fA-F]{24}$/),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
     }
     const body = await request.json();
     const bodySchema = object({
@@ -76,12 +95,25 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       message: string().required(),
     });
     if (!bodySchema.isValidSync(body)) {
-      return new Response(undefined, { status: 400 });
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
+    }
+    const token = await Authenticator.verifyToken(request.cookies);
+    if (!token) {
+      throw new ServerError({
+        code: ServerErrorCode.Unauthorized,
+        status: 401,
+      });
     }
     if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
       if (!guestGroup) {
-        return new Response(undefined, { status: 403 });
+        throw new ServerError({
+          code: ServerErrorCode.Forbidden,
+          status: 403,
+        });
       }
     }
     const response = await MySQLQueries.upsertResponseFromGuestId(params.guest, {

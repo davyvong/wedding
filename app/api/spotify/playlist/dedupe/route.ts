@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server';
 import SpotifyAPI, { SpotifyPlaylistTrack } from 'server/apis/spotify';
-import ServerError from 'server/error';
+import ServerError, { ServerErrorCode } from 'server/error';
 import Token from 'server/token';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
 
-export const GET = async (request: NextRequest): Promise<Response> => {
+export const POST = async (request: NextRequest): Promise<Response> => {
   try {
     const requestURL = new URL(request.url);
     const params = {
@@ -16,15 +16,17 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       token: string().required().min(1),
     });
     if (!paramsSchema.isValidSync(params)) {
-      return ServerError.to404Page();
+      throw new ServerError({
+        code: ServerErrorCode.BadRequest,
+        status: 400,
+      });
     }
     if (!(await Token.verify(params.token, process.env.SPOTIFY_PLAYLIST_ID))) {
-      return ServerError.to404Page();
+      throw new ServerError({
+        code: ServerErrorCode.Unauthorized,
+        status: 401,
+      });
     }
-  } catch (error: unknown) {
-    return ServerError.to404Page();
-  }
-  try {
     const accessToken = await SpotifyAPI.getAccessToken();
     const tracks = await SpotifyAPI.getDuplicateTracksInPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
     const uris = tracks.map((track: SpotifyPlaylistTrack): string => track.uri);
