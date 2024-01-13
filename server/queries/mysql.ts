@@ -73,7 +73,7 @@ class MySQLQueries {
           from wedding_guests
           where public_id = :guestId
           limit 1
-        )
+        ) or wedding_guests.public_id = :guestId
       `;
       const results = await connection.execute<{
         guest_email: string;
