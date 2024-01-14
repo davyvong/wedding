@@ -1,3 +1,5 @@
+import RateLimiter, { RateLimiterCheckResult } from 'server/rate-limiter';
+
 export enum ServerErrorCode {
   BadRequest = 'BadRequest',
   Forbidden = 'Forbidden',
@@ -10,20 +12,29 @@ export enum ServerErrorCode {
 
 interface ServerErrorOptions {
   code: ServerErrorCode;
+  rateLimit?: RateLimiterCheckResult;
   status: number;
 }
 
-class ServerError {
-  public status = 500;
+class ServerError implements ServerErrorOptions {
+  public code: ServerErrorCode = ServerErrorCode.InternalServerError;
+  public rateLimit?: RateLimiterCheckResult;
+  public status: number = 500;
 
   constructor(options: ServerErrorOptions) {
-    Object.assign(this, options);
+    this.code = options.code;
+    this.rateLimit = options.rateLimit;
+    this.status = options.status;
   }
 
   public static handle(error: unknown): Response {
     console.log(error);
     if (error instanceof ServerError) {
-      return new Response(undefined, { status: error.status });
+      const init: ResponseInit = {
+        headers: RateLimiter.toHeaders(error.rateLimit),
+        status: error.status,
+      };
+      return new Response(undefined, init);
     }
     return new Response(undefined, { status: 500 });
   }

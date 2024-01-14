@@ -17,6 +17,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -28,6 +29,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!paramsSchema.isValidSync(params)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -35,12 +37,14 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!token) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
+        rateLimit: checkResults,
         status: 401,
       });
     }
     if (token.guestId !== params.guest && !token.isAdmin) {
       throw new ServerError({
         code: ServerErrorCode.Forbidden,
+        rateLimit: checkResults,
         status: 403,
       });
     }
@@ -48,6 +52,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!response) {
       throw new ServerError({
         code: ServerErrorCode.NotFound,
+        rateLimit: checkResults,
         status: 404,
       });
     }
@@ -56,7 +61,10 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         guests: response.guests.map(guest => guest.valueOf()),
         responses: response.responses.map(response => response.valueOf()),
       },
-      { status: 200 },
+      {
+        headers: RateLimiter.toHeaders(checkResults),
+        status: 200,
+      },
     );
   } catch (error: unknown) {
     return ServerError.handle(error);
@@ -72,6 +80,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -83,6 +92,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!paramsSchema.isValidSync(params)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -97,6 +107,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!bodySchema.isValidSync(body)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -104,6 +115,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!token) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
+        rateLimit: checkResults,
         status: 401,
       });
     }
@@ -112,6 +124,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       if (!guestGroup) {
         throw new ServerError({
           code: ServerErrorCode.Forbidden,
+          rateLimit: checkResults,
           status: 403,
         });
       }
@@ -124,9 +137,15 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       message: body.message,
     });
     if (!response) {
-      return new Response(undefined, { status: 204 });
+      return new Response(undefined, {
+        headers: RateLimiter.toHeaders(checkResults),
+        status: 204,
+      });
     }
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json(response, {
+      headers: RateLimiter.toHeaders(checkResults),
+      status: 200,
+    });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }

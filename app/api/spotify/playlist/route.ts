@@ -15,6 +15,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -22,13 +23,17 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!token) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
+        rateLimit: checkResults,
         status: 401,
       });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
     return NextResponse.json(playlist, {
-      headers: { 'Cache-Control': 's-maxage=120, stale-while-revalidate=60' },
+      headers: {
+        'Cache-Control': 's-maxage=120, stale-while-revalidate=60',
+        ...RateLimiter.toHeaders(checkResults),
+      },
       status: 200,
     });
   } catch (error: unknown) {

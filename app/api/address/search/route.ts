@@ -23,6 +23,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -36,6 +37,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!paramsSchema.isValidSync(params)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -70,7 +72,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       })
       .filter(Boolean);
     return NextResponse.json(addresses, {
-      headers: { 'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400' },
+      headers: {
+        'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400',
+        ...RateLimiter.toHeaders(checkResults),
+      },
       status: 200,
     });
   } catch (error: unknown) {

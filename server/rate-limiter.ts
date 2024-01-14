@@ -12,7 +12,10 @@ export enum RateLimiterScope {
   SecretCode = 'SecretCode',
   SecretEmail = 'SecretEmail',
   SignOut = 'SignOut',
+  SpotifyAuthorize = 'SpotifyAuthorize',
+  SpotifyAuthorizeToken = 'SpotifyAuthorizeToken',
   SpotifyPlaylist = 'SpotifyPlaylist',
+  SpotifyPlaylistDedupe = 'SpotifyPlaylistDedupe',
   SpotifySearch = 'SpotifySearch',
 }
 
@@ -22,7 +25,7 @@ interface RateLimiterOptions {
   scope: RateLimiterScope;
 }
 
-interface RateLimiterCheckResult {
+export interface RateLimiterCheckResult {
   exceeded: boolean;
   limit: number;
   remaining: number;
@@ -36,6 +39,17 @@ class RateLimiter {
 
   constructor(options: RateLimiterOptions) {
     Object.assign(this, options);
+  }
+
+  public static toHeaders(checkResults?: RateLimiterCheckResult): Record<string, string> {
+    if (!checkResults) {
+      return {};
+    }
+    return {
+      'X-RateLimit-Limit': checkResults.limit.toString(),
+      'X-RateLimit-Remaining': checkResults.remaining.toString(),
+      'X-RateLimit-Reset': checkResults.reset.toString(),
+    };
   }
 
   public async checkRequest(request: NextRequest): Promise<RateLimiterCheckResult> {

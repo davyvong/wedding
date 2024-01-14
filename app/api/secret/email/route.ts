@@ -32,6 +32,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -42,6 +43,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -50,6 +52,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!guest) {
       throw new ServerError({
         code: ServerErrorCode.Forbidden,
+        rateLimit: checkResults,
         status: 403,
       });
     }
@@ -67,7 +70,10 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', code);
     await redisClient.set(redisKey, guest.id, { ex: 900 });
-    return new Response(undefined, { status: 202 });
+    return new Response(undefined, {
+      headers: RateLimiter.toHeaders(checkResults),
+      status: 202,
+    });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }

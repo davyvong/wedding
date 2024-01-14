@@ -19,6 +19,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }

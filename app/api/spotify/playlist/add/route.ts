@@ -16,6 +16,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (checkResults.exceeded) {
       throw new ServerError({
         code: ServerErrorCode.TooManyRequests,
+        rateLimit: checkResults,
         status: 429,
       });
     }
@@ -33,6 +34,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
+        rateLimit: checkResults,
         status: 400,
       });
     }
@@ -40,12 +42,16 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!token) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
+        rateLimit: checkResults,
         status: 401,
       });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     await SpotifyAPI.addToPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, body.uris);
-    return new Response(undefined, { status: 202 });
+    return new Response(undefined, {
+      headers: RateLimiter.toHeaders(checkResults),
+      status: 202,
+    });
   } catch (error: unknown) {
     return ServerError.handle(error);
   }
