@@ -130,7 +130,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                     : Translate.t('components.guest-list.tooltips.collapse');
                 }}
               >
-                <div>
+                <div className={styles.iconButton}>
                   <ExpandLessIconSVG className={styles.guestGroupExpandIcon} />
                 </div>
               </Tooltip>
