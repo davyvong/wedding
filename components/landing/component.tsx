@@ -46,7 +46,7 @@ const LandingComponent: FC = () => {
             fill
             priority
             quality={80}
-            sizes="(max-width: 425px) 100vh, (max-width: 768px) 100vh, (max-width: 1024px) 100vh, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, (max-width: 2560px) 100vw, 100vw"
+            sizes="(max-width: 425px) 150vw, (max-width: 768px) 75vw, (max-width: 1024px) 50vw, (max-width: 1280px) 40vw, (max-width: 1440px) 40vw, (max-width: 2560px) 40vw, 40vw"
             src={image.src}
             style={image.style}
           />
@@ -80,7 +80,7 @@ const LandingComponent: FC = () => {
             priority
             quality={80}
             src={VD72JPG}
-            sizes="(max-width: 425px) 100vh, (max-width: 768px) 100vh, (max-width: 1024px) 100vh, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, (max-width: 2560px) 100vw, 100vw"
+            sizes="(max-width: 425px) 150vw, (max-width: 768px) 150vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, (max-width: 2560px) 100vw, 100vw"
           />
           <div className={styles.eventInfo}>
             <div className={classNames(styles.saveTheDate, brittanySignature.className)}>
