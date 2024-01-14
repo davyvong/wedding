@@ -215,10 +215,44 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     [mutate, onValidate, selectedGuestId, values],
   );
 
-  const renderGuestPartySelector = useCallback(() => {
+  const renderDismissWarning = useCallback((): JSX.Element => {
+    const guests: GuestData[] = data?.guests || [];
+    return (
+      <div className={classNames(styles.warningMessage, styles.dismissWarning)}>
+        {Translate.t('components.flyouts.rsvp.unsaved-changes.dismiss', {
+          currentGuest: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
+        })}
+        <div className={styles.buttonRow}>
+          <Button
+            className={styles.filledButton}
+            onClick={(): void => {
+              setIsOpen(false, true);
+              if (setShouldRenderDismissWarning) {
+                setShouldRenderDismissWarning(false);
+              }
+            }}
+          >
+            {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.discard-and-close')}
+          </Button>
+          <Button
+            className={styles.outlinedButton}
+            onClick={(): void => {
+              if (setShouldRenderDismissWarning) {
+                setShouldRenderDismissWarning(false);
+              }
+            }}
+          >
+            {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.cancel')}
+          </Button>
+        </div>
+      </div>
+    );
+  }, [data, selectedGuestId, setIsOpen, setShouldRenderDismissWarning]);
+
+  const renderGuestPartySelector = useCallback((): JSX.Element => {
     const guests: GuestData[] = data?.guests || [];
     if (guests.length <= 1) {
-      return null;
+      return <Fragment />;
     }
     return (
       <div className={styles.guests}>
@@ -248,7 +282,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
           })}
         </div>
         {switchToUser && (
-          <div className={styles.unsavedChangesWarning}>
+          <div className={classNames(styles.warningMessage, styles.guestSwitchWarning)}>
             {Translate.t('components.flyouts.rsvp.unsaved-changes.guest-switch', {
               currentGuest: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
               selectedGuest: guests.find((guest: GuestData) => guest.id === switchToUser)?.name || '',
@@ -273,7 +307,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     );
   }, [data, didValuesChange, selectedGuestId, switchToUser]);
 
-  const renderSubmitButtonContent = useCallback(() => {
+  const renderSubmitButtonContent = useCallback((): JSX.Element | string => {
     if (isSaving) {
       return (
         <Fragment>
@@ -327,34 +361,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
       {renderGuestPartySelector()}
-      {shouldRenderDismissWarning && (
-        <div className={styles.dismissWarning}>
-          {Translate.t('components.flyouts.rsvp.unsaved-changes.dismiss')}
-          <div className={styles.buttonRow}>
-            <Button
-              className={styles.filledButton}
-              onClick={(): void => {
-                setIsOpen(false, true);
-                if (setShouldRenderDismissWarning) {
-                  setShouldRenderDismissWarning(false);
-                }
-              }}
-            >
-              {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.discard-and-close')}
-            </Button>
-            <Button
-              className={styles.outlinedButton}
-              onClick={(): void => {
-                if (setShouldRenderDismissWarning) {
-                  setShouldRenderDismissWarning(false);
-                }
-              }}
-            >
-              {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.cancel')}
-            </Button>
-          </div>
-        </div>
-      )}
+      {shouldRenderDismissWarning && renderDismissWarning()}
       <div className={styles.header}>
         {Translate.t('components.flyouts.rsvp.headers.response', {
           name: (data?.guests || []).find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
