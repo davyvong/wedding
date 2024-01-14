@@ -14,7 +14,7 @@ import {
 } from '@floating-ui/react';
 import CloseIconSVG from 'assets/icons/close.svg';
 import { isBrowser } from 'client/browser';
-import type { Dispatch, FC, SetStateAction, TouchEvent, WheelEvent } from 'react';
+import type { FC, TouchEvent, WheelEvent } from 'react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -25,10 +25,11 @@ export interface FlyoutReferenceComponentProps {
 }
 
 export interface FlyoutContentComponentProps {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: (open: boolean, shouldSkipAttemptToDismiss?: boolean) => void;
 }
 
 interface FlyoutComponentProps {
+  onAttemptToDismiss?: () => boolean;
   onToggleFlyout?: (open: boolean) => void;
   openWithURLParam?: string;
   renderContent: (props: FlyoutContentComponentProps) => JSX.Element;
@@ -36,6 +37,7 @@ interface FlyoutComponentProps {
 }
 
 const FlyoutComponent: FC<FlyoutComponentProps> = ({
+  onAttemptToDismiss,
   onToggleFlyout,
   openWithURLParam,
   renderContent,
@@ -44,7 +46,10 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleFlyout = useCallback(
-    (open: boolean): void => {
+    (open: boolean, shouldSkipAttemptToDismiss: boolean = false): void => {
+      if (!shouldSkipAttemptToDismiss && !open && onAttemptToDismiss && !onAttemptToDismiss()) {
+        return;
+      }
       setIsOpen(open);
       if (onToggleFlyout) {
         onToggleFlyout(open);
@@ -55,11 +60,18 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
         window.history.pushState({ path: url.href }, '', url.href);
       }
     },
-    [onToggleFlyout],
+    [onAttemptToDismiss, onToggleFlyout],
+  );
+
+  const onOpenChange = useCallback(
+    (open: boolean): void => {
+      toggleFlyout(open);
+    },
+    [toggleFlyout],
   );
 
   const { refs, context } = useFloating({
-    onOpenChange: toggleFlyout,
+    onOpenChange,
     open: isOpen,
     whileElementsMounted: autoUpdate,
   });

@@ -10,26 +10,24 @@ import Select from 'components/form/select';
 import TextInput from 'components/form/text-input';
 import Textarea from 'components/form/textarea';
 import LoadingHeart from 'components/loading-heart';
+import Skeleton from 'components/skeleton';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { FC } from 'react';
 import { GuestData } from 'server/models/guest';
 import { ResponseData } from 'server/models/response';
-import { KeyedMutator } from 'swr';
+import useSWR from 'swr';
+import { sortByKey } from 'utils/sort';
 import { boolean, mixed, string } from 'yup';
 
 import styles from './component.module.css';
 import { EntreeOptions, attendanceOptions, entreeOptions } from './constants';
 
 interface RSVPFlyoutComponentProps extends FlyoutContentComponentProps {
-  guests: GuestData[];
-  initialValues?: Partial<RSVPFlyoutComponentValues>;
-  isEditMode: boolean;
-  mutateDataCache: KeyedMutator<{
-    guests: GuestData[];
-    responses: ResponseData[];
-  }>;
-  selectedGuestId: string;
-  setSelectedGuestId: Dispatch<SetStateAction<string>>;
+  defaultSelectedGuestId: string;
+  onValuesChange?: (didValuesChange: boolean) => void;
+  setShouldRenderDismissWarning?: (shouldRenderDismissWarning: boolean) => void;
+  shouldFetchRSVP?: boolean;
+  shouldRenderDismissWarning?: boolean;
 }
 
 export interface RSVPFlyoutComponentValues {
@@ -57,18 +55,61 @@ const defaultValues: RSVPFlyoutComponentValues = {
 };
 
 const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
-  guests,
-  initialValues,
-  isEditMode,
-  mutateDataCache,
-  selectedGuestId,
-  setSelectedGuestId,
+  defaultSelectedGuestId,
+  onValuesChange,
   setIsOpen,
+  setShouldRenderDismissWarning,
+  shouldFetchRSVP = true,
+  shouldRenderDismissWarning = false,
 }) => {
+  const [selectedGuestId, setSelectedGuestId] = useState<string>(defaultSelectedGuestId);
+
+  const fetchRSVP = useCallback(async (): Promise<{
+    guests: GuestData[];
+    responses: ResponseData[];
+  } | null> => {
+    const response = await fetch('/api/rsvp/' + selectedGuestId, {
+      cache: 'no-store',
+      method: 'GET',
+    });
+    const responseJson = await response.json();
+    return {
+      ...responseJson,
+      guests: (responseJson.guests || []).sort(sortByKey('name')),
+    };
+  }, [selectedGuestId]);
+
+  const { data, isLoading, mutate } = useSWR(
+    (): null | string => (shouldFetchRSVP ? '/api/rsvp/' + selectedGuestId : null),
+    fetchRSVP,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
+  );
+
+  const initialValues = useMemo<ResponseData | undefined>(() => {
+    if (!data) {
+      return undefined;
+    }
+    return data.responses.find((response: ResponseData): boolean => response.guest === selectedGuestId);
+  }, [data, selectedGuestId]);
+
   const [values, setValues] = useState<RSVPFlyoutComponentValues>({
     ...defaultValues,
     ...initialValues,
   });
+
+  useEffect(() => {
+    setValues({
+      ...defaultValues,
+      ...initialValues,
+    });
+  }, [initialValues, selectedGuestId]);
+
+  const isEditMode = useMemo<boolean>((): boolean => !!initialValues, [initialValues]);
+
   const [errors, setErrors] = useState<RSVPFlyoutComponentErrors>({});
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [switchToUser, setSwitchToUser] = useState<string | undefined>();
@@ -89,6 +130,12 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     }
     return false;
   }, [initialValues, values]);
+
+  useEffect(() => {
+    if (onValuesChange) {
+      onValuesChange(didValuesChange);
+    }
+  }, [didValuesChange, onValuesChange]);
 
   const onAddressInputChange = useCallback((name: string, value: string): void => {
     setValues(
@@ -142,7 +189,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         });
         setIsSaving(false);
         const responseJson: ResponseData = await response.json();
-        mutateDataCache(
+        mutate(
           (currentData?: {
             guests: GuestData[];
             responses: ResponseData[];
@@ -165,10 +212,11 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         );
       }
     },
-    [mutateDataCache, onValidate, selectedGuestId, values],
+    [mutate, onValidate, selectedGuestId, values],
   );
 
   const renderGuestPartySelector = useCallback(() => {
+    const guests: GuestData[] = data?.guests || [];
     if (guests.length <= 1) {
       return null;
     }
@@ -201,7 +249,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         </div>
         {switchToUser && (
           <div className={styles.unsavedChangesWarning}>
-            {Translate.t('components.flyouts.rsvp.unsaved-changes', {
+            {Translate.t('components.flyouts.rsvp.unsaved-changes.guest-switch', {
               currentGuest: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
               selectedGuest: guests.find((guest: GuestData) => guest.id === switchToUser)?.name || '',
             })}
@@ -223,7 +271,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         )}
       </div>
     );
-  }, [didValuesChange, guests, selectedGuestId, setSelectedGuestId, switchToUser]);
+  }, [data, didValuesChange, selectedGuestId, switchToUser]);
 
   const renderSubmitButtonContent = useCallback(() => {
     if (isSaving) {
@@ -242,20 +290,74 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     return Translate.t('components.flyouts.rsvp.buttons.submit');
   }, [isEditMode, isSaving]);
 
-  useEffect(() => {
-    setValues({
-      ...defaultValues,
-      ...initialValues,
-    });
-  }, [initialValues, selectedGuestId]);
+  if (isLoading) {
+    const randomQuestionAndAnswerWidths = new Array(5)
+      .fill(undefined)
+      .map((): string[] => [
+        (50 + Math.ceil(Math.random() * 50)).toString() + '%',
+        (75 + Math.ceil(Math.random() * 25)).toString() + '%',
+      ]);
+    return (
+      <div className={styles.form}>
+        <Skeleton height="2.5rem" inverse width={100} />
+        <Skeleton height="14.5rem" inverse style={{ marginTop: '3rem' }} width="100%" />
+        <Skeleton
+          height="2rem"
+          inverse
+          style={{ marginTop: '3rem' }}
+          width={(25 + Math.ceil(Math.random() * 50)).toString() + '%'}
+        />
+        {randomQuestionAndAnswerWidths.map(
+          ([questionWidth, answerWidth]: string[], index: number): JSX.Element => (
+            <Fragment key={index}>
+              <Skeleton height="1.5rem" inverse style={{ marginTop: '3rem' }} width={questionWidth} />
+              <Skeleton height="1.5rem" inverse style={{ marginTop: '1rem' }} width={answerWidth} />
+            </Fragment>
+          ),
+        )}
+        <center style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '3rem' }}>
+          <Skeleton height="2.5rem" inverse style={{ borderRadius: '1.25rem' }} width={125} />
+          <Skeleton height="2.5rem" inverse style={{ borderRadius: '1.25rem', marginLeft: '1.5rem' }} width={80} />
+        </center>
+      </div>
+    );
+  }
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
       {renderGuestPartySelector()}
+      {shouldRenderDismissWarning && (
+        <div className={styles.dismissWarning}>
+          {Translate.t('components.flyouts.rsvp.unsaved-changes.dismiss')}
+          <div className={styles.buttonRow}>
+            <Button
+              className={styles.filledButton}
+              onClick={(): void => {
+                setIsOpen(false, true);
+                if (setShouldRenderDismissWarning) {
+                  setShouldRenderDismissWarning(false);
+                }
+              }}
+            >
+              {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.discard-and-close')}
+            </Button>
+            <Button
+              className={styles.outlinedButton}
+              onClick={(): void => {
+                if (setShouldRenderDismissWarning) {
+                  setShouldRenderDismissWarning(false);
+                }
+              }}
+            >
+              {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.cancel')}
+            </Button>
+          </div>
+        </div>
+      )}
       <div className={styles.header}>
         {Translate.t('components.flyouts.rsvp.headers.response', {
-          name: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
+          name: (data?.guests || []).find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
         })}
       </div>
       <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.attendance')}</div>
@@ -312,7 +414,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         <Button className={styles.submitButton} disabled={isSaving} inverse type="submit">
           {renderSubmitButtonContent()}
         </Button>
-        <Button inverse onClick={() => setIsOpen(false)}>
+        <Button inverse onClick={() => setIsOpen(false, true)}>
           {Translate.t('components.flyouts.rsvp.buttons.cancel')}
         </Button>
       </div>

@@ -3,8 +3,14 @@
 }
 
 .form {
-  padding: 3rem;
+  padding: 2rem;
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .form {
+    padding: 3rem;
+  }
 }
 
 .guests {
@@ -63,6 +69,24 @@
   border-top: 1px solid var(--color-placeholder);
   margin-top: 1.5rem;
   padding-top: 1.5rem;
+}
+
+.dismissWarning {
+  background-color: var(--color-error);
+  border-radius: 0.5rem;
+  color: var(--color-on-error);
+  margin-top: 3rem;
+  padding: 1.5rem;
+}
+
+.dismissWarning .outlinedButton {
+  box-shadow: inset 0 0 0 2px var(--color-on-error);
+  color: var(--color-on-error);
+}
+
+.dismissWarning .filledButton {
+  background-color: var(--color-on-error);
+  color: var(--color-error);
 }
 
 .header {
