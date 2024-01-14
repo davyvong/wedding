@@ -2,11 +2,6 @@
   --palette-black: rgb(0, 0, 0);
   --palette-transparent: rgba(0, 0, 0, 0);
 
-  --color-primary: #d0947a;
-  --color-on-primary: rgb(233, 233, 233);
-  --color-primary-container: #ffdbce;
-  --color-on-primary-container: #370d00;
-
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;

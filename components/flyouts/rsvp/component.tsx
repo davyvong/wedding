@@ -2,16 +2,18 @@
 
 import CheckIconSVG from 'assets/icons/check.svg';
 import classNames from 'classnames';
+import { waitForElement } from 'client/browser';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import { FlyoutContentComponentProps } from 'components/flyout/component';
+import flyoutStyles from 'components/flyout/component.module.css';
 import AddressInput from 'components/form/address-input';
 import Select from 'components/form/select';
 import TextInput from 'components/form/text-input';
 import Textarea from 'components/form/textarea';
 import LoadingHeart from 'components/loading-heart';
 import Skeleton from 'components/skeleton';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { GuestData } from 'server/models/guest';
 import { ResponseData } from 'server/models/response';
@@ -170,6 +172,31 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     return Object.keys(validationErrors).length === 0;
   }, [values]);
 
+  const [shouldRenderSavedMessage, setShouldRenderSavedMessage] = useState<boolean>(false);
+  const clearSavedMessageTimeout = useRef<NodeJS.Timeout>();
+
+  const onSavedChanges = useCallback((): void => {
+    setShouldRenderSavedMessage(true);
+    waitForElement('.' + styles.savedChangesMessageTimer, (element: Element): void => {
+      document.querySelector('.' + flyoutStyles.flyout)?.scrollTo({
+        behavior: 'smooth',
+        top: 0,
+      });
+      element.animate([{ width: '100%' }, { width: '0%' }], { duration: 30000, iterations: 1 });
+      if (clearSavedMessageTimeout.current) {
+        clearTimeout(clearSavedMessageTimeout.current);
+        clearSavedMessageTimeout.current = undefined;
+      }
+      clearSavedMessageTimeout.current = setTimeout((): void => {
+        try {
+          setShouldRenderSavedMessage(false);
+        } finally {
+          clearSavedMessageTimeout.current = undefined;
+        }
+      }, 30000);
+    });
+  }, []);
+
   const onSubmit = useCallback(
     async (event): Promise<void> => {
       event.preventDefault();
@@ -210,17 +237,22 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
             };
           },
         );
+        onSavedChanges();
       }
     },
-    [mutate, onValidate, selectedGuestId, values],
+    [mutate, onSavedChanges, onValidate, selectedGuestId, values],
   );
 
-  const renderDismissWarning = useCallback((): JSX.Element => {
+  const currentGuestName = useMemo<string>(() => {
     const guests: GuestData[] = data?.guests || [];
-    return (
+    return guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '';
+  }, [data, selectedGuestId]);
+
+  const renderDismissWarning = useCallback(
+    (): JSX.Element => (
       <div className={classNames(styles.warningMessage, styles.dismissWarning)}>
         {Translate.t('components.flyouts.rsvp.unsaved-changes.dismiss', {
-          currentGuest: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
+          guest: currentGuestName,
         })}
         <div className={styles.buttonRow}>
           <Button
@@ -246,8 +278,9 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
           </Button>
         </div>
       </div>
-    );
-  }, [data, selectedGuestId, setIsOpen, setShouldRenderDismissWarning]);
+    ),
+    [currentGuestName, setIsOpen, setShouldRenderDismissWarning],
+  );
 
   const renderGuestPartySelector = useCallback((): JSX.Element => {
     const guests: GuestData[] = data?.guests || [];
@@ -271,6 +304,10 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
                     setSwitchToUser(guest.id);
                   } else {
                     setSelectedGuestId(guest.id);
+                    if (setShouldRenderDismissWarning) {
+                      setShouldRenderDismissWarning(false);
+                    }
+                    setShouldRenderSavedMessage(false);
                   }
                 }}
                 type="button"
@@ -284,7 +321,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         {switchToUser && (
           <div className={classNames(styles.warningMessage, styles.guestSwitchWarning)}>
             {Translate.t('components.flyouts.rsvp.unsaved-changes.guest-switch', {
-              currentGuest: guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
+              currentGuest: currentGuestName,
               selectedGuest: guests.find((guest: GuestData) => guest.id === switchToUser)?.name || '',
             })}
             <div className={styles.buttonRow}>
@@ -293,6 +330,10 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
                 onClick={(): void => {
                   setSelectedGuestId(switchToUser);
                   setSwitchToUser(undefined);
+                  if (setShouldRenderDismissWarning) {
+                    setShouldRenderDismissWarning(false);
+                  }
+                  setShouldRenderSavedMessage(false);
                 }}
               >
                 {Translate.t('components.flyouts.rsvp.unsaved-changes.buttons.discard-and-switch')}
@@ -305,7 +346,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         )}
       </div>
     );
-  }, [data, didValuesChange, selectedGuestId, switchToUser]);
+  }, [currentGuestName, data, didValuesChange, selectedGuestId, setShouldRenderDismissWarning, switchToUser]);
 
   const renderSubmitButtonContent = useCallback((): JSX.Element | string => {
     if (isSaving) {
@@ -362,9 +403,17 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
       {renderGuestPartySelector()}
       {shouldRenderDismissWarning && renderDismissWarning()}
+      {shouldRenderSavedMessage && (
+        <div className={styles.savedChangesMessage}>
+          {Translate.t('components.flyouts.rsvp.saved-changes', {
+            guest: currentGuestName,
+          })}
+          <div className={styles.savedChangesMessageTimer} />
+        </div>
+      )}
       <div className={styles.header}>
         {Translate.t('components.flyouts.rsvp.headers.response', {
-          name: (data?.guests || []).find((guest: GuestData) => guest.id === selectedGuestId)?.name || '',
+          name: currentGuestName,
         })}
       </div>
       <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.attendance')}</div>
