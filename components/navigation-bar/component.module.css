@@ -4,6 +4,7 @@
   display: flex;
   left: 0;
   height: 80px;
+  justify-content: space-between;
   padding: 0 2rem;
   position: sticky;
   right: 0;
@@ -31,10 +32,6 @@
 
 .title {
   font-size: 2rem;
-}
-
-.spacer {
-  flex: 1;
 }
 
 @media (min-width: 768px) {

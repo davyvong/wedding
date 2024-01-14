@@ -37,10 +37,35 @@
 
 .guestTable tr {
   background-color: var(--color-inverse-surface);
+  transition: opacity 300ms ease-in-out;
 }
 
-.guestTable thead tr:hover {
+.guestTable tr:hover {
+  opacity: 0.9;
+}
+
+.guestTable .guestGroupRow:hover {
   opacity: 1;
+}
+
+.guestGroupCell {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.guestGroupCell span {
+  margin-left: 1rem;
+}
+
+.separatorLine {
+  background-color: var(--color-inverse-on-surface);
+  border-radius: 3px;
+  flex: 1;
+  height: 3px;
+  margin-left: 1rem;
+  opacity: 0.5;
 }
 
 .guestTable th,
@@ -50,60 +75,18 @@
   white-space: nowrap;
 }
 
-.guestTableActionHeader {
+.guestIdCell {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.viewRSVPCell {
   align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-}
-
-.guestGroupHeader {
-  opacity: 0.9;
-  transition: opacity 300ms ease-in-out;
-}
-
-.guestGroupHeader:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.guestGroupId {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-}
-
-.guestGroupIcon {
-  margin-right: 1rem;
-}
-
-.guestGroupExpandIcon {
-  transition: transform 300ms ease-in-out;
-}
-
-.guestGroupHeaderCollapsed .guestGroupExpandIcon {
-  transform: rotate(180deg);
-}
-
-.guestGroup td {
-  padding: 0;
-}
-
-.guestGroup td > div {
-  max-height: 56px;
-  overflow: hidden;
-  transition: max-height 300ms ease-in-out;
-}
-
-.guestGroupCollapsed td > div {
-  max-height: 0;
-}
-
-.collapsibleCell {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  padding: 1rem 1.5rem;
 }
 
 .iconButton {
@@ -124,8 +107,4 @@
 .copyGuestGroupIdIcon,
 .copyGuestIdIcon {
   margin-left: 1rem;
-}
-
-.spacer {
-  flex: 1;
 }

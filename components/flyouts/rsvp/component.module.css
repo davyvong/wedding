@@ -103,10 +103,11 @@
 }
 
 .savedChangesMessageTimer {
-  background-color: var(--color-placeholder);
+  background-color: var(--color-on-surface);
   border-radius: 5px;
   height: 5px;
   margin-top: 1.5rem;
+  opacity: 0.5;
   width: 100%;
 }
 

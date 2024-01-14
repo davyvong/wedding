@@ -15,7 +15,6 @@ interface NavigationBarComponentProps {
 const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => (
   <div className={styles.navigationBar}>
     <div className={classNames(styles.title, italiana.className)}>{Translate.t('components.navigation-bar.title')}</div>
-    <div className={styles.spacer} />
     {token ? <RSVPFlyout token={token} /> : <InvitationFlyout />}
   </div>
 );
