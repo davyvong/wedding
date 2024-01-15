@@ -1,14 +1,14 @@
 import Translate from 'client/translate';
 import Layout from 'components/layout';
 import { cookies } from 'next/headers';
-import { Fragment, type ReactNode } from 'react';
+import { FC, Fragment, type ReactNode } from 'react';
 import Authenticator, { GuestTokenPayload } from 'server/authenticator';
 
 interface PublicLayoutProps {
   children: ReactNode;
 }
 
-const PublicLayout = async ({ children }: PublicLayoutProps): Promise<JSX.Element> => {
+const PublicLayout: FC<PublicLayoutProps> = async ({ children }) => {
   const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
 
   return (

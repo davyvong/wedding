@@ -2,14 +2,14 @@ import Translate from 'client/translate';
 import ErrorPage from 'components/error-page';
 import Layout from 'components/layout';
 import { cookies } from 'next/headers';
-import { Fragment, type ReactNode } from 'react';
+import { FC, Fragment, type ReactNode } from 'react';
 import Authenticator, { GuestTokenPayload } from 'server/authenticator';
 
 interface AdminGuestsLayoutProps {
   children: ReactNode;
 }
 
-const AdminGuestsLayout = async ({ children }: AdminGuestsLayoutProps): Promise<JSX.Element> => {
+const AdminGuestsLayout: FC<AdminGuestsLayoutProps> = async ({ children }) => {
   const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
 
   if (!token || !token.isAdmin) {

@@ -5,7 +5,7 @@ import '../app/global.css';
 import { Analytics } from '@vercel/analytics/react';
 import { openSans } from 'client/fonts';
 import NavigationBar from 'components/navigation-bar';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 
 interface LayoutProps {
@@ -14,7 +14,7 @@ interface LayoutProps {
   token?: GuestTokenPayload;
 }
 
-const Layout = ({ children, hideNavigationBar = false, token }: LayoutProps): JSX.Element => (
+const Layout: FC<LayoutProps> = async ({ children, hideNavigationBar = false, token }) => (
   <html lang="en">
     <body className={openSans.className}>
       {!hideNavigationBar && <NavigationBar token={token} />}
