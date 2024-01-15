@@ -21,21 +21,18 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         status: 429,
       });
     }
-    const requestURL = new URL(request.url);
-    const params = {
-      token: requestURL.searchParams.get('token'),
-    };
-    const paramsSchema = object({
+    const body = await request.json();
+    const bodySchema = object({
       token: string().required().min(1),
     });
-    if (!paramsSchema.isValidSync(params)) {
+    if (!bodySchema.isValidSync(body)) {
       throw new ServerError({
         code: ServerErrorCode.BadRequest,
         rateLimit: checkResults,
         status: 400,
       });
     }
-    if (!(await Token.verify(params.token, process.env.SPOTIFY_PLAYLIST_ID))) {
+    if (!(await Token.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID))) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
         rateLimit: checkResults,
