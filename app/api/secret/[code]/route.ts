@@ -45,7 +45,9 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       guestId: guest.id,
       isAdmin: guest.isAdmin,
     });
-    const response = NextResponse.redirect(ServerEnvironment.getBaseURL() + '/?flyout=rsvp');
+    const url = new URL(ServerEnvironment.getBaseURL());
+    url.searchParams.set('open', 'rsvp');
+    const response = NextResponse.redirect(url.href);
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
     response.cookies.set('token', token, { expires: expiryDate });

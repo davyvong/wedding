@@ -56,7 +56,7 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
       }
       if (!open) {
         const url = new URL(window.location.href);
-        url.searchParams.delete('flyout');
+        url.searchParams.delete('open');
         window.history.pushState({ path: url.href }, '', url.href);
       }
     },
@@ -109,7 +109,7 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
   useEffect(() => {
     if (isBrowser() && openWithURLParam) {
       const searchParams = new URLSearchParams(window.location.search);
-      if (searchParams.get('flyout') === openWithURLParam) {
+      if (searchParams.get('open') === openWithURLParam) {
         toggleFlyout(true);
       }
     }
