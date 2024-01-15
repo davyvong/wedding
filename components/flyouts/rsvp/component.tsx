@@ -405,9 +405,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       {shouldRenderDismissWarning && renderDismissWarning()}
       {shouldRenderSavedMessage && (
         <div className={styles.savedChangesMessage}>
-          {Translate.t('components.flyouts.rsvp.saved-changes', {
-            guest: currentGuestName,
-          })}
+          {Translate.t('components.flyouts.rsvp.saved-changes')}
           <div className={styles.savedChangesMessageTimer} />
         </div>
       )}
