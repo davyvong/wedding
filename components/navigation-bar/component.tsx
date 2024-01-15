@@ -12,10 +12,10 @@ interface NavigationBarComponentProps {
   token?: GuestTokenPayload;
 }
 
-const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => (
+const NavigationBarComponent: FC<NavigationBarComponentProps> = async ({ token }) => (
   <div className={styles.navigationBar}>
     <div className={classNames(styles.title, italiana.className)}>{Translate.t('components.navigation-bar.title')}</div>
-    {token ? <RSVPFlyout token={token} /> : <InvitationFlyout />}
+    {token ? <RSVPFlyout defaultSelectedGuestId={token.guestId} /> : <InvitationFlyout />}
   </div>
 );
 

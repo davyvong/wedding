@@ -91,19 +91,15 @@
 }
 
 .savedChangesMessage {
-  background-color: var(--color-surface);
+  background-color: var(--color-inverse-surface);
   border-radius: 0.5rem;
-  color: var(--color-on-surface);
-  margin-top: 3rem;
+  color: var(--color-inverse-on-surface);
+  margin-top: 1.5rem;
   padding: 1.5rem;
 }
 
-.saveChangesMessageIcon {
-  margin-right: 1rem;
-}
-
 .savedChangesMessageTimer {
-  background-color: var(--color-on-surface);
+  background-color: var(--color-inverse-on-surface);
   border-radius: 5px;
   height: 5px;
   margin-top: 1.5rem;

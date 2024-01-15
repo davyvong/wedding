@@ -344,9 +344,23 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
             </div>
           </div>
         )}
+        {shouldRenderSavedMessage && (
+          <div className={styles.savedChangesMessage}>
+            {Translate.t('components.flyouts.rsvp.saved-changes')}
+            <div className={styles.savedChangesMessageTimer} />
+          </div>
+        )}
       </div>
     );
-  }, [currentGuestName, data, didValuesChange, selectedGuestId, setShouldRenderDismissWarning, switchToUser]);
+  }, [
+    currentGuestName,
+    data,
+    didValuesChange,
+    selectedGuestId,
+    setShouldRenderDismissWarning,
+    shouldRenderSavedMessage,
+    switchToUser,
+  ]);
 
   const renderSubmitButtonContent = useCallback((): JSX.Element | string => {
     if (isSaving) {
@@ -403,12 +417,6 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
       {renderGuestPartySelector()}
       {shouldRenderDismissWarning && renderDismissWarning()}
-      {shouldRenderSavedMessage && (
-        <div className={styles.savedChangesMessage}>
-          {Translate.t('components.flyouts.rsvp.saved-changes')}
-          <div className={styles.savedChangesMessageTimer} />
-        </div>
-      )}
       <div className={styles.header}>
         {Translate.t('components.flyouts.rsvp.headers.response', {
           name: currentGuestName,

@@ -104,6 +104,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
           <td>
             <div className={styles.viewRSVPCell}>
               <RSVPFlyout
+                defaultSelectedGuestId={guest.id}
                 openWithURLParam=""
                 renderReference={(referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
                   <div {...referenceProps}>
@@ -117,7 +118,6 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
                     </Tooltip>
                   </div>
                 )}
-                token={{ guestId: guest.id }}
               />
             </div>
           </td>

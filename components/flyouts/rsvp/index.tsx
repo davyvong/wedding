@@ -6,18 +6,17 @@ import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import { FC, useCallback, useState } from 'react';
-import { GuestTokenPayload } from 'server/authenticator';
 
 import RSVPFlyoutComponent from './component';
 import styles from './index.module.css';
 
 interface RSVPFlyoutProps {
+  defaultSelectedGuestId: string;
   openWithURLParam?: string;
   renderReference?: (referenceProps: FlyoutReferenceComponentProps) => JSX.Element;
-  token: GuestTokenPayload;
 }
 
-const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderReference, token }) => {
+const RSVPFlyout: FC<RSVPFlyoutProps> = ({ defaultSelectedGuestId, openWithURLParam = 'rsvp', renderReference }) => {
   const [didValuesChange, setDidValuesChange] = useState<boolean>(false);
   const [shouldFetchRSVP, setShouldFetchRSVP] = useState<boolean>(false);
   const [shouldRenderDismissWarning, setShouldRenderDismissWarning] = useState<boolean>(false);
@@ -26,14 +25,14 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ openWithURLParam = 'rsvp', renderRefe
     (contentProps: FlyoutContentComponentProps): JSX.Element => (
       <RSVPFlyoutComponent
         {...contentProps}
-        defaultSelectedGuestId={token.guestId}
+        defaultSelectedGuestId={defaultSelectedGuestId}
         onValuesChange={setDidValuesChange}
         setShouldRenderDismissWarning={setShouldRenderDismissWarning}
         shouldFetchRSVP={shouldFetchRSVP}
         shouldRenderDismissWarning={shouldRenderDismissWarning}
       />
     ),
-    [shouldFetchRSVP, shouldRenderDismissWarning, token],
+    [defaultSelectedGuestId, shouldFetchRSVP, shouldRenderDismissWarning],
   );
 
   const renderDefaultReference = useCallback(
