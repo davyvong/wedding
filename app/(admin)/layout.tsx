@@ -5,6 +5,8 @@ import { cookies } from 'next/headers';
 import { Fragment, type ReactNode } from 'react';
 import Authenticator, { GuestTokenPayload } from 'server/authenticator';
 
+export const dynamic = 'force-dynamic';
+
 interface AdminGuestsLayoutProps {
   children: ReactNode;
 }

@@ -6,6 +6,7 @@ import Token from 'server/token';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export const POST = async (request: NextRequest): Promise<Response> => {
   try {
