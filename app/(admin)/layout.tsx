@@ -18,7 +18,11 @@ const AdminGuestsLayout: FC<AdminGuestsLayoutProps> = async ({ children }) => {
         <head>
           <title>{Translate.t('app.admin.layout.errorPages.404')}</title>
         </head>
-        <ErrorPage statusCode={404} />
+        <html lang="en">
+          <body>
+            <ErrorPage statusCode={404} />
+          </body>
+        </html>
       </Fragment>
     );
   }
