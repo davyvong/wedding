@@ -73,5 +73,6 @@
   "components.landing.questions.when-is-the-rsvp-deadline": "When is the RSVP deadline?",
   "components.landing.questions.where-is-the-ceremoney-and-reception": "Where will the ceremony and reception take place?",
   "components.navigation-bar.title": "Vivian & Davy",
-  "components.select.no-options": "There are no options available."
+  "components.select.no-options": "There are no options available.",
+  "components.song-list.explicit": "E"
 }
