@@ -17,7 +17,7 @@ export const waitForElement = (
   );
   let iteration = 0;
   const interval = setInterval((): void => {
-    const element = document.querySelector(selector);
+    const element = document.querySelector<HTMLElement>(selector);
     if (element) {
       clearInterval(interval);
       callback(element);

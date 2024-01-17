@@ -3,7 +3,7 @@
   background-color: var(--color-surface);
   display: flex;
   left: 0;
-  height: 80px;
+  height: var(--navigation-bar-height);
   justify-content: space-between;
   padding: 0 2rem;
   position: sticky;

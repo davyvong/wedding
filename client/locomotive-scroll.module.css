@@ -1,14 +1,17 @@
-html.hasScrollSmooth {
-  overflow: hidden;
-}
-
-html.hasScrollDragging {
+.hasScrollDragging {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
+.hasScrollInit {
+}
+
+.hasScrollScrolling {
+}
+
+.hasScrollSmooth,
 .hasScrollSmooth body {
   overflow: hidden;
 }

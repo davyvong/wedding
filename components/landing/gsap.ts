@@ -1,7 +1,9 @@
 'use client';
 
+import locomotiveScrollStyles from 'client/locomotive-scroll.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import LocomotiveScroll from 'locomotive-scroll';
 
 import styles from './component.module.css';
 
@@ -30,6 +32,54 @@ const getSpacing = (breakpoint: LandingBreakpoints): string => {
 
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
   gsap.context(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const locomotiveScroll = new LocomotiveScroll({
+      draggingClass: locomotiveScrollStyles.hasScrollDragging,
+      el: document.querySelector<HTMLElement>('.' + styles.landing),
+      gestureDirection: 'vertical',
+      initClass: locomotiveScrollStyles.hasScrollInit,
+      reloadOnContextChange: true,
+      repeat: true,
+      scrollbarClass: locomotiveScrollStyles.scrollbar,
+      scrollingClass: locomotiveScrollStyles.hasScrollScrolling,
+      smartphone: {
+        smooth: true,
+      },
+      smooth: true,
+      smoothClass: locomotiveScrollStyles.hasScrollSmooth,
+      tablet: {
+        smooth: true,
+      },
+      touchMultiplier: 3,
+    });
+    ScrollTrigger.scrollerProxy('.' + styles.landing, {
+      getBoundingClientRect() {
+        const navigationBarHeight = parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue('--navigation-bar-height').replace('px', ''),
+        );
+        return {
+          height: window.innerHeight - navigationBarHeight,
+          left: 0,
+          top: navigationBarHeight,
+          width: window.innerWidth,
+        };
+      },
+      scrollTop(value?: number): number | void {
+        if (arguments.length) {
+          locomotiveScroll.scrollTo(value, { disableLerp: true, duration: 0 });
+        }
+        return locomotiveScroll.scroll.instance.scroll.y;
+      },
+    });
+    locomotiveScroll.on('scroll', (): void => {
+      ScrollTrigger.update();
+    });
+    ScrollTrigger.addEventListener('refresh', () => {
+      locomotiveScroll.update();
+    });
+    ScrollTrigger.defaults({
+      scroller: '.' + styles.landing,
+    });
     const firstSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {
@@ -37,7 +87,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         pin: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: 'top 80px',
+        start: 'top top',
         trigger: '.' + styles.firstSection,
       },
     });
@@ -53,7 +103,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       '.' + styles.coverImage,
       {
         borderRadius: '1rem',
-        height: `calc(100vh - 80px - ${getSpacing(breakpoint)})`,
+        height: `calc(100% - ${getSpacing(breakpoint)})`,
       },
       'zoomCoverImage',
     );
