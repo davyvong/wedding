@@ -34,6 +34,14 @@
   --color-inverse-scrollbar-hover: rgba(233, 233, 233, 0.09);
   --color-inverse-scrollbar-thumb: rgba(233, 233, 233, 0.5);
   --color-inverse-scrollbar-thumb-active: rgba(233, 233, 233, 0.61);
+
+  --navigation-bar-height: 70px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navigation-bar-height: 80px;
+  }
 }
 
 html {
@@ -60,19 +68,6 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   width: 100%;
-}
-
-[data-scroll-direction='horizontal'] [data-scroll-container] {
-  height: 100vh;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-[data-scroll-direction='horizontal'] [data-scroll-section] {
-  display: inline-block;
-  vertical-align: top;
-  white-space: nowrap;
-  height: 100%;
 }
 
 svg[height='24'][width='24'] {

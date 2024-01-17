@@ -178,7 +178,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
   const onSavedChanges = useCallback((): void => {
     setShouldRenderSavedMessage(true);
     waitForElement('.' + styles.savedChangesMessageTimer, (element: Element): void => {
-      document.querySelector('.' + flyoutStyles.flyout)?.scrollTo({
+      document.querySelector<HTMLElement>('.' + flyoutStyles.flyout)?.scrollTo({
         behavior: 'smooth',
         top: 0,
       });

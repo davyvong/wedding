@@ -1,13 +1,18 @@
 .landing {
+  overflow-x: hidden;
+  overflow-y: hidden !important;
   width: 100%;
 }
 
 .firstSection {
+  min-height: calc(100vh - var(--navigation-bar-height));
+  min-height: calc(100dvh - var(--navigation-bar-height));
+  min-height: calc(100svh - var(--navigation-bar-height));
   width: 100%;
 }
 
 .coverImage {
-  height: calc(100vh - 80px);
+  height: 100%;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -210,7 +215,6 @@
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   justify-content: center;
   width: 100%;
 }

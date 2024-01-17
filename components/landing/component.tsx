@@ -4,10 +4,8 @@ import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import { brittanySignature, italiana, kollektif, openSans } from 'client/fonts';
-import SmoothScroll from 'client/smooth-scroll';
 import Translate from 'client/translate';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { FC, Fragment, useCallback, useEffect } from 'react';
 
@@ -17,8 +15,6 @@ import { LandingBreakpoints, createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    SmoothScroll.create('.' + styles.landing);
     let context: gsap.Context;
     gsap
       .matchMedia()
@@ -32,7 +28,6 @@ const LandingComponent: FC = () => {
         context = createLandingContext(LandingBreakpoints.Desktop);
       });
     return () => {
-      SmoothScroll.destroy();
       context?.revert();
     };
   }, []);
