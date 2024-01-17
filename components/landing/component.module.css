@@ -6,6 +6,7 @@
 
 .firstSection {
   min-height: calc(100vh - var(--navigation-bar-height));
+  min-height: calc(100dvh - var(--navigation-bar-height));
   min-height: calc(100svh - var(--navigation-bar-height));
   width: 100%;
 }
