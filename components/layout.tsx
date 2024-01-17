@@ -10,14 +10,13 @@ import { GuestTokenPayload } from 'server/authenticator';
 
 interface LayoutProps {
   children: ReactNode;
-  hideNavigationBar?: boolean;
   token?: GuestTokenPayload;
 }
 
-const Layout: FC<LayoutProps> = async ({ children, hideNavigationBar = false, token }) => (
+const Layout: FC<LayoutProps> = async ({ children, token }) => (
   <html lang="en">
     <body className={openSans.className}>
-      {!hideNavigationBar && <NavigationBar token={token} />}
+      <NavigationBar token={token} />
       {children}
       <Analytics />
     </body>

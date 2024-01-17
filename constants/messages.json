@@ -1,5 +1,5 @@
 {
-  "app.admin.layout.404-title": "404: This page could not be found.",
+  "app.admin.layout.errorPages.404": "404: This page could not be found.",
   "app.admin.layout.title": "Vivian & Davy",
   "app.public.layout.title": "Vivian & Davy",
   "components.address-input.no-suggestions": "No suggestions found for <b>{{value}}</b>.",
