@@ -1,4 +1,5 @@
 import ObjectID from 'bson-objectid';
+import { GuestTokenPayload } from 'server/authenticator';
 import MySQLClientFactory from 'server/clients/mysql';
 import Guest, { GuestRowData } from 'server/models/guest';
 import Response, { ResponseData, ResponseRowData } from 'server/models/response';
@@ -120,6 +121,7 @@ class MySQLQueries {
   }
 
   public static async insertResponseFromGuestId(
+    token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<boolean> {
@@ -136,7 +138,9 @@ class MySQLQueries {
           dietary_restrictions,
           entree,
           mailing_address,
-          message
+          message,
+          created_by,
+          modified_by
         )
         values (
           :publicId,
@@ -150,7 +154,19 @@ class MySQLQueries {
           :dietaryRestrictions,
           :entree,
           :mailingAddress,
-          :message
+          :message,
+          (
+            select id
+            from wedding_guests
+            where public_id = :tokenGuestId
+            limit 1
+          ),
+          (
+            select id
+            from wedding_guests
+            where public_id = :tokenGuestId
+            limit 1
+          )
         )
       `;
       const results = await connection.execute<ResponseRowData>(query, {
@@ -161,6 +177,7 @@ class MySQLQueries {
         publicId: ObjectID().toHexString(),
         mailingAddress: data.mailingAddress || null,
         message: data.message,
+        tokenGuestId: token.guestId,
       });
       return results.rowsAffected > 0;
     } catch {
@@ -169,6 +186,7 @@ class MySQLQueries {
   }
 
   public static async updateResponseFromGuestId(
+    token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<boolean> {
@@ -184,7 +202,14 @@ class MySQLQueries {
           dietary_restrictions = :dietaryRestrictions,
           entree = :entree,
           mailing_address = :mailingAddress,
-          message = :message
+          message = :message,
+          modified_at = current_timestamp(),
+          modified_by = (
+            select id
+            from wedding_guests
+            where public_id = :tokenGuestId
+            limit 1
+          )
         where guest_id = (
           select id
           from wedding_guests
@@ -199,6 +224,7 @@ class MySQLQueries {
         guestId,
         mailingAddress: data.mailingAddress || null,
         message: data.message,
+        tokenGuestId: token.guestId,
       });
       return results.rowsAffected > 0;
     } catch {
@@ -237,6 +263,7 @@ class MySQLQueries {
   }
 
   public static async upsertResponseFromGuestId(
+    token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<Response | null> {
@@ -244,8 +271,8 @@ class MySQLQueries {
       return null;
     }
     try {
-      if (!(await MySQLQueries.updateResponseFromGuestId(guestId, data))) {
-        await MySQLQueries.insertResponseFromGuestId(guestId, data);
+      if (!(await MySQLQueries.updateResponseFromGuestId(token, guestId, data))) {
+        await MySQLQueries.insertResponseFromGuestId(token, guestId, data);
       }
       return MySQLQueries.findResponseFromGuestId(guestId);
     } catch {
