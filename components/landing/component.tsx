@@ -34,10 +34,10 @@ const LandingComponent: FC = () => {
 
   const renderEngagementPhoto = useCallback(
     (image: EngagementPhoto): JSX.Element => (
-      <div className={styles.engagementPhoto} key={image.alt}>
+      <div className={styles.engagementPhoto} key={image.id}>
         <div className={styles.engagementPhotoZoom}>
           <Image
-            alt={image.alt}
+            alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
             priority
             quality={90}

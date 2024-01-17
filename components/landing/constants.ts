@@ -7,32 +7,32 @@ import { StaticImageData } from 'next/image';
 import { CSSProperties } from 'react';
 
 export interface EngagementPhoto {
-  alt: string;
+  id: string;
   src: StaticImageData;
   style?: CSSProperties;
 }
 
 export const engagementPhotos: EngagementPhoto[] = [
   {
-    alt: 'VD22',
+    id: 'VD22',
     src: VD22JPG,
   },
   {
-    alt: 'VD13',
+    id: 'VD13',
     src: VD13JPG,
   },
   {
-    alt: 'VD83',
+    id: 'VD83',
     src: VD83JPG,
     style: { objectPosition: '52% center' },
   },
   {
-    alt: 'VD50',
+    id: 'VD50',
     src: VD50JPG,
     style: { objectPosition: '12% center' },
   },
   {
-    alt: 'VD26',
+    id: 'VD26',
     src: VD26JPG,
     style: { objectPosition: '51% center' },
   },
