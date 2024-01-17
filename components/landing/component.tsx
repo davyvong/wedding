@@ -40,8 +40,8 @@ const LandingComponent: FC = () => {
             alt={image.alt}
             fill
             priority
-            quality={80}
-            sizes="(max-width: 425px) 150vw, (max-width: 768px) 75vw, (max-width: 1024px) 50vw, (max-width: 1280px) 40vw, (max-width: 1440px) 40vw, (max-width: 2560px) 40vw, 40vw"
+            quality={90}
+            sizes="(max-width: 425px) 300vw, (max-width: 768px) 150vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, (max-width: 2560px) 50vw, 50vw"
             src={image.src}
             style={image.style}
           />
@@ -73,9 +73,9 @@ const LandingComponent: FC = () => {
             alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
             priority
-            quality={80}
+            quality={90}
             src={VD72JPG}
-            sizes="(max-width: 425px) 150vw, (max-width: 768px) 150vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, (max-width: 2560px) 100vw, 100vw"
+            sizes="(max-width: 425px) 200vw, (max-width: 768px) 200vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, (max-width: 1440px) 100vw, (max-width: 2560px) 100vw, 100vw"
           />
           <div className={styles.eventInfo}>
             <div className={classNames(styles.saveTheDate, brittanySignature.className)}>

@@ -19,8 +19,13 @@
 }
 
 .coverImage img {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   object-fit: cover;
   object-position: center bottom;
+  pointer-events: none;
+  user-select: none;
 }
 
 .eventInfo {
@@ -269,7 +274,12 @@
 }
 
 .engagementPhoto img {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   object-fit: cover;
+  pointer-events: none;
+  user-select: none;
 }
 
 .engagementPhoto:not(:first-child) {
