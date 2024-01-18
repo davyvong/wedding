@@ -36,11 +36,19 @@
   --color-inverse-scrollbar-thumb-active: rgba(233, 233, 233, 0.61);
 
   --navigation-bar-height: 70px;
+  --page-side-spacing: 2rem;
 }
 
 @media (min-width: 768px) {
   :root {
     --navigation-bar-height: 80px;
+    --page-side-spacing: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-side-spacing: 4rem;
   }
 }
 

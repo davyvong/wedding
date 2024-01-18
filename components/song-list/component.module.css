@@ -4,6 +4,8 @@
   margin-right: auto;
   max-width: 720px;
   overflow: hidden;
+  padding: var(--page-side-spacing);
+  padding-top: 0;
   width: 100%;
 }
 

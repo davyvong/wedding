@@ -3,8 +3,8 @@
   flex-direction: row;
   flex-wrap: nowrap;
   overflow-x: auto;
-  padding-bottom: 2rem;
-  padding-left: 2rem;
+  padding-bottom: var(--page-side-spacing);
+  padding-left: var(--page-side-spacing);
   width: 100%;
 }
 
@@ -12,18 +12,7 @@
   content: '';
   display: block;
   min-height: 100%;
-  min-width: 2rem;
-}
-
-@media (min-width: 768px) {
-  .guestList {
-    padding-bottom: 4rem;
-    padding-left: 4rem;
-  }
-
-  .guestList::after {
-    min-width: 4rem;
-  }
+  min-width: var(--page-side-spacing);
 }
 
 .guestTable {
