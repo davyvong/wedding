@@ -9,24 +9,24 @@
 
 @keyframes placeholder {
   from {
-    background-color: var(--color-popover);
+    background-color: var(--color-surface);
   }
   50% {
-    background-color: var(--color-placeholder);
+    background-color: var(--color-hover-surface);
   }
   to {
-    background-color: var(--color-popover);
+    background-color: var(--color-surface);
   }
 }
 
 @keyframes placeholderInverse {
   from {
-    background-color: var(--color-inverse-popover);
+    background-color: var(--color-inverse-surface);
   }
   50% {
-    background-color: var(--color-inverse-placeholder);
+    background-color: var(--color-inverse-hover-surface);
   }
   to {
-    background-color: var(--color-inverse-popover);
+    background-color: var(--color-inverse-surface);
   }
 }

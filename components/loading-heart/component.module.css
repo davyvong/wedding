@@ -9,7 +9,7 @@
 
 .loadingHeart div {
   animation: heartBeat 1200ms infinite cubic-bezier(0.215, 0.61, 0.355, 1);
-  background-color: var(--color-on-primary);
+  background-color: var(--color-surface);
   height: 0.6rem;
   left: 0.6rem;
   position: absolute;
@@ -19,7 +19,7 @@
 
 .loadingHeart div:after,
 .loadingHeart div:before {
-  background-color: var(--color-on-primary);
+  background-color: var(--color-surface);
   content: '';
   display: block;
   height: 0.6rem;
@@ -38,12 +38,12 @@
 }
 
 .loadingHeartInverse div {
-  background-color: var(--color-on-surface);
+  background-color: var(--color-inverse-surface);
 }
 
 .loadingHeartInverse div:after,
 .loadingHeartInverse div:before {
-  background-color: var(--color-on-surface);
+  background-color: var(--color-inverse-surface);
 }
 
 @keyframes heartBeat {

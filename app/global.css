@@ -2,28 +2,28 @@
   --palette-black: rgb(0, 0, 0);
   --palette-transparent: rgba(0, 0, 0, 0);
 
-  --color-primary: #d0947a;
-  --color-on-primary: rgb(233, 233, 233);
-  --color-primary-container: #ffdbce;
-  --color-on-primary-container: #370d00;
+  --color-primary: rgb(208, 148, 122);
 
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #410002;
 
   --color-background: rgb(233, 233, 233);
   --color-on-background: rgb(33, 33, 33);
 
   --color-surface: rgb(233, 233, 233);
   --color-on-surface: rgb(33, 33, 33);
-  --color-placeholder: rgb(33, 33, 33, 0.5);
-  --color-popover: rgb(77, 77, 77);
+  --color-hover-surface: rgb(213, 213, 213);
 
   --color-inverse-surface: rgb(33, 33, 33);
   --color-inverse-on-surface: rgb(233, 233, 233);
+  --color-inverse-hover-surface: rgb(53, 53, 53);
+
+  --color-placeholder: rgb(33, 33, 33, 0.5);
   --color-inverse-placeholder: rgb(233, 233, 233, 0.5);
-  --color-inverse-popover: rgb(77, 77, 77);
+
+  --color-popover: rgb(77, 77, 77);
+  --color-on-popover: rgb(233, 233, 233);
+  --color-hover-popover: rgb(33, 33, 33);
 
   --color-scrollbar: rgba(33, 33, 33, 0);
   --color-scrollbar-hover: rgba(33, 33, 33, 0.09);
@@ -45,7 +45,7 @@
 }
 
 html {
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: var(--palette-transparent);
   -webkit-text-size-adjust: 100%;
   font-size: 80%;
   height: 100%;

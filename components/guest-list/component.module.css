@@ -27,6 +27,7 @@
 }
 
 .guestTable {
+  background-color: var(--color-inverse-surface);
   border-radius: 0.5rem;
   border-collapse: separate;
   border-spacing: 0;
@@ -36,16 +37,16 @@
 }
 
 .guestTable tr {
-  background-color: var(--color-inverse-surface);
-  transition: opacity 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
 }
 
 .guestTable tr:hover {
-  opacity: 0.9;
+  background-color: var(--color-inverse-hover-surface);
 }
 
+.guestTable thead tr:hover,
 .guestTable .guestGroupRow:hover {
-  opacity: 1;
+  background-color: var(--palette-transparent);
 }
 
 .guestGroupCell {
@@ -60,12 +61,11 @@
 }
 
 .separatorLine {
-  background-color: var(--color-inverse-on-surface);
+  background-color: var(--color-inverse-hover-surface);
   border-radius: 3px;
   flex: 1;
   height: 3px;
   margin-left: 1rem;
-  opacity: 0.5;
 }
 
 .guestTable th,

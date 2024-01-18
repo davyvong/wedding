@@ -30,7 +30,7 @@
 
 .eventInfo {
   bottom: 65%;
-  color: var(--color-on-primary);
+  color: var(--color-inverse-on-surface);
   left: 50%;
   position: absolute;
   text-align: center;
