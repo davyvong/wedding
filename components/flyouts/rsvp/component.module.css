@@ -3,14 +3,8 @@
 }
 
 .form {
-  padding: 2rem;
+  padding: var(--page-side-spacing);
   width: 100%;
-}
-
-@media (min-width: 768px) {
-  .form {
-    padding: 3rem;
-  }
 }
 
 .guests {
@@ -28,7 +22,7 @@
 }
 
 .outlinedButton {
-  background-color: transparent;
+  background-color: var(--palette-transparent);
   box-shadow: inset 0 0 0 2px var(--color-inverse-surface);
   color: var(--color-on-surface);
   margin-right: 1.5rem;
@@ -99,11 +93,10 @@
 }
 
 .savedChangesMessageTimer {
-  background-color: var(--color-inverse-on-surface);
+  background-color: var(--color-inverse-hover-surface);
   border-radius: 5px;
   height: 5px;
   margin-top: 1.5rem;
-  opacity: 0.5;
   width: 100%;
 }
 

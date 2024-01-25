@@ -5,25 +5,13 @@
   left: 0;
   height: var(--navigation-bar-height);
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 var(--page-side-spacing);
   position: sticky;
   right: 0;
   top: 0;
   transform: translateY(0);
   transition: transform 300ms ease-in-out;
   z-index: 1;
-}
-
-@media (min-width: 768px) {
-  .navigationBar {
-    padding: 0 3rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .navigationBar {
-    padding: 0 4rem;
-  }
 }
 
 .navigationBarHidden {

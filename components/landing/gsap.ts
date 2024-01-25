@@ -13,21 +13,9 @@ export enum LandingBreakpoints {
   Desktop,
 }
 
-const getSpacing = (breakpoint: LandingBreakpoints): string => {
-  switch (breakpoint) {
-    case LandingBreakpoints.Mobile: {
-      return '2rem';
-    }
-    case LandingBreakpoints.Tablet: {
-      return '3rem';
-    }
-    case LandingBreakpoints.Desktop: {
-      return '4rem';
-    }
-    default: {
-      return '2rem';
-    }
-  }
+const getSpacing = (): string => {
+  const computedStyles = window.getComputedStyle(document.documentElement);
+  return computedStyles.getPropertyValue('--page-side-spacing');
 };
 
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
@@ -94,8 +82,8 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
     firstSectionTimeline.to(
       '.' + styles.firstSection,
       {
-        paddingLeft: getSpacing(breakpoint),
-        paddingRight: getSpacing(breakpoint),
+        paddingLeft: getSpacing(),
+        paddingRight: getSpacing(),
       },
       'zoomCoverImage',
     );
@@ -103,7 +91,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       '.' + styles.coverImage,
       {
         borderRadius: '1rem',
-        height: `calc(100% - ${getSpacing(breakpoint)})`,
+        height: `calc(100% - ${getSpacing()})`,
       },
       'zoomCoverImage',
     );

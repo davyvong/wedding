@@ -22,6 +22,9 @@ module.exports = {
   experimental: {
     webpackBuildWorker: true,
   },
+  images: {
+    domains: ['i.scdn.co'],
+  },
   redirects: () => [
     {
       destination: '/api/secret/:code*',

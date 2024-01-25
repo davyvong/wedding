@@ -1,0 +1,56 @@
+.songList {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 768px;
+  padding: var(--page-side-spacing);
+  padding-top: 0;
+  width: 100%;
+}
+
+.songCard {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.songCard:not(:first-child) {
+  margin-top: var(--page-side-spacing);
+}
+
+.songCardImage {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.songCardInformation {
+  flex: 1;
+  margin-left: 1.5rem;
+}
+
+.songCardName {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.songArtists {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.songExplicit {
+  align-items: center;
+  background-color: var(--color-on-surface);
+  border-radius: 0.25rem;
+  color: var(--color-surface);
+  display: flex;
+  font-size: 0.75rem;
+  height: 1.25rem;
+  justify-content: center;
+  margin-right: 0.5rem;
+  overflow: hidden;
+  padding: 0.125rem;
+  width: 1.25rem;
+}

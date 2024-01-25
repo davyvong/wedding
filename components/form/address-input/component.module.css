@@ -1,7 +1,7 @@
 .suggestionList {
-  background: var(--color-primary);
+  background: var(--color-popover);
   border-radius: 0.5rem;
-  color: var(--color-on-primary);
+  color: var(--color-on-popover);
   max-width: 768px;
   padding: 0.5rem;
   width: 100%;
@@ -15,16 +15,16 @@
 }
 
 .suggestionItem:hover {
-  background-color: var(--palette-persian-orange);
+  background-color: var(--color-hover-popover);
   cursor: pointer;
 }
 
 .suggestionListInverse {
-  background-color: var(--color-inverse-popover);
+  background-color: var(--color-popover);
 }
 
 .suggestionItemInverse:hover {
-  background-color: var(--color-inverse-surface);
+  background-color: var(--color-hover-popover);
 }
 
 .suggestionListEmpty,
