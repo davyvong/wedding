@@ -4,7 +4,7 @@ import Authenticator from 'server/authenticator';
 import ServerError, { ServerErrorCode } from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { boolean, mixed, object, string } from 'yup';
+import { boolean, object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
 
@@ -100,7 +100,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     const bodySchema = object({
       attendance: boolean().required(),
       dietaryRestrictions: string(),
-      entree: mixed<EntreeOptions>().oneOf(Object.values(EntreeOptions)).required(),
+      entree: string<EntreeOptions>().when('attendance', {
+        is: true,
+        then: schema => schema.oneOf(Object.values(EntreeOptions)).required(),
+      }),
       mailingAddress: string(),
       message: string().required(),
     });

@@ -171,11 +171,11 @@ class MySQLQueries {
       `;
       const results = await connection.execute<ResponseRowData>(query, {
         attendance: data.attendance,
-        dietaryRestrictions: data.dietaryRestrictions || null,
-        entree: data.entree,
+        dietaryRestrictions: (data.attendance && data.dietaryRestrictions) || null,
+        entree: (data.attendance && data.entree) || null,
         guestId,
         publicId: ObjectID().toHexString(),
-        mailingAddress: data.mailingAddress || null,
+        mailingAddress: (data.attendance && data.mailingAddress) || null,
         message: data.message,
         tokenGuestId: token.guestId,
       });
@@ -219,10 +219,10 @@ class MySQLQueries {
       `;
       const results = await connection.execute<ResponseRowData>(query, {
         attendance: data.attendance,
-        dietaryRestrictions: data.dietaryRestrictions || null,
-        entree: data.entree,
+        dietaryRestrictions: (data.attendance && data.dietaryRestrictions) || null,
+        entree: (data.attendance && data.entree) || null,
         guestId,
-        mailingAddress: data.mailingAddress || null,
+        mailingAddress: (data.attendance && data.mailingAddress) || null,
         message: data.message,
         tokenGuestId: token.guestId,
       });

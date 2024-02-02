@@ -19,7 +19,7 @@ import { GuestData } from 'server/models/guest';
 import { ResponseData } from 'server/models/response';
 import useSWR from 'swr';
 import { sortByKey } from 'utils/sort';
-import { boolean, mixed, string } from 'yup';
+import { boolean, object, string } from 'yup';
 
 import styles from './component.module.css';
 import { EntreeOptions, attendanceOptions, entreeOptions } from './constants';
@@ -95,7 +95,16 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     if (!data) {
       return undefined;
     }
-    return data.responses.find((response: ResponseData): boolean => response.guest === selectedGuestId);
+    const response = data.responses.find((response: ResponseData): boolean => response.guest === selectedGuestId);
+    if (!response) {
+      return undefined;
+    }
+    return {
+      ...response,
+      dietaryRestrictions: response.dietaryRestrictions || '',
+      entree: response.entree || '',
+      mailingAddress: response.mailingAddress || '',
+    };
   }, [data, selectedGuestId]);
 
   const [values, setValues] = useState<RSVPFlyoutComponentValues>({
@@ -162,7 +171,14 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     if (!boolean().required().isValidSync(values.attendance)) {
       validationErrors.attendance = 'components.flyouts.rsvp.errors.missing-attendance';
     }
-    if (!mixed<EntreeOptions>().oneOf(Object.values(EntreeOptions)).required().isValidSync(values.entree)) {
+    if (
+      !object({
+        entree: string<EntreeOptions>().when('attendance', {
+          is: true,
+          then: schema => schema.oneOf(Object.values(EntreeOptions)).required(),
+        }),
+      }).isValidSync(values)
+    ) {
       validationErrors.entree = 'components.flyouts.rsvp.errors.missing-entree';
     }
     if (!string().required().isValidSync(values.message)) {
@@ -432,34 +448,38 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         value={values.attendance}
       />
       {errors.attendance && <div className={styles.error}>{Translate.t(errors.attendance)}</div>}
-      <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.entree')}</div>
-      <Select
-        inverse
-        name="entree"
-        onChange={onAddressInputChange}
-        options={entreeOptions}
-        placeholder={Translate.t('components.flyouts.rsvp.placeholders.entree')}
-        value={values.entree}
-      />
-      {errors.entree && <div className={styles.error}>{Translate.t(errors.entree)}</div>}
-      <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.dietaryRestrictions')}</div>
-      <TextInput
-        inverse
-        name="dietaryRestrictions"
-        onChange={onInputChange}
-        placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietaryRestrictions')}
-        value={values.dietaryRestrictions}
-      />
-      {errors.dietaryRestrictions && <div className={styles.error}>{Translate.t(errors.dietaryRestrictions)}</div>}
-      <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
-      <AddressInput
-        inverse
-        name="mailingAddress"
-        onChange={onAddressInputChange}
-        placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
-        value={values.mailingAddress}
-      />
-      {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
+      {values.attendance && (
+        <Fragment>
+          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.entree')}</div>
+          <Select
+            inverse
+            name="entree"
+            onChange={onAddressInputChange}
+            options={entreeOptions}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.entree')}
+            value={values.entree}
+          />
+          {errors.entree && <div className={styles.error}>{Translate.t(errors.entree)}</div>}
+          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.dietaryRestrictions')}</div>
+          <TextInput
+            inverse
+            name="dietaryRestrictions"
+            onChange={onInputChange}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietaryRestrictions')}
+            value={values.dietaryRestrictions}
+          />
+          {errors.dietaryRestrictions && <div className={styles.error}>{Translate.t(errors.dietaryRestrictions)}</div>}
+          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
+          <AddressInput
+            inverse
+            name="mailingAddress"
+            onChange={onAddressInputChange}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
+            value={values.mailingAddress}
+          />
+          {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
+        </Fragment>
+      )}
       <div className={styles.question} onChange={onInputChange}>
         {Translate.t('components.flyouts.rsvp.questions.message')}
       </div>

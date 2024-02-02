@@ -1,7 +1,7 @@
 export interface ResponseData {
   attendance: boolean;
   dietaryRestrictions?: string;
-  entree: string;
+  entree?: string;
   guest: string;
   id: string;
   mailingAddress?: string;
@@ -21,7 +21,7 @@ export interface ResponseRowData {
 class Response {
   public attendance: boolean;
   public dietaryRestrictions?: string;
-  public entree: string;
+  public entree?: string;
   public guest: string;
   public id: string;
   public mailingAddress?: string;
@@ -40,11 +40,11 @@ class Response {
   public static fromRow(row: ResponseRowData): Response {
     const data: ResponseData = {
       attendance: Boolean(row.attendance),
-      dietaryRestrictions: row.dietary_restrictions || '',
+      dietaryRestrictions: row.dietary_restrictions,
       entree: row.entree,
       guest: row.guest_id,
       id: row.public_id,
-      mailingAddress: row.mailing_address || '',
+      mailingAddress: row.mailing_address,
       message: row.message,
     };
     return new Response(data);
