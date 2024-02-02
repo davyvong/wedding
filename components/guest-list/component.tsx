@@ -1,16 +1,13 @@
 'use client';
 
-import CheckIconSVG from 'assets/icons/check.svg';
-import CopyIconSVG from 'assets/icons/copy.svg';
 import GroupIconSVG from 'assets/icons/group.svg';
 import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
-import classNames from 'classnames';
 import Translate from 'client/translate';
 import { FlyoutReferenceComponentProps } from 'components/flyout/component';
 import RSVPFlyout from 'components/flyouts/rsvp';
 import Tooltip from 'components/tooltip';
 import cloneDeep from 'lodash.clonedeep';
-import { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useMemo } from 'react';
 import { GuestData } from 'server/models/guest';
 import { ResponseData } from 'server/models/response';
 import { sortByKey } from 'utils/sort';
@@ -22,8 +19,6 @@ export interface GuestListComponentProps {
 }
 
 const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
-  const [clickedIconButtons, setClickedIconButtons] = useState<Set<string>>(new Set());
-
   const sortedGuestList = useMemo<{ guests: GuestData[]; id: string; responses: ResponseData[] }[]>(() => {
     const guestListClone = cloneDeep(guestList);
     guestListClone.sort(sortByKey('id'));
@@ -33,23 +28,13 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
     return guestListClone;
   }, [guestList]);
 
-  const onClickIconButton = useCallback((objectId: string): void => {
-    setClickedIconButtons((prevState: Set<string>): Set<string> => {
-      const nextState = new Set(prevState);
-      nextState.add(objectId);
-      return nextState;
-    });
-    setTimeout(() => {
-      try {
-        setClickedIconButtons((prevState: Set<string>): Set<string> => {
-          const nextState = new Set(prevState);
-          nextState.delete(objectId);
-          return nextState;
-        });
-      } catch {
-        //
-      }
-    }, 2000);
+  const renderGuestAttendance = useCallback((guestResponse?: ResponseData): JSX.Element | string => {
+    if (!guestResponse) {
+      return <Fragment />;
+    }
+    return guestResponse.attendance
+      ? Translate.t('components.guest-list.rows.attendance.yes')
+      : Translate.t('components.guest-list.rows.attendance.no');
   }, []);
 
   const renderGuest = useCallback(
@@ -58,41 +43,8 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
         (response: ResponseData): boolean => response.guest === guest.id,
       );
 
-      const renderGuestAttendance = (): JSX.Element | string => {
-        if (!guestResponse) {
-          return <Fragment />;
-        }
-        return guestResponse.attendance
-          ? Translate.t('components.guest-list.rows.attendance.yes')
-          : Translate.t('components.guest-list.rows.attendance.no');
-      };
-
       return (
         <tr key={guest.id}>
-          <td>
-            <div className={styles.guestIdCell}>
-              {guest.id.substr(-7)}
-              {clickedIconButtons.has('copiedGuestId-' + guest.id) ? (
-                <div className={styles.iconButton}>
-                  <CheckIconSVG className={styles.copiedGuestIdIcon} />
-                </div>
-              ) : (
-                <Tooltip
-                  placement="right-middle"
-                  renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
-                >
-                  <div className={classNames(styles.iconButton, styles.copyGuestIdIcon)}>
-                    <CopyIconSVG
-                      onClick={(): void => {
-                        navigator.clipboard.writeText(guest.id);
-                        onClickIconButton('copiedGuestId-' + guest.id);
-                      }}
-                    />
-                  </div>
-                </Tooltip>
-              )}
-            </div>
-          </td>
           <td>{guest.name}</td>
           <td>{guest.email}</td>
           <td>
@@ -100,7 +52,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
               ? Translate.t('components.guest-list.rows.rsvp.yes')
               : Translate.t('components.guest-list.rows.rsvp.no')}
           </td>
-          <td>{renderGuestAttendance()}</td>
+          <td>{renderGuestAttendance(guestResponse)}</td>
           <td>
             <div className={styles.viewRSVPCell}>
               <RSVPFlyout
@@ -124,7 +76,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
         </tr>
       );
     },
-    [clickedIconButtons, onClickIconButton],
+    [renderGuestAttendance],
   );
 
   const renderGuestGroup = useCallback(
@@ -138,32 +90,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
             <td colSpan={6}>
               <div className={styles.guestGroupCell}>
                 <GroupIconSVG />
-                {guestGroup.id ? (
-                  <Fragment>
-                    <span>{guestGroup.id.substr(-7)}</span>
-                    {clickedIconButtons.has('copiedGuestId-' + guestGroup.id) ? (
-                      <div className={styles.iconButton}>
-                        <CheckIconSVG className={styles.copiedGuestGroupIdIcon} />
-                      </div>
-                    ) : (
-                      <Tooltip
-                        placement="right-middle"
-                        renderContent={(): string => Translate.t('components.guest-list.tooltips.copy')}
-                      >
-                        <div className={classNames(styles.iconButton, styles.copyGuestGroupIdIcon)}>
-                          <CopyIconSVG
-                            onClick={(): void => {
-                              navigator.clipboard.writeText(guestGroup.id);
-                              onClickIconButton('copiedGuestId-' + guestGroup.id);
-                            }}
-                          />
-                        </div>
-                      </Tooltip>
-                    )}
-                  </Fragment>
-                ) : (
-                  <span>{Translate.t('components.guest-list.individuals')}</span>
-                )}
+                {!guestGroup.id && <span>{Translate.t('components.guest-list.individuals')}</span>}
                 <div className={styles.separatorLine} />
               </div>
             </td>
@@ -172,7 +99,7 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
         </tbody>
       );
     },
-    [clickedIconButtons, onClickIconButton, renderGuest],
+    [renderGuest],
   );
 
   return (
@@ -180,7 +107,6 @@ const GuestListComponent: FC<GuestListComponentProps> = ({ guestList }) => {
       <table className={styles.guestTable}>
         <thead>
           <tr>
-            <th>{Translate.t('components.guest-list.columns.id')}</th>
             <th>{Translate.t('components.guest-list.columns.name')}</th>
             <th>{Translate.t('components.guest-list.columns.email')}</th>
             <th>{Translate.t('components.guest-list.columns.rsvp')}</th>

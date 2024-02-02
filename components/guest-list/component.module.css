@@ -64,13 +64,6 @@
   white-space: nowrap;
 }
 
-.guestIdCell {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
 .viewRSVPCell {
   align-items: center;
   display: flex;
@@ -89,11 +82,4 @@
 .iconButton:hover {
   cursor: pointer;
   opacity: 0.8;
-}
-
-.copiedGuestGroupIdIcon,
-.copiedGuestIdIcon,
-.copyGuestGroupIdIcon,
-.copyGuestIdIcon {
-  margin-left: 1rem;
 }
