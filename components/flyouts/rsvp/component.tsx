@@ -469,17 +469,17 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
             value={values.dietaryRestrictions}
           />
           {errors.dietaryRestrictions && <div className={styles.error}>{Translate.t(errors.dietaryRestrictions)}</div>}
-          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
-          <AddressInput
-            inverse
-            name="mailingAddress"
-            onChange={onAddressInputChange}
-            placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
-            value={values.mailingAddress}
-          />
-          {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
         </Fragment>
       )}
+      <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
+      <AddressInput
+        inverse
+        name="mailingAddress"
+        onChange={onAddressInputChange}
+        placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
+        value={values.mailingAddress}
+      />
+      {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
       <div className={styles.question} onChange={onInputChange}>
         {Translate.t('components.flyouts.rsvp.questions.message')}
       </div>

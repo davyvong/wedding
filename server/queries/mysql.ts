@@ -175,7 +175,7 @@ class MySQLQueries {
         entree: (data.attendance && data.entree) || null,
         guestId,
         publicId: ObjectID().toHexString(),
-        mailingAddress: (data.attendance && data.mailingAddress) || null,
+        mailingAddress: data.mailingAddress || null,
         message: data.message,
         tokenGuestId: token.guestId,
       });
@@ -222,7 +222,7 @@ class MySQLQueries {
         dietaryRestrictions: (data.attendance && data.dietaryRestrictions) || null,
         entree: (data.attendance && data.entree) || null,
         guestId,
-        mailingAddress: (data.attendance && data.mailingAddress) || null,
+        mailingAddress: data.mailingAddress || null,
         message: data.message,
         tokenGuestId: token.guestId,
       });
