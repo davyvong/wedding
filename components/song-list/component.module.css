@@ -15,7 +15,7 @@
 }
 
 .songCard:not(:first-child) {
-  margin-top: var(--page-side-spacing);
+  margin-top: 1.5rem;
 }
 
 .songCardImage {

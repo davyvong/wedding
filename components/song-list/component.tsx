@@ -1,6 +1,7 @@
 'use client';
 
 import Translate from 'client/translate';
+import Skeleton from 'components/skeleton';
 import Image from 'next/image';
 import { FC, useCallback } from 'react';
 import { SpotifyPlaylist, SpotifyPlaylistTrack } from 'server/apis/spotify';
@@ -37,8 +38,28 @@ const SongListComponent: FC = () => {
     [],
   );
 
+  const renderSongSkeleton = useCallback(
+    ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
+      <div className={styles.songCard} key={index}>
+        <Skeleton className={styles.songCardImage} height={80} width={80} />
+        <div className={styles.songCardInformation}>
+          <Skeleton height="1.125rem" width={nameWidth} />
+          <Skeleton height="1rem" style={{ marginTop: '1rem' }} width={artistsWidth} />
+        </div>
+      </div>
+    ),
+    [],
+  );
+
   if (isLoading) {
-    return <div className={styles.songList}></div>;
+    const randomNameAndArtistsWidths = new Array(5)
+      .fill(undefined)
+      .map((): string[] => [
+        (50 + Math.ceil(Math.random() * 50)).toString() + '%',
+        (25 + Math.ceil(Math.random() * 50)).toString() + '%',
+      ]);
+
+    return <div className={styles.songList}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
   }
 
   if (!data) {
