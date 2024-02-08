@@ -64,11 +64,11 @@ const SongListComponent: FC = () => {
     return <div className={styles.songList}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
   }
 
-  if (!data) {
-    return <div className={styles.songList}></div>;
-  }
-
-  return <div className={styles.songList}>{data.tracks.map(renderSong)}</div>;
+  return (
+    <div className={styles.songList}>
+      {data ? data.tracks.map(renderSong) : Translate.t('components.song-list.no-songs')}
+    </div>
+  );
 };
 
 export default SongListComponent;

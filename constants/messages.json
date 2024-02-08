@@ -72,5 +72,6 @@
   "components.landing.questions.where-is-the-ceremoney-and-reception": "Where will the ceremony and reception take place?",
   "components.navigation-bar.title": "Vivian & Davy",
   "components.select.no-options": "There are no options available.",
-  "components.song-list.explicit": "E"
+  "components.song-list.explicit": "E",
+  "components.song-list.no-songs": "Be the first to submit song requests!"
 }
