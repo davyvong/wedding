@@ -142,7 +142,9 @@ class SpotifyAPI {
         tracks: [],
       };
     }
-    const response = await fetch(next, {
+    const url = new URL(next);
+    url.searchParams.set('limit', '50');
+    const response = await fetch(url, {
       cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + accessToken,
