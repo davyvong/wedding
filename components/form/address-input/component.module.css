@@ -10,7 +10,7 @@
 
 .suggestionItem {
   border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 1rem;
   transition: background-color 150ms ease-in-out;
 }
 
@@ -29,10 +29,19 @@
 
 .suggestionListEmpty,
 .suggestionListLoading {
-  align-items: center;
   display: flex;
   justify-content: center;
   padding: 0.75rem;
   white-space: pre-wrap;
   width: 100%;
+}
+
+.suggestionListEmpty {
+  align-items: center;
+  flex-direction: row;
+}
+
+.suggestionListLoading {
+  align-items: flex-start;
+  flex-direction: column;
 }

@@ -403,7 +403,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         (75 + Math.ceil(Math.random() * 25)).toString() + '%',
       ]);
     return (
-      <div className={styles.form}>
+      <div className={styles.content}>
         <Skeleton height="2.5rem" inverse width={100} />
         <Skeleton height="14.5rem" inverse style={{ marginTop: '3rem' }} width="100%" />
         <Skeleton
@@ -429,7 +429,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form className={styles.content} onSubmit={onSubmit}>
       <div className={styles.title}>{Translate.t('components.flyouts.rsvp.title')}</div>
       {renderGuestPartySelector()}
       {shouldRenderDismissWarning && renderDismissWarning()}

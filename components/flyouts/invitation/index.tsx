@@ -1,6 +1,6 @@
 'use client';
 
-import MarkEmailUnreadSVG from 'assets/icons/mark-email-unread.svg';
+import MarkEmailUnreadIconSVG from 'assets/icons/mark-email-unread.svg';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import Flyout from 'components/flyout';
@@ -17,7 +17,7 @@ const InvitationFlyout: FC = () => {
 
   const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
     <Button {...referenceProps}>
-      <MarkEmailUnreadSVG />
+      <MarkEmailUnreadIconSVG />
       <span className={rsvpFlyoutStyles.buttonText}>
         {Translate.t('components.flyouts.invitation.buttons.invitation')}
       </span>

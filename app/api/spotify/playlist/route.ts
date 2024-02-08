@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
-    return NextResponse.json(playlist, {
+    return NextResponse.json(playlist.tracks, {
       headers: {
         'Cache-Control': 's-maxage=120, stale-while-revalidate=60',
         ...RateLimiter.toHeaders(checkResults),
