@@ -8,7 +8,7 @@ import rsvpFlyoutStyles from 'components/flyouts/rsvp/component.module.css';
 import SongInput from 'components/form/song-input';
 import Image from 'next/image';
 import { useCallback, type FC, useState } from 'react';
-import { SpotifyPlaylist, SpotifyPlaylistTrack, SpotifyTrack } from 'server/apis/spotify';
+import { SpotifyPlaylistTrack, SpotifyTrack } from 'server/apis/spotify';
 import useSWR from 'swr';
 
 import styles from './component.module.css';
@@ -18,7 +18,7 @@ interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
 const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const [query, setQuery] = useState<string>('');
 
-  const fetchSpotifyPlaylist = useCallback(async (): Promise<SpotifyPlaylist> => {
+  const fetchSpotifyPlaylist = useCallback(async (): Promise<SpotifyPlaylistTrack[]> => {
     const response = await fetch('/api/spotify/playlist', {
       cache: 'no-store',
       method: 'GET',
@@ -94,7 +94,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
         </div>
       </div>
       {data ? (
-        <div className={styles.songList}>{data.tracks.map(renderSong)}</div>
+        <div className={styles.songList}>{data.map(renderSong)}</div>
       ) : (
         Translate.t('components.flyouts.songs.no-songs')
       )}
