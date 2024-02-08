@@ -50,7 +50,6 @@
   "components.flyouts.rsvp.unsaved-changes.guest-switch": "You have unsaved changes for {{currentGuest}}'s response. Are you sure you want to discard the unsaved changes to switch to {{selectedGuest}}'s response?",
   "components.flyouts.songs.description": "Want to hear a song at the wedding? Let us know by submitting song requests!",
   "components.flyouts.songs.explicit": "E",
-  "components.flyouts.songs.no-songs": "Be the first to submit song requests!",
   "components.flyouts.songs.placeholders.search": "Search for a song",
   "components.flyouts.songs.song-requests": "Song Requests",
   "components.flyouts.songs.tooltips.remove": "Remove",

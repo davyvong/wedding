@@ -154,11 +154,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
           />
         </div>
       </div>
-      {data ? (
-        <div className={styles.songList}>{data.map(renderSong)}</div>
-      ) : (
-        Translate.t('components.flyouts.songs.no-songs')
-      )}
+      {Array.isArray(data) && <div className={styles.songList}>{data.map(renderSong)}</div>}
     </div>
   );
 };
