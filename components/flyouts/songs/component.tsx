@@ -31,13 +31,13 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const renderSong = useCallback(
     (song: SpotifyPlaylistTrack): JSX.Element => (
       <div className={styles.songCard} key={song.id}>
-        <Image alt={song.name} className={styles.songCardImage} height={80} src={song.image} width={80} />
-        <div className={styles.songCardInformation}>
-          <div className={styles.songCardName}>
+        <Image alt={song.name} className={styles.songImage} height={80} src={song.image} width={80} />
+        <div className={styles.songInformation}>
+          <div className={styles.songName}>
             <a href={song.href} target="_blank">
               {song.name}
             </a>
-            <OpenInNewIconSVG className={styles.songCardNameIcon} height={20} width={20} />
+            <OpenInNewIconSVG className={styles.songNameIcon} height={20} width={20} />
           </div>
           <div className={styles.songArtists}>
             {song.explicit && (
@@ -54,8 +54,8 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const renderSongSkeleton = useCallback(
     ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
       <div className={styles.songCard} key={index}>
-        <Skeleton className={styles.songCardImage} height={80} inverse width={80} />
-        <div className={styles.songCardInformation}>
+        <Skeleton className={styles.songImage} height={80} inverse width={80} />
+        <div className={styles.songInformation}>
           <Skeleton height="1.125rem" inverse width={nameWidth} />
           <Skeleton height="1rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />
         </div>

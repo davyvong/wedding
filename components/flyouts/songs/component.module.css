@@ -22,17 +22,17 @@
   margin-top: 1.5rem;
 }
 
-.songCardImage {
+.songImage {
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
-.songCardInformation {
+.songInformation {
   flex: 1;
   margin-left: 1.5rem;
 }
 
-.songCardName {
+.songName {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -40,18 +40,18 @@
   font-weight: 600;
 }
 
-.songCardName a {
+.songName a {
   color: inherit;
   text-decoration: none;
 }
 
-.songCardNameIcon {
+.songNameIcon {
   margin-left: 0.5rem;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
 }
 
-.songCardName:hover .songCardNameIcon {
+.songName:hover .songNameIcon {
   opacity: 1;
 }
 

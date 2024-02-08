@@ -109,14 +109,14 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
         >
           <Image
             alt={suggestion.name}
-            className={songFlyoutStyles.songCardImage}
-            height={80}
+            className={songFlyoutStyles.songImage}
+            height={64}
             src={suggestion.image}
-            width={80}
+            width={64}
           />
-          <div className={songFlyoutStyles.songCardInformation}>
-            <div className={songFlyoutStyles.songCardName}>{suggestion.name}</div>
-            <div className={songFlyoutStyles.songArtists}>
+          <div className={classNames(songFlyoutStyles.songInformation, styles.songInformation)}>
+            <div className={classNames(songFlyoutStyles.songName, styles.songName)}>{suggestion.name}</div>
+            <div className={classNames(songFlyoutStyles.songArtists, styles.songArtists)}>
               {suggestion.explicit && (
                 <span className={songFlyoutStyles.songExplicit}>
                   {Translate.t('components.flyouts.songs.explicit')}
@@ -144,11 +144,11 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
 
   const renderSongSkeleton = useCallback(
     ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
-      <div className={songFlyoutStyles.songCard} key={index}>
-        <Skeleton className={songFlyoutStyles.songCardImage} height={80} inverse width={80} />
-        <div className={songFlyoutStyles.songCardInformation}>
-          <Skeleton height="1.125rem" inverse width={nameWidth} />
-          <Skeleton height="1rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />
+      <div className={classNames(songFlyoutStyles.songCard, styles.songSkeleton)} key={index}>
+        <Skeleton className={classNames(songFlyoutStyles.songImage, styles.songImage)} height={64} inverse width={64} />
+        <div className={classNames(songFlyoutStyles.songInformation, styles.songInformation)}>
+          <Skeleton height="1rem" inverse width={nameWidth} />
+          <Skeleton height="0.875rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />
         </div>
       </div>
     ),

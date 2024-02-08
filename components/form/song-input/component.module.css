@@ -11,3 +11,19 @@
 .songCard {
   margin-top: 0 !important;
 }
+
+.songInformation {
+  margin-left: 1rem;
+}
+
+.songName {
+  font-size: 1rem;
+}
+
+.songArtists {
+  font-size: 0.875rem;
+}
+
+.songSkeleton:not(:first-child) {
+  margin-top: 2rem;
+}
