@@ -29,14 +29,26 @@
 }
 
 .songCardName {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.songCardName a {
   color: var(--color-on-surface);
   font-size: 1.125rem;
   font-weight: 600;
   text-decoration: none;
 }
 
-.songCardName:hover {
-  text-decoration: underline;
+.songCardNameIcon {
+  margin-left: 0.5rem;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+}
+
+.songCardName:hover .songCardNameIcon {
+  opacity: 1;
 }
 
 .songArtists {

@@ -1,5 +1,6 @@
 'use client';
 
+import OpenInNewIconSVG from 'assets/icons/open-in-new.svg';
 import Translate from 'client/translate';
 import Skeleton from 'components/skeleton';
 import Image from 'next/image';
@@ -25,9 +26,12 @@ const SongListComponent: FC = () => {
       <div className={styles.songCard} key={song.id}>
         <Image alt={song.name} className={styles.songCardImage} height={80} src={song.image} width={80} />
         <div className={styles.songCardInformation}>
-          <a className={styles.songCardName} href={song.href} target="_blank">
-            {song.name}
-          </a>
+          <div className={styles.songCardName}>
+            <a href={song.href} target="_blank">
+              {song.name}
+            </a>
+            <OpenInNewIconSVG className={styles.songCardNameIcon} height={20} width={20} />
+          </div>
           <div className={styles.songArtists}>
             {song.explicit && (
               <span className={styles.songExplicit}>{Translate.t('components.song-list.explicit')}</span>
