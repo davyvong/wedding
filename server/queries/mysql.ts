@@ -488,6 +488,31 @@ class MySQLQueries {
       return false;
     }
   }
+
+  public static async findSongRequests(): Promise<string[] | null> {
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        select *
+        from wedding_song_requests
+      `;
+      const results = await connection.execute<SongRequestRowData>(query);
+      const trackIds = results.rows.map((row: SongRequestRowData): string => row.spotify_track_id);
+      const frequencyMap = new Map<string, number>();
+      for (const trackId of trackIds) {
+        if (frequencyMap.has(trackId)) {
+          frequencyMap.set(trackId, (frequencyMap.get(trackId) as number) + 1);
+        } else {
+          frequencyMap.set(trackId, 1);
+        }
+      }
+      return Array.from(frequencyMap.keys()).sort((trackA: string, trackB: string): number => {
+        return (frequencyMap.get(trackA) as number) - (frequencyMap.get(trackB) as number);
+      });
+    } catch {
+      return null;
+    }
+  }
 }
 
 export default MySQLQueries;

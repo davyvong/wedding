@@ -43,12 +43,12 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const requestsForTracks: Promise<SpotifyTrack[]>[] = [];
+    const chunkedRequests: Promise<SpotifyTrack[]>[] = [];
     for (let i = 0; i < songRequests.length; i += 50) {
-      const songRequestsChunk = songRequests.slice(i, i + 50);
-      requestsForTracks.push(SpotifyAPI.getSeveralTracks(accessToken, songRequestsChunk));
+      const chunkedSongRequests = songRequests.slice(i, i + 50);
+      chunkedRequests.push(SpotifyAPI.getSeveralTracks(accessToken, chunkedSongRequests));
     }
-    const tracks = (await Promise.all(requestsForTracks)).flat();
+    const tracks = (await Promise.all(chunkedRequests)).flat();
     return NextResponse.json(tracks, {
       headers: RateLimiter.toHeaders(checkResults),
       status: 200,

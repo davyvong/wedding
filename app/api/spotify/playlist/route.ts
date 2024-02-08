@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import SpotifyAPI, { SpotifyPlaylistTrack } from 'server/apis/spotify';
 import ServerError, { ServerErrorCode } from 'server/error';
+import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import Token from 'server/token';
 import { object, string } from 'yup';
@@ -40,10 +41,25 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const tracks = await SpotifyAPI.getDuplicateTracksInPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
-    const uris = tracks.map((track: SpotifyPlaylistTrack): string => track.uri);
-    await SpotifyAPI.removeFromPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, uris);
-    await SpotifyAPI.addToPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, uris);
+    const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
+    const uris = playlist.tracks.map((track: SpotifyPlaylistTrack): string => track.uri);
+    const chunkedRequests: Promise<void>[] = [];
+    for (let i = 0; i < uris.length; i += 100) {
+      const urisChunk = uris.slice(i, i + 100);
+      chunkedRequests.push(SpotifyAPI.removeFromPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, urisChunk));
+    }
+    await Promise.all(chunkedRequests);
+    chunkedRequests.length = 0;
+    const songRequests = await MySQLQueries.findSongRequests();
+    if (songRequests) {
+      for (let i = 0; i < songRequests.length; i += 100) {
+        const songRequestsChunk = songRequests
+          .slice(i, i + 100)
+          .map((trackId: string): string => 'spotify:track:' + trackId);
+        chunkedRequests.push(SpotifyAPI.addToPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, songRequestsChunk));
+      }
+    }
+    await Promise.all(chunkedRequests);
     return new Response(undefined, {
       headers: RateLimiter.toHeaders(checkResults),
       status: 202,

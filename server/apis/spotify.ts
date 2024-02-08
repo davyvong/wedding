@@ -201,29 +201,6 @@ class SpotifyAPI {
     return responseJson.tracks.items.map(SpotifyAPI.toSpotifyTrack);
   }
 
-  public static async getDuplicateTracksInPlaylist(
-    accessToken: string,
-    playlistId: string,
-  ): Promise<SpotifyPlaylistTrack[]> {
-    const tracks = new Map<string, SpotifyPlaylistTrack>();
-    const duplicateTracks = new Set<string>();
-    const url = new URL('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks');
-    let next: null | string = url.href;
-    while (next) {
-      const nextTracks = await this.getNextTracksInPlaylist(accessToken, next);
-      for (const track of nextTracks.tracks) {
-        if (tracks.has(track.uri)) {
-          duplicateTracks.add(track.uri);
-        }
-        tracks.set(track.uri, track);
-      }
-      next = nextTracks.next;
-    }
-    return Array.from(tracks.values()).filter((track: SpotifyPlaylistTrack): boolean => {
-      return duplicateTracks.has(track.uri);
-    });
-  }
-
   public static async getTrack(accessToken: string, trackId: string): Promise<SpotifyTrack> {
     const url = new URL('https://api.spotify.com/v1/tracks/' + trackId);
     const response = await fetch(url.href, {
