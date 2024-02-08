@@ -3,6 +3,7 @@ import { GuestTokenPayload } from 'server/authenticator';
 import MySQLClientFactory from 'server/clients/mysql';
 import Guest, { GuestRowData } from 'server/models/guest';
 import Response, { ResponseData, ResponseRowData } from 'server/models/response';
+import { SongRequestRowData } from 'server/models/song-request';
 
 class MySQLQueries {
   public static async findGuestFromId(id: string): Promise<Guest | null> {
@@ -120,7 +121,7 @@ class MySQLQueries {
     }
   }
 
-  public static async insertResponseFromGuestId(
+  public static async insertResponse(
     token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
@@ -185,7 +186,7 @@ class MySQLQueries {
     }
   }
 
-  public static async updateResponseFromGuestId(
+  public static async updateResponse(
     token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
@@ -262,7 +263,7 @@ class MySQLQueries {
     }
   }
 
-  public static async upsertResponseFromGuestId(
+  public static async upsertResponse(
     token: GuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
@@ -271,8 +272,8 @@ class MySQLQueries {
       return null;
     }
     try {
-      if (!(await MySQLQueries.updateResponseFromGuestId(token, guestId, data))) {
-        await MySQLQueries.insertResponseFromGuestId(token, guestId, data);
+      if (!(await MySQLQueries.updateResponse(token, guestId, data))) {
+        await MySQLQueries.insertResponse(token, guestId, data);
       }
       return MySQLQueries.findResponseFromGuestId(guestId);
     } catch {
@@ -389,6 +390,103 @@ class MySQLQueries {
       });
     }
     return guestList;
+  }
+
+  public static async findSongRequestsFromGuestId(guestId: string): Promise<string[] | null> {
+    if (!guestId) {
+      return null;
+    }
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        select *
+        from wedding_song_requests
+        where guest_id = (
+          select id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
+        )
+      `;
+      const results = await connection.execute<SongRequestRowData>(query, {
+        guestId,
+      });
+      return results.rows.map((row: SongRequestRowData): string => row.spotify_track_id);
+    } catch {
+      return null;
+    }
+  }
+
+  public static async insertSongRequest(
+    token: GuestTokenPayload,
+    guestId: string,
+    spotifyTrackId: string,
+  ): Promise<boolean> {
+    if (!spotifyTrackId) {
+      return false;
+    }
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        insert into wedding_song_requests (
+          public_id,
+          guest_id,
+          spotify_track_id,
+          created_by
+        )
+        values (
+          :publicId,
+          (
+            select id
+            from wedding_guests
+            where public_id = :guestId
+            limit 1
+          ),
+          :spotifyTrackId,
+          (
+            select id
+            from wedding_guests
+            where public_id = :tokenGuestId
+            limit 1
+          )
+        )
+      `;
+      const results = await connection.execute<SongRequestRowData>(query, {
+        guestId,
+        publicId: ObjectID().toHexString(),
+        spotifyTrackId,
+        tokenGuestId: token.guestId,
+      });
+      return results.rowsAffected > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  public static async deleteSongRequest(guestId: string, spotifyTrackId: string): Promise<boolean> {
+    if (!guestId || !spotifyTrackId) {
+      return false;
+    }
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        delete from wedding_song_requests
+        where guest_id = (
+          select id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
+        )
+        and spotify_track_id = :spotifyTrackId
+      `;
+      const results = await connection.execute<SongRequestRowData>(query, {
+        guestId,
+        spotifyTrackId,
+      });
+      return results.rowsAffected > 0;
+    } catch {
+      return false;
+    }
   }
 }
 

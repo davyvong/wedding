@@ -1,6 +1,7 @@
 'use client';
 
 import OpenInNewIconSVG from 'assets/icons/open-in-new.svg';
+import PlaylistRemoveIconSVG from 'assets/icons/playlist-remove.svg';
 import Translate from 'client/translate';
 import Skeleton from 'components/skeleton';
 import type { FlyoutContentComponentProps } from 'components/flyout/component';
@@ -12,21 +13,59 @@ import { SpotifyPlaylistTrack, SpotifyTrack } from 'server/apis/spotify';
 import useSWR from 'swr';
 
 import styles from './component.module.css';
+import Tooltip from 'components/tooltip';
+import LoadingHeart from 'components/loading-heart';
 
 interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
 
 const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const [query, setQuery] = useState<string>('');
+  const [isRemoving, setIsRemoving] = useState<Set<string>>(new Set());
 
-  const fetchSpotifyPlaylist = useCallback(async (): Promise<SpotifyPlaylistTrack[]> => {
-    const response = await fetch('/api/spotify/playlist', {
+  const fetchSongRequests = useCallback(async (): Promise<SpotifyPlaylistTrack[]> => {
+    const response = await fetch('/api/songs', {
       cache: 'no-store',
       method: 'GET',
     });
     return response.json();
   }, []);
 
-  const { data, isLoading, mutate } = useSWR('/api/spotify/playlist', fetchSpotifyPlaylist);
+  const { data, isLoading, mutate } = useSWR('/api/songs', fetchSongRequests);
+
+  const createSongRequest = useCallback(
+    async (song: SpotifyTrack): Promise<void> => {
+      await fetch('/api/songs/' + song.id, {
+        cache: 'no-store',
+        method: 'POST',
+      });
+      mutate();
+    },
+    [mutate],
+  );
+
+  const removeSongRequest = useCallback(
+    async (song: SpotifyTrack): Promise<void> => {
+      setIsRemoving((prevState: Set<string>): Set<string> => {
+        const nextState = new Set(prevState);
+        nextState.add(song.id);
+        return nextState;
+      });
+      try {
+        await fetch('/api/songs/' + song.id, {
+          cache: 'no-store',
+          method: 'DELETE',
+        });
+        mutate();
+      } finally {
+        setIsRemoving((prevState: Set<string>): Set<string> => {
+          const nextState = new Set(prevState);
+          nextState.delete(song.id);
+          return nextState;
+        });
+      }
+    },
+    [mutate],
+  );
 
   const renderSong = useCallback(
     (song: SpotifyPlaylistTrack): JSX.Element => (
@@ -46,9 +85,26 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
             <span>{song.artists.join(', ')}</span>
           </div>
         </div>
+        {isRemoving.has(song.id) ? (
+          <LoadingHeart />
+        ) : (
+          <Tooltip
+            placement="left-middle"
+            renderContent={(): string => Translate.t('components.flyouts.songs.tooltips.remove')}
+          >
+            <div
+              className={styles.removeIcon}
+              onClick={(): void => {
+                removeSongRequest(song);
+              }}
+            >
+              <PlaylistRemoveIconSVG />
+            </div>
+          </Tooltip>
+        )}
       </div>
     ),
-    [],
+    [isRemoving, removeSongRequest],
   );
 
   const renderSongSkeleton = useCallback(
@@ -62,20 +118,6 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
       </div>
     ),
     [],
-  );
-
-  const addSongToPlaylist = useCallback(
-    async (song: SpotifyTrack): Promise<void> => {
-      await fetch('/api/spotify/playlist/add', {
-        body: JSON.stringify({
-          uris: [song.uri],
-        }),
-        cache: 'no-store',
-        method: 'POST',
-      });
-      mutate();
-    },
-    [mutate],
   );
 
   if (isLoading) {
@@ -99,7 +141,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
             onChange={(name: string, value: string): void => {
               setQuery(value);
             }}
-            onSelect={addSongToPlaylist}
+            onSelect={createSongRequest}
             placeholder={Translate.t('components.flyouts.songs.placeholders.search')}
             value={query}
           />

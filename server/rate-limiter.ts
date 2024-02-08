@@ -12,6 +12,7 @@ export enum RateLimiterScope {
   SecretCode = 'SecretCode',
   SecretEmail = 'SecretEmail',
   SignOut = 'SignOut',
+  Songs = 'Songs',
   SpotifyAuthorize = 'SpotifyAuthorize',
   SpotifyAuthorizeToken = 'SpotifyAuthorizeToken',
   SpotifyPlaylist = 'SpotifyPlaylist',

@@ -223,6 +223,35 @@ class SpotifyAPI {
       return duplicateTracks.has(track.uri);
     });
   }
+
+  public static async getTrack(accessToken: string, trackId: string): Promise<SpotifyTrack> {
+    const url = new URL('https://api.spotify.com/v1/tracks/' + trackId);
+    const response = await fetch(url.href, {
+      cache: 'no-store',
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    });
+    const responseJson = await response.json();
+    return SpotifyAPI.toSpotifyTrack(responseJson);
+  }
+
+  public static async getSeveralTracks(accessToken: string, trackIds: string[]): Promise<SpotifyTrack[]> {
+    const url = new URL('https://api.spotify.com/v1/tracks');
+    url.searchParams.set('ids', trackIds.join(','));
+    const response = await fetch(url.href, {
+      cache: 'no-store',
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    });
+    const responseJson = await response.json();
+    return responseJson.tracks.map(SpotifyAPI.toSpotifyTrack);
+  }
 }
 
 export default SpotifyAPI;

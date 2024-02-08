@@ -197,7 +197,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
         {value.length > 0 && (
           <Tooltip
             inverse
-            placement="left"
+            placement="left-middle"
             renderContent={(): string => Translate.t('components.form.song-input.tooltips.clear')}
           >
             <div className={styles.clearIcon} onClick={(): void => onChange(name, '')}>

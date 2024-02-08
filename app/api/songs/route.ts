@@ -1,16 +1,16 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
 import ServerError, { ServerErrorCode } from 'server/error';
+import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
-import { array, object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
 
-export const POST = async (request: NextRequest): Promise<Response> => {
+export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.SpotifyPlaylist,
+      scope: RateLimiterScope.Songs,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
@@ -18,24 +18,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         code: ServerErrorCode.TooManyRequests,
         rateLimit: checkResults,
         status: 429,
-      });
-    }
-    const body = await request.json();
-    const bodySchema = object({
-      uris: array()
-        .of(
-          string()
-            .required()
-            .matches(/^spotify:track:([a-zA-Z0-9]){22}/),
-        )
-        .required()
-        .min(1),
-    });
-    if (!bodySchema.isValidSync(body)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
       });
     }
     const token = await Authenticator.verifyToken(request.cookies);
@@ -46,11 +28,25 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         status: 401,
       });
     }
+    const songRequests = await MySQLQueries.findSongRequestsFromGuestId(token.guestId);
+    if (!songRequests) {
+      throw new ServerError({
+        code: ServerErrorCode.InternalServerError,
+        rateLimit: checkResults,
+        status: 500,
+      });
+    }
+    if (songRequests.length === 0) {
+      return NextResponse.json([], {
+        headers: RateLimiter.toHeaders(checkResults),
+        status: 200,
+      });
+    }
     const accessToken = await SpotifyAPI.getAccessToken();
-    await SpotifyAPI.removeFromPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID, body.uris);
-    return new Response(undefined, {
+    const tracks = await SpotifyAPI.getSeveralTracks(accessToken, songRequests);
+    return NextResponse.json(tracks, {
       headers: RateLimiter.toHeaders(checkResults),
-      status: 202,
+      status: 200,
     });
   } catch (error: unknown) {
     return ServerError.handle(error);
