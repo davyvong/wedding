@@ -122,13 +122,19 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   );
 
   if (isLoading) {
-    const randomNameAndArtistsWidths = new Array(7)
+    const randomNameAndArtistsWidths = new Array(5)
       .fill(undefined)
       .map((): string[] => [
         (50 + Math.ceil(Math.random() * 50)).toString() + '%',
         (25 + Math.ceil(Math.random() * 50)).toString() + '%',
       ]);
-    return <div className={rsvpFlyoutStyles.content}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
+    return (
+      <div className={rsvpFlyoutStyles.content}>
+        <Skeleton height="2.5rem" inverse width={300} />
+        <Skeleton height="6rem" inverse style={{ marginTop: '3rem' }} width="100%" />
+        <div style={{ marginTop: '3rem' }}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>
+      </div>
+    );
   }
 
   return (
