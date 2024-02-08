@@ -27,11 +27,7 @@
   margin-top: 1.5rem;
 }
 
-.songCard:hover:before {
-  opacity: 1;
-}
-
-.songCard:before {
+.songCardHoverable:before {
   background-color: var(--color-inverse-hover-surface);
   border-radius: 0.5rem;
   bottom: -1rem;
@@ -43,6 +39,10 @@
   top: -1rem;
   transition: opacity 150ms ease-in-out;
   z-index: -1;
+}
+
+.songCardHoverable:hover:before {
+  opacity: 1;
 }
 
 .songImage {

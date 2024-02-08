@@ -15,6 +15,7 @@ import useSWR from 'swr';
 import styles from './component.module.css';
 import Tooltip from 'components/tooltip';
 import LoadingHeart from 'components/loading-heart';
+import classNames from 'classnames';
 
 interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
 
@@ -69,7 +70,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
 
   const renderSong = useCallback(
     (song: SpotifyPlaylistTrack): JSX.Element => (
-      <div className={styles.songCard} key={song.id}>
+      <div className={classNames(styles.songCard, styles.songCardHoverable)} key={song.id}>
         <Image alt={song.name} className={styles.songImage} height={80} src={song.image} width={80} />
         <div className={styles.songInformation}>
           <div className={styles.songName}>
