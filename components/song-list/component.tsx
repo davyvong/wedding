@@ -25,7 +25,9 @@ const SongListComponent: FC = () => {
       <div className={styles.songCard} key={song.id}>
         <Image alt={song.name} className={styles.songCardImage} height={80} src={song.image} width={80} />
         <div className={styles.songCardInformation}>
-          <div className={styles.songCardName}>{song.name}</div>
+          <a className={styles.songCardName} href={song.href} target="_blank">
+            {song.name}
+          </a>
           <div className={styles.songArtists}>
             {song.explicit && (
               <span className={styles.songExplicit}>{Translate.t('components.song-list.explicit')}</span>

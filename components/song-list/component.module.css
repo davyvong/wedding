@@ -29,8 +29,14 @@
 }
 
 .songCardName {
+  color: var(--color-on-surface);
   font-size: 1.125rem;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.songCardName:hover {
+  text-decoration: underline;
 }
 
 .songArtists {
