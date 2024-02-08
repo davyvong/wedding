@@ -24,6 +24,12 @@ module.exports = {
   },
   images: {
     domains: ['i.scdn.co'],
+    remotePatterns: [
+      {
+        hostname: 'i.scdn.co',
+        protocol: 'https',
+      },
+    ],
   },
   redirects: () => [
     {
