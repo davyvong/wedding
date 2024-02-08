@@ -26,7 +26,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
     return response.json();
   }, []);
 
-  const { data, isLoading } = useSWR('/api/spotify/playlist', fetchSpotifyPlaylist);
+  const { data, isLoading, mutate } = useSWR('/api/spotify/playlist', fetchSpotifyPlaylist);
 
   const renderSong = useCallback(
     (song: SpotifyPlaylistTrack): JSX.Element => (
@@ -64,6 +64,20 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
     [],
   );
 
+  const addSongToPlaylist = useCallback(
+    async (song: SpotifyTrack): Promise<void> => {
+      await fetch('/api/spotify/playlist/add', {
+        body: JSON.stringify({
+          uris: [song.uri],
+        }),
+        cache: 'no-store',
+        method: 'POST',
+      });
+      mutate();
+    },
+    [mutate],
+  );
+
   if (isLoading) {
     const randomNameAndArtistsWidths = new Array(7)
       .fill(undefined)
@@ -85,9 +99,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
             onChange={(name: string, value: string): void => {
               setQuery(value);
             }}
-            onSelect={(value: SpotifyTrack): void => {
-              console.log(value);
-            }}
+            onSelect={addSongToPlaylist}
             placeholder={Translate.t('components.flyouts.songs.placeholders.search')}
             value={query}
           />
