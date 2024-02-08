@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import SpotifyAPI from 'server/apis/spotify';
+import SpotifyAPI, { SpotifyTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
 import ServerError, { ServerErrorCode } from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
@@ -43,7 +43,12 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       });
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const tracks = await SpotifyAPI.getSeveralTracks(accessToken, songRequests);
+    const requestsForTracks: Promise<SpotifyTrack[]>[] = [];
+    for (let i = 0; i < songRequests.length; i += 50) {
+      const songRequestsChunk = songRequests.slice(i, i + 50);
+      requestsForTracks.push(SpotifyAPI.getSeveralTracks(accessToken, songRequestsChunk));
+    }
+    const tracks = (await Promise.all(requestsForTracks)).flat();
     return NextResponse.json(tracks, {
       headers: RateLimiter.toHeaders(checkResults),
       status: 200,
