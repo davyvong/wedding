@@ -6,7 +6,7 @@ import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import rsvpFlyoutStyles from 'components/flyouts/rsvp/index.module.css';
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 
 import SongsFlyoutComponent from './component';
 
@@ -15,6 +15,7 @@ const SongsFlyout: FC = () => {
     <SongsFlyoutComponent {...contentProps} />
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
     <Button {...referenceProps}>
       <QueueMusicIconSVG />
@@ -22,7 +23,7 @@ const SongsFlyout: FC = () => {
     </Button>
   );
 
-  return <Flyout openWithURLParam="songs" renderContent={renderContent} renderReference={renderReference} />;
+  return <Flyout openWithURLParam="songs" renderContent={renderContent} renderReference={() => <Fragment />} />;
 };
 
 export default SongsFlyout;

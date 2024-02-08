@@ -3,6 +3,7 @@ import { italiana } from 'client/fonts';
 import Translate from 'client/translate';
 import InvitationFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
+import SongsFlyout from 'components/flyouts/songs';
 import { FC } from 'react';
 import { GuestTokenPayload } from 'server/authenticator';
 
@@ -16,6 +17,7 @@ const NavigationBarComponent: FC<NavigationBarComponentProps> = async ({ token }
   <div className={styles.navigationBar}>
     <div className={classNames(styles.title, italiana.className)}>{Translate.t('components.navigation-bar.title')}</div>
     {token ? <RSVPFlyout defaultSelectedGuestId={token.guestId} /> : <InvitationFlyout />}
+    <SongsFlyout />
   </div>
 );
 
