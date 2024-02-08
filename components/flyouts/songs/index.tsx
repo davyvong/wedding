@@ -18,9 +18,7 @@ const SongsFlyout: FC = () => {
   const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
     <Button {...referenceProps}>
       <QueueMusicIconSVG />
-      <span className={rsvpFlyoutStyles.buttonText}>
-        {Translate.t('components.flyouts.songs.buttons.song-requests')}
-      </span>
+      <span className={rsvpFlyoutStyles.buttonText}>{Translate.t('components.flyouts.songs.song-requests')}</span>
     </Button>
   );
 

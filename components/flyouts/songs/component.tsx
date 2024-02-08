@@ -1,20 +1,23 @@
 'use client';
 
 import OpenInNewIconSVG from 'assets/icons/open-in-new.svg';
-import type { FlyoutContentComponentProps } from 'components/flyout/component';
-import { useCallback, type FC } from 'react';
-import rsvpFlyoutStyles from 'components/flyouts/rsvp/component.module.css';
-import { SpotifyPlaylist, SpotifyPlaylistTrack } from 'server/apis/spotify';
-import useSWR from 'swr';
-import Image from 'next/image';
 import Translate from 'client/translate';
 import Skeleton from 'components/skeleton';
+import type { FlyoutContentComponentProps } from 'components/flyout/component';
+import rsvpFlyoutStyles from 'components/flyouts/rsvp/component.module.css';
+import SongInput from 'components/form/song-input';
+import Image from 'next/image';
+import { useCallback, type FC, useState } from 'react';
+import { SpotifyPlaylist, SpotifyPlaylistTrack, SpotifyTrack } from 'server/apis/spotify';
+import useSWR from 'swr';
 
 import styles from './component.module.css';
 
 interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
 
 const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
+  const [query, setQuery] = useState<string>('');
+
   const fetchSpotifyPlaylist = useCallback(async (): Promise<SpotifyPlaylist> => {
     const response = await fetch('/api/spotify/playlist', {
       cache: 'no-store',
@@ -68,13 +71,31 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
         (50 + Math.ceil(Math.random() * 50)).toString() + '%',
         (25 + Math.ceil(Math.random() * 50)).toString() + '%',
       ]);
-
     return <div className={rsvpFlyoutStyles.content}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
   }
 
   return (
     <div className={rsvpFlyoutStyles.content}>
-      {data ? data.tracks.map(renderSong) : Translate.t('components.flyouts.songs.no-songs')}
+      <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.songs.song-requests')}</div>
+      <div className={styles.search}>
+        {Translate.t('components.flyouts.songs.description')}
+        <SongInput
+          name="search"
+          onChange={(name: string, value: string): void => {
+            setQuery(value);
+          }}
+          onSelect={(value: SpotifyTrack): void => {
+            console.log(value);
+          }}
+          placeholder={Translate.t('components.flyouts.songs.placeholders.search')}
+          value={query}
+        />
+      </div>
+      {data ? (
+        <div className={styles.songList}>{data.tracks.map(renderSong)}</div>
+      ) : (
+        Translate.t('components.flyouts.songs.no-songs')
+      )}
     </div>
   );
 };

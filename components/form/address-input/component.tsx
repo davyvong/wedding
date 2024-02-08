@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
-import LoadingHeart from 'components/loading-heart';
+import Skeleton from 'components/skeleton';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
 
@@ -104,16 +104,29 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
 
   const renderSuggestionList = useCallback(() => {
     if (suggestionsLoading) {
+      const randomSuggestionWidths = new Array(5)
+        .fill(undefined)
+        .map((): string => (50 + Math.ceil(Math.random() * 50)).toString() + '%');
       return (
         <div className={styles.suggestionListLoading}>
-          <LoadingHeart />
+          {randomSuggestionWidths.map(
+            (width: string, index: number): JSX.Element => (
+              <Skeleton
+                height="1.5rem"
+                inverse
+                key={index}
+                style={index > 0 ? { marginTop: '1.5rem' } : undefined}
+                width={width}
+              />
+            ),
+          )}
         </div>
       );
     }
     if (suggestions.length === 0) {
       return (
         <div className={styles.suggestionListEmpty}>
-          {Translate.html('components.address-input.no-suggestions', { value })}
+          {Translate.html('components.form.address-input.no-suggestions', { value })}
         </div>
       );
     }

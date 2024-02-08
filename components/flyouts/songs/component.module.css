@@ -1,8 +1,21 @@
+.search {
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  color: var(--color-on-surface);
+  margin-top: 3rem;
+  padding: 1.5rem;
+}
+
+.songList {
+  margin-top: 3rem;
+}
+
 .songCard {
   align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  width: 100%;
 }
 
 .songCard:not(:first-child) {
@@ -23,12 +36,12 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 
 .songCardName a {
   color: inherit;
-  font-size: 1.125rem;
-  font-weight: 600;
   text-decoration: none;
 }
 
