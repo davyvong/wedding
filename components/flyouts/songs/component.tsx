@@ -1,16 +1,20 @@
 'use client';
 
 import OpenInNewIconSVG from 'assets/icons/open-in-new.svg';
-import Translate from 'client/translate';
-import Skeleton from 'components/skeleton';
-import Image from 'next/image';
-import { FC, useCallback } from 'react';
+import type { FlyoutContentComponentProps } from 'components/flyout/component';
+import { useCallback, type FC } from 'react';
+import rsvpFlyoutStyles from 'components/flyouts/rsvp/component.module.css';
 import { SpotifyPlaylist, SpotifyPlaylistTrack } from 'server/apis/spotify';
 import useSWR from 'swr';
+import Image from 'next/image';
+import Translate from 'client/translate';
+import Skeleton from 'components/skeleton';
 
 import styles from './component.module.css';
 
-const SongListComponent: FC = () => {
+interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
+
+const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const fetchSpotifyPlaylist = useCallback(async (): Promise<SpotifyPlaylist> => {
     const response = await fetch('/api/spotify/playlist', {
       cache: 'no-store',
@@ -34,7 +38,7 @@ const SongListComponent: FC = () => {
           </div>
           <div className={styles.songArtists}>
             {song.explicit && (
-              <span className={styles.songExplicit}>{Translate.t('components.song-list.explicit')}</span>
+              <span className={styles.songExplicit}>{Translate.t('components.flyouts.songs.explicit')}</span>
             )}
             <span>{song.artists.join(', ')}</span>
           </div>
@@ -47,10 +51,10 @@ const SongListComponent: FC = () => {
   const renderSongSkeleton = useCallback(
     ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
       <div className={styles.songCard} key={index}>
-        <Skeleton className={styles.songCardImage} height={80} width={80} />
+        <Skeleton className={styles.songCardImage} height={80} inverse width={80} />
         <div className={styles.songCardInformation}>
-          <Skeleton height="1.125rem" width={nameWidth} />
-          <Skeleton height="1rem" style={{ marginTop: '1rem' }} width={artistsWidth} />
+          <Skeleton height="1.125rem" inverse width={nameWidth} />
+          <Skeleton height="1rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />
         </div>
       </div>
     ),
@@ -58,21 +62,21 @@ const SongListComponent: FC = () => {
   );
 
   if (isLoading) {
-    const randomNameAndArtistsWidths = new Array(5)
+    const randomNameAndArtistsWidths = new Array(7)
       .fill(undefined)
       .map((): string[] => [
         (50 + Math.ceil(Math.random() * 50)).toString() + '%',
         (25 + Math.ceil(Math.random() * 50)).toString() + '%',
       ]);
 
-    return <div className={styles.songList}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
+    return <div className={rsvpFlyoutStyles.content}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>;
   }
 
   return (
-    <div className={styles.songList}>
-      {data ? data.tracks.map(renderSong) : Translate.t('components.song-list.no-songs')}
+    <div className={rsvpFlyoutStyles.content}>
+      {data ? data.tracks.map(renderSong) : Translate.t('components.flyouts.songs.no-songs')}
     </div>
   );
 };
 
-export default SongListComponent;
+export default SongsFlyoutComponent;

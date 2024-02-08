@@ -70,7 +70,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
   }, [isSending, isSent]);
 
   return (
-    <form className={rsvpFlyoutStyles.form} onSubmit={sendLoginCode}>
+    <form className={rsvpFlyoutStyles.content} onSubmit={sendLoginCode}>
       <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.invitation.title')}</div>
       <div className={rsvpFlyoutStyles.question}>{Translate.t('components.flyouts.invitation.description')}</div>
       <TextInput

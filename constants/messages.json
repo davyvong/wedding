@@ -49,6 +49,9 @@
   "components.flyouts.rsvp.unsaved-changes.buttons.discard-and-switch": "Discard and switch",
   "components.flyouts.rsvp.unsaved-changes.dismiss": "You have unsaved changes for {{guest}}'s response. Are you sure you want to discard the unsaved changes to close this form?",
   "components.flyouts.rsvp.unsaved-changes.guest-switch": "You have unsaved changes for {{currentGuest}}'s response. Are you sure you want to discard the unsaved changes to switch to {{selectedGuest}}'s response?",
+  "components.flyouts.songs.buttons.song-requests": "Song Requests",
+  "components.flyouts.songs.explicit": "E",
+  "components.flyouts.songs.no-songs": "Be the first to submit song requests!",
   "components.guest-list.columns.attendance": "Attendance",
   "components.guest-list.columns.email": "Email",
   "components.guest-list.columns.name": "Name",
@@ -71,7 +74,5 @@
   "components.landing.questions.when-is-the-rsvp-deadline": "When is the RSVP deadline?",
   "components.landing.questions.where-is-the-ceremoney-and-reception": "Where will the ceremony and reception take place?",
   "components.navigation-bar.title": "Vivian & Davy",
-  "components.select.no-options": "There are no options available.",
-  "components.song-list.explicit": "E",
-  "components.song-list.no-songs": "Be the first to submit song requests!"
+  "components.select.no-options": "There are no options available."
 }

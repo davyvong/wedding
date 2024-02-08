@@ -1,8 +1,8 @@
-import SongList from 'components/song-list';
+import SongsFlyout from 'components/flyouts/songs';
 import { FC } from 'react';
 
 const Page: FC = async () => {
-  return <SongList />;
+  return <SongsFlyout />;
 };
 
 export default Page;
