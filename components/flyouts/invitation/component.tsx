@@ -23,9 +23,6 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
   const sendLoginCode = useCallback(
     async (event: FormEvent): Promise<void> => {
       event.preventDefault();
-      if (isSent) {
-        return;
-      }
       if (!email) {
         setError('components.flyouts.invitation.errors.missing-email');
         return;
@@ -41,6 +38,10 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
       });
       setIsSending(false);
       if (!response.ok) {
+        if (response.status === 429) {
+          setError('components.flyouts.invitation.errors.rate-limited');
+          return;
+        }
         setError('components.flyouts.invitation.errors.not-invited');
         return;
       }
@@ -49,13 +50,10 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
       }
       setIsSent(true);
     },
-    [email, error, isSent],
+    [email, error],
   );
 
   const renderSubmitButtonContent = useCallback((): JSX.Element => {
-    if (isSent) {
-      return <span>{Translate.t('components.flyouts.invitation.buttons.send-again')}</span>;
-    }
     if (isSending) {
       return (
         <Fragment>
@@ -65,6 +63,9 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
           <span>{Translate.t('components.flyouts.invitation.buttons.sending')}</span>
         </Fragment>
       );
+    }
+    if (isSent) {
+      return <span>{Translate.t('components.flyouts.invitation.buttons.send-again')}</span>;
     }
     return <span>{Translate.t('components.flyouts.invitation.buttons.send-secret-link')}</span>;
   }, [isSending, isSent]);
