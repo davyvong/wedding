@@ -6,6 +6,10 @@
   padding: 1.5rem;
 }
 
+.searchInput {
+  margin-top: 1rem;
+}
+
 .songList {
   margin-top: 3rem;
 }

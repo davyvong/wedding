@@ -1,3 +1,28 @@
+.inputWrapper {
+  position: relative;
+}
+
+.textInput {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.searchIcon {
+  left: 0;
+  position: absolute;
+  top: 0.75rem;
+}
+
+.clearIcon {
+  right: 0;
+  position: absolute;
+  top: 0.75rem;
+}
+
+.clearIcon:hover {
+  cursor: pointer;
+}
+
 .suggestionList {
   max-height: 500px;
   overflow-y: auto;

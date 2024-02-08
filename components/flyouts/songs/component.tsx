@@ -79,17 +79,19 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
       <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.songs.song-requests')}</div>
       <div className={styles.search}>
         {Translate.t('components.flyouts.songs.description')}
-        <SongInput
-          name="search"
-          onChange={(name: string, value: string): void => {
-            setQuery(value);
-          }}
-          onSelect={(value: SpotifyTrack): void => {
-            console.log(value);
-          }}
-          placeholder={Translate.t('components.flyouts.songs.placeholders.search')}
-          value={query}
-        />
+        <div className={styles.searchInput}>
+          <SongInput
+            name="search"
+            onChange={(name: string, value: string): void => {
+              setQuery(value);
+            }}
+            onSelect={(value: SpotifyTrack): void => {
+              console.log(value);
+            }}
+            placeholder={Translate.t('components.flyouts.songs.placeholders.search')}
+            value={query}
+          />
+        </div>
       </div>
       {data ? (
         <div className={styles.songList}>{data.tracks.map(renderSong)}</div>

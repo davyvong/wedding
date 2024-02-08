@@ -12,6 +12,8 @@ import {
   useInteractions,
   useTransitionStyles,
 } from '@floating-ui/react';
+import CloseIconSVG from 'assets/icons/close.svg';
+import SearchIconSVG from 'assets/icons/search.svg';
 import classNames from 'classnames';
 import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
@@ -19,6 +21,7 @@ import songFlyoutStyles from 'components/flyouts/songs/component.module.css';
 import addressInputStyles from 'components/form/address-input/component.module.css';
 import textInputStyles from 'components/form/text-input/component.module.css';
 import Skeleton from 'components/skeleton';
+import Tooltip from 'components/tooltip';
 import Image from 'next/image';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { SpotifyTrack } from 'server/apis/spotify';
@@ -175,19 +178,34 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
 
   return (
     <Fragment>
-      <input
-        {...getReferenceProps()}
-        {...props}
-        className={classNames(
-          textInputStyles.textInput,
-          inverse && textInputStyles.textInputInverse,
-          openSans.className,
-          className,
+      <div className={styles.inputWrapper}>
+        <input
+          {...getReferenceProps()}
+          {...props}
+          className={classNames(
+            textInputStyles.textInput,
+            inverse && textInputStyles.textInputInverse,
+            styles.textInput,
+            openSans.className,
+            className,
+          )}
+          onChange={event => onChange(name, event.target.value)}
+          ref={refs.setReference}
+          value={value}
+        />
+        <SearchIconSVG className={styles.searchIcon} />
+        {value.length > 0 && (
+          <Tooltip
+            inverse
+            placement="left"
+            renderContent={(): string => Translate.t('components.form.song-input.tooltips.clear')}
+          >
+            <div className={styles.clearIcon} onClick={(): void => onChange(name, '')}>
+              <CloseIconSVG height={24} width={24} />
+            </div>
+          </Tooltip>
         )}
-        onChange={event => onChange(name, event.target.value)}
-        ref={refs.setReference}
-        value={value}
-      />
+      </div>
       {value && isMounted && (
         <div
           {...getFloatingProps()}
