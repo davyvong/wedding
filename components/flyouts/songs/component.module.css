@@ -55,7 +55,7 @@
   transition: opacity 150ms ease-in-out;
 }
 
-.songName:hover .songNameIcon {
+.songName a:hover + .songNameIcon {
   opacity: 1;
 }
 
