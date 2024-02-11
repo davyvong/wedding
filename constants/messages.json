@@ -1,5 +1,7 @@
 {
-  "app.admin.layout.errorPages.404": "404: This page could not be found.",
+  "app.admin.layout.errorPages.401": "You are not authorized to view this page",
+  "app.admin.layout.errorPages.403": "You are not allowed to view this page",
+  "app.admin.layout.errorPages.title-with-status-code": "{{statusCode}}: {{title}}.",
   "app.admin.layout.title": "Vivian & Davy",
   "app.public.layout.title": "Vivian & Davy",
   "components.flyouts.invitation.buttons.cancel": "Cancel",
