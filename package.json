@@ -9,7 +9,7 @@
     "lint:eslint": "next lint",
     "lint:prettier": "prettier --list-different --ignore-path .gitignore .",
     "prebuild": "npm run lint",
-    "prepare": "husky install",
+    "prepare": "husky",
     "start": "next start"
   },
   "dependencies": {
