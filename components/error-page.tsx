@@ -12,15 +12,15 @@ const ErrorPage: FC<ErrorPageProps> = ({ statusCode }) => (
   <Fragment>
     <head>
       <title>
-        {Translate.t('app.admin.layout.errorPages.title-with-status-code', {
+        {Translate.t('components.error-page.title-with-status-code', {
           statusCode: statusCode.toString(),
-          title: Translate.t('app.admin.layout.errorPages.' + statusCode),
+          title: Translate.t('components.error-page.status-code.' + statusCode),
         })}
       </title>
     </head>
     <html lang="en">
       <body>
-        <NextErrorPage statusCode={statusCode} title={Translate.t('app.admin.layout.errorPages.' + statusCode)} />
+        <NextErrorPage statusCode={statusCode} title={Translate.t('components.error-page.status-code.' + statusCode)} />
       </body>
     </html>
   </Fragment>

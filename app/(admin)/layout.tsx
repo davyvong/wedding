@@ -1,14 +1,13 @@
-import Translate from 'client/translate';
 import ErrorPage from 'components/error-page';
 import Layout from 'components/layout';
-import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { FC, type ReactNode } from 'react';
 import Authenticator, { GuestTokenPayload } from 'server/authenticator';
+import { generateMetadata } from 'utils/metadata';
 
-export const metadata: Metadata = {
-  title: Translate.t('app.public.layout.title'),
-};
+export const metadata = generateMetadata({
+  url: '/guests',
+});
 
 interface AdminGuestsLayoutProps {
   children: ReactNode;

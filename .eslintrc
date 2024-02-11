@@ -6,6 +6,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "@next/next/no-head-element": "off",
     "@typescript-eslint/no-empty-function": "off"
   }
 }
