@@ -1,6 +1,7 @@
 .flyout {
   background-color: var(--color-inverse-surface);
   bottom: 0;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
   color: var(--color-inverse-on-surface);
   overflow-x: hidden;
   overflow-y: auto;

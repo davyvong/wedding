@@ -56,9 +56,45 @@
 .megaMenu {
   background-color: var(--color-inverse-surface);
   border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
   color: var(--color-inverse-on-surface);
-  max-width: 500px;
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  max-width: calc(100vw - 48px);
   width: 100%;
   z-index: 3;
+}
+
+@media (min-width: 548px) {
+  .megaMenu {
+    max-width: 500px;
+  }
+}
+
+.menuItem {
+  padding: 1rem;
+  position: relative;
+}
+
+.menuItem:hover {
+  cursor: pointer;
+}
+
+.menuItem:before {
+  background-color: var(--color-inverse-hover-surface);
+  border-radius: 0.5rem;
+  bottom: 0;
+  content: '';
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: opacity 150ms ease-in-out;
+  z-index: -1;
+}
+
+.menuItem:hover:before {
+  opacity: 1;
 }

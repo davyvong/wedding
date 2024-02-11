@@ -32,7 +32,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { context, floatingStyles, refs } = useFloating({
-    middleware: [offset(8), shift({ padding: 32 })],
+    middleware: [offset(8), shift({ padding: 24 })],
     onOpenChange: setIsOpen,
     open: isOpen,
     placement: 'bottom',
@@ -82,9 +82,20 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
                 ref={refs.setFloating}
                 style={{ ...floatingStyles, ...transitionStyles }}
               >
-                <button onClick={(): void => openFlyout('invitation')}>open invitation</button>
-                <button onClick={(): void => openFlyout('rsvp')}>open rsvp</button>
-                <button onClick={(): void => openFlyout('songs')}>open songs</button>
+                {token ? (
+                  <Fragment>
+                    <div className={styles.menuItem} onClick={(): void => openFlyout('rsvp')}>
+                      open rsvp
+                    </div>
+                    <div className={styles.menuItem} onClick={(): void => openFlyout('songs')}>
+                      open songs
+                    </div>
+                  </Fragment>
+                ) : (
+                  <div className={styles.menuItem} onClick={(): void => openFlyout('invitation')}>
+                    open invitation
+                  </div>
+                )}
               </div>
             </FloatingFocusManager>
           </Fragment>,
