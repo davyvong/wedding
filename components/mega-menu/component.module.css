@@ -66,13 +66,16 @@
   z-index: 3;
 }
 
-@media (min-width: 548px) {
+@media (min-width: 498px) {
   .megaMenu {
-    max-width: 500px;
+    max-width: 450px;
   }
 }
 
 .menuItem {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   padding: 1rem;
   position: relative;
 }
@@ -97,4 +100,21 @@
 
 .menuItem:hover:before {
   opacity: 1;
+}
+
+.menuItemIcon {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.menuItemContent {
+  flex: 1;
+}
+
+.menuItemDescription {
+  color: var(--color-inverse-placeholder);
+  margin-top: 0.25rem;
 }
