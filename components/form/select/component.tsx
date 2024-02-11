@@ -40,7 +40,7 @@ const Select: FC<SelectProps> = ({ className, inverse = false, onChange, name, o
   const { context, floatingStyles, refs } = useFloating({
     middleware: [
       offset(8),
-      shift({ padding: 32 }),
+      shift({ padding: 24 }),
       size({
         apply({ elements, rects }) {
           Object.assign(elements.floating.style, {
