@@ -13,7 +13,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import CloseIconSVG from 'assets/icons/close.svg';
-import { isBrowser } from 'client/browser';
+import { useSearchParams } from 'next/navigation';
 import type { FC, TouchEvent, WheelEvent } from 'react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -43,6 +43,7 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
   renderContent,
   renderReference,
 }) => {
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleFlyout = useCallback(
@@ -107,13 +108,10 @@ const FlyoutComponent: FC<FlyoutComponentProps> = ({
   const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
   useEffect(() => {
-    if (isBrowser() && openWithURLParam) {
-      const searchParams = new URLSearchParams(window.location.search);
-      if (searchParams.get('open') === openWithURLParam) {
-        toggleFlyout(true);
-      }
+    if (openWithURLParam && searchParams.get('open') === openWithURLParam) {
+      toggleFlyout(true);
     }
-  }, [openWithURLParam, toggleFlyout]);
+  }, [openWithURLParam, searchParams, toggleFlyout]);
 
   useEffect(() => {
     if (isOpen) {

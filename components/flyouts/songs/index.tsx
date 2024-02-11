@@ -6,24 +6,33 @@ import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import rsvpFlyoutStyles from 'components/flyouts/rsvp/index.module.css';
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 
 import SongsFlyoutComponent from './component';
 
-const SongsFlyout: FC = () => {
+interface SongsFlyoutProps {
+  renderReference?: (referenceProps: FlyoutReferenceComponentProps) => JSX.Element;
+}
+
+const SongsFlyout: FC<SongsFlyoutProps> = ({ renderReference }) => {
   const renderContent = (contentProps: FlyoutContentComponentProps): JSX.Element => (
     <SongsFlyoutComponent {...contentProps} />
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
+  const renderDefaultReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
     <Button {...referenceProps}>
       <QueueMusicIconSVG />
       <span className={rsvpFlyoutStyles.buttonText}>{Translate.t('components.flyouts.songs.song-requests')}</span>
     </Button>
   );
 
-  return <Flyout openWithURLParam="songs" renderContent={renderContent} renderReference={() => <Fragment />} />;
+  return (
+    <Flyout
+      openWithURLParam="songs"
+      renderContent={renderContent}
+      renderReference={renderReference || renderDefaultReference}
+    />
+  );
 };
 
 export default SongsFlyout;

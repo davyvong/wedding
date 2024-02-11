@@ -10,12 +10,16 @@ import { FC } from 'react';
 
 import InvitationFlyoutComponent from './component';
 
-const InvitationFlyout: FC = () => {
+interface InvitationFlyoutProps {
+  renderReference?: (referenceProps: FlyoutReferenceComponentProps) => JSX.Element;
+}
+
+const InvitationFlyout: FC<InvitationFlyoutProps> = ({ renderReference }) => {
   const renderContent = (contentProps: FlyoutContentComponentProps): JSX.Element => (
     <InvitationFlyoutComponent {...contentProps} />
   );
 
-  const renderReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
+  const renderDefaultReference = (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
     <Button {...referenceProps}>
       <MarkEmailUnreadIconSVG />
       <span className={rsvpFlyoutStyles.buttonText}>
@@ -24,7 +28,13 @@ const InvitationFlyout: FC = () => {
     </Button>
   );
 
-  return <Flyout openWithURLParam="invitation" renderContent={renderContent} renderReference={renderReference} />;
+  return (
+    <Flyout
+      openWithURLParam="invitation"
+      renderContent={renderContent}
+      renderReference={renderReference || renderDefaultReference}
+    />
+  );
 };
 
 export default InvitationFlyout;

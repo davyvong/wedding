@@ -1,0 +1,64 @@
+.toggleButton {
+  background-color: transparent;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  height: 1.125rem;
+  justify-content: space-between;
+  padding: 0;
+  width: 1.5rem;
+}
+
+.toggleButton span {
+  background-color: var(--color-on-background);
+  display: block;
+  height: 0.125rem;
+  width: 100%;
+}
+
+.toggleButton .toggleButtonLine1 {
+  position: relative;
+  top: 0;
+  transform: rotate(0);
+  transition:
+    top 300ms ease-in-out,
+    transform 300ms ease-in-out;
+}
+
+.toggleButton .toggleButtonLine2 {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}
+
+.toggleButton .toggleButtonLine3 {
+  bottom: 0;
+  position: relative;
+  transform: rotate(0);
+  transition:
+    bottom 300ms ease-in-out,
+    transform 300ms ease-in-out;
+}
+
+.toggleButtonClose .toggleButtonLine1 {
+  top: 0.5rem;
+  transform: rotate(45deg);
+}
+
+.toggleButtonClose .toggleButtonLine2 {
+  opacity: 0;
+}
+
+.toggleButtonClose .toggleButtonLine3 {
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+}
+
+.megaMenu {
+  background-color: var(--color-inverse-surface);
+  border-radius: 0.5rem;
+  color: var(--color-inverse-on-surface);
+  max-width: 500px;
+  padding: 1.5rem;
+  width: 100%;
+  z-index: 3;
+}

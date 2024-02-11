@@ -1,5 +1,3 @@
-export const isBrowser = () => typeof window === 'object';
-
 export const waitForElement = (
   selector: string,
   callback: (element: Element) => void,
