@@ -23,7 +23,6 @@ module.exports = {
     webpackBuildWorker: true,
   },
   images: {
-    domains: ['i.scdn.co'],
     remotePatterns: [
       {
         hostname: 'i.scdn.co',
