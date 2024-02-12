@@ -25,6 +25,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { GuestTokenPayload } from 'server/authenticator';
+import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 
@@ -101,12 +102,8 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
       description: Translate.t('components.mega-menu.menu-items.faq.description'),
       icon: <HelpIconSVG />,
       onClick: (): void => {
-        const computedStyles = window.getComputedStyle(document.documentElement);
-        const pageSideSpacing =
-          parseInt(computedStyles.getPropertyValue('--page-side-spacing').replace('rem', '')) * 16;
-        const navigationBarHeight = parseInt(
-          computedStyles.getPropertyValue('--navigation-bar-height').replace('px', ''),
-        );
+        const pageSideSpacing = parseInt(getStyleProperty('--page-side-spacing').replace('rem', '')) * 16;
+        const navigationBarHeight = parseInt(getStyleProperty('--navigation-bar-height').replace('px', ''));
         window.locomotiveScroll?.scrollTo('#faq', {
           callback: () => ScrollTrigger.update(),
           offset: pageSideSpacing - navigationBarHeight - 32,

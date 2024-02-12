@@ -29,6 +29,7 @@ const LandingComponent: FC = () => {
       });
     return () => {
       context?.revert();
+      window.locomotiveScroll?.destroy();
     };
   }, []);
 

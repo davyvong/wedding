@@ -4,6 +4,7 @@ import locomotiveScrollStyles from 'client/locomotive-scroll.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import LocomotiveScroll from 'locomotive-scroll';
+import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 
@@ -12,11 +13,6 @@ export enum LandingBreakpoints {
   Tablet,
   Desktop,
 }
-
-const getSpacing = (): string => {
-  const computedStyles = window.getComputedStyle(document.documentElement);
-  return computedStyles.getPropertyValue('--page-side-spacing');
-};
 
 export const createLocomotiveScroll = (): void => {
   window.locomotiveScroll?.destroy();
@@ -88,19 +84,31 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         trigger: '.' + styles.firstSection,
       },
     });
-    firstSectionTimeline.to(
+    firstSectionTimeline.fromTo(
       '.' + styles.firstSection,
       {
-        paddingLeft: getSpacing(),
-        paddingRight: getSpacing(),
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
+      {
+        paddingLeft: () => getStyleProperty('--page-side-spacing'),
+        paddingRight: () => getStyleProperty('--page-side-spacing'),
       },
       'zoomCoverImage',
     );
-    firstSectionTimeline.to(
+    firstSectionTimeline.fromTo(
       '.' + styles.coverImage,
       {
+        borderRadius: 0,
+        height: () => {
+          return `calc(${window.innerHeight}px - ${getStyleProperty('--navigation-bar-height')})`;
+        },
+      },
+      {
         borderRadius: '1rem',
-        height: `calc(100% - ${getSpacing()})`,
+        height: () => {
+          return `calc(${window.innerHeight}px - ${getStyleProperty('--navigation-bar-height')} - ${getStyleProperty('--page-side-spacing')})`;
+        },
       },
       'zoomCoverImage',
     );
@@ -142,22 +150,45 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       },
     });
     if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      thirdSectionTimeline.to('.' + styles.engagementPhoto, {
-        duration: 1,
-        transform: 'translateY(0)',
-      });
+      thirdSectionTimeline.fromTo(
+        '.' + styles.engagementPhoto,
+        {
+          duration: 1,
+          transform: (index: number) => {
+            return `translateY(${index * 20}%)`;
+          },
+        },
+        {
+          duration: 1,
+          transform: 'translateY(0)',
+        },
+      );
     }
-    thirdSectionTimeline.to('.' + styles.engagementPhotoSet, {
-      duration: 5,
-      transform: 'translateX(calc(100vw - 100%))',
-    });
+    thirdSectionTimeline.fromTo(
+      '.' + styles.engagementPhotoSet,
+      {
+        duration: 5,
+        transform: 'translateX(0)',
+      },
+      {
+        duration: 5,
+        transform: 'translateX(calc(100vw - 100%))',
+      },
+    );
     // if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-    //   thirdSectionTimeline.to('.' + styles.engagementPhoto, {
-    //     duration: 1,
-    //     transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
-    //       return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+    //   thirdSectionTimeline.fromTo(
+    //     '.' + styles.engagementPhoto,
+    //     {
+    //       duration: 1,
+    //       transform: 'translateY(0)',
     //     },
-    //   });
+    //     {
+    //       duration: 1,
+    //       transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
+    //         return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
+    //       },
+    //     },
+    //   );
     // }
     ScrollTrigger.refresh();
   });

@@ -253,25 +253,3 @@
 .engagementPhoto:not(:first-child) {
   margin-left: var(--page-side-spacing);
 }
-
-@media (min-width: 768px) {
-  .engagementPhoto:nth-child(1) {
-    transform: translateY(0);
-  }
-
-  .engagementPhoto:nth-child(2) {
-    transform: translateY(20%);
-  }
-
-  .engagementPhoto:nth-child(3) {
-    transform: translateY(40%);
-  }
-
-  .engagementPhoto:nth-child(4) {
-    transform: translateY(80%);
-  }
-
-  .engagementPhoto:nth-child(5) {
-    transform: translateY(80%);
-  }
-}
