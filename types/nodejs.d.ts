@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export {};
-
 namespace NodeJS {
   interface ProcessEnv {
     JWT_SECRET: string;
@@ -27,16 +25,5 @@ namespace NodeJS {
     VERCEL_ENV: string;
     VERCEL_URL_OVERRIDE: string;
     VERCEL_URL: string;
-  }
-}
-
-declare module '*.eml' {
-  const content: string;
-  export default content;
-}
-
-declare global {
-  interface Window {
-    locomotiveScroll?: LocomotiveScroll;
   }
 }
