@@ -139,7 +139,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
 
   return (
     <div className={rsvpFlyoutStyles.content}>
-      <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.songs.song-requests')}</div>
+      <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.songs.title')}</div>
       <div className={styles.search}>
         {Translate.t('components.flyouts.songs.description')}
         <div className={styles.searchInput}>
