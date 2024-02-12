@@ -8,18 +8,34 @@
 }
 
 .searchIcon {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   left: 0;
   position: absolute;
-  top: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.clearIcon {
+.clearButton {
+  align-items: center;
+  background-color: var(--palette-transparent);
+  border: 0;
+  color: inherit;
+  display: flex;
+  flex-direction: row;
+  font-size: inherit;
+  justify-content: center;
   right: 0;
+  padding: 0;
   position: absolute;
-  top: 0.75rem;
+  text-align: inherit;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.clearIcon:hover {
+.clearButton:hover {
   cursor: pointer;
 }
 

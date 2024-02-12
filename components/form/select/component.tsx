@@ -10,6 +10,7 @@ import {
   useDismiss,
   useFloating,
   useInteractions,
+  useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
@@ -55,20 +56,33 @@ const Select: FC<SelectProps> = ({ className, inverse = false, onChange, name, o
   });
   const click = useClick(context);
   const dismiss = useDismiss(context);
-  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss]);
+  const role = useRole(context, { role: 'select' });
+  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, role]);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context);
 
   const renderOptionItem = useCallback(
     (option: SelectOption): JSX.Element => {
-      const onClickOption = () => {
+      const onClickOption = (): void => {
         onChange(name, option.value);
         setIsOpen(false);
       };
+      const onKeyDownOption = (event): boolean => {
+        if (event.keyCode === 13) {
+          event.stopPropagation();
+          onClickOption();
+          return false;
+        }
+        return true;
+      };
       return (
         <div
+          aria-selected="false"
           className={classNames(styles.optionItem, inverse && styles.optionItemInverse)}
           key={option.label}
           onClick={onClickOption}
+          onKeyDown={onKeyDownOption}
+          role="option"
+          tabIndex={0}
         >
           {option.label}
         </div>

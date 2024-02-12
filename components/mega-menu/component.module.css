@@ -1,22 +1,25 @@
 .toggleButton {
-  background-color: transparent;
+  background-color: var(--palette-transparent);
   border: 0;
+  padding: 0.5rem;
+}
+
+.toggleButtonOpen {
   display: flex;
   flex-direction: column;
   height: 1.125rem;
   justify-content: space-between;
-  padding: 0;
   width: 1.5rem;
 }
 
-.toggleButton span {
+.toggleButtonOpen span {
   background-color: var(--color-on-background);
   display: block;
   height: 0.125rem;
   width: 100%;
 }
 
-.toggleButton .toggleButtonLine1 {
+.toggleButtonOpen .toggleButtonLine1 {
   position: relative;
   top: 0;
   transform: rotate(0);
@@ -25,12 +28,12 @@
     transform 300ms ease-in-out;
 }
 
-.toggleButton .toggleButtonLine2 {
+.toggleButtonOpen .toggleButtonLine2 {
   opacity: 1;
   transition: opacity 300ms ease-in-out;
 }
 
-.toggleButton .toggleButtonLine3 {
+.toggleButtonOpen .toggleButtonLine3 {
   bottom: 0;
   position: relative;
   transform: rotate(0);
@@ -74,10 +77,15 @@
 
 .menuItem {
   align-items: center;
+  background-color: var(--palette-transparent);
+  border: 0;
+  color: inherit;
   display: flex;
   flex-direction: row;
+  font-size: inherit;
   padding: 1rem;
   position: relative;
+  text-align: initial;
 }
 
 .menuItem:hover {
@@ -98,6 +106,7 @@
   z-index: -1;
 }
 
+.menuItem:focus:before,
 .menuItem:hover:before {
   opacity: 1;
 }

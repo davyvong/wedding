@@ -10,6 +10,7 @@ import {
   useFloating,
   useFocus,
   useInteractions,
+  useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
@@ -59,7 +60,8 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
   const click = useClick(context);
   const dismiss = useDismiss(context);
   const focus = useFocus(context);
-  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus]);
+  const role = useRole(context, { role: 'select' });
+  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus, role]);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context);
 
   const fetchAddresses = useCallback(async (): Promise<string[]> => {
@@ -85,15 +87,27 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
 
   const renderSuggestionItem = useCallback(
     (suggestion: string): JSX.Element => {
-      const onClickSuggestion = () => {
+      const onClickSuggestion = (): void => {
         onChange(name, suggestion);
         setIsOpen(false);
       };
+      const onKeyDownSuggestion = (event): boolean => {
+        if (event.keyCode === 13) {
+          event.stopPropagation();
+          onClickSuggestion();
+          return false;
+        }
+        return true;
+      };
       return (
         <div
+          aria-selected="false"
           className={classNames(styles.suggestionItem, inverse && styles.suggestionItemInverse)}
           key={suggestion}
           onClick={onClickSuggestion}
+          onKeyDown={onKeyDownSuggestion}
+          role="option"
+          tabIndex={0}
         >
           {suggestion}
         </div>

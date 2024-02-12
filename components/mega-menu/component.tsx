@@ -101,33 +101,32 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
 
   const renderMenuItem = useCallback(
     (item: MegaMenuItem, index: number): JSX.Element => (
-      <div className={styles.menuItem} onClick={item.onClick} key={index}>
+      <button className={styles.menuItem} onClick={item.onClick} key={index} role="menuitem">
         <div className={styles.menuItemIcon}>{item.icon}</div>
         <div className={styles.menuItemContent}>
           <div>{item.title}</div>
           {<div className={styles.menuItemDescription}>{item.description}</div>}
         </div>
-      </div>
+      </button>
     ),
     [],
   );
 
   return (
     <Fragment>
-      <button
-        {...getReferenceProps()}
-        className={classNames(styles.toggleButton, isOpen && styles.toggleButtonClose)}
-        ref={refs.setReference}
-      >
-        <span className={styles.toggleButtonLine1} />
-        <span className={styles.toggleButtonLine2} />
-        <span className={styles.toggleButtonLine3} />
+      <button {...getReferenceProps()} aria-controls="menu" className={styles.toggleButton} ref={refs.setReference}>
+        <div className={classNames(styles.toggleButtonOpen, isOpen && styles.toggleButtonClose)}>
+          <span className={styles.toggleButtonLine1} />
+          <span className={styles.toggleButtonLine2} />
+          <span className={styles.toggleButtonLine3} />
+        </div>
       </button>
       {isMounted &&
         createPortal(
           <FloatingFocusManager context={context}>
             <div
               {...getFloatingProps()}
+              role="menu"
               className={styles.megaMenu}
               ref={refs.setFloating}
               style={{ ...floatingStyles, ...transitionStyles }}
