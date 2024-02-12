@@ -10,6 +10,7 @@ import {
   useFloating,
   useFocus,
   useInteractions,
+  useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
 import CloseIconSVG from 'assets/icons/close.svg';
@@ -52,7 +53,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   const { context, floatingStyles, refs } = useFloating({
     middleware: [
       offset(8),
-      shift({ padding: 32 }),
+      shift({ padding: 24 }),
       size({
         apply({ elements, rects }) {
           Object.assign(elements.floating.style, {
@@ -68,7 +69,8 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   const click = useClick(context);
   const dismiss = useDismiss(context);
   const focus = useFocus(context);
-  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus]);
+  const role = useRole(context, { role: 'select' });
+  const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus, role]);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context);
 
   const fetchSongs = useCallback(async (): Promise<SpotifyTrack[]> => {
@@ -94,13 +96,22 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
 
   const renderSuggestionItem = useCallback(
     (suggestion: SpotifyTrack): JSX.Element => {
-      const onClickSuggestion = () => {
+      const onClickSuggestion = (): void => {
         onChange(name, '');
         onSelect(suggestion);
         setIsOpen(false);
       };
+      const onKeyDownSuggestion = (event): boolean => {
+        if (event.keyCode === 13) {
+          event.stopPropagation();
+          onClickSuggestion();
+          return false;
+        }
+        return true;
+      };
       return (
         <div
+          aria-selected="false"
           className={classNames(
             addressInputStyles.suggestionItem,
             inverse && addressInputStyles.suggestionItemInverse,
@@ -109,6 +120,9 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
           )}
           key={suggestion.id}
           onClick={onClickSuggestion}
+          onKeyDown={onKeyDownSuggestion}
+          role="option"
+          tabIndex={0}
         >
           <Image
             alt={suggestion.name}
@@ -200,9 +214,9 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
             placement="left-middle"
             renderContent={(): string => Translate.t('components.form.song-input.tooltips.clear')}
           >
-            <div className={styles.clearIcon} onClick={(): void => onChange(name, '')}>
+            <button className={styles.clearButton} onClick={(): void => onChange(name, '')} tabIndex={-1}>
               <CloseIconSVG height={24} width={24} />
-            </div>
+            </button>
           </Tooltip>
         )}
       </div>

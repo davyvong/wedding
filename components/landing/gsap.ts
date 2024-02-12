@@ -21,7 +21,7 @@ const getSpacing = (): string => {
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
   gsap.context(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const locomotiveScroll = new LocomotiveScroll({
+    window.locomotiveScroll = new LocomotiveScroll({
       draggingClass: locomotiveScrollStyles.hasScrollDragging,
       el: document.querySelector<HTMLElement>('.' + styles.landing),
       gestureDirection: 'vertical',
@@ -36,6 +36,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       smooth: true,
       smoothClass: locomotiveScrollStyles.hasScrollSmooth,
       tablet: {
+        breakpoint: 768,
         smooth: true,
       },
       touchMultiplier: 3,
@@ -54,16 +55,19 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
       },
       scrollTop(value?: number): number | void {
         if (arguments.length) {
-          locomotiveScroll.scrollTo(value, { disableLerp: true, duration: 0 });
+          window.locomotiveScroll.scrollTo(value, { disableLerp: true, duration: 0 });
         }
-        return locomotiveScroll.scroll.instance.scroll.y;
+        return window.locomotiveScroll.scroll.instance.scroll.y;
       },
     });
-    locomotiveScroll.on('scroll', (): void => {
+    window.locomotiveScroll.on('scroll', (): void => {
       ScrollTrigger.update();
     });
+    ScrollTrigger.addEventListener('matchMedia', () => {
+      window.locomotiveScroll.update();
+    });
     ScrollTrigger.addEventListener('refresh', () => {
-      locomotiveScroll.update();
+      window.locomotiveScroll.update();
     });
     ScrollTrigger.defaults({
       scroller: '.' + styles.landing,

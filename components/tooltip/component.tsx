@@ -31,7 +31,7 @@ const Tooltip: FC<TooltipProps> = ({ children, disabled = false, inverse = false
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { context, floatingStyles, refs } = useFloating({
-    middleware: [offset(8), shift({ padding: 32 })],
+    middleware: [offset(8), shift({ padding: 24 })],
     onOpenChange: setIsOpen,
     open: isOpen,
     placement: placement as Placement,

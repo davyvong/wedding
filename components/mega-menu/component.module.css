@@ -1,0 +1,128 @@
+.toggleButton {
+  background-color: var(--palette-transparent);
+  border: 0;
+  padding: 0.5rem;
+}
+
+.toggleButtonOpen {
+  display: flex;
+  flex-direction: column;
+  height: 1.125rem;
+  justify-content: space-between;
+  width: 1.5rem;
+}
+
+.toggleButtonOpen span {
+  background-color: var(--color-on-background);
+  display: block;
+  height: 0.125rem;
+  width: 100%;
+}
+
+.toggleButtonOpen .toggleButtonLine1 {
+  position: relative;
+  top: 0;
+  transform: rotate(0);
+  transition:
+    top 300ms ease-in-out,
+    transform 300ms ease-in-out;
+}
+
+.toggleButtonOpen .toggleButtonLine2 {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}
+
+.toggleButtonOpen .toggleButtonLine3 {
+  bottom: 0;
+  position: relative;
+  transform: rotate(0);
+  transition:
+    bottom 300ms ease-in-out,
+    transform 300ms ease-in-out;
+}
+
+.toggleButtonClose .toggleButtonLine1 {
+  top: 0.5rem;
+  transform: rotate(45deg);
+}
+
+.toggleButtonClose .toggleButtonLine2 {
+  opacity: 0;
+}
+
+.toggleButtonClose .toggleButtonLine3 {
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+}
+
+.megaMenu {
+  background-color: var(--color-inverse-surface);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
+  color: var(--color-inverse-on-surface);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  max-width: calc(100vw - 48px);
+  width: 100%;
+  z-index: 3;
+}
+
+@media (min-width: 498px) {
+  .megaMenu {
+    max-width: 450px;
+  }
+}
+
+.menuItem {
+  align-items: center;
+  background-color: var(--palette-transparent);
+  border: 0;
+  color: inherit;
+  display: flex;
+  flex-direction: row;
+  font-size: inherit;
+  padding: 1rem;
+  position: relative;
+  text-align: initial;
+}
+
+.menuItem:hover {
+  cursor: pointer;
+}
+
+.menuItem:before {
+  background-color: var(--color-inverse-hover-surface);
+  border-radius: 0.5rem;
+  bottom: 0;
+  content: '';
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: opacity 150ms ease-in-out;
+  z-index: -1;
+}
+
+.menuItem:hover:before {
+  opacity: 1;
+}
+
+.menuItemIcon {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.menuItemContent {
+  flex: 1;
+}
+
+.menuItemDescription {
+  color: var(--color-inverse-placeholder);
+  margin-top: 0.25rem;
+}

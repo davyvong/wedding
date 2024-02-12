@@ -186,6 +186,11 @@
   margin-top: calc(var(--page-side-spacing) / 2);
 }
 
+.coupleAnswer a {
+  color: inherit;
+  font-weight: 600;
+}
+
 .thirdSection {
   align-items: flex-start;
   display: flex;

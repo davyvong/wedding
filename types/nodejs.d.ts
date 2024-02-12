@@ -27,8 +27,3 @@ namespace NodeJS {
     VERCEL_URL: string;
   }
 }
-
-declare module '*.eml' {
-  const content: string;
-  export default content;
-}

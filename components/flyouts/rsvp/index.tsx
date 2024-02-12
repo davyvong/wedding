@@ -1,19 +1,15 @@
 'use client';
 
-import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
-import Translate from 'client/translate';
-import Button from 'components/button';
 import Flyout from 'components/flyout';
 import { FlyoutContentComponentProps, FlyoutReferenceComponentProps } from 'components/flyout/component';
 import { FC, useCallback, useState } from 'react';
 
 import RSVPFlyoutComponent from './component';
-import styles from './index.module.css';
 
 interface RSVPFlyoutProps {
   defaultSelectedGuestId: string;
   openWithURLParam?: string;
-  renderReference?: (referenceProps: FlyoutReferenceComponentProps) => JSX.Element;
+  renderReference: (referenceProps: FlyoutReferenceComponentProps) => JSX.Element;
 }
 
 const RSVPFlyout: FC<RSVPFlyoutProps> = ({ defaultSelectedGuestId, openWithURLParam = 'rsvp', renderReference }) => {
@@ -35,16 +31,6 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ defaultSelectedGuestId, openWithURLPa
     [defaultSelectedGuestId, shouldFetchRSVP, shouldRenderDismissWarning],
   );
 
-  const renderDefaultReference = useCallback(
-    (referenceProps: FlyoutReferenceComponentProps): JSX.Element => (
-      <Button {...referenceProps}>
-        <MarkEmailReadIconSVG />
-        <span className={styles.buttonText}>{Translate.t('components.flyouts.rsvp.buttons.rsvp')}</span>
-      </Button>
-    ),
-    [],
-  );
-
   const onAttemptToDismiss = useCallback((): boolean => {
     setShouldRenderDismissWarning(didValuesChange);
     return !didValuesChange;
@@ -60,7 +46,7 @@ const RSVPFlyout: FC<RSVPFlyoutProps> = ({ defaultSelectedGuestId, openWithURLPa
       onToggleFlyout={onToggleFlyout}
       openWithURLParam={openWithURLParam}
       renderContent={renderContent}
-      renderReference={renderReference || renderDefaultReference}
+      renderReference={renderReference}
     />
   );
 };
