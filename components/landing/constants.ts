@@ -53,6 +53,10 @@ export const coupleQuestions: CoupleQuestion[] = [
     question: 'components.landing.questions.i-did-not-receive-an-email',
   },
   {
+    answer: 'components.landing.answers.when-is-the-rsvp-deadline',
+    question: 'components.landing.questions.when-is-the-rsvp-deadline',
+  },
+  {
     answer: 'components.landing.answers.how-to-respond-to-invitation',
     question: 'components.landing.questions.how-to-respond-to-invitation',
   },
