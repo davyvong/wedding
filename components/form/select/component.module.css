@@ -14,15 +14,18 @@
   transition: background-color 150ms ease-in-out;
 }
 
+.optionItem:focus,
 .optionItem:hover {
   background-color: var(--color-hover-popover);
   cursor: pointer;
+  outline: none;
 }
 
 .optionListInverse {
   background-color: var(--color-popover);
 }
 
+.optionItemInverse:focus,
 .optionItemInverse:hover {
   background-color: var(--color-hover-popover);
 }

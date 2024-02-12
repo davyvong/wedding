@@ -89,3 +89,7 @@ svg[height='24'][width='24'] {
     width: 24px;
   }
 }
+
+input {
+  outline: none;
+}

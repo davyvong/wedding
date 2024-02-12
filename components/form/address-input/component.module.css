@@ -14,15 +14,18 @@
   transition: background-color 150ms ease-in-out;
 }
 
+.suggestionItem:focus,
 .suggestionItem:hover {
   background-color: var(--color-hover-popover);
   cursor: pointer;
+  outline: none;
 }
 
 .suggestionListInverse {
   background-color: var(--color-popover);
 }
 
+.suggestionItemInverse:focus,
 .suggestionItemInverse:hover {
   background-color: var(--color-hover-popover);
 }

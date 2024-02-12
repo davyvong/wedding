@@ -88,6 +88,10 @@
   text-align: initial;
 }
 
+.menuItem:focus {
+  outline: none;
+}
+
 .menuItem:hover {
   cursor: pointer;
 }
@@ -106,6 +110,7 @@
   z-index: -1;
 }
 
+.menuItem:focus:before,
 .menuItem:hover:before {
   opacity: 1;
 }
