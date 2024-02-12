@@ -1,6 +1,6 @@
 import ClientEnvironment from 'client/environment';
 import messages from 'constants/messages.json';
-import parse from 'html-react-parser';
+import parse, { Element } from 'html-react-parser';
 import template from 'lodash.template';
 import { Fragment } from 'react';
 
@@ -25,6 +25,29 @@ export default class Translate {
 
   public static html(key: string, values?: Record<string, string>): JSX.Element {
     const compiledMessage = Translate.t(key, values);
-    return <Fragment>{parse(compiledMessage)}</Fragment>;
+    return (
+      <Fragment>
+        {parse(compiledMessage, {
+          replace(domNode) {
+            if (domNode instanceof Element) {
+              if (domNode.type === 'tag' && domNode.name === 'flyoutlink') {
+                const onClick = (): void => {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set('open', domNode.attribs.to);
+                  window.history.pushState({ path: url.href }, '', url.href);
+                };
+                return (
+                  <a href="javascript:void(0)" onClick={onClick}>
+                    {domNode.attribs.text}
+                  </a>
+                );
+              }
+            }
+            console.log({ domNode });
+            return null;
+          },
+        })}
+      </Fragment>
+    );
   }
 }

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+export {};
+
 namespace NodeJS {
   interface ProcessEnv {
     JWT_SECRET: string;
@@ -31,4 +33,10 @@ namespace NodeJS {
 declare module '*.eml' {
   const content: string;
   export default content;
+}
+
+declare global {
+  interface Window {
+    locomotiveScroll?: LocomotiveScroll;
+  }
 }

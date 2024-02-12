@@ -90,10 +90,12 @@ const LandingComponent: FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.secondSection}>
+      <div className={styles.secondSection} id="faq">
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
         <div className={styles.coupleQuestionAnswerSection}>
-          <div className={styles.coupleQuestionAnswerTitle}>Questions & Answers</div>
+          <div className={styles.coupleQuestionAnswerTitle}>
+            {Translate.t('components.landing.titles.questions-and-answers')}
+          </div>
           {coupleQuestions.map(renderCoupleQuestion)}
         </div>
       </div>

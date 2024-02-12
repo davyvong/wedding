@@ -106,7 +106,6 @@
   z-index: -1;
 }
 
-.menuItem:focus:before,
 .menuItem:hover:before {
   opacity: 1;
 }

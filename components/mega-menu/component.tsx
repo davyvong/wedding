@@ -21,6 +21,7 @@ import Translate from 'client/translate';
 import InvitationFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
 import SongsFlyout from 'components/flyouts/songs';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { GuestTokenPayload } from 'server/authenticator';
@@ -42,7 +43,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { context, floatingStyles, refs } = useFloating({
-    middleware: [offset(24), shift({ padding: 24 })],
+    middleware: [offset(16), shift({ padding: 24 })],
     onOpenChange: setIsOpen,
     open: isOpen,
     placement: 'bottom-end',
@@ -72,13 +73,17 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
         {
           description: Translate.t('components.mega-menu.menu-items.rsvp.description'),
           icon: <MarkEmailReadIconSVG />,
-          onClick: (): void => openFlyout('rsvp'),
+          onClick: (): void => {
+            openFlyout('rsvp');
+          },
           title: Translate.t('components.mega-menu.menu-items.rsvp.title'),
         },
         {
           description: Translate.t('components.mega-menu.menu-items.songs.description'),
           icon: <QueueMusicIconSVG />,
-          onClick: (): void => openFlyout('songs'),
+          onClick: (): void => {
+            openFlyout('songs');
+          },
           title: Translate.t('components.mega-menu.menu-items.songs.title'),
         },
       );
@@ -86,14 +91,29 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
       items.push({
         description: Translate.t('components.mega-menu.menu-items.invitation.description'),
         icon: <MarkEmailUnreadIconSVG />,
-        onClick: (): void => openFlyout('invitation'),
+        onClick: (): void => {
+          openFlyout('invitation');
+        },
         title: Translate.t('components.mega-menu.menu-items.invitation.title'),
       });
     }
     items.push({
       description: Translate.t('components.mega-menu.menu-items.faq.description'),
       icon: <HelpIconSVG />,
-      onClick: (): void => setIsOpen(false),
+      onClick: (): void => {
+        const computedStyles = window.getComputedStyle(document.documentElement);
+        const pageSideSpacing =
+          parseInt(computedStyles.getPropertyValue('--page-side-spacing').replace('rem', '')) * 16;
+        const navigationBarHeight = parseInt(
+          computedStyles.getPropertyValue('--navigation-bar-height').replace('px', ''),
+        );
+        window.locomotiveScroll?.scrollTo('#faq', {
+          callback: () => ScrollTrigger.update(),
+          offset: pageSideSpacing - navigationBarHeight - 32,
+        });
+        ScrollTrigger.update();
+        setIsOpen(false);
+      },
       title: Translate.t('components.mega-menu.menu-items.faq.title'),
     });
     return items;
@@ -150,13 +170,12 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           </FloatingFocusManager>,
           document.body,
         )}
-      {token ? (
+      <InvitationFlyout renderReference={() => <Fragment />} />
+      {token && (
         <Fragment>
           <RSVPFlyout defaultSelectedGuestId={token.guestId} renderReference={() => <Fragment />} />
           <SongsFlyout renderReference={() => <Fragment />} />
         </Fragment>
-      ) : (
-        <InvitationFlyout renderReference={() => <Fragment />} />
       )}
     </Fragment>
   );

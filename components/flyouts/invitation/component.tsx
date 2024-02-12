@@ -73,7 +73,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
   return (
     <form className={rsvpFlyoutStyles.content} onSubmit={sendLoginCode}>
       <div className={rsvpFlyoutStyles.title}>{Translate.t('components.flyouts.invitation.title')}</div>
-      <div className={rsvpFlyoutStyles.question}>{Translate.t('components.flyouts.invitation.description')}</div>
+      <div className={rsvpFlyoutStyles.question}>{Translate.html('components.flyouts.invitation.description')}</div>
       <TextInput
         inverse
         onChange={(event): void => setEmail(event.target.value)}
