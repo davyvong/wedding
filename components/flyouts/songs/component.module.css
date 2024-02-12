@@ -70,12 +70,6 @@
 
 .songNameIcon {
   margin-left: 0.5rem;
-  opacity: 0;
-  transition: opacity 150ms ease-in-out;
-}
-
-.songName a:hover + .songNameIcon {
-  opacity: 1;
 }
 
 .songArtists {
@@ -106,7 +100,6 @@
   border: 0;
   color: inherit;
   padding: 0;
-  transition: opacity 150ms ease-in-out;
   text-align: inherit;
 }
 
