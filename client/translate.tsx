@@ -36,11 +36,7 @@ export default class Translate {
                   url.searchParams.set('open', domNode.attribs.to);
                   window.history.pushState({ path: url.href }, '', url.href);
                 };
-                return (
-                  <a href="javascript:void(0)" onClick={onClick}>
-                    {domNode.attribs.text}
-                  </a>
-                );
+                return <a onClick={onClick}>{domNode.attribs.text}</a>;
               }
             }
             return null;

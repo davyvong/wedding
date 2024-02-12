@@ -18,60 +18,65 @@ const getSpacing = (): string => {
   return computedStyles.getPropertyValue('--page-side-spacing');
 };
 
+export const createLocomotiveScroll = (): void => {
+  window.locomotiveScroll?.destroy();
+  window.locomotiveScroll = new LocomotiveScroll({
+    draggingClass: locomotiveScrollStyles.hasScrollDragging,
+    el: document.querySelector<HTMLElement>('.' + styles.landing),
+    gestureDirection: 'vertical',
+    initClass: locomotiveScrollStyles.hasScrollInit,
+    reloadOnContextChange: true,
+    repeat: true,
+    scrollbarClass: locomotiveScrollStyles.scrollbar,
+    scrollingClass: locomotiveScrollStyles.hasScrollScrolling,
+    smartphone: {
+      smooth: true,
+    },
+    smooth: true,
+    smoothClass: locomotiveScrollStyles.hasScrollSmooth,
+    tablet: {
+      breakpoint: 768,
+      smooth: true,
+    },
+    touchMultiplier: 3,
+  });
+  ScrollTrigger.scrollerProxy('.' + styles.landing, {
+    getBoundingClientRect() {
+      const navigationBarHeight = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--navigation-bar-height').replace('px', ''),
+      );
+      return {
+        height: window.innerHeight - navigationBarHeight,
+        left: 0,
+        top: navigationBarHeight,
+        width: window.innerWidth,
+      };
+    },
+    scrollTop(value?: number): number | void {
+      if (arguments.length) {
+        window.locomotiveScroll.scrollTo(value, { disableLerp: true, duration: 0 });
+      }
+      return window.locomotiveScroll.scroll.instance.scroll.y;
+    },
+  });
+  window.locomotiveScroll.on('scroll', (): void => {
+    ScrollTrigger.update();
+  });
+  ScrollTrigger.addEventListener('matchMedia', () => {
+    window.locomotiveScroll.update();
+  });
+  ScrollTrigger.addEventListener('refresh', () => {
+    window.locomotiveScroll.update();
+  });
+  ScrollTrigger.defaults({
+    scroller: '.' + styles.landing,
+  });
+};
+
 export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
   gsap.context(() => {
     gsap.registerPlugin(ScrollTrigger);
-    window.locomotiveScroll = new LocomotiveScroll({
-      draggingClass: locomotiveScrollStyles.hasScrollDragging,
-      el: document.querySelector<HTMLElement>('.' + styles.landing),
-      gestureDirection: 'vertical',
-      initClass: locomotiveScrollStyles.hasScrollInit,
-      reloadOnContextChange: true,
-      repeat: true,
-      scrollbarClass: locomotiveScrollStyles.scrollbar,
-      scrollingClass: locomotiveScrollStyles.hasScrollScrolling,
-      smartphone: {
-        smooth: true,
-      },
-      smooth: true,
-      smoothClass: locomotiveScrollStyles.hasScrollSmooth,
-      tablet: {
-        breakpoint: 768,
-        smooth: true,
-      },
-      touchMultiplier: 3,
-    });
-    ScrollTrigger.scrollerProxy('.' + styles.landing, {
-      getBoundingClientRect() {
-        const navigationBarHeight = parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue('--navigation-bar-height').replace('px', ''),
-        );
-        return {
-          height: window.innerHeight - navigationBarHeight,
-          left: 0,
-          top: navigationBarHeight,
-          width: window.innerWidth,
-        };
-      },
-      scrollTop(value?: number): number | void {
-        if (arguments.length) {
-          window.locomotiveScroll.scrollTo(value, { disableLerp: true, duration: 0 });
-        }
-        return window.locomotiveScroll.scroll.instance.scroll.y;
-      },
-    });
-    window.locomotiveScroll.on('scroll', (): void => {
-      ScrollTrigger.update();
-    });
-    ScrollTrigger.addEventListener('matchMedia', () => {
-      window.locomotiveScroll.update();
-    });
-    ScrollTrigger.addEventListener('refresh', () => {
-      window.locomotiveScroll.update();
-    });
-    ScrollTrigger.defaults({
-      scroller: '.' + styles.landing,
-    });
+    createLocomotiveScroll();
     const firstSectionTimeline = gsap.timeline({
       overwrite: true,
       scrollTrigger: {

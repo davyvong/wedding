@@ -189,6 +189,11 @@
 .coupleAnswer a {
   color: inherit;
   font-weight: 600;
+  text-decoration: underline;
+}
+
+.coupleAnswer a:hover {
+  cursor: pointer;
 }
 
 .thirdSection {
