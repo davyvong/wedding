@@ -51,7 +51,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
-  const role = useRole(context);
+  const role = useRole(context, { role: 'menu' });
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
     duration: 300,
   });
@@ -99,18 +99,32 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
     return items;
   }, [openFlyout, token]);
 
-  const renderMenuItem = useCallback(
-    (item: MegaMenuItem, index: number): JSX.Element => (
-      <button className={styles.menuItem} onClick={item.onClick} key={index} role="menuitem">
+  const renderMenuItem = useCallback((item: MegaMenuItem, index: number): JSX.Element => {
+    const onKeyDown = (event): boolean => {
+      if (event.keyCode === 13) {
+        event.stopPropagation();
+        item.onClick();
+        return false;
+      }
+      return true;
+    };
+    return (
+      <div
+        className={styles.menuItem}
+        key={index}
+        onClick={item.onClick}
+        onKeyDown={onKeyDown}
+        role="menuitem"
+        tabIndex={0}
+      >
         <div className={styles.menuItemIcon}>{item.icon}</div>
         <div className={styles.menuItemContent}>
           <div>{item.title}</div>
           {<div className={styles.menuItemDescription}>{item.description}</div>}
         </div>
-      </button>
-    ),
-    [],
-  );
+      </div>
+    );
+  }, []);
 
   return (
     <Fragment>
