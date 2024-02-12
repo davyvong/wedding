@@ -43,7 +43,6 @@ export default class Translate {
                 );
               }
             }
-            console.log({ domNode });
             return null;
           },
         })}
