@@ -101,15 +101,15 @@
   width: 1.25rem;
 }
 
-.removeIcon {
-  opacity: 0;
+.removeButton {
+  background-color: var(--palette-transparent);
+  border: 0;
+  color: inherit;
+  padding: 0;
   transition: opacity 150ms ease-in-out;
+  text-align: inherit;
 }
 
-.removeIcon:hover {
+.removeButton:hover {
   cursor: pointer;
-}
-
-.songCard:hover .removeIcon {
-  opacity: 1;
 }

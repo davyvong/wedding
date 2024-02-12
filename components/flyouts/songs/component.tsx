@@ -93,14 +93,22 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
             placement="left-middle"
             renderContent={(): string => Translate.t('components.flyouts.songs.tooltips.remove')}
           >
-            <div
-              className={styles.removeIcon}
+            <button
+              className={styles.removeButton}
               onClick={(): void => {
                 removeSongRequest(song);
               }}
+              onKeyDown={(event): boolean => {
+                if (event.keyCode === 13) {
+                  event.stopPropagation();
+                  removeSongRequest(song);
+                  return false;
+                }
+                return true;
+              }}
             >
-              <PlaylistRemoveIconSVG />
-            </div>
+              <PlaylistRemoveIconSVG height={32} width={32} />
+            </button>
           </Tooltip>
         )}
       </div>
