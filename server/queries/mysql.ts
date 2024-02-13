@@ -1,7 +1,8 @@
 import ObjectID from 'bson-objectid';
-import { GuestTokenPayload } from 'server/authenticator';
+import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import MySQLClientFactory from 'server/clients/mysql';
 import Guest, { GuestRowData } from 'server/models/guest';
+import { GuestTokenRowData } from 'server/models/guest-token';
 import Response, { ResponseData, ResponseRowData } from 'server/models/response';
 import { SongRequestRowData } from 'server/models/song-request';
 
@@ -122,7 +123,7 @@ class MySQLQueries {
   }
 
   public static async insertResponse(
-    token: GuestTokenPayload,
+    token: VerifiedGuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<boolean> {
@@ -187,7 +188,7 @@ class MySQLQueries {
   }
 
   public static async updateResponse(
-    token: GuestTokenPayload,
+    token: VerifiedGuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<boolean> {
@@ -264,7 +265,7 @@ class MySQLQueries {
   }
 
   public static async upsertResponse(
-    token: GuestTokenPayload,
+    token: VerifiedGuestTokenPayload,
     guestId: string,
     data: Omit<ResponseData, 'guest' | 'id'>,
   ): Promise<Response | null> {
@@ -418,7 +419,7 @@ class MySQLQueries {
   }
 
   public static async insertSongRequest(
-    token: GuestTokenPayload,
+    token: VerifiedGuestTokenPayload,
     guestId: string,
     spotifyTrackId: string,
   ): Promise<boolean> {
@@ -511,6 +512,57 @@ class MySQLQueries {
       });
     } catch {
       return null;
+    }
+  }
+
+  public static async insertGuestToken(tokenId: string, guestId: string): Promise<boolean> {
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        insert into wedding_guest_tokens (
+          public_id,
+          guest_id
+        )
+        values (
+          :tokenId,
+          (
+            select id
+            from wedding_guests
+            where public_id = :guestId
+            limit 1
+          )
+        )
+      `;
+      const results = await connection.execute<GuestTokenRowData>(query, {
+        guestId,
+        tokenId,
+      });
+      return results.rowsAffected > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  public static async deleteGuestToken(tokenId: string, guestId: string): Promise<boolean> {
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        delete from wedding_guest_tokens
+        where guest_id = (
+          select id
+          from wedding_guests
+          where public_id = :guestId
+          limit 1
+        )
+        and public_id = :tokenId
+      `;
+      const results = await connection.execute<GuestTokenRowData>(query, {
+        guestId,
+        tokenId,
+      });
+      return results.rowsAffected > 0;
+    } catch {
+      return false;
     }
   }
 }

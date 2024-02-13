@@ -24,13 +24,13 @@ import SongsFlyout from 'components/flyouts/songs';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { GuestTokenPayload } from 'server/authenticator';
+import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 
 interface MegaMenuProps {
-  token?: GuestTokenPayload;
+  token?: VerifiedGuestTokenPayload;
 }
 
 interface MegaMenuItem {

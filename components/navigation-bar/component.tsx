@@ -3,12 +3,12 @@ import { italiana } from 'client/fonts';
 import Translate from 'client/translate';
 import MegaMenu from 'components/mega-menu';
 import { FC } from 'react';
-import { GuestTokenPayload } from 'server/authenticator';
+import { VerifiedGuestTokenPayload } from 'server/authenticator';
 
 import styles from './component.module.css';
 
 interface NavigationBarComponentProps {
-  token?: GuestTokenPayload;
+  token?: VerifiedGuestTokenPayload;
 }
 
 const NavigationBarComponent: FC<NavigationBarComponentProps> = async ({ token }) => (

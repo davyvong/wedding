@@ -2,7 +2,7 @@ import ErrorPage from 'components/error-page';
 import Layout from 'components/layout';
 import { cookies } from 'next/headers';
 import { FC, type ReactNode } from 'react';
-import Authenticator, { GuestTokenPayload } from 'server/authenticator';
+import Authenticator, { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { generateMetadata } from 'utils/metadata';
 
 export const metadata = generateMetadata({
@@ -14,7 +14,7 @@ interface AdminGuestsLayoutProps {
 }
 
 const AdminGuestsLayout: FC<AdminGuestsLayoutProps> = async ({ children }) => {
-  const token: GuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
+  const token: VerifiedGuestTokenPayload | undefined = await Authenticator.verifyToken(cookies());
 
   if (!token) {
     return <ErrorPage statusCode={401} />;

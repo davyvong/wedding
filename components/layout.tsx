@@ -6,11 +6,11 @@ import { Analytics } from '@vercel/analytics/react';
 import { openSans } from 'client/fonts';
 import NavigationBar from 'components/navigation-bar';
 import type { FC, ReactNode } from 'react';
-import { GuestTokenPayload } from 'server/authenticator';
+import { VerifiedGuestTokenPayload } from 'server/authenticator';
 
 interface LayoutProps {
   children: ReactNode;
-  token?: GuestTokenPayload;
+  token?: VerifiedGuestTokenPayload;
 }
 
 const Layout: FC<LayoutProps> = async ({ children, token }) => (

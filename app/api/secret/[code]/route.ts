@@ -1,5 +1,6 @@
 import ObjectID from 'bson-objectid';
 import { NextRequest, NextResponse } from 'next/server';
+import { GuestTokenPayload } from 'server/authenticator';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError, { ServerErrorCode } from 'server/error';
@@ -42,10 +43,21 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (!guest) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
-    const token = await JWT.sign({
+    const payload: GuestTokenPayload = {
       guestId: guest.id,
       tokenId: ObjectID().toHexString(),
-    });
+    };
+    const [token, isGuestTokenInserted] = await Promise.all([
+      JWT.sign(payload),
+      MySQLQueries.insertGuestToken(payload.tokenId, payload.guestId),
+    ]);
+    if (!token || !isGuestTokenInserted) {
+      throw new ServerError({
+        code: ServerErrorCode.InternalServerError,
+        rateLimit: checkResults,
+        status: 500,
+      });
+    }
     const url = new URL(ServerEnvironment.getBaseURL());
     url.searchParams.set('open', 'rsvp');
     const response = NextResponse.redirect(url.href);

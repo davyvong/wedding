@@ -8,13 +8,17 @@ import MySQLQueries from './queries/mysql';
 
 export interface GuestTokenPayload extends JWTPayload {
   guestId: string;
+  tokenId: string;
+}
+
+export interface VerifiedGuestTokenPayload extends GuestTokenPayload {
   isAdmin: boolean;
 }
 
 class Authenticator {
   public static async verifyToken(
     cookies: RequestCookies | ReadonlyRequestCookies,
-  ): Promise<GuestTokenPayload | undefined> {
+  ): Promise<VerifiedGuestTokenPayload | undefined> {
     const tokenCookie = cookies.get('token');
     if (!tokenCookie) {
       return undefined;
@@ -37,7 +41,7 @@ class Authenticator {
   public static async verifyTokenOrRedirect(
     cookies: RequestCookies | ReadonlyRequestCookies,
     redirectURL: string,
-  ): Promise<GuestTokenPayload | never> {
+  ): Promise<VerifiedGuestTokenPayload | never> {
     const payload = await Authenticator.verifyToken(cookies);
     if (!payload) {
       return redirect(redirectURL);
