@@ -1,3 +1,4 @@
+import ObjectID from 'bson-objectid';
 import { NextRequest, NextResponse } from 'next/server';
 import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
@@ -43,7 +44,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     }
     const token = await JWT.sign({
       guestId: guest.id,
-      isAdmin: guest.isAdmin,
+      tokenId: ObjectID().toHexString(),
     });
     const url = new URL(ServerEnvironment.getBaseURL());
     url.searchParams.set('open', 'rsvp');

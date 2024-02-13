@@ -41,7 +41,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         status: 401,
       });
     }
-    if (token.guestId !== params.guest && !token.isAdmin) {
+    if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
       if (!guestGroup) {
         throw new ServerError({
