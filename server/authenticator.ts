@@ -8,7 +8,7 @@ import MySQLQueries from './queries/mysql';
 
 export interface GuestTokenPayload extends JWTPayload {
   guestId: string;
-  isAdmin?: boolean;
+  isAdmin: boolean;
 }
 
 class Authenticator {
@@ -25,7 +25,10 @@ class Authenticator {
       if (!guest) {
         return undefined;
       }
-      return payload;
+      return {
+        ...payload,
+        isAdmin: guest.isAdmin,
+      };
     } catch {
       return undefined;
     }
