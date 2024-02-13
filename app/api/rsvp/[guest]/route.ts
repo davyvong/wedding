@@ -42,11 +42,14 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
       });
     }
     if (token.guestId !== params.guest && !token.isAdmin) {
-      throw new ServerError({
-        code: ServerErrorCode.Forbidden,
-        rateLimit: checkResults,
-        status: 403,
-      });
+      const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
+      if (!guestGroup) {
+        throw new ServerError({
+          code: ServerErrorCode.Forbidden,
+          rateLimit: checkResults,
+          status: 403,
+        });
+      }
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
     if (!response) {
