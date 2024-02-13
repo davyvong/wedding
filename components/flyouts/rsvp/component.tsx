@@ -448,49 +448,57 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
         value={values.attendance}
       />
       {errors.attendance && <div className={styles.error}>{Translate.t(errors.attendance)}</div>}
-      {values.attendance && (
+      {values.attendance !== undefined && (
         <Fragment>
-          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.entree')}</div>
-          <Select
+          {values.attendance === true && (
+            <Fragment>
+              <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.entree')}</div>
+              <Select
+                inverse
+                name="entree"
+                onChange={onAddressInputChange}
+                options={entreeOptions}
+                placeholder={Translate.t('components.flyouts.rsvp.placeholders.entree')}
+                value={values.entree}
+              />
+              {errors.entree && <div className={styles.error}>{Translate.t(errors.entree)}</div>}
+              <div className={styles.question}>
+                {Translate.t('components.flyouts.rsvp.questions.dietaryRestrictions')}
+              </div>
+              <TextInput
+                inverse
+                name="dietaryRestrictions"
+                onChange={onInputChange}
+                placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietaryRestrictions')}
+                value={values.dietaryRestrictions}
+              />
+              {errors.dietaryRestrictions && (
+                <div className={styles.error}>{Translate.t(errors.dietaryRestrictions)}</div>
+              )}
+            </Fragment>
+          )}
+          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
+          <AddressInput
             inverse
-            name="entree"
+            name="mailingAddress"
             onChange={onAddressInputChange}
-            options={entreeOptions}
-            placeholder={Translate.t('components.flyouts.rsvp.placeholders.entree')}
-            value={values.entree}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
+            value={values.mailingAddress}
           />
-          {errors.entree && <div className={styles.error}>{Translate.t(errors.entree)}</div>}
-          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.dietaryRestrictions')}</div>
-          <TextInput
+          {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
+          <div className={styles.question} onChange={onInputChange}>
+            {Translate.t('components.flyouts.rsvp.questions.message')}
+          </div>
+          <Textarea
             inverse
-            name="dietaryRestrictions"
+            name="message"
             onChange={onInputChange}
-            placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietaryRestrictions')}
-            value={values.dietaryRestrictions}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.message')}
+            rows={1}
+            value={values.message}
           />
-          {errors.dietaryRestrictions && <div className={styles.error}>{Translate.t(errors.dietaryRestrictions)}</div>}
         </Fragment>
       )}
-      <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
-      <AddressInput
-        inverse
-        name="mailingAddress"
-        onChange={onAddressInputChange}
-        placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
-        value={values.mailingAddress}
-      />
-      {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
-      <div className={styles.question} onChange={onInputChange}>
-        {Translate.t('components.flyouts.rsvp.questions.message')}
-      </div>
-      <Textarea
-        inverse
-        name="message"
-        onChange={onInputChange}
-        placeholder={Translate.t('components.flyouts.rsvp.placeholders.message')}
-        rows={1}
-        value={values.message}
-      />
       {errors.message && <div className={styles.error}>{Translate.t(errors.message)}</div>}
       <div className={styles.buttons}>
         <Button className={styles.submitButton} disabled={isSaving} inverse type="submit">
