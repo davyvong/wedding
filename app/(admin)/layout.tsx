@@ -5,6 +5,8 @@ import { FC, type ReactNode } from 'react';
 import Authenticator, { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { generateMetadata } from 'utils/metadata';
 
+export const runtime = 'edge';
+
 export const metadata = generateMetadata({
   url: '/guests',
 });

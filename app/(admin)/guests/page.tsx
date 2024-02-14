@@ -6,6 +6,8 @@ import RedisKey from 'server/models/redis-key';
 import { ResponseData } from 'server/models/response';
 import MySQLQueries from 'server/queries/mysql';
 
+export const runtime = 'edge';
+
 const Page: FC = async () => {
   const redisClient = RedisClientFactory.getInstance();
   const redisKey = RedisKey.create('guest-list');
