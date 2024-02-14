@@ -11,6 +11,7 @@ import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export const GET = async (request: NextRequest, { params }: { params: { code: string } }): Promise<Response> => {
   try {
