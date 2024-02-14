@@ -6,7 +6,6 @@ import MySQLQueries from 'server/queries/mysql';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
 
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {

@@ -5,7 +5,6 @@ import ServerError, { ServerErrorCode } from 'server/error';
 import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
 
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
