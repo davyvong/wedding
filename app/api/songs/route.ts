@@ -29,6 +29,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       });
     }
     const songRequests = await MySQLQueries.findSongRequestsFromGuestId(token.guestId);
+    console.log(`[GET] /api/songs/[id] songRequestsFound=${songRequests ? songRequests.length : 0}`);
     if (!songRequests) {
       throw new ServerError({
         code: ServerErrorCode.InternalServerError,

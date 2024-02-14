@@ -21,6 +21,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         status: 429,
       });
     }
+    console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest}`);
     const paramsSchema = object({
       guest: string()
         .required()
@@ -41,8 +42,10 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         status: 401,
       });
     }
+    console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
+      console.log(`[GET] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
       if (!guestGroup) {
         throw new ServerError({
           code: ServerErrorCode.Forbidden,
@@ -52,6 +55,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
       }
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
+    console.log(`[GET] /api/rsvp/[guest] rsvpFound=${Boolean(response)}`);
     if (!response) {
       throw new ServerError({
         code: ServerErrorCode.NotFound,
@@ -99,6 +103,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
         status: 400,
       });
     }
+    console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest}`);
     const body = await request.json();
     const bodySchema = object({
       attendance: boolean().required(),
@@ -125,8 +130,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
         status: 401,
       });
     }
+    console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
+      console.log(`[POST] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
       if (!guestGroup) {
         throw new ServerError({
           code: ServerErrorCode.Forbidden,
@@ -142,6 +149,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       mailingAddress: body.mailingAddress,
       message: body.message,
     });
+    console.log(`[POST] /api/rsvp/[guest] responseId=${response?.id}`);
     if (!response) {
       return new Response(undefined, {
         headers: RateLimiter.toHeaders(checkResults),

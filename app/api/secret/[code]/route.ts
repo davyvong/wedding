@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
         status: 429,
       });
     }
-    console.log('[GET]', '/api/secret/[code]', `code=${params.code}`);
+    console.log(`[GET] /api/secret/[code] code=${params.code}`);
     const paramsSchema = object({
       code: string()
         .required()
@@ -37,12 +37,12 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', params.code);
     const cachedGuestId = await redisClient.get<string>(redisKey);
-    console.log('[GET]', '/api/secret/[code]', `cachedGuestId=${cachedGuestId}`);
+    console.log(`[GET] /api/secret/[code] cachedGuestId=${cachedGuestId}`);
     if (!cachedGuestId) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
     const guest = await MySQLQueries.findGuestFromId(cachedGuestId);
-    console.log('[GET]', '/api/secret/[code]', `guestId=${guest?.id}`);
+    console.log(`[GET] /api/secret/[code] guestId=${guest?.id}`);
     if (!guest) {
       return NextResponse.redirect(ServerEnvironment.getBaseURL());
     }
@@ -50,7 +50,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       guestId: guest.id,
       tokenId: ObjectID().toHexString(),
     };
-    console.log('[GET]', '/api/secret/[code]', `tokenId=${payload.tokenId}`);
+    console.log(`[GET] /api/secret/[code] tokenId=${payload.tokenId}`);
     const [token, isGuestTokenInserted] = await Promise.all([
       JWT.sign(payload),
       MySQLQueries.insertGuestToken(payload.tokenId, payload.guestId),

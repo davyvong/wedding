@@ -12,7 +12,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
   try {
     const rateLimiter = new RateLimiter({
       requestsPerInterval: 5,
-      scope: RateLimiterScope.SpotifyPlaylistDedupe,
+      scope: RateLimiterScope.SpotifyPlaylist,
     });
     const checkResults = await rateLimiter.checkRequest(request);
     if (checkResults.exceeded) {
@@ -33,7 +33,9 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         status: 400,
       });
     }
-    if (!(await Token.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID))) {
+    const isTokenVerified = await Token.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID);
+    console.log(`[POST] /api/spotify/playlist tokenVerified=${isTokenVerified}`);
+    if (!isTokenVerified) {
       throw new ServerError({
         code: ServerErrorCode.Unauthorized,
         rateLimit: checkResults,

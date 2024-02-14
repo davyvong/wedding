@@ -26,7 +26,7 @@ class Authenticator {
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
       const guest = await MySQLQueries.findGuestFromId(payload.guestId);
-      console.log('[Authenticator] verifyToken', `guestId=${guest?.id}`);
+      console.log(`[Authenticator] verifyToken guestId=${guest?.id}`);
       if (!guest) {
         return undefined;
       }
@@ -35,7 +35,7 @@ class Authenticator {
         isAdmin: guest.isAdmin,
       };
     } catch (error: unknown) {
-      console.log('[Authenticator] verifyToken', `error=${error}`);
+      console.log(`[Authenticator] verifyToken error=${error}`);
       return undefined;
     }
   }

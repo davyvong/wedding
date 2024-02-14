@@ -57,7 +57,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       });
     }
     const code = getRandomWords(4).join('-');
-    console.log('[POST]', '/api/secret/email', `code=${code}`);
+    console.log(`[POST] /api/secret/email code=${code}`);
     const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: url.href });
