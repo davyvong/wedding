@@ -5,6 +5,7 @@ import { generateDefaultMetadata } from 'utils/metadata';
 export const metadata = generateDefaultMetadata({
   url: '/',
 });
+export const runtime = 'edge';
 
 const Page: FC = async () => <Landing />;
 

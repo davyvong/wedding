@@ -1,23 +1,23 @@
 import ClientEnvironment from 'client/environment';
 import messages from 'constants/messages.json';
 import parse, { Element } from 'html-react-parser';
-import template from 'lodash.template';
 import { Fragment } from 'react';
 
 export default class Translate {
-  public static t(key: string, values?: Record<string, string>): string {
+  public static t(key: string, values: Record<string, string> = {}): string {
     try {
       const message = messages[key];
       if (!message) {
         throw new Error('Unable to translate: ' + key);
       }
-      const options = {
-        interpolate: /{{([\s\S]+?)}}/g,
-      };
-      return template(message, options)(values);
+      let messageWithValues = message;
+      for (const key of Object.keys(values)) {
+        messageWithValues = messageWithValues.replace('{{' + key + '}}', values[key]);
+      }
+      return messageWithValues;
     } catch (error: unknown) {
       if (ClientEnvironment.isDevelopment) {
-        console.log((error as Error).message);
+        console.log(`[Translate] t error=${error}`);
       }
       return '';
     }

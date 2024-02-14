@@ -7,6 +7,7 @@ import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export const DELETE = async (request: NextRequest, { params }: { params: { id: string } }): Promise<Response> => {
   try {
@@ -21,6 +22,7 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
         status: 429,
       });
     }
+    console.log(`[DELETE] /api/songs/[id] spotifyTrackId=${params.id}`);
     const paramsSchema = object({
       id: string()
         .matches(/^([a-zA-Z0-9]){22}/)
@@ -41,9 +43,7 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
         status: 401,
       });
     }
-    const accessToken = await SpotifyAPI.getAccessToken();
-    const track = await SpotifyAPI.getTrack(accessToken, params.id);
-    await MySQLQueries.deleteSongRequest(token.guestId, track.id);
+    await MySQLQueries.deleteSongRequest(token.guestId, params.id);
     return new Response(undefined, {
       headers: RateLimiter.toHeaders(checkResults),
       status: 202,
@@ -66,6 +66,7 @@ export const POST = async (request: NextRequest, { params }: { params: { id: str
         status: 429,
       });
     }
+    console.log(`[POST] /api/songs/[id] spotifyTrackId=${params.id}`);
     const paramsSchema = object({
       id: string()
         .matches(/^([a-zA-Z0-9]){22}/)

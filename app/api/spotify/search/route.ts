@@ -6,6 +6,7 @@ import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
@@ -25,6 +26,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const params = {
       query: requestURL.searchParams.get('query'),
     };
+    console.log(`[GET] /api/spotify/search query=${params.query}`);
     const paramsSchema = object({
       query: string().required().min(1).max(256),
     });
@@ -45,6 +47,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const results = await SpotifyAPI.searchForTrack(accessToken, params.query);
+    console.log(`[GET] /api/spotify/search resultsFound=${results.length}`);
     return NextResponse.json(results, {
       headers: {
         'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400',

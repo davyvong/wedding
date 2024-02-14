@@ -28,7 +28,7 @@ class ServerError implements ServerErrorOptions {
   }
 
   public static handle(error: unknown): Response {
-    console.log(error);
+    console.log(`[ServerError] handle error=${error}`);
     if (error instanceof ServerError) {
       const init: ResponseInit = {
         headers: RateLimiter.toHeaders(error.rateLimit),

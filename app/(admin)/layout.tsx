@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { FC, type ReactNode } from 'react';
 import Authenticator, { VerifiedGuestTokenPayload } from 'server/authenticator';
 
+export const runtime = 'edge';
+
 interface AdminGuestsLayoutProps {
   children: ReactNode;
 }
