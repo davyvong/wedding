@@ -5,6 +5,11 @@ import { GuestData } from 'server/models/guest';
 import RedisKey from 'server/models/redis-key';
 import { ResponseData } from 'server/models/response';
 import MySQLQueries from 'server/queries/mysql';
+import { generateDefaultMetadata } from 'utils/metadata';
+
+export const metadata = generateDefaultMetadata({
+  url: '/guests',
+});
 
 const Page: FC = async () => {
   const redisClient = RedisClientFactory.getInstance();

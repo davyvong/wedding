@@ -2,11 +2,6 @@ import Layout from 'components/layout';
 import { cookies } from 'next/headers';
 import { FC, type ReactNode } from 'react';
 import Authenticator, { VerifiedGuestTokenPayload } from 'server/authenticator';
-import { generateMetadata } from 'utils/metadata';
-
-export const metadata = generateMetadata({
-  url: '/',
-});
 
 interface PublicLayoutProps {
   children: ReactNode;

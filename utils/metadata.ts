@@ -2,11 +2,20 @@ import Translate from 'client/translate';
 import { Metadata } from 'next';
 import ServerEnvironment from 'server/environment';
 
-interface MetadataOptions {
+export interface MetadataOptions {
   url?: string;
 }
 
-export const generateMetadata = (options: MetadataOptions = {}): Metadata => ({
+export interface MetadataProps {
+  params: {
+    id: string;
+  };
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}
+
+export const generateDefaultMetadata = (options: MetadataOptions = {}): Metadata => ({
   description: Translate.t('app.metadata.description'),
   openGraph: {
     description: Translate.t('app.metadata.description'),
