@@ -17,7 +17,7 @@ export default class Translate {
       return template(message, options)(values);
     } catch (error: unknown) {
       if (ClientEnvironment.isDevelopment) {
-        console.log((error as Error).message);
+        console.log('[Translate] t', `error=${error}`);
       }
       return '';
     }

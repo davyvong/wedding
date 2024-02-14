@@ -88,7 +88,7 @@ class RateLimiter {
         reset: await redisClient.ttl(redisKey),
       };
     } catch (error: unknown) {
-      console.log(error);
+      console.log('[RateLimiter] checkRequest', `error=${error}`);
       throw new ServerError({
         code: ServerErrorCode.InternalServerError,
         status: 500,
