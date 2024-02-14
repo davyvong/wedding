@@ -116,11 +116,13 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
     [inverse, name, onChange],
   );
 
+  const randomSuggestionWidths = useMemo<string[]>(
+    () => new Array(5).fill(undefined).map((): string => (50 + Math.ceil(Math.random() * 50)).toString() + '%'),
+    [],
+  );
+
   const renderSuggestionList = useCallback(() => {
     if (suggestionsLoading) {
-      const randomSuggestionWidths = new Array(5)
-        .fill(undefined)
-        .map((): string => (50 + Math.ceil(Math.random() * 50)).toString() + '%');
       return (
         <div className={styles.suggestionListLoading}>
           {randomSuggestionWidths.map(
@@ -145,7 +147,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
       );
     }
     return suggestions.map(renderSuggestionItem);
-  }, [renderSuggestionItem, suggestions, suggestionsLoading, value]);
+  }, [randomSuggestionWidths, renderSuggestionItem, suggestions, suggestionsLoading, value]);
 
   return (
     <Fragment>
