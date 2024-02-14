@@ -40,6 +40,7 @@ const LandingComponent: FC = () => {
           <Image
             alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
+            placeholder="blur"
             priority
             quality={90}
             sizes="(max-width: 425px) 300vw, (max-width: 768px) 150vw, (max-width: 1024px) 50vw, (max-width: 1280px) 50vw, (max-width: 1440px) 50vw, (max-width: 2560px) 50vw, 50vw"
@@ -73,6 +74,7 @@ const LandingComponent: FC = () => {
           <Image
             alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
+            placeholder="blur"
             priority
             quality={90}
             src={VD72JPG}

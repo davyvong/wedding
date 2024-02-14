@@ -128,6 +128,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
             alt={suggestion.name}
             className={songFlyoutStyles.songImage}
             height={64}
+            placeholder="blur"
             src={suggestion.image}
             width={64}
           />
