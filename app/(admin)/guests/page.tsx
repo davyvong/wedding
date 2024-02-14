@@ -10,6 +10,7 @@ import { generateDefaultMetadata } from 'utils/metadata';
 export const metadata = generateDefaultMetadata({
   url: '/guests',
 });
+export const runtime = 'edge';
 
 const Page: FC = async () => {
   const redisClient = RedisClientFactory.getInstance();
