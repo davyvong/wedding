@@ -123,6 +123,18 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
       },
       title: Translate.t('components.mega-menu.menu-items.faq.title'),
     });
+    if (token) {
+      items.push({
+        description: Translate.t('components.mega-menu.menu-items.sign-out.description'),
+        icon: <MarkEmailUnreadIconSVG />,
+        onClick: (): void => {
+          router.push('/sign-out?redirect=' + encodeURIComponent('/?open=invitation'));
+          router.refresh();
+          setIsOpen(false);
+        },
+        title: Translate.t('components.mega-menu.menu-items.sign-out.title'),
+      });
+    }
     return items;
   }, [openFlyout, router, token]);
 

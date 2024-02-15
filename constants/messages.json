@@ -86,6 +86,8 @@
   "components.mega-menu.menu-items.invitation.title": "Guest Invitation",
   "components.mega-menu.menu-items.rsvp.description": "Let us know if you will be attending",
   "components.mega-menu.menu-items.rsvp.title": "RSVP",
+  "components.mega-menu.menu-items.sign-out.description": "Get a secret link to view your invitation",
+  "components.mega-menu.menu-items.sign-out.title": "Wrong Invitation?",
   "components.mega-menu.menu-items.songs.description": "Submit requests for songs you want to hear",
   "components.mega-menu.menu-items.songs.title": "Song Requests",
   "components.navigation-bar.title": "Vivian & Davy",
