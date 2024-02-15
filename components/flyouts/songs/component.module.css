@@ -48,6 +48,7 @@
 .songImage {
   border-radius: 0.5rem;
   height: 64px;
+  min-height: 64px;
   min-width: 64px;
   overflow: hidden;
   width: 64px;
@@ -56,6 +57,7 @@
 @media (min-width: 768px) {
   .songImage {
     height: 80px;
+    min-height: 80px;
     min-width: 80px;
     width: 80px;
   }

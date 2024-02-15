@@ -18,6 +18,7 @@ import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
 import Skeleton from 'components/skeleton';
+import useDebounce from 'hooks/useDebounce';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
 
@@ -64,17 +65,20 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
   const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus, role]);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context);
 
+  const debouncedValue = useDebounce<string>(value, 1000);
+  const hasValueChanged = useMemo<boolean>(() => value !== debouncedValue, [debouncedValue, value]);
+
   const fetchAddresses = useCallback(async (): Promise<string[]> => {
     try {
-      const response = await fetch('/api/address/search?lookup=' + value);
+      const response = await fetch('/api/address/search?lookup=' + debouncedValue);
       return response.json();
     } catch {
       return [];
     }
-  }, [value]);
+  }, [debouncedValue]);
 
   const { data: suggestionsData, isLoading: suggestionsLoading } = useSWR(
-    value ? '/api/address/search?lookup=' + value : null,
+    debouncedValue ? '/api/address/search?lookup=' + debouncedValue : null,
     fetchAddresses,
     {
       revalidateIfStale: false,
@@ -122,7 +126,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
   );
 
   const renderSuggestionList = useCallback(() => {
-    if (suggestionsLoading) {
+    if (hasValueChanged || suggestionsLoading) {
       return (
         <div className={styles.suggestionListLoading}>
           {randomSuggestionWidths.map(
@@ -147,7 +151,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
       );
     }
     return suggestions.map(renderSuggestionItem);
-  }, [randomSuggestionWidths, renderSuggestionItem, suggestions, suggestionsLoading, value]);
+  }, [hasValueChanged, randomSuggestionWidths, renderSuggestionItem, suggestions, suggestionsLoading, value]);
 
   return (
     <Fragment>

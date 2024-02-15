@@ -23,6 +23,7 @@ import addressInputStyles from 'components/form/address-input/component.module.c
 import textInputStyles from 'components/form/text-input/component.module.css';
 import Skeleton from 'components/skeleton';
 import Tooltip from 'components/tooltip';
+import useDebounce from 'hooks/useDebounce';
 import Image from 'next/image';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { SpotifyTrack } from 'server/apis/spotify';
@@ -73,17 +74,20 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss, focus, role]);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context);
 
+  const debouncedValue = useDebounce<string>(value, 1000);
+  const hasValueChanged = useMemo<boolean>(() => value !== debouncedValue, [debouncedValue, value]);
+
   const fetchSongs = useCallback(async (): Promise<SpotifyTrack[]> => {
     try {
-      const response = await fetch('/api/spotify/search?query=' + value);
+      const response = await fetch('/api/spotify/search?query=' + debouncedValue);
       return response.json();
     } catch {
       return [];
     }
-  }, [value]);
+  }, [debouncedValue]);
 
   const { data: suggestionsData, isLoading: suggestionsLoading } = useSWR(
-    value ? '/api/spotify/search?query=' + value : null,
+    debouncedValue ? '/api/spotify/search?query=' + debouncedValue : null,
     fetchSongs,
     {
       revalidateIfStale: false,
@@ -162,7 +166,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   const renderSongSkeleton = useCallback(
     ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
       <div className={classNames(songFlyoutStyles.songCard, styles.songSkeleton)} key={index}>
-        <Skeleton className={classNames(songFlyoutStyles.songImage, styles.songImage)} height={64} inverse width={64} />
+        <Skeleton className={songFlyoutStyles.songImage} inverse />
         <div className={classNames(songFlyoutStyles.songInformation, styles.songInformation)}>
           <Skeleton height="1rem" inverse width={nameWidth} />
           <Skeleton height="0.875rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />
@@ -173,7 +177,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   );
 
   const renderSuggestionList = useCallback(() => {
-    if (suggestionsLoading) {
+    if (hasValueChanged || suggestionsLoading) {
       return (
         <div className={classNames(addressInputStyles.suggestionListLoading, styles.suggestionListLoading)}>
           {randomNameAndArtistsWidths.map(renderSongSkeleton)}
@@ -188,7 +192,15 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
       );
     }
     return suggestions.map(renderSuggestionItem);
-  }, [randomNameAndArtistsWidths, renderSongSkeleton, renderSuggestionItem, suggestions, suggestionsLoading, value]);
+  }, [
+    hasValueChanged,
+    randomNameAndArtistsWidths,
+    renderSongSkeleton,
+    renderSuggestionItem,
+    suggestions,
+    suggestionsLoading,
+    value,
+  ]);
 
   return (
     <Fragment>
