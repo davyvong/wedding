@@ -259,10 +259,11 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     [mutate, onSavedChanges, onValidate, selectedGuestId, values],
   );
 
+  const guests = useMemo<GuestData[]>(() => data?.guests || [], [data]);
+
   const currentGuestName = useMemo<string>(() => {
-    const guests: GuestData[] = data?.guests || [];
     return guests.find((guest: GuestData) => guest.id === selectedGuestId)?.name || '';
-  }, [data, selectedGuestId]);
+  }, [guests, selectedGuestId]);
 
   const renderDismissWarning = useCallback(
     (): JSX.Element => (
@@ -299,7 +300,6 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
   );
 
   const renderGuestPartySelector = useCallback((): JSX.Element => {
-    const guests: GuestData[] = data?.guests || [];
     if (guests.length <= 1) {
       return <Fragment />;
     }
@@ -370,8 +370,8 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     );
   }, [
     currentGuestName,
-    data,
     didValuesChange,
+    guests,
     selectedGuestId,
     setShouldRenderDismissWarning,
     shouldRenderSavedMessage,
