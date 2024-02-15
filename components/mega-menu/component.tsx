@@ -22,12 +22,23 @@ import InvitationFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
 import SongsFlyout from 'components/flyouts/songs';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useRouter } from 'next/navigation';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
+
+export const navigateToFAQ = (): void => {
+  const pageSideSpacing = parseInt(getStyleProperty('--page-side-spacing').replace('rem', '')) * 16;
+  const navigationBarHeight = parseInt(getStyleProperty('--navigation-bar-height').replace('px', ''));
+  window.locomotiveScroll?.scrollTo('#faq', {
+    callback: () => ScrollTrigger.update(),
+    offset: pageSideSpacing - navigationBarHeight - 32,
+  });
+  ScrollTrigger.update();
+};
 
 interface MegaMenuProps {
   token?: VerifiedGuestTokenPayload;
@@ -41,6 +52,7 @@ interface MegaMenuItem {
 }
 
 const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { context, floatingStyles, refs } = useFloating({
@@ -102,19 +114,17 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
       description: Translate.t('components.mega-menu.menu-items.faq.description'),
       icon: <HelpIconSVG />,
       onClick: (): void => {
-        const pageSideSpacing = parseInt(getStyleProperty('--page-side-spacing').replace('rem', '')) * 16;
-        const navigationBarHeight = parseInt(getStyleProperty('--navigation-bar-height').replace('px', ''));
-        window.locomotiveScroll?.scrollTo('#faq', {
-          callback: () => ScrollTrigger.update(),
-          offset: pageSideSpacing - navigationBarHeight - 32,
-        });
-        ScrollTrigger.update();
+        if (document.getElementById('faq')) {
+          navigateToFAQ();
+        } else {
+          router.push('/?scrollTo=faq');
+        }
         setIsOpen(false);
       },
       title: Translate.t('components.mega-menu.menu-items.faq.title'),
     });
     return items;
-  }, [openFlyout, token]);
+  }, [openFlyout, router, token]);
 
   const renderMenuItem = useCallback((item: MegaMenuItem, index: number): JSX.Element => {
     const onKeyDown = (event): boolean => {

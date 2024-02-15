@@ -3,10 +3,13 @@
 import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
+import { waitForElement } from 'client/browser';
 import { brittanySignature, italiana, kollektif, openSans } from 'client/fonts';
 import Translate from 'client/translate';
+import { navigateToFAQ } from 'components/mega-menu/component';
 import gsap from 'gsap';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { FC, Fragment, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
@@ -14,6 +17,18 @@ import { CoupleQuestion, EngagementPhoto, coupleQuestions, engagementPhotos } fr
 import { LandingBreakpoints, createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const scrollTo = searchParams.get('scrollTo');
+    if (scrollTo) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('scrollTo');
+      window.history.pushState({ path: url.href }, '', url.href);
+      waitForElement('#' + scrollTo, navigateToFAQ);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     let context: gsap.Context;
     gsap
