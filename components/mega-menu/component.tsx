@@ -16,6 +16,7 @@ import HelpIconSVG from 'assets/icons/help.svg';
 import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
 import MarkEmailUnreadIconSVG from 'assets/icons/mark-email-unread.svg';
 import QueueMusicIconSVG from 'assets/icons/queue-music.svg';
+import UnsubscribeIconSVG from 'assets/icons/unsubscribe.svg';
 import classNames from 'classnames';
 import Translate from 'client/translate';
 import InvitationFlyout from 'components/flyouts/invitation';
@@ -126,7 +127,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
     if (token) {
       items.push({
         description: Translate.t('components.mega-menu.menu-items.sign-out.description'),
-        icon: <MarkEmailUnreadIconSVG />,
+        icon: <UnsubscribeIconSVG />,
         onClick: (): void => {
           router.push('/sign-out?redirect=' + encodeURIComponent('/?open=invitation'));
           router.refresh();
