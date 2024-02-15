@@ -19,7 +19,16 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         status: 429,
       });
     }
-    const response = NextResponse.redirect(ServerEnvironment.getBaseURL());
+    const requestURL = new URL(request.url);
+    const params = {
+      redirect: requestURL.searchParams.get('redirect'),
+    };
+    console.log(`[GET] /api/sign-out redirect=${params.redirect}`);
+    let redirectURL = ServerEnvironment.getBaseURL();
+    if (params.redirect) {
+      redirectURL += decodeURIComponent(params.redirect);
+    }
+    const response = NextResponse.redirect(redirectURL);
     response.cookies.delete('token');
     return response;
   } catch (error: unknown) {
