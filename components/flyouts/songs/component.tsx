@@ -1,6 +1,5 @@
 'use client';
 
-import OpenInNewIconSVG from 'assets/icons/open-in-new.svg';
 import PlaylistRemoveIconSVG from 'assets/icons/playlist-remove.svg';
 import Translate from 'client/translate';
 import Skeleton from 'components/skeleton';
@@ -73,12 +72,9 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
       <div className={classNames(styles.songCard, styles.songCardHoverable)} key={song.id}>
         <Image alt={song.name} className={styles.songImage} height={80} src={song.image} width={80} />
         <div className={styles.songInformation}>
-          <div className={styles.songName}>
-            <a href={song.href} target="_blank">
-              {song.name}
-            </a>
-            <OpenInNewIconSVG className={styles.songNameIcon} height={20} width={20} />
-          </div>
+          <a className={styles.songName} href={song.href} target="_blank">
+            {song.name}
+          </a>
           <div className={styles.songArtists}>
             {song.explicit && (
               <span className={styles.songExplicit}>{Translate.t('components.flyouts.songs.explicit')}</span>
@@ -107,7 +103,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
                 return true;
               }}
             >
-              <PlaylistRemoveIconSVG height={32} width={32} />
+              <PlaylistRemoveIconSVG />
             </button>
           </Tooltip>
         )}

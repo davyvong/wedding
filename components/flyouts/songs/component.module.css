@@ -47,7 +47,18 @@
 
 .songImage {
   border-radius: 0.5rem;
+  height: 64px;
+  min-width: 64px;
   overflow: hidden;
+  width: 64px;
+}
+
+@media (min-width: 768px) {
+  .songImage {
+    height: 80px;
+    min-width: 80px;
+    width: 80px;
+  }
 }
 
 .songInformation {
@@ -56,20 +67,10 @@
 }
 
 .songName {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
+  color: inherit;
   font-size: 1.125rem;
   font-weight: 600;
-}
-
-.songName a {
-  color: inherit;
   text-decoration: none;
-}
-
-.songNameIcon {
-  margin-left: 0.5rem;
 }
 
 .songArtists {
@@ -99,10 +100,23 @@
   background-color: var(--palette-transparent);
   border: 0;
   color: inherit;
+  margin-left: 1.5rem;
   padding: 0;
   text-align: inherit;
 }
 
 .removeButton:hover {
   cursor: pointer;
+}
+
+.removeButton svg {
+  height: 24px;
+  width: 24px;
+}
+
+@media (min-width: 768px) {
+  .removeButton svg {
+    height: 28px;
+    width: 28px;
+  }
 }
