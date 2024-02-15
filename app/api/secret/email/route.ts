@@ -1,3 +1,4 @@
+import Translate from 'client/translate';
 import words from 'constants/words.json';
 import Handlebars from 'handlebars';
 import { NextRequest } from 'next/server';
@@ -63,9 +64,18 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const html = template({ url: url.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({
+      dkim: {
+        domainName: process.env.NODEMAILER_DKIM_DOMAIN,
+        keySelector: process.env.NODEMAILER_DKIM_KEY_SELECTOR,
+        privateKey: process.env.NODEMAILER_DKIM_PRIVATE_KEY,
+      },
+      envelope: {
+        from: process.env.NODEMAILER_ADDRESS,
+        to: email,
+      },
       from: process.env.NODEMAILER_ADDRESS,
       html,
-      subject: 'Your secret link from Vivian & Davy',
+      subject: Translate.t('app.api.secret.email.subject'),
       to: email,
     });
     const redisClient = RedisClientFactory.getInstance();

@@ -5,6 +5,9 @@ namespace NodeJS {
     JWT_SECRET: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
     NODEMAILER_ADDRESS: string;
+    NODEMAILER_DKIM_DOMAIN: string;
+    NODEMAILER_DKIM_KEY_SELECTOR: string;
+    NODEMAILER_DKIM_PRIVATE_KEY: string;
     NODEMAILER_PASSWORD: string;
     NODEMAILER_SERVICE: string;
     NODEMAILER_USERNAME: string;

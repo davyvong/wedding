@@ -18,7 +18,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>();
   const [isSending, setIsSending] = useState<boolean>(false);
-  const [isSent, setIsSent] = useState<boolean>(false);
+  const [sentTo, setSentTo] = useState<string>('');
 
   const sendLoginCode = useCallback(
     async (event: FormEvent): Promise<void> => {
@@ -48,7 +48,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
       if (error) {
         setError(undefined);
       }
-      setIsSent(true);
+      setSentTo(email);
     },
     [email, error],
   );
@@ -64,11 +64,11 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
         </Fragment>
       );
     }
-    if (isSent) {
+    if (sentTo) {
       return <span>{Translate.t('components.flyouts.invitation.buttons.send-again')}</span>;
     }
     return <span>{Translate.t('components.flyouts.invitation.buttons.send-secret-link')}</span>;
-  }, [isSending, isSent]);
+  }, [isSending, sentTo]);
 
   return (
     <form className={rsvpFlyoutStyles.content} onSubmit={sendLoginCode}>
@@ -82,9 +82,9 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
         value={email}
       />
       {error && <div className={rsvpFlyoutStyles.error}>{Translate.html(error)}</div>}
-      {isSent && (
+      {sentTo && (
         <div className={styles.success}>
-          {Translate.html('components.flyouts.invitation.messages.email-sent', { email })}
+          {Translate.html('components.flyouts.invitation.messages.email-sent', { email: sentTo })}
         </div>
       )}
       <div className={rsvpFlyoutStyles.buttons}>
@@ -92,7 +92,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
           {renderSubmitButtonContent()}
         </Button>
         <Button inverse onClick={() => setIsOpen(false)}>
-          {isSent
+          {sentTo
             ? Translate.t('components.flyouts.invitation.buttons.close')
             : Translate.t('components.flyouts.invitation.buttons.cancel')}
         </Button>
