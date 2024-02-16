@@ -8,12 +8,6 @@ import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 
-export enum LandingBreakpoints {
-  Mobile,
-  Tablet,
-  Desktop,
-}
-
 export const createLocomotiveScroll = (): void => {
   window.locomotiveScroll?.destroy();
   window.locomotiveScroll = new LocomotiveScroll({
@@ -38,9 +32,7 @@ export const createLocomotiveScroll = (): void => {
   });
   ScrollTrigger.scrollerProxy('.' + styles.landing, {
     getBoundingClientRect() {
-      const navigationBarHeight = parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--navigation-bar-height').replace('px', ''),
-      );
+      const navigationBarHeight = parseInt(getStyleProperty('--navigation-bar-height').replace('px', ''));
       return {
         height: window.innerHeight - navigationBarHeight,
         left: 0,
@@ -69,7 +61,7 @@ export const createLocomotiveScroll = (): void => {
   });
 };
 
-export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Context =>
+export const createLandingContext = (): gsap.Context =>
   gsap.context(() => {
     gsap.registerPlugin(ScrollTrigger);
     createLocomotiveScroll();
@@ -80,15 +72,15 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         pin: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: 'top top',
+        start: () => 'top top',
         trigger: '.' + styles.firstSection,
       },
     });
     firstSectionTimeline.fromTo(
       '.' + styles.firstSection,
       {
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingLeft: () => 0,
+        paddingRight: () => 0,
       },
       {
         paddingLeft: () => getStyleProperty('--page-side-spacing'),
@@ -99,13 +91,13 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
     firstSectionTimeline.fromTo(
       '.' + styles.coverImage,
       {
-        borderRadius: 0,
+        borderRadius: () => 0,
         height: () => {
           return `calc(${window.innerHeight}px - ${getStyleProperty('--navigation-bar-height')})`;
         },
       },
       {
-        borderRadius: '1rem',
+        borderRadius: () => '1rem',
         height: () => {
           return `calc(${window.innerHeight}px - ${getStyleProperty('--navigation-bar-height')} - ${getStyleProperty('--page-side-spacing')})`;
         },
@@ -118,7 +110,7 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         invalidateOnRefresh: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: 'top center',
+        start: () => 'top center',
         trigger: '.' + styles.secondSection,
       },
     });
@@ -145,50 +137,46 @@ export const createLandingContext = (breakpoint: LandingBreakpoints): gsap.Conte
         pin: true,
         scroller: '.' + styles.landing,
         scrub: true,
-        start: '50% 50%',
+        start: () => '50% 50%',
         trigger: '.' + styles.thirdSection,
       },
     });
-    if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-      thirdSectionTimeline.fromTo(
-        '.' + styles.engagementPhoto,
-        {
-          duration: 1,
-          transform: (index: number) => {
-            return `translateY(${index * 20}%)`;
-          },
+    thirdSectionTimeline.fromTo(
+      '.' + styles.engagementPhoto,
+      {
+        duration: 1,
+        transform: (index: number) => {
+          return `translateY(${index * 20}%)`;
         },
-        {
-          duration: 1,
-          transform: 'translateY(0)',
-        },
-      );
-    }
+      },
+      {
+        duration: 1,
+        transform: () => 'translateY(0)',
+      },
+    );
     thirdSectionTimeline.fromTo(
       '.' + styles.engagementPhotoSet,
       {
         duration: 5,
-        transform: 'translateX(0)',
+        transform: () => 'translateX(0)',
       },
       {
         duration: 5,
-        transform: 'translateX(calc(100vw - 100%))',
+        transform: () => 'translateX(calc(100vw - 100%))',
       },
     );
-    // if (breakpoint.valueOf() >= LandingBreakpoints.Tablet.valueOf()) {
-    //   thirdSectionTimeline.fromTo(
-    //     '.' + styles.engagementPhoto,
-    //     {
-    //       duration: 1,
-    //       transform: 'translateY(0)',
+    // thirdSectionTimeline.fromTo(
+    //   '.' + styles.engagementPhoto,
+    //   {
+    //     duration: 1,
+    //     transform: () => 'translateY(0)',
+    //   },
+    //   {
+    //     duration: 1,
+    //     transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
+    //       return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
     //     },
-    //     {
-    //       duration: 1,
-    //       transform: (index: number, engagementPhoto: Element, photosInHorizontalStrip: Element[]) => {
-    //         return `translateY(calc(${photosInHorizontalStrip.length - 1 - index} * -20%))`;
-    //       },
-    //     },
-    //   );
-    // }
+    //   },
+    // );
     ScrollTrigger.refresh();
   });

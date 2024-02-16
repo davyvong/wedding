@@ -14,7 +14,7 @@ import { FC, Fragment, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
 import { CoupleQuestion, EngagementPhoto, coupleQuestions, engagementPhotos } from './constants';
-import { LandingBreakpoints, createLandingContext } from './gsap';
+import { createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
   const searchParams = useSearchParams();
@@ -30,20 +30,9 @@ const LandingComponent: FC = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    let context: gsap.Context;
-    gsap
-      .matchMedia()
-      .add('(max-width: 767px)', () => {
-        context = createLandingContext(LandingBreakpoints.Mobile);
-      })
-      .add('(min-width: 768px) and (max-width: 1023px)', () => {
-        context = createLandingContext(LandingBreakpoints.Tablet);
-      })
-      .add('(min-width: 1024px)', () => {
-        context = createLandingContext(LandingBreakpoints.Desktop);
-      });
+    const context: gsap.Context = createLandingContext();
     return () => {
-      context?.revert();
+      context.revert();
       window.locomotiveScroll?.destroy();
     };
   }, []);
