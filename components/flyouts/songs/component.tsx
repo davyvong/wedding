@@ -135,8 +135,8 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
     return (
       <div className={rsvpFlyoutStyles.content}>
         <Skeleton height="2.5rem" inverse width={300} />
-        <Skeleton height="6rem" inverse style={{ marginTop: '3rem' }} width="100%" />
-        <div style={{ marginTop: '3rem' }}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>
+        <Skeleton height="6rem" inverse style={{ marginTop: '2rem' }} width="100%" />
+        <div style={{ marginTop: '2rem' }}>{randomNameAndArtistsWidths.map(renderSongSkeleton)}</div>
       </div>
     );
   }

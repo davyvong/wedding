@@ -405,22 +405,22 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     return (
       <div className={styles.content}>
         <Skeleton height="2.5rem" inverse width={100} />
-        <Skeleton height="14.5rem" inverse style={{ marginTop: '3rem' }} width="100%" />
+        <Skeleton height="14.5rem" inverse style={{ marginTop: '2rem' }} width="100%" />
         <Skeleton
           height="2rem"
           inverse
-          style={{ marginTop: '3rem' }}
+          style={{ marginTop: '2rem' }}
           width={(25 + Math.ceil(Math.random() * 50)).toString() + '%'}
         />
         {randomQuestionAndAnswerWidths.map(
           ([questionWidth, answerWidth]: string[], index: number): JSX.Element => (
             <Fragment key={index}>
-              <Skeleton height="1.5rem" inverse style={{ marginTop: '3rem' }} width={questionWidth} />
+              <Skeleton height="1.5rem" inverse style={{ marginTop: '2rem' }} width={questionWidth} />
               <Skeleton height="1.5rem" inverse style={{ marginTop: '1rem' }} width={answerWidth} />
             </Fragment>
           ),
         )}
-        <center style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '3rem' }}>
+        <center style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '2rem' }}>
           <Skeleton height="2.5rem" inverse style={{ borderRadius: '1.25rem' }} width={125} />
           <Skeleton height="2.5rem" inverse style={{ borderRadius: '1.25rem', marginLeft: '1.5rem' }} width={80} />
         </center>

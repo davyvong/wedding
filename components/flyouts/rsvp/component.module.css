@@ -17,7 +17,7 @@
   background-color: var(--color-surface);
   border-radius: 0.5rem;
   color: var(--color-on-surface);
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
   padding: 1.5rem;
 }
 
@@ -87,7 +87,7 @@
 }
 
 .dismissWarning {
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
 }
 
 .savedChangesMessage {
@@ -108,12 +108,12 @@
 
 .header {
   font-size: 1.5rem;
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
 }
 
 .question {
   margin-bottom: 0.25rem;
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
   width: 100%;
 }
 
@@ -127,7 +127,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
 }
 
 .buttons button {
