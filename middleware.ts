@@ -2,7 +2,9 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { NextRequest, NextResponse } from 'next/server';
 import pkg from 'package.json';
 import RedisClientFactory from 'server/clients/redis';
+import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
+import { string } from 'yup';
 
 const ratelimit = new Ratelimit({
   analytics: true,
@@ -12,20 +14,25 @@ const ratelimit = new Ratelimit({
 });
 
 export const config = {
-  matcher: [
-    {
-      source: '/((?!_next/static|_next/image|icon.ico).*)',
-      missing: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
-      ],
-    },
-  ],
+  matcher: ['/api/:path*'],
 };
 
 async function middleware(request: NextRequest): Promise<Response> {
-  const ip = request.ip ?? '127.0.0.1';
-  const { limit, remaining, reset, success } = await ratelimit.limit(ip);
+  if (ServerEnvironment.isDevelopment) {
+    return NextResponse.next();
+  }
+  if (!request.ip) {
+    return ServerError.BadRequest();
+  }
+  const ipSchema = string()
+    .required()
+    .min(7)
+    .max(15)
+    .matches(/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/);
+  if (!ipSchema.isValidSync(request.ip)) {
+    return ServerError.BadRequest();
+  }
+  const { limit, remaining, reset, success } = await ratelimit.limit(request.ip);
   const headers: HeadersInit = {
     'X-RateLimit-Limit': limit.toString(),
     'X-RateLimit-Remaining': remaining.toString(),
