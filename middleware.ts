@@ -7,7 +7,7 @@ import ServerError from 'server/error';
 import { string } from 'yup';
 
 const ratelimit = new Ratelimit({
-  analytics: true,
+  analytics: ServerEnvironment.isProduction,
   limiter: Ratelimit.tokenBucket(90, '30 s', 180),
   prefix: [pkg.name, process.env.VERCEL_ENV].join('/'),
   redis: RedisClientFactory.getInstance(),
