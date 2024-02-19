@@ -6,10 +6,22 @@ import ServerError from 'server/error';
 
 const ratelimit = new Ratelimit({
   analytics: true,
-  limiter: Ratelimit.tokenBucket(20, '10 s', 200),
+  limiter: Ratelimit.tokenBucket(90, '30 s', 180),
   prefix: [pkg.name, process.env.VERCEL_ENV].join('/'),
   redis: RedisClientFactory.getInstance(),
 });
+
+export const config = {
+  matcher: [
+    {
+      source: '/((?!_next/static|_next/image|icon.ico).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
+};
 
 async function middleware(request: NextRequest): Promise<Response> {
   const ip = request.ip ?? '127.0.0.1';
