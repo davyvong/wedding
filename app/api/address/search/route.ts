@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ServerError, { ServerErrorCode } from 'server/error';
-import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
+import ServerError from 'server/error';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -16,18 +15,6 @@ export interface CanadaPostSearchResult {
 
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
-    const rateLimiter = new RateLimiter({
-      requestsPerInterval: 3000,
-      scope: RateLimiterScope.AddressSearch,
-    });
-    const checkResults = await rateLimiter.checkRequest(request);
-    if (checkResults.exceeded) {
-      throw new ServerError({
-        code: ServerErrorCode.TooManyRequests,
-        rateLimit: checkResults,
-        status: 429,
-      });
-    }
     const requestURL = new URL(request.url);
     const params = {
       lookup: requestURL.searchParams.get('lookup'),
@@ -37,11 +24,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       lookup: string().min(1).required(),
     });
     if (!paramsSchema.isValidSync(params)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
-      });
+      return ServerError.BadRequest();
     }
     const url = new URL('https://ws1.postescanada-canadapost.ca/Capture/Interactive/Find/v1.00/json3ex.ws');
     url.searchParams.set('Countries', 'CAN');
@@ -77,11 +60,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     return NextResponse.json(addresses, {
       headers: {
         'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400',
-        ...RateLimiter.toHeaders(checkResults),
       },
       status: 200,
     });
   } catch (error: unknown) {
-    return ServerError.handle(error);
+    return ServerError.handleError(error);
   }
 };

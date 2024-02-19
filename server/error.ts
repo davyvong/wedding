@@ -1,42 +1,63 @@
-import RateLimiter, { RateLimiterCheckResult } from 'server/rate-limiter';
-
-export enum ServerErrorCode {
-  BadRequest = 'BadRequest',
-  Forbidden = 'Forbidden',
-  InternalServerError = 'InternalServerError',
-  MethodNotAllowed = 'MethodNotAllowed',
-  NotFound = 'NotFound',
-  TooManyRequests = 'TooManyRequests',
-  Unauthorized = 'Unauthorized',
-}
-
-interface ServerErrorOptions {
-  code: ServerErrorCode;
-  rateLimit?: RateLimiterCheckResult;
-  status: number;
-}
-
-class ServerError implements ServerErrorOptions {
-  public code: ServerErrorCode = ServerErrorCode.InternalServerError;
-  public rateLimit?: RateLimiterCheckResult;
-  public status: number = 500;
-
-  constructor(options: ServerErrorOptions) {
-    this.code = options.code;
-    this.rateLimit = options.rateLimit;
-    this.status = options.status;
+class ServerError {
+  public static BadRequest(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 400,
+      statusText: 'Bad Request',
+    });
   }
 
-  public static handle(error: unknown): Response {
-    console.log(`[ServerError] handle error=${error}`);
-    if (error instanceof ServerError) {
-      const init: ResponseInit = {
-        headers: RateLimiter.toHeaders(error.rateLimit),
-        status: error.status,
-      };
-      return new Response(undefined, init);
-    }
-    return new Response(undefined, { status: 500 });
+  public static Unauthorized(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 401,
+      statusText: 'Unauthorized',
+    });
+  }
+
+  public static Forbidden(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 403,
+      statusText: 'Forbidden',
+    });
+  }
+
+  public static NotFound(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 404,
+      statusText: 'Not Found',
+    });
+  }
+
+  public static MethodNotAllowed(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 405,
+      statusText: 'Method Not Allowed',
+    });
+  }
+
+  public static TooManyRequests(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 429,
+      statusText: 'Too Many Requests',
+    });
+  }
+
+  public static InternalServerError(headers?: HeadersInit): Response {
+    return new Response(null, {
+      headers,
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
+  }
+
+  public static handleError(error: unknown): Response {
+    console.log(`[ServerError] handleError error=${error}`);
+    return ServerError.InternalServerError();
   }
 }
 
