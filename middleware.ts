@@ -6,13 +6,6 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import { string } from 'yup';
 
-const ratelimit = new Ratelimit({
-  analytics: ServerEnvironment.isProduction,
-  limiter: Ratelimit.tokenBucket(90, '30 s', 180),
-  prefix: [pkg.name, process.env.VERCEL_ENV].join('/'),
-  redis: RedisClientFactory.getInstance(),
-});
-
 export const config = {
   matcher: ['/', '/api/:path*', '/guests'],
 };
@@ -32,6 +25,12 @@ async function middleware(request: NextRequest): Promise<Response> {
   if (!ipSchema.isValidSync(request.ip)) {
     return ServerError.BadRequest();
   }
+  const ratelimit = new Ratelimit({
+    analytics: ServerEnvironment.isProduction,
+    limiter: Ratelimit.tokenBucket(90, '30 s', 180),
+    prefix: [pkg.name, process.env.VERCEL_ENV].join('/'),
+    redis: RedisClientFactory.getInstance(),
+  });
   const { limit, remaining, reset, success } = await ratelimit.limit(request.ip);
   const headers: HeadersInit = {
     'X-RateLimit-Limit': limit.toString(),
