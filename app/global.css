@@ -90,6 +90,11 @@ svg[height='24'][width='24'] {
   }
 }
 
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 input {
   outline: none;
 }

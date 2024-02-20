@@ -23,8 +23,9 @@ import InvitationFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
 import SongsFlyout from 'components/flyouts/songs';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { getStyleProperty } from 'utils/styles';
@@ -45,12 +46,23 @@ interface MegaMenuProps {
   token?: VerifiedGuestTokenPayload;
 }
 
-interface MegaMenuItem {
+interface MegaMenuBaseItem {
   description: string;
   icon: JSX.Element;
-  onClick: () => void;
   title: string;
 }
+
+interface MegaMenuButtonItem extends MegaMenuBaseItem {
+  onClick: () => void;
+  type: 'button';
+}
+
+interface MegaMenuLinkItem extends MegaMenuBaseItem {
+  href: string;
+  type: 'link';
+}
+
+type MegaMenuItem = MegaMenuButtonItem | MegaMenuLinkItem;
 
 const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
   const router = useRouter();
@@ -80,17 +92,16 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
     window.history.pushState({ path: url.href }, '', url.href);
   }, []);
 
-  const menuItems = useMemo<MegaMenuItem[]>(() => {
-    const items: MegaMenuItem[] = [];
+  const menuItems = useMemo<Array<MegaMenuItem>>(() => {
+    const items: Array<MegaMenuItem> = [];
     if (token) {
       if (token.isAdmin) {
         items.push({
           description: Translate.t('components.mega-menu.menu-items.guest-list.description'),
+          href: '/guests',
           icon: <QueueMusicIconSVG />,
-          onClick: (): void => {
-            router.push('/guests');
-          },
           title: Translate.t('components.mega-menu.menu-items.guest-list.title'),
+          type: 'link',
         });
       }
       items.push(
@@ -101,6 +112,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
             openFlyout('rsvp');
           },
           title: Translate.t('components.mega-menu.menu-items.rsvp.title'),
+          type: 'button',
         },
         {
           description: Translate.t('components.mega-menu.menu-items.songs.description'),
@@ -109,6 +121,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
             openFlyout('songs');
           },
           title: Translate.t('components.mega-menu.menu-items.songs.title'),
+          type: 'button',
         },
       );
     } else {
@@ -119,68 +132,61 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           openFlyout('invitation');
         },
         title: Translate.t('components.mega-menu.menu-items.invitation.title'),
+        type: 'button',
       });
     }
     items.push({
       description: Translate.t('components.mega-menu.menu-items.faq.description'),
       icon: <HelpIconSVG />,
       onClick: (): void => {
+        setIsOpen(false);
         if (document.getElementById('faq')) {
           navigateToFAQ();
         } else {
           router.push('/?scrollTo=faq');
         }
-        setIsOpen(false);
       },
       title: Translate.t('components.mega-menu.menu-items.faq.title'),
+      type: 'button',
     });
     if (token) {
       items.push({
         description: Translate.t('components.mega-menu.menu-items.sign-out.description'),
         icon: <UnsubscribeIconSVG />,
         onClick: (): void => {
+          setIsOpen(false);
           router.push('/sign-out?redirect=' + encodeURIComponent('/?open=invitation'));
           router.refresh();
-          setIsOpen(false);
         },
         title: Translate.t('components.mega-menu.menu-items.sign-out.title'),
+        type: 'button',
       });
     }
     return items;
   }, [openFlyout, router, token]);
 
   const renderMenuItem = useCallback((item: MegaMenuItem, index: number): JSX.Element => {
-    const onKeyDown = (event): boolean => {
-      if (event.keyCode === 13) {
-        event.stopPropagation();
-        item.onClick();
-        return false;
-      }
-      return true;
-    };
+    if (item.type === 'link') {
+      return (
+        <Link className={styles.menuItem} href={item.href} key={index} role="menuitem" tabIndex={0}>
+          <div className={styles.menuItemIcon}>{item.icon}</div>
+          <div className={styles.menuItemContent}>
+            <div>{item.title}</div>
+            <div className={styles.menuItemDescription}>{item.description}</div>
+          </div>
+        </Link>
+      );
+    }
     return (
-      <div
-        className={styles.menuItem}
-        key={index}
-        onClick={item.onClick}
-        onKeyDown={onKeyDown}
-        role="menuitem"
-        tabIndex={0}
-      >
+      <button className={styles.menuItem} key={index} onClick={item.onClick} role="menuitem" tabIndex={0}>
         <div className={styles.menuItemIcon}>{item.icon}</div>
         <div className={styles.menuItemContent}>
           <div>{item.title}</div>
-          {<div className={styles.menuItemDescription}>{item.description}</div>}
+          <div className={styles.menuItemDescription}>{item.description}</div>
         </div>
-      </div>
+      </button>
     );
   }, []);
-
-  useEffect(() => {
-    if (isOpen && token?.isAdmin) {
-      router.prefetch('/guests');
-    }
-  }, [isOpen, router, token]);
 
   return (
     <Fragment>
