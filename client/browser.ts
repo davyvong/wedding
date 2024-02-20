@@ -28,3 +28,14 @@ export const waitForElement = (
     }
   }, calculatedOptions.interval);
 };
+
+export const createKeyDownHandler =
+  (callback: () => void) =>
+  (event): boolean => {
+    if (event.keyCode === 13) {
+      event.stopPropagation();
+      callback();
+      return false;
+    }
+    return true;
+  };

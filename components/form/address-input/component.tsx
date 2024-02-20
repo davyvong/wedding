@@ -14,6 +14,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
+import { createKeyDownHandler } from 'client/browser';
 import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
@@ -95,21 +96,13 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
         onChange(name, suggestion);
         setIsOpen(false);
       };
-      const onKeyDownSuggestion = (event): boolean => {
-        if (event.keyCode === 13) {
-          event.stopPropagation();
-          onClickSuggestion();
-          return false;
-        }
-        return true;
-      };
       return (
         <div
           aria-selected="false"
           className={classNames(styles.suggestionItem, inverse && styles.suggestionItemInverse)}
           key={suggestion}
           onClick={onClickSuggestion}
-          onKeyDown={onKeyDownSuggestion}
+          onKeyDown={createKeyDownHandler(onClickSuggestion)}
           role="option"
           tabIndex={0}
         >

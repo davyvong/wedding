@@ -14,6 +14,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import classNames from 'classnames';
+import { createKeyDownHandler } from 'client/browser';
 import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import textInputStyles from 'components/form/text-input/component.module.css';
@@ -66,21 +67,13 @@ const Select: FC<SelectProps> = ({ className, inverse = false, onChange, name, o
         onChange(name, option.value);
         setIsOpen(false);
       };
-      const onKeyDownOption = (event): boolean => {
-        if (event.keyCode === 13) {
-          event.stopPropagation();
-          onClickOption();
-          return false;
-        }
-        return true;
-      };
       return (
         <div
           aria-selected="false"
           className={classNames(styles.optionItem, inverse && styles.optionItemInverse)}
           key={option.label}
           onClick={onClickOption}
-          onKeyDown={onKeyDownOption}
+          onKeyDown={createKeyDownHandler(onClickOption)}
           role="option"
           tabIndex={0}
         >

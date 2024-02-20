@@ -16,6 +16,7 @@ import {
 import CloseIconSVG from 'assets/icons/close.svg';
 import SearchIconSVG from 'assets/icons/search.svg';
 import classNames from 'classnames';
+import { createKeyDownHandler } from 'client/browser';
 import { openSans } from 'client/fonts';
 import Translate from 'client/translate';
 import songFlyoutStyles from 'components/flyouts/songs/component.module.css';
@@ -105,14 +106,6 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
         onSelect(suggestion);
         setIsOpen(false);
       };
-      const onKeyDownSuggestion = (event): boolean => {
-        if (event.keyCode === 13) {
-          event.stopPropagation();
-          onClickSuggestion();
-          return false;
-        }
-        return true;
-      };
       return (
         <div
           aria-selected="false"
@@ -124,7 +117,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
           )}
           key={suggestion.id}
           onClick={onClickSuggestion}
-          onKeyDown={onKeyDownSuggestion}
+          onKeyDown={createKeyDownHandler(onClickSuggestion)}
           role="option"
           tabIndex={0}
         >

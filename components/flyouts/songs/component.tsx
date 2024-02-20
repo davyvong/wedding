@@ -1,20 +1,21 @@
 'use client';
 
 import PlaylistRemoveIconSVG from 'assets/icons/playlist-remove.svg';
+import classNames from 'classnames';
+import { createKeyDownHandler } from 'client/browser';
 import Translate from 'client/translate';
-import Skeleton from 'components/skeleton';
 import type { FlyoutContentComponentProps } from 'components/flyout/component';
 import rsvpFlyoutStyles from 'components/flyouts/rsvp/component.module.css';
 import SongInput from 'components/form/song-input';
+import LoadingHeart from 'components/loading-heart';
+import Skeleton from 'components/skeleton';
+import Tooltip from 'components/tooltip';
 import Image from 'next/image';
 import { useCallback, type FC, useState } from 'react';
 import { SpotifyPlaylistTrack, SpotifyTrack } from 'server/apis/spotify';
 import useSWR from 'swr';
 
 import styles from './component.module.css';
-import Tooltip from 'components/tooltip';
-import LoadingHeart from 'components/loading-heart';
-import classNames from 'classnames';
 
 interface SongsFlyoutComponentProps extends FlyoutContentComponentProps {}
 
@@ -94,14 +95,9 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
               onClick={(): void => {
                 removeSongRequest(song);
               }}
-              onKeyDown={(event): boolean => {
-                if (event.keyCode === 13) {
-                  event.stopPropagation();
-                  removeSongRequest(song);
-                  return false;
-                }
-                return true;
-              }}
+              onKeyDown={createKeyDownHandler((): void => {
+                removeSongRequest(song);
+              })}
             >
               <PlaylistRemoveIconSVG />
             </button>
