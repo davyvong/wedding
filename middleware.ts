@@ -14,7 +14,7 @@ const ratelimit = new Ratelimit({
 });
 
 export const config = {
-  matcher: ['/api/:path*'],
+  matcher: ['/', '/api/:path*', '/guests'],
 };
 
 async function middleware(request: NextRequest): Promise<Response> {
