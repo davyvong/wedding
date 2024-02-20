@@ -93,8 +93,17 @@ svg[height='24'][width='24'] {
 button {
   font-family: inherit;
   font-size: inherit;
+  line-height: inherit;
 }
 
-input {
+input,
+textarea {
+  line-height: inherit;
   outline: none;
+}
+
+@media (hover: none) {
+  * {
+    outline: none;
+  }
 }
