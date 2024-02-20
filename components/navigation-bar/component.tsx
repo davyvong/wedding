@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { italiana } from 'client/fonts';
 import Translate from 'client/translate';
 import MegaMenu from 'components/mega-menu';
+import Link from 'next/link';
 import { FC } from 'react';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 
@@ -13,7 +14,9 @@ interface NavigationBarComponentProps {
 
 const NavigationBarComponent: FC<NavigationBarComponentProps> = async ({ token }) => (
   <div className={styles.navigationBar}>
-    <div className={classNames(styles.title, italiana.className)}>{Translate.t('components.navigation-bar.title')}</div>
+    <Link className={classNames(styles.title, italiana.className)} href="/">
+      {Translate.t('components.navigation-bar.title')}
+    </Link>
     <MegaMenu token={token} />
   </div>
 );

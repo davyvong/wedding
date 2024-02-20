@@ -19,7 +19,9 @@
 }
 
 .title {
+  color: inherit;
   font-size: 2rem;
+  text-decoration: none;
 }
 
 @media (min-width: 768px) {
