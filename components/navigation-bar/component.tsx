@@ -12,7 +12,7 @@ interface NavigationBarComponentProps {
   token?: VerifiedGuestTokenPayload;
 }
 
-const NavigationBarComponent: FC<NavigationBarComponentProps> = async ({ token }) => (
+const NavigationBarComponent: FC<NavigationBarComponentProps> = ({ token }) => (
   <div className={styles.navigationBar}>
     <Link className={classNames(styles.title, italiana.className)} href="/">
       {Translate.t('components.navigation-bar.title')}

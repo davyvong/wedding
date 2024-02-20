@@ -13,7 +13,7 @@ interface LayoutProps {
   token?: VerifiedGuestTokenPayload;
 }
 
-const Layout: FC<LayoutProps> = async ({ children, token }) => (
+const Layout: FC<LayoutProps> = ({ children, token }) => (
   <html lang="en">
     <body className={openSans.className}>
       <NavigationBar token={token} />

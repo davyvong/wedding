@@ -6,10 +6,9 @@ import NodemailerClientFactory from 'server/clients/nodemailer';
 import RedisClientFactory from 'server/clients/redis';
 import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
-import ServerError, { ServerErrorCode } from 'server/error';
+import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
-import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -25,37 +24,17 @@ const getRandomWords = (count: number): string[] => {
 
 export const POST = async (request: NextRequest): Promise<Response> => {
   try {
-    const rateLimiter = new RateLimiter({
-      requestsPerInterval: 25,
-      scope: RateLimiterScope.SecretEmail,
-    });
-    const checkResults = await rateLimiter.checkRequest(request);
-    if (checkResults.exceeded) {
-      throw new ServerError({
-        code: ServerErrorCode.TooManyRequests,
-        rateLimit: checkResults,
-        status: 429,
-      });
-    }
     const body = await request.json();
     const bodySchema = object({
       email: string().email().required(),
     });
     if (!bodySchema.isValidSync(body)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
-      });
+      return ServerError.BadRequest();
     }
     const email = body.email.toLowerCase();
     const guest = await MySQLQueries.findGuestFromEmail(email);
     if (!guest) {
-      throw new ServerError({
-        code: ServerErrorCode.Forbidden,
-        rateLimit: checkResults,
-        status: 403,
-      });
+      return ServerError.Forbidden();
     }
     const code = getRandomWords(4).join('-');
     console.log(`[POST] /api/secret/email code=${code}`);
@@ -81,11 +60,8 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', code);
     await redisClient.set(redisKey, guest.id, { ex: 900 });
-    return new Response(undefined, {
-      headers: RateLimiter.toHeaders(checkResults),
-      status: 202,
-    });
+    return new Response(null, { status: 202 });
   } catch (error: unknown) {
-    return ServerError.handle(error);
+    return ServerError.handleError(error);
   }
 };

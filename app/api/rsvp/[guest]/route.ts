@@ -1,9 +1,8 @@
 import { EntreeOptions } from 'components/flyouts/rsvp/constants';
 import { NextRequest, NextResponse } from 'next/server';
 import Authenticator from 'server/authenticator';
-import ServerError, { ServerErrorCode } from 'server/error';
+import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
-import RateLimiter, { RateLimiterScope } from 'server/rate-limiter';
 import { boolean, object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -11,17 +10,6 @@ export const runtime = 'edge';
 
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
-    const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.RSVP,
-    });
-    const checkResults = await rateLimiter.checkRequest(request);
-    if (checkResults.exceeded) {
-      throw new ServerError({
-        code: ServerErrorCode.TooManyRequests,
-        rateLimit: checkResults,
-        status: 429,
-      });
-    }
     console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest}`);
     const paramsSchema = object({
       guest: string()
@@ -29,80 +17,46 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
         .matches(/^[0-9a-fA-F]{24}$/),
     });
     if (!paramsSchema.isValidSync(params)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
-      });
+      return ServerError.BadRequest();
     }
     const token = await Authenticator.verifyToken(request.cookies);
     if (!token) {
-      throw new ServerError({
-        code: ServerErrorCode.Unauthorized,
-        rateLimit: checkResults,
-        status: 401,
-      });
+      return ServerError.Unauthorized();
     }
     console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
       console.log(`[GET] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
       if (!guestGroup) {
-        throw new ServerError({
-          code: ServerErrorCode.Forbidden,
-          rateLimit: checkResults,
-          status: 403,
-        });
+        return ServerError.Forbidden();
       }
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
     console.log(`[GET] /api/rsvp/[guest] rsvpFound=${Boolean(response)}`);
     if (!response) {
-      throw new ServerError({
-        code: ServerErrorCode.NotFound,
-        rateLimit: checkResults,
-        status: 404,
-      });
+      return ServerError.NotFound();
     }
     return NextResponse.json(
       {
         guests: response.guests.map(guest => guest.valueOf()),
         responses: response.responses.map(response => response.valueOf()),
       },
-      {
-        headers: RateLimiter.toHeaders(checkResults),
-        status: 200,
-      },
+      { status: 200 },
     );
   } catch (error: unknown) {
-    return ServerError.handle(error);
+    return ServerError.handleError(error);
   }
 };
 
 export const POST = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
-    const rateLimiter = new RateLimiter({
-      scope: RateLimiterScope.RSVP,
-    });
-    const checkResults = await rateLimiter.checkRequest(request);
-    if (checkResults.exceeded) {
-      throw new ServerError({
-        code: ServerErrorCode.TooManyRequests,
-        rateLimit: checkResults,
-        status: 429,
-      });
-    }
     const paramsSchema = object({
       guest: string()
         .required()
         .matches(/^[0-9a-fA-F]{24}$/),
     });
     if (!paramsSchema.isValidSync(params)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
-      });
+      return ServerError.BadRequest();
     }
     console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest}`);
     const body = await request.json();
@@ -117,30 +71,18 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       message: string().required(),
     });
     if (!bodySchema.isValidSync(body)) {
-      throw new ServerError({
-        code: ServerErrorCode.BadRequest,
-        rateLimit: checkResults,
-        status: 400,
-      });
+      return ServerError.BadRequest();
     }
     const token = await Authenticator.verifyToken(request.cookies);
     if (!token) {
-      throw new ServerError({
-        code: ServerErrorCode.Unauthorized,
-        rateLimit: checkResults,
-        status: 401,
-      });
+      return ServerError.Unauthorized();
     }
     console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
       const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
       console.log(`[POST] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
       if (!guestGroup) {
-        throw new ServerError({
-          code: ServerErrorCode.Forbidden,
-          rateLimit: checkResults,
-          status: 403,
-        });
+        return ServerError.Forbidden();
       }
     }
     const response = await MySQLQueries.upsertResponse(token, params.guest, {
@@ -152,16 +94,10 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     });
     console.log(`[POST] /api/rsvp/[guest] responseId=${response?.id}`);
     if (!response) {
-      return new Response(undefined, {
-        headers: RateLimiter.toHeaders(checkResults),
-        status: 204,
-      });
+      return new Response(null, { status: 204 });
     }
-    return NextResponse.json(response, {
-      headers: RateLimiter.toHeaders(checkResults),
-      status: 200,
-    });
+    return NextResponse.json(response, { status: 200 });
   } catch (error: unknown) {
-    return ServerError.handle(error);
+    return ServerError.handleError(error);
   }
 };
