@@ -83,6 +83,16 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
   const menuItems = useMemo<MegaMenuItem[]>(() => {
     const items: MegaMenuItem[] = [];
     if (token) {
+      if (token.isAdmin) {
+        items.push({
+          description: Translate.t('components.mega-menu.menu-items.guest-list.description'),
+          icon: <QueueMusicIconSVG />,
+          onClick: (): void => {
+            router.push('/guests');
+          },
+          title: Translate.t('components.mega-menu.menu-items.guest-list.title'),
+        });
+      }
       items.push(
         {
           description: Translate.t('components.mega-menu.menu-items.rsvp.description'),

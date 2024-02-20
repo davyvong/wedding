@@ -82,6 +82,8 @@
   "components.landing.titles.questions-and-answers": "Questions & Answers",
   "components.mega-menu.menu-items.faq.description": "Frequently asked questions",
   "components.mega-menu.menu-items.faq.title": "FAQ",
+  "components.mega-menu.menu-items.guest-list.description": "Manage responses of guests",
+  "components.mega-menu.menu-items.guest-list.title": "Guest List",
   "components.mega-menu.menu-items.invitation.description": "Get a secret link to view your invitation",
   "components.mega-menu.menu-items.invitation.title": "Guest Invitation",
   "components.mega-menu.menu-items.rsvp.description": "Let us know if you will be attending",
