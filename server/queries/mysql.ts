@@ -17,6 +17,7 @@ class MySQLQueries {
         select *
         from wedding_guests
         where public_id = :publicId
+        and is_deleted = 0
         limit 1
       `;
       const results = await connection.execute<GuestRowData>(query, { publicId: id });
@@ -39,6 +40,7 @@ class MySQLQueries {
         select *
         from wedding_guests
         where email = :email
+        and is_deleted = 0
         limit 1
       `;
       const results = await connection.execute<GuestRowData>(query, { email });

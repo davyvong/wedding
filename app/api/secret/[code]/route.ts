@@ -20,20 +20,21 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
         .required()
         .matches(/^([a-z]+)-([a-z]+)-([a-z]+)-([a-z]+)$/),
     });
+    const redirectURL = new URL(ServerEnvironment.getBaseURL());
     if (!paramsSchema.isValidSync(params)) {
-      return NextResponse.redirect(ServerEnvironment.getBaseURL());
+      return NextResponse.redirect(redirectURL);
     }
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', params.code);
     const cachedGuestId = await redisClient.get<string>(redisKey);
     console.log(`[GET] /api/secret/[code] cachedGuestId=${cachedGuestId}`);
     if (!cachedGuestId) {
-      return NextResponse.redirect(ServerEnvironment.getBaseURL());
+      return NextResponse.redirect(redirectURL);
     }
     const guest = await MySQLQueries.findGuestFromId(cachedGuestId);
     console.log(`[GET] /api/secret/[code] guestId=${guest?.id}`);
     if (!guest) {
-      return NextResponse.redirect(ServerEnvironment.getBaseURL());
+      return NextResponse.redirect(redirectURL);
     }
     const payload: GuestTokenPayload = {
       guestId: guest.id,
@@ -45,11 +46,10 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       MySQLQueries.insertGuestToken(payload.tokenId, payload.guestId),
     ]);
     if (!token || !isGuestTokenInserted) {
-      return ServerError.InternalServerError();
+      return NextResponse.redirect(redirectURL);
     }
-    const url = new URL(ServerEnvironment.getBaseURL());
-    url.searchParams.set('open', 'rsvp');
-    const response = NextResponse.redirect(url.href);
+    redirectURL.searchParams.set('open', 'rsvp');
+    const response = NextResponse.redirect(redirectURL);
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
     response.cookies.set('token', token, { expires: expiryDate });

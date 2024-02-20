@@ -38,9 +38,9 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     }
     const code = getRandomWords(4).join('-');
     console.log(`[POST] /api/secret/email code=${code}`);
-    const url = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
+    const secretURL = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
     const template = Handlebars.compile(secretLinkTemplate);
-    const html = template({ url: url.href });
+    const html = template({ url: secretURL.href });
     const transporter = NodemailerClientFactory.getInstance();
     await transporter.sendMail({
       dkim: {

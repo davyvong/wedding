@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import { object, string } from 'yup';
 
@@ -25,6 +26,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     });
     if (!paramsSchema.isValidSync(params)) {
       return ServerError.BadRequest();
+    }
+    const token = await Authenticator.verifyToken(request.cookies);
+    if (!token) {
+      return ServerError.Unauthorized();
     }
     const url = new URL('https://ws1.postescanada-canadapost.ca/Capture/Interactive/Find/v1.00/json3ex.ws');
     url.searchParams.set('Countries', 'CAN');
