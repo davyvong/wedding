@@ -331,6 +331,7 @@ class MySQLQueries {
       from wedding_guests
       left join wedding_responses on wedding_responses.guest_id = wedding_guests.id
       left join wedding_guest_groups on wedding_guest_groups.id = wedding_guests.guest_group_id
+      where wedding_guests.is_deleted = 0
     `;
     const results = await connection.execute<{
       guest_email: string;
