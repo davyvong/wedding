@@ -24,7 +24,7 @@ import RSVPFlyout from 'components/flyouts/rsvp';
 import SongsFlyout from 'components/flyouts/songs';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useRouter } from 'next/navigation';
-import { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import { getStyleProperty } from 'utils/styles';
@@ -175,6 +175,12 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
       </div>
     );
   }, []);
+
+  useEffect(() => {
+    if (isOpen && token?.isAdmin) {
+      router.prefetch('/guests');
+    }
+  }, [isOpen, router, token]);
 
   return (
     <Fragment>
