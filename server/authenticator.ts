@@ -2,7 +2,7 @@ import { JWTPayload } from 'jose';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { redirect } from 'next/navigation';
-import JWT from 'server/jwt';
+import JWT from 'server/tokens/jwt';
 
 import MySQLQueries from './queries/mysql';
 
