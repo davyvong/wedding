@@ -1,9 +1,9 @@
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 
 class JWT {
-  public static async sign(payload: object): Promise<string> {
+  public static async sign(payload: object, lifespan: number = 7776000): Promise<string> {
     const iat = Math.floor(Date.now() / 1000);
-    const exp = iat + 2592000;
+    const exp = iat + lifespan;
 
     return new SignJWT({ ...payload })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
