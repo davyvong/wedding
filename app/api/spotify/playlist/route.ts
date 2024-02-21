@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import SpotifyAPI, { SpotifyPlaylistTrack } from 'server/apis/spotify';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
-import Token from 'server/token';
+import CryptoToken from 'server/tokens/crypto';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return ServerError.BadRequest();
     }
-    const isTokenVerified = await Token.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID);
+    const isTokenVerified = await CryptoToken.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID);
     console.log(`[POST] /api/spotify/playlist tokenVerified=${isTokenVerified}`);
     if (!isTokenVerified) {
       return ServerError.Unauthorized();

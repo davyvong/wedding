@@ -1,13 +1,13 @@
 import { JWTPayload } from 'jose';
 import ServerEnvironment from 'server/environment';
-import JWT from 'server/jwt';
+import JWT from 'server/tokens/jwt';
 
 export interface UnsubscribeTokenPayload extends JWTPayload {
   guestEmail: string;
   guestId: string;
 }
 
-export class UnsubscribeToken {
+class UnsubscribeToken {
   public static async sign(guestEmail: string, guestId: string): Promise<string> {
     const payload: UnsubscribeTokenPayload = {
       guestEmail,
@@ -26,3 +26,5 @@ export class UnsubscribeToken {
     return url.href;
   }
 }
+
+export default UnsubscribeToken;

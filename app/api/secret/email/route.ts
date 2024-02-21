@@ -9,7 +9,7 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
-import { UnsubscribeToken } from 'utils/unsubscribe';
+import UnsubscribeToken from 'server/tokens/unsubscribe';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';

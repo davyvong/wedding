@@ -2,7 +2,7 @@ import Translate from 'client/translate';
 import { NextRequest } from 'next/server';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
-import { UnsubscribeToken } from 'utils/unsubscribe';
+import UnsubscribeToken from 'server/tokens/unsubscribe';
 import { object, string } from 'yup';
 
 export const GET = async (request: NextRequest, { params }: { params: { token: string } }): Promise<Response> => {
