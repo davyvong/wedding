@@ -18,6 +18,7 @@ import MarkEmailUnreadIconSVG from 'assets/icons/mark-email-unread.svg';
 import QueueMusicIconSVG from 'assets/icons/queue-music.svg';
 import UnsubscribeIconSVG from 'assets/icons/unsubscribe.svg';
 import classNames from 'classnames';
+import { getStyleProperty } from 'client/browser';
 import Translate from 'client/translate';
 import InvitationFlyout from 'components/flyouts/invitation';
 import RSVPFlyout from 'components/flyouts/rsvp';
@@ -28,7 +29,6 @@ import { useRouter } from 'next/navigation';
 import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
-import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 

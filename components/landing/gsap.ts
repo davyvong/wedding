@@ -1,10 +1,10 @@
 'use client';
 
+import { getStyleProperty } from 'client/browser';
 import locomotiveScrollStyles from 'client/locomotive-scroll.module.css';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import LocomotiveScroll from 'locomotive-scroll';
-import { getStyleProperty } from 'utils/styles';
 
 import styles from './component.module.css';
 

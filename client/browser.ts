@@ -39,3 +39,8 @@ export const createKeyDownHandler =
     }
     return true;
   };
+
+export const getStyleProperty = (property: string): string => {
+  const computedStyles = window.getComputedStyle(document.documentElement);
+  return computedStyles.getPropertyValue(property);
+};
