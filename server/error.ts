@@ -56,7 +56,7 @@ class ServerError {
   }
 
   public static handleError(error: unknown): Response {
-    console.log(`[ServerError] handleError error=${error}`);
+    console.log(`ServerError.handleError error=${error}`);
     return ServerError.InternalServerError();
   }
 }
