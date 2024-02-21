@@ -1,6 +1,6 @@
 {
   "app.api.secret.email.subject": "Your secret link from Vivian & Davy",
-  "app.api.secret.email.unsubscribe": "Unsubscribe from Vivian & Davy's secret links (not recommended)",
+  "app.api.secret.email.unsubscribe": "Unsubscribe from Vivian & Davy's wedding",
   "app.api.unsubscribe.success": "You have successfully unsubscribed.",
   "app.metadata.description": "The website for our wedding in 2024.",
   "app.metadata.title": "Vivian & Davy",

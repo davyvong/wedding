@@ -568,6 +568,27 @@ class MySQLQueries {
       return false;
     }
   }
+
+  public static async updateGuestSubscription(guestId: string, isSubscribed: boolean): Promise<boolean> {
+    if (!guestId) {
+      return false;
+    }
+    try {
+      const connection = await MySQLClientFactory.getInstance();
+      const query = `
+        update wedding_guests
+        set is_subscribed = :isSubscribed
+        where public_id = :guestId
+      `;
+      const results = await connection.execute<GuestRowData>(query, {
+        guestId,
+        isSubscribed: isSubscribed ? 1 : 0,
+      });
+      return results.rowsAffected > 0;
+    } catch {
+      return false;
+    }
+  }
 }
 
 export default MySQLQueries;

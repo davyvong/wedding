@@ -22,9 +22,10 @@ export const GET = async (request: NextRequest, { params }: { params: { token: s
     if (!guest) {
       return response;
     }
-    if (guest.email !== payload.email) {
+    if (guest.email !== payload.guestEmail) {
       return response;
     }
+    await MySQLQueries.updateGuestSubscription(guest.id, false);
     return response;
   } catch (error: unknown) {
     return ServerError.handleError(error);
