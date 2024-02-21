@@ -1,6 +1,6 @@
 import Landing from 'components/landing';
 import { FC } from 'react';
-import { generateDefaultMetadata } from 'utils/metadata';
+import { generateDefaultMetadata } from 'server/metadata';
 
 export const metadata = generateDefaultMetadata({
   url: '/',

@@ -1,7 +1,7 @@
 import GuestList from 'components/guest-list';
 import { FC } from 'react';
+import { generateDefaultMetadata } from 'server/metadata';
 import MySQLQueries from 'server/queries/mysql';
-import { generateDefaultMetadata } from 'utils/metadata';
 
 export const metadata = generateDefaultMetadata({
   url: '/guests',
