@@ -41,6 +41,11 @@ module.exports = {
       permanent: false,
       source: '/sign-out',
     },
+    {
+      destination: '/api/unsubscribe/:token*',
+      permanent: false,
+      source: '/unsubscribe/:token*',
+    },
   ],
   webpack: (config, { dev }) => {
     const rules = config.module.rules

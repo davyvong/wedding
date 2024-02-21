@@ -9,6 +9,7 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
+import { UnsubscribeToken } from 'utils/unsubscribe';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -39,6 +40,8 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const code = getRandomWords(4).join('-');
     console.log(`[POST] /api/secret/email code=${code}`);
     const secretURL = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
+    const unsubscribeURL = await UnsubscribeToken.generateURL(guest.email, guest.id);
+    console.log(`[POST] /api/secret/email unsubscribeURL=${unsubscribeURL}`);
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: secretURL.href });
     const transporter = NodemailerClientFactory.getInstance();
@@ -54,6 +57,12 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       },
       from: process.env.NODEMAILER_ADDRESS,
       html,
+      list: {
+        unsubscribe: {
+          comment: Translate.t('app.api.secret.email.unsubscribe'),
+          url: unsubscribeURL,
+        },
+      },
       subject: Translate.t('app.api.secret.email.subject'),
       to: email,
     });

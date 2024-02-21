@@ -1,5 +1,7 @@
 {
   "app.api.secret.email.subject": "Your secret link from Vivian & Davy",
+  "app.api.secret.email.unsubscribe": "Unsubscribe from Vivian & Davy's secret links (not recommended)",
+  "app.api.unsubscribe.success": "You have successfully unsubscribed.",
   "app.metadata.description": "The website for our wedding in 2024.",
   "app.metadata.title": "Vivian & Davy",
   "components.error-page.status-code.401": "You are not authorized to view this page",
