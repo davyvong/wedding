@@ -141,30 +141,47 @@ export const createLandingContext = (): gsap.Context =>
         trigger: '.' + styles.thirdSection,
       },
     });
-    // thirdSectionTimeline.fromTo(
-    //   '.' + styles.engagementPhoto,
-    //   {
-    //     duration: 1,
-    //     transform: (index: number) => {
-    //       return `translateY(${index * 20}%)`;
-    //     },
-    //   },
-    //   {
-    //     duration: 1,
-    //     transform: () => 'translateY(0)',
-    //   },
-    // );
-    thirdSectionTimeline.fromTo(
-      '.' + styles.engagementPhotoSet,
-      {
-        duration: 5,
-        transform: () => 'translateX(0)',
-      },
-      {
-        duration: 5,
-        transform: () => 'translateX(calc(100vw - 100%))',
-      },
-    );
+    gsap
+      .matchMedia()
+      .add('(max-width: 639px)', () => {
+        thirdSectionTimeline.fromTo(
+          '.' + styles.engagementPhotoSet,
+          {
+            duration: 5,
+            transform: () => 'translateX(0)',
+          },
+          {
+            duration: 5,
+            transform: () => 'translateX(calc(100vw - 100%))',
+          },
+        );
+      })
+      .add('(min-width: 640px)', () => {
+        thirdSectionTimeline.fromTo(
+          '.' + styles.engagementPhoto,
+          {
+            duration: 1,
+            transform: (index: number) => {
+              return `translateY(${index * 20}%)`;
+            },
+          },
+          {
+            duration: 1,
+            transform: () => 'translateY(0)',
+          },
+        );
+        thirdSectionTimeline.fromTo(
+          '.' + styles.engagementPhotoSet,
+          {
+            duration: 5,
+            transform: () => 'translateX(0)',
+          },
+          {
+            duration: 5,
+            transform: () => 'translateX(calc(100vw - 100%))',
+          },
+        );
+      });
     // thirdSectionTimeline.fromTo(
     //   '.' + styles.engagementPhoto,
     //   {
