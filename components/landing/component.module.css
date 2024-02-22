@@ -9,6 +9,7 @@
   min-height: calc(100dvh - var(--navigation-bar-height));
   min-height: calc(100svh - var(--navigation-bar-height));
   width: 100%;
+  will-change: padding-left, padding-right;
 }
 
 .coverImage {
@@ -16,6 +17,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  will-change: border-radius, height;
 }
 
 .coverImage img {
@@ -158,6 +160,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 3px;
+  will-change: stroke-dashoffset;
 }
 
 @media (min-width: 1024px) {
@@ -222,12 +225,14 @@
   display: flex;
   flex-direction: row;
   padding: 0 var(--page-side-spacing);
+  will-change: transform;
 }
 
 .engagementPhoto {
   height: 65vh;
   max-width: calc(100vw - (2 * var(--page-side-spacing)));
   width: 45vh;
+  will-change: transform;
 }
 
 @media (min-width: 768px) {

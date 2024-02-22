@@ -45,7 +45,7 @@ const LandingComponent: FC = () => {
             alt={Translate.t('components.landing.event-info.bride-and-groom')}
             fill
             priority
-            sizes="(max-width: 640px) 300vw, (max-width: 750px) 150vw, (max-width: 828px) 150vw, (max-width: 1080px) 50vw, (max-width: 1200px) 50vw, (max-width: 1920px) 50vw, (max-width: 2048px) 50vw, (max-width: 3840px) 50vw, 50vw"
+            sizes="(max-width: 640px) 200vw, (max-width: 750px) 150vw, (max-width: 828px) 150vw, (max-width: 1080px) 50vw, (max-width: 1200px) 50vw, (max-width: 1920px) 50vw, (max-width: 2048px) 50vw, (max-width: 3840px) 50vw, 50vw"
             src={image.src}
             style={image.style}
           />

@@ -141,19 +141,19 @@ export const createLandingContext = (): gsap.Context =>
         trigger: '.' + styles.thirdSection,
       },
     });
-    thirdSectionTimeline.fromTo(
-      '.' + styles.engagementPhoto,
-      {
-        duration: 1,
-        transform: (index: number) => {
-          return `translateY(${index * 20}%)`;
-        },
-      },
-      {
-        duration: 1,
-        transform: () => 'translateY(0)',
-      },
-    );
+    // thirdSectionTimeline.fromTo(
+    //   '.' + styles.engagementPhoto,
+    //   {
+    //     duration: 1,
+    //     transform: (index: number) => {
+    //       return `translateY(${index * 20}%)`;
+    //     },
+    //   },
+    //   {
+    //     duration: 1,
+    //     transform: () => 'translateY(0)',
+    //   },
+    // );
     thirdSectionTimeline.fromTo(
       '.' + styles.engagementPhotoSet,
       {
