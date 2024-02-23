@@ -68,7 +68,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     });
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', code);
-    await redisClient.set(redisKey, guest.id, { ex: 900 });
+    await redisClient.set<string>(redisKey, guest.id, { ex: 900 });
     return new Response(null, { status: 202 });
   } catch (error: unknown) {
     return ServerError.handleError(error);

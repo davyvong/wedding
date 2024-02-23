@@ -1,9 +1,7 @@
-import { Ratelimit } from '@upstash/ratelimit';
 import { NextRequest, NextResponse } from 'next/server';
-import pkg from 'package.json';
-import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
+import RateLimiter from 'server/rate-limiter';
 import { string } from 'yup';
 
 export const config = {
@@ -15,7 +13,7 @@ async function middleware(request: NextRequest): Promise<Response> {
     return NextResponse.next();
   }
   if (!request.ip) {
-    return ServerError.BadRequest();
+    return ServerError.InternalServerError();
   }
   const ipSchema = string()
     .required()
@@ -25,13 +23,12 @@ async function middleware(request: NextRequest): Promise<Response> {
   if (!ipSchema.isValidSync(request.ip)) {
     return ServerError.BadRequest();
   }
-  const ratelimit = new Ratelimit({
-    analytics: ServerEnvironment.isProduction,
-    limiter: Ratelimit.tokenBucket(90, '30 s', 180),
-    prefix: [pkg.name, process.env.VERCEL_ENV].join('/'),
-    redis: RedisClientFactory.getInstance(),
+  const rateLimiter = new RateLimiter({
+    interval: 30000,
+    maxTokens: 180,
+    refillRate: 90,
   });
-  const { limit, remaining, reset, success } = await ratelimit.limit(request.ip);
+  const { limit, remaining, reset, success } = await rateLimiter.limit(request.ip);
   const headers: HeadersInit = {
     'X-RateLimit-Limit': limit.toString(),
     'X-RateLimit-Remaining': remaining.toString(),
