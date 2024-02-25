@@ -5,6 +5,9 @@ import MySQLQueries from 'server/queries/mysql';
 import UnsubscribeToken from 'server/tokens/unsubscribe';
 import { object, string } from 'yup';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export const GET = async (request: NextRequest, { params }: { params: { token: string } }): Promise<Response> => {
   try {
     console.log(`[GET] /api/unsubscribe/[token] token=${params.token}`);

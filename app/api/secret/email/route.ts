@@ -13,6 +13,7 @@ import UnsubscribeToken from 'server/tokens/unsubscribe';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const getRandomWords = (count: number): string[] => {
   const set = new Set<string>();
