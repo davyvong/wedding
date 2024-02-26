@@ -10,12 +10,10 @@
 
 .suggestionItem {
   border-radius: 0.5rem;
-  outline: none;
   padding: 1rem;
   transition: background-color 150ms ease-in-out;
 }
 
-.suggestionItem:focus,
 .suggestionItem:hover {
   background-color: var(--color-hover-popover);
   cursor: pointer;
@@ -25,7 +23,6 @@
   background-color: var(--color-popover);
 }
 
-.suggestionItemInverse:focus,
 .suggestionItemInverse:hover {
   background-color: var(--color-hover-popover);
 }

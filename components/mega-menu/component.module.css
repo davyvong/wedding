@@ -84,7 +84,6 @@
   display: flex;
   flex-direction: row;
   font-size: inherit;
-  outline: none;
   padding: 1rem;
   position: relative;
   text-align: initial;
@@ -109,7 +108,6 @@
   z-index: -1;
 }
 
-.menuItem:focus:before,
 .menuItem:hover:before {
   opacity: 1;
 }

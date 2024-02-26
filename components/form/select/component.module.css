@@ -10,12 +10,10 @@
 
 .optionItem {
   border-radius: 0.5rem;
-  outline: none;
   padding: 0.75rem 1rem;
   transition: background-color 150ms ease-in-out;
 }
 
-.optionItem:focus,
 .optionItem:hover {
   background-color: var(--color-hover-popover);
   cursor: pointer;
@@ -25,7 +23,10 @@
   background-color: var(--color-popover);
 }
 
-.optionItemInverse:focus,
 .optionItemInverse:hover {
   background-color: var(--color-hover-popover);
+}
+
+.optionItemDescription {
+  color: var(--color-muted-on-popover);
 }
