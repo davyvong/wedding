@@ -23,6 +23,7 @@
 
   --color-popover: rgb(77, 77, 77);
   --color-on-popover: rgb(233, 233, 233);
+  --color-muted-on-popover: rgb(233, 233, 233, 0.5);
   --color-hover-popover: rgb(33, 33, 33);
 
   --color-scrollbar: rgba(33, 33, 33, 0);

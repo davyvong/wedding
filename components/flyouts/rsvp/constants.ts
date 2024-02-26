@@ -14,8 +14,24 @@ export enum EntreeOptions {
 }
 
 export const entreeOptions: SelectOption[] = [
-  { label: Translate.t('components.flyouts.rsvp.options.entree.beef'), value: EntreeOptions.Beef },
-  { label: Translate.t('components.flyouts.rsvp.options.entree.chicken'), value: EntreeOptions.Chicken },
-  { label: Translate.t('components.flyouts.rsvp.options.entree.fish'), value: EntreeOptions.Fish },
-  { label: Translate.t('components.flyouts.rsvp.options.entree.vegetarian'), value: EntreeOptions.Vegetarian },
+  {
+    description: Translate.t('components.flyouts.rsvp.options.entree-description.chicken'),
+    label: Translate.t('components.flyouts.rsvp.options.entree.chicken'),
+    value: EntreeOptions.Chicken,
+  },
+  {
+    description: Translate.t('components.flyouts.rsvp.options.entree-description.fish'),
+    label: Translate.t('components.flyouts.rsvp.options.entree.fish'),
+    value: EntreeOptions.Fish,
+  },
+  {
+    description: Translate.t('components.flyouts.rsvp.options.entree-description.beef'),
+    label: Translate.t('components.flyouts.rsvp.options.entree.beef'),
+    value: EntreeOptions.Beef,
+  },
+  {
+    description: Translate.t('components.flyouts.rsvp.options.entree-description.vegetarian'),
+    label: Translate.t('components.flyouts.rsvp.options.entree.vegetarian'),
+    value: EntreeOptions.Vegetarian,
+  },
 ];

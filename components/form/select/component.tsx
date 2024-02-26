@@ -23,6 +23,7 @@ import { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import styles from './component.module.css';
 
 export interface SelectOption {
+  description?: string;
   label: string;
   value: unknown;
 }
@@ -77,7 +78,8 @@ const Select: FC<SelectProps> = ({ className, inverse = false, onChange, name, o
           role="option"
           tabIndex={0}
         >
-          {option.label}
+          <p>{option.label}</p>
+          {option.description && <p className={styles.optionItemDescription}>{option.description}</p>}
         </div>
       );
     },
