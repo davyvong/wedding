@@ -123,7 +123,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
         >
           <Image
             alt={suggestion.name}
-            className={songFlyoutStyles.songImage}
+            className={classNames(songFlyoutStyles.songImage, styles.songImage)}
             height={64}
             src={suggestion.image}
             width={64}
@@ -159,7 +159,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
   const renderSongSkeleton = useCallback(
     ([nameWidth, artistsWidth]: string[], index: number): JSX.Element => (
       <div className={classNames(songFlyoutStyles.songCard, styles.songSkeleton)} key={index}>
-        <Skeleton className={songFlyoutStyles.songImage} inverse />
+        <Skeleton className={classNames(songFlyoutStyles.songImage, styles.songImage)} inverse />
         <div className={classNames(songFlyoutStyles.songInformation, styles.songInformation)}>
           <Skeleton height="1rem" inverse width={nameWidth} />
           <Skeleton height="0.875rem" inverse style={{ marginTop: '1rem' }} width={artistsWidth} />

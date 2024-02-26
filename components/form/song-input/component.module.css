@@ -53,6 +53,13 @@
   margin-top: 0 !important;
 }
 
+.songImage {
+  height: 64px;
+  min-height: 64px;
+  min-width: 64px;
+  width: 64px;
+}
+
 .songInformation {
   margin-left: 1rem;
 }
