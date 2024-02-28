@@ -3,10 +3,11 @@ import nodemailer from 'nodemailer';
 class NodemailerClientFactory {
   private static readonly instance = nodemailer.createTransport({
     auth: {
-      user: process.env.NODEMAILER_USERNAME,
       pass: process.env.NODEMAILER_PASSWORD,
+      user: process.env.NODEMAILER_USERNAME,
     },
-    service: process.env.NODEMAILER_SERVICE,
+    host: process.env.NODEMAILER_HOST,
+    secure: true,
   });
 
   public static getInstance() {
