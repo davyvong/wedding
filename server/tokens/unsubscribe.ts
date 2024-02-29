@@ -13,7 +13,8 @@ class UnsubscribeToken {
       guestEmail,
       guestId,
     };
-    return JWT.sign(payload);
+    const expiresIn30Days = 2592000;
+    return JWT.sign(payload, expiresIn30Days);
   }
 
   public static async verify(token: string): Promise<UnsubscribeTokenPayload> {

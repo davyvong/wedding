@@ -41,8 +41,9 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       tokenId: ObjectID().toHexString(),
     };
     console.log(`[GET] /api/secret/[code] tokenId=${payload.tokenId}`);
+    const expiresIn90Days = 7776000;
     const [token, isGuestTokenInserted] = await Promise.all([
-      JWT.sign(payload),
+      JWT.sign(payload, expiresIn90Days),
       MySQLQueries.insertGuestToken(payload.tokenId, payload.guestId),
     ]);
     if (!token || !isGuestTokenInserted) {
@@ -50,8 +51,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     }
     redirectURL.searchParams.set('open', 'rsvp');
     const response = NextResponse.redirect(redirectURL);
-    const expiryDate = new Date();
-    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+    const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
     response.cookies.set('token', token, { expires: expiryDate });
     return response;
   } catch (error: unknown) {
