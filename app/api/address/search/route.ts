@@ -18,14 +18,14 @@ export interface CanadaPostSearchResult {
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const requestURL = new URL(request.url);
-    const params = {
+    const searchParams = {
       lookup: requestURL.searchParams.get('lookup'),
     };
-    Logger.info({ params });
-    const paramsSchema = object({
+    Logger.info({ searchParams });
+    const searchParamsSchema = object({
       lookup: string().min(1).required(),
     });
-    if (!paramsSchema.isValidSync(params)) {
+    if (!searchParamsSchema.isValidSync(searchParams)) {
       return ServerError.BadRequest();
     }
     const token = await Authenticator.verifyToken(request.cookies);
@@ -38,7 +38,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     url.searchParams.set('Language', 'en');
     url.searchParams.set('Limit', '7');
     url.searchParams.set('Origin', 'CAN');
-    url.searchParams.set('Text', params.lookup);
+    url.searchParams.set('Text', searchParams.lookup);
     const response = await fetch(url, {
       headers: {
         Origin: 'https://www.canadapost-postescanada.ca',

@@ -1,29 +1,20 @@
-import { JWTPayload } from 'jose';
 import ServerEnvironment from 'server/environment';
-import JWT from 'server/tokens/jwt';
-
-export interface UnsubscribeTokenPayload extends JWTPayload {
-  guestEmail: string;
-  guestId: string;
-}
+import CryptoToken from 'server/tokens/crypto';
 
 class UnsubscribeToken {
-  public static async sign(guestEmail: string, guestId: string): Promise<string> {
-    const payload: UnsubscribeTokenPayload = {
-      guestEmail,
-      guestId,
-    };
-    const expiresIn30Days = 2592000;
-    return JWT.sign(payload, expiresIn30Days);
+  public static async sign(guestId: string): Promise<string> {
+    return CryptoToken.sign(guestId);
   }
 
-  public static async verify(token: string): Promise<UnsubscribeTokenPayload> {
-    return (await JWT.verify(token)) as UnsubscribeTokenPayload;
+  public static async verify(guestId: string, token: string): Promise<boolean> {
+    return CryptoToken.verify(token, guestId);
   }
 
-  public static async generateURL(guestEmail: string, guestId: string): Promise<string> {
-    const token = await UnsubscribeToken.sign(guestEmail, guestId);
-    const url = new URL(ServerEnvironment.getBaseURL() + '/unsubscribe/' + token);
+  public static async generateURL(guestId: string): Promise<string> {
+    const token = await UnsubscribeToken.sign(guestId);
+    const url = new URL(ServerEnvironment.getBaseURL());
+    url.pathname = '/unsubscribe/' + guestId;
+    url.searchParams.set('token', token);
     return url.href;
   }
 }

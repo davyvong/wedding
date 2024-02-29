@@ -11,14 +11,14 @@ export const runtime = 'edge';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const requestURL = new URL(request.url);
-    const params = {
+    const searchParams = {
       query: requestURL.searchParams.get('query'),
     };
-    Logger.info({ params });
-    const paramsSchema = object({
+    Logger.info({ searchParams });
+    const searchParamsSchema = object({
       query: string().required().min(1).max(256),
     });
-    if (!paramsSchema.isValidSync(params)) {
+    if (!searchParamsSchema.isValidSync(searchParams)) {
       return ServerError.BadRequest();
     }
     const token = await Authenticator.verifyToken(request.cookies);
@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       return ServerError.Unauthorized();
     }
     const accessToken = await SpotifyAPI.getAccessToken();
-    const results = await SpotifyAPI.searchForTrack(accessToken, params.query);
+    const results = await SpotifyAPI.searchForTrack(accessToken, searchParams.query);
     Logger.info({ results });
     return NextResponse.json(results, {
       headers: {

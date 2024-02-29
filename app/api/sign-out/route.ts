@@ -9,13 +9,13 @@ export const runtime = 'edge';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     const requestURL = new URL(request.url);
-    const params = {
+    const searchParams = {
       redirect: requestURL.searchParams.get('redirect'),
     };
-    Logger.info({ params });
+    Logger.info({ searchParams });
     let redirectURL = ServerEnvironment.getBaseURL();
-    if (params.redirect) {
-      redirectURL += decodeURIComponent(params.redirect);
+    if (searchParams.redirect) {
+      redirectURL += decodeURIComponent(searchParams.redirect);
     }
     Logger.info({ redirectURL });
     const response = NextResponse.redirect(redirectURL);

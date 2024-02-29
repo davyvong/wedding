@@ -1,0 +1,49 @@
+import Translate from 'client/translate';
+import { NextRequest } from 'next/server';
+import ServerError from 'server/error';
+import MySQLQueries from 'server/queries/mysql';
+import UnsubscribeToken from 'server/tokens/unsubscribe';
+import Logger from 'utils/logger';
+import { object, string } from 'yup';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
+  try {
+    Logger.info({ params });
+    const paramsSchema = object({
+      guest: string()
+        .required()
+        .matches(/^[0-9a-fA-F]{24}$/),
+    });
+    const response = new Response(Translate.t('app.api.unsubscribe.success'), { status: 200 });
+    if (!paramsSchema.isValidSync(params)) {
+      return response;
+    }
+    const requestURL = new URL(request.url);
+    const searchParams = {
+      token: requestURL.searchParams.get('token'),
+    };
+    Logger.info({ searchParams });
+    const searchParamsSchema = object({
+      token: string().min(1).required(),
+    });
+    if (!searchParamsSchema.isValidSync(searchParams)) {
+      return response;
+    }
+    const isTokenVerified = await UnsubscribeToken.verify(params.guest, searchParams.token);
+    Logger.info({ isTokenVerified });
+    if (isTokenVerified) {
+      const guest = await MySQLQueries.findGuestFromId(params.guest);
+      Logger.info({ guest });
+      if (!guest) {
+        return response;
+      }
+      await MySQLQueries.updateGuestSubscription(guest.id, false);
+    }
+    return response;
+  } catch (error: unknown) {
+    return ServerError.handleError(error);
+  }
+};

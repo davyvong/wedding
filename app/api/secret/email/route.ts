@@ -42,7 +42,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     const code = getRandomWords(4).join('-');
     const secretURL = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
     Logger.info({ secretURL });
-    const unsubscribeURL = await UnsubscribeToken.generateURL(guest.email, guest.id);
+    const unsubscribeURL = await UnsubscribeToken.generateURL(guest.id);
     Logger.info({ unsubscribeURL });
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: secretURL.href });
