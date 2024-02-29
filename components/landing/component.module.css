@@ -142,6 +142,7 @@
   margin-bottom: var(--page-side-spacing);
   overflow: hidden;
   padding: var(--page-side-spacing);
+  padding-top: 0;
   position: relative;
   width: 100%;
 }
@@ -167,50 +168,6 @@
   .backgroundStroke {
     display: block;
   }
-
-  .coupleQuestionAnswerSection {
-    margin-left: 14rem;
-  }
-}
-
-.coupleQuestionAnswerTitle {
-  font-size: 1.75rem;
-  font-weight: 600;
-}
-
-.coupleQuestion {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: var(--page-side-spacing);
-}
-
-.coupleAnswer {
-  font-size: 1rem;
-  margin-top: calc(var(--page-side-spacing) / 2);
-}
-
-@media (min-width: 768px) {
-  .coupleQuestionAnswerTitle {
-    font-size: 2rem;
-  }
-
-  .coupleQuestion {
-    font-size: 1.5rem;
-  }
-
-  .coupleAnswer {
-    font-size: 1.25rem;
-  }
-}
-
-.coupleAnswer a {
-  color: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.coupleAnswer a:hover {
-  cursor: pointer;
 }
 
 .thirdSection {

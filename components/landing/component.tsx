@@ -4,16 +4,17 @@ import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
 import VD72JPG from 'assets/images/VD-72.jpg';
 import classNames from 'classnames';
 import { waitForElement } from 'client/browser';
-import { brittanySignature, italiana, kollektif, openSans } from 'client/fonts';
+import { brittanySignature, italiana, kollektif } from 'client/fonts';
 import Translate from 'client/translate';
+import EventDetails from 'components/event-details';
+import FrequentlyAskedQuestions from 'components/frequently-asked-questions';
 import { navigateToFAQ } from 'components/mega-menu/component';
-import gsap from 'gsap';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { FC, Fragment, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
-import { CoupleQuestion, EngagementPhoto, coupleQuestions, engagementPhotos } from './constants';
+import { EngagementPhoto, engagementPhotos } from './constants';
 import { createLandingContext } from './gsap';
 
 const LandingComponent: FC = () => {
@@ -55,20 +56,6 @@ const LandingComponent: FC = () => {
     [],
   );
 
-  const renderCoupleQuestion = useCallback(
-    (coupleQuestion: CoupleQuestion, index: number): JSX.Element => (
-      <Fragment key={coupleQuestion.question + index}>
-        <div className={classNames(styles.coupleQuestion, openSans.className)}>
-          {Translate.t(coupleQuestion.question)}
-        </div>
-        <div className={classNames(styles.coupleAnswer, openSans.className)}>
-          {Translate.html(coupleQuestion.answer)}
-        </div>
-      </Fragment>
-    ),
-    [],
-  );
-
   return (
     <div className={styles.landing}>
       <div className={styles.firstSection}>
@@ -94,14 +81,10 @@ const LandingComponent: FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.secondSection} id="faq">
+      <div className={styles.secondSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
-        <div className={styles.coupleQuestionAnswerSection}>
-          <div className={styles.coupleQuestionAnswerTitle}>
-            {Translate.t('components.landing.titles.questions-and-answers')}
-          </div>
-          {coupleQuestions.map(renderCoupleQuestion)}
-        </div>
+        <EventDetails />
+        <FrequentlyAskedQuestions />
       </div>
       <div className={styles.thirdSection}>
         <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>

@@ -37,27 +37,3 @@ export const engagementPhotos: EngagementPhoto[] = [
     style: { objectPosition: '51% center' },
   },
 ];
-
-export interface CoupleQuestion {
-  answer: string;
-  question: string;
-}
-
-export const coupleQuestions: CoupleQuestion[] = [
-  {
-    answer: 'components.landing.answers.where-is-the-ceremoney-and-reception',
-    question: 'components.landing.questions.where-is-the-ceremoney-and-reception',
-  },
-  {
-    answer: 'components.landing.answers.i-did-not-receive-an-email',
-    question: 'components.landing.questions.i-did-not-receive-an-email',
-  },
-  {
-    answer: 'components.landing.answers.when-is-the-rsvp-deadline',
-    question: 'components.landing.questions.when-is-the-rsvp-deadline',
-  },
-  {
-    answer: 'components.landing.answers.how-to-respond-to-invitation',
-    question: 'components.landing.questions.how-to-respond-to-invitation',
-  },
-];
