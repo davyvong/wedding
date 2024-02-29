@@ -10,6 +10,7 @@ import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
 import UnsubscribeToken from 'server/tokens/unsubscribe';
+import Logger from 'utils/logger';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -39,10 +40,10 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return ServerError.Forbidden();
     }
     const code = getRandomWords(4).join('-');
-    console.log(`[POST] /api/secret/email code=${code}`);
     const secretURL = new URL(ServerEnvironment.getBaseURL() + '/secret/' + code);
+    Logger.info({ secretURL });
     const unsubscribeURL = await UnsubscribeToken.generateURL(guest.email, guest.id);
-    console.log(`[POST] /api/secret/email unsubscribeURL=${unsubscribeURL}`);
+    Logger.info({ unsubscribeURL });
     const template = Handlebars.compile(secretLinkTemplate);
     const html = template({ url: secretURL.href });
     const transporter = NodemailerClientFactory.getInstance();

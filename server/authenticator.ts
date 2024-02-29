@@ -3,6 +3,7 @@ import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { redirect } from 'next/navigation';
 import JWT from 'server/tokens/jwt';
+import Logger from 'utils/logger';
 
 import MySQLQueries from './queries/mysql';
 
@@ -26,7 +27,7 @@ class Authenticator {
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
       const guest = await MySQLQueries.findGuestFromId(payload.guestId);
-      console.log(`Authenticator.verifyToken guestId=${guest?.id}`);
+      Logger.info({ guest });
       if (!guest) {
         return undefined;
       }
@@ -35,7 +36,7 @@ class Authenticator {
         isAdmin: guest.isAdmin,
       };
     } catch (error: unknown) {
-      console.log(`Authenticator.verifyToken error=${error}`);
+      Logger.error(error);
       return undefined;
     }
   }

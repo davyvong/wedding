@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
+import Logger from 'utils/logger';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +21,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     const params = {
       lookup: requestURL.searchParams.get('lookup'),
     };
-    console.log(`[GET] /api/address/search lookup=${params.lookup}`);
+    Logger.info({ params });
     const paramsSchema = object({
       lookup: string().min(1).required(),
     });
@@ -61,7 +62,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         return '';
       })
       .filter(Boolean);
-    console.log(`[GET] /api/address/search addressesFound=${addresses.length}`);
+    Logger.info({ addresses });
     return NextResponse.json(addresses, {
       headers: {
         'Cache-Control': 's-maxage=604800, stale-while-revalidate=86400',

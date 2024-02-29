@@ -7,6 +7,7 @@ import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
 import MySQLQueries from 'server/queries/mysql';
 import JWT from 'server/tokens/jwt';
+import Logger from 'utils/logger';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +15,6 @@ export const runtime = 'edge';
 
 export const GET = async (request: NextRequest, { params }: { params: { code: string } }): Promise<Response> => {
   try {
-    console.log(`[GET] /api/secret/[code] code=${params.code}`);
     const paramsSchema = object({
       code: string()
         .required()
@@ -27,12 +27,12 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     const redisClient = RedisClientFactory.getInstance();
     const redisKey = RedisKey.create('codes', params.code);
     const cachedGuestId = await redisClient.get<string>(redisKey);
-    console.log(`[GET] /api/secret/[code] cachedGuestId=${cachedGuestId}`);
+    Logger.info({ cachedGuestId });
     if (!cachedGuestId) {
       return NextResponse.redirect(redirectURL);
     }
     const guest = await MySQLQueries.findGuestFromId(cachedGuestId);
-    console.log(`[GET] /api/secret/[code] guestId=${guest?.id}`);
+    Logger.info({ guest });
     if (!guest) {
       return NextResponse.redirect(redirectURL);
     }
@@ -40,7 +40,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
       guestId: guest.id,
       tokenId: ObjectID().toHexString(),
     };
-    console.log(`[GET] /api/secret/[code] tokenId=${payload.tokenId}`);
+    Logger.info({ payload });
     const expiresIn90Days = 7776000;
     const [token, isGuestTokenInserted] = await Promise.all([
       JWT.sign(payload, expiresIn90Days),

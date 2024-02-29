@@ -3,6 +3,7 @@ import SpotifyAPI, { SpotifyTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
+import Logger from 'utils/logger';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
@@ -14,7 +15,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       return ServerError.Unauthorized();
     }
     const songRequests = await MySQLQueries.findSongRequestsFromGuestId(token.guestId);
-    console.log(`[GET] /api/songs/[id] songRequestsFound=${songRequests ? songRequests.length : 0}`);
+    Logger.info({ songRequests });
     if (!songRequests) {
       return ServerError.InternalServerError();
     }

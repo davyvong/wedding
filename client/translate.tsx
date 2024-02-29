@@ -1,7 +1,7 @@
-import ClientEnvironment from 'client/environment';
 import messages from 'constants/messages.json';
 import parse, { Element } from 'html-react-parser';
 import { Fragment } from 'react';
+import Logger from 'utils/logger';
 
 export default class Translate {
   public static t(key: string, values: Record<string, string> = {}): string {
@@ -16,9 +16,7 @@ export default class Translate {
       }
       return messageWithValues;
     } catch (error: unknown) {
-      if (ClientEnvironment.isDevelopment) {
-        console.log(`Translate.t error=${error}`);
-      }
+      Logger.error(error);
       return '';
     }
   }

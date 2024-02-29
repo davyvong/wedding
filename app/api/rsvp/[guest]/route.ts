@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
+import Logger from 'utils/logger';
 import { boolean, object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,6 @@ export const runtime = 'edge';
 
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
-    console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest}`);
     const paramsSchema = object({
       guest: string()
         .required()
@@ -23,16 +23,13 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!token) {
       return ServerError.Unauthorized();
     }
-    console.log(`[GET] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
-      const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
-      console.log(`[GET] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
-      if (!guestGroup) {
+      if (!(await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
         return ServerError.Forbidden();
       }
     }
     const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
-    console.log(`[GET] /api/rsvp/[guest] rsvpFound=${Boolean(response)}`);
+    Logger.info({ response });
     if (!response) {
       return ServerError.NotFound();
     }
@@ -58,7 +55,6 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!paramsSchema.isValidSync(params)) {
       return ServerError.BadRequest();
     }
-    console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest}`);
     const body = await request.json();
     const bodySchema = object({
       attendance: boolean().required(),
@@ -77,11 +73,8 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
     if (!token) {
       return ServerError.Unauthorized();
     }
-    console.log(`[POST] /api/rsvp/[guest] guestId=${params.guest} tokenGuestId=${token.guestId}`);
     if (params.guest !== token.guestId && !token.isAdmin) {
-      const guestGroup = await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]);
-      console.log(`[POST] /api/rsvp/[guest] isGuestGroupMember=${guestGroup}`);
-      if (!guestGroup) {
+      if (!(await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
         return ServerError.Forbidden();
       }
     }
@@ -92,7 +85,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       mailingAddress: body.mailingAddress,
       message: body.message,
     });
-    console.log(`[POST] /api/rsvp/[guest] responseId=${response?.id}`);
+    Logger.info({ response });
     if (!response) {
       return new Response(null, { status: 204 });
     }

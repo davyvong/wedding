@@ -10,7 +10,6 @@ export const runtime = 'edge';
 
 export const DELETE = async (request: NextRequest, { params }: { params: { id: string } }): Promise<Response> => {
   try {
-    console.log(`[DELETE] /api/songs/[id] spotifyTrackId=${params.id}`);
     const paramsSchema = object({
       id: string()
         .matches(/^([a-zA-Z0-9]){22}/)
@@ -32,7 +31,6 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
 
 export const POST = async (request: NextRequest, { params }: { params: { id: string } }): Promise<Response> => {
   try {
-    console.log(`[POST] /api/songs/[id] spotifyTrackId=${params.id}`);
     const paramsSchema = object({
       id: string()
         .matches(/^([a-zA-Z0-9]){22}/)

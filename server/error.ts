@@ -1,3 +1,5 @@
+import Logger from 'utils/logger';
+
 class ServerError {
   public static BadRequest(headers?: HeadersInit): Response {
     return new Response(null, {
@@ -56,7 +58,7 @@ class ServerError {
   }
 
   public static handleError(error: unknown): Response {
-    console.log(`ServerError.handleError error=${error}`);
+    Logger.error(error);
     return ServerError.InternalServerError();
   }
 }

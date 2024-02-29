@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
 import UnsubscribeToken from 'server/tokens/unsubscribe';
+import Logger from 'utils/logger';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,6 @@ export const runtime = 'nodejs';
 
 export const GET = async (request: NextRequest, { params }: { params: { token: string } }): Promise<Response> => {
   try {
-    console.log(`[GET] /api/unsubscribe/[token] token=${params.token}`);
     const paramsSchema = object({
       token: string().required(),
     });
@@ -19,9 +19,9 @@ export const GET = async (request: NextRequest, { params }: { params: { token: s
       return response;
     }
     const payload = await UnsubscribeToken.verify(params.token);
-    console.log(`[GET] /api/unsubscribe/[token] tokenGuestEmail=${payload.guestEmail} tokenGuestId=${payload.guestId}`);
+    Logger.info({ payload });
     const guest = await MySQLQueries.findGuestFromId(payload.guestId);
-    console.log(`[GET] /api/unsubscribe/[token] guestEmail=${guest?.email} guestId=${guest?.id}`);
+    Logger.info({ guest });
     if (!guest) {
       return response;
     }

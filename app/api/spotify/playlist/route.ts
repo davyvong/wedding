@@ -17,9 +17,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return ServerError.BadRequest();
     }
-    const isTokenVerified = await CryptoToken.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID);
-    console.log(`[POST] /api/spotify/playlist tokenVerified=${isTokenVerified}`);
-    if (!isTokenVerified) {
+    if (!(await CryptoToken.verify(body.token, process.env.SPOTIFY_PLAYLIST_ID))) {
       return ServerError.Unauthorized();
     }
     const accessToken = await SpotifyAPI.getAccessToken();
