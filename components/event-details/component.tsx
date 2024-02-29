@@ -1,10 +1,7 @@
-import classNames from 'classnames';
 import Translate from 'client/translate';
 import faqStyles from 'components/frequently-asked-questions/component.module.css';
 import { FC, Fragment } from 'react';
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
-
-import styles from './component.module.css';
 
 export const runtime = 'edge';
 
@@ -18,7 +15,7 @@ const EventDetailsComponent: FC<EventDetailsComponentProps> = ({ token }) => {
   }
 
   return (
-    <div className={classNames(faqStyles.faq, styles.eventDetails)}>
+    <div className={faqStyles.faq}>
       <div className={faqStyles.faqTitle}>{Translate.t('components.event-details.title')}</div>
     </div>
   );

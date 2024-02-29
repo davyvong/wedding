@@ -12,12 +12,17 @@ import { navigateToFAQ } from 'components/mega-menu/component';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { FC, useCallback, useEffect } from 'react';
+import { VerifiedGuestTokenPayload } from 'server/authenticator';
 
 import styles from './component.module.css';
 import { EngagementPhoto, engagementPhotos } from './constants';
 import { createLandingContext } from './gsap';
 
-const LandingComponent: FC = () => {
+export interface LandingComponentProps {
+  token?: VerifiedGuestTokenPayload;
+}
+
+const LandingComponent: FC<LandingComponentProps> = ({ token }) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -83,7 +88,7 @@ const LandingComponent: FC = () => {
       </div>
       <div className={styles.secondSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
-        <EventDetails />
+        <EventDetails token={token} />
         <FrequentlyAskedQuestions />
       </div>
       <div className={styles.thirdSection}>
