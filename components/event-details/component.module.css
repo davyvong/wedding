@@ -1,0 +1,19 @@
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.header svg {
+  height: 24px;
+  margin-right: 1rem;
+  width: 24px;
+}
+
+@media (min-width: 768px) {
+  .header svg {
+    height: 32px;
+    width: 32px;
+  }
+}
