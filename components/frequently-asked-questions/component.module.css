@@ -10,12 +10,12 @@
 .faqQuestion {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-top: var(--page-side-spacing);
+  margin-top: 2rem;
 }
 
 .faqAnswer {
   font-size: 1rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .faqAnswer a {
@@ -39,6 +39,7 @@
 
   .faqAnswer {
     font-size: 1.25rem;
+    margin-top: 0.675rem;
   }
 }
 
