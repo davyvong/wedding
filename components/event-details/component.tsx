@@ -8,8 +8,6 @@ import { VerifiedGuestTokenPayload } from 'server/authenticator';
 
 import styles from './component.module.css';
 
-export const runtime = 'edge';
-
 export interface EventDetailsComponentProps {
   token?: VerifiedGuestTokenPayload;
 }

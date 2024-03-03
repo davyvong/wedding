@@ -89,7 +89,7 @@ const LandingComponent: FC<LandingComponentProps> = ({ token }) => {
       <div className={styles.secondSection}>
         <BackgroundStrokeSVG className={styles.backgroundStroke} />
         <EventDetails token={token} />
-        <FrequentlyAskedQuestions />
+        <FrequentlyAskedQuestions token={token} />
       </div>
       <div className={styles.thirdSection}>
         <div className={styles.engagementPhotoSet}>{engagementPhotos.map(renderEngagementPhoto)}</div>
