@@ -2,6 +2,7 @@
 
 namespace NodeJS {
   interface ProcessEnv {
+    GOOGLE_SHEETS_WEDDING_WEBHOOK: string;
     JWT_SECRET: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
     NODEMAILER_ADDRESS: string;

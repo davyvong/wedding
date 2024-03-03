@@ -1,5 +1,7 @@
 import { EntreeOptions } from 'components/flyouts/rsvp/constants';
+import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest, NextResponse } from 'next/server';
+import GoogleSheetsAPI from 'server/apis/gsheet';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
@@ -86,6 +88,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       message: body.message,
     });
     Logger.info({ response });
+    waitUntil(GoogleSheetsAPI.updateGuestListSheet);
     if (!response) {
       return new Response(null, { status: 204 });
     }
