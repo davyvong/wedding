@@ -11,7 +11,7 @@ export const runtime = 'edge';
 export const GET = async (request: NextRequest): Promise<Response> => {
   try {
     if (!ServerEnvironment.isDevelopment) {
-      return ServerError.MethodNotAllowed();
+      return ServerError.NotFound();
     }
     const requestURL = new URL(request.url);
     const searchParams = {
