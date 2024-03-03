@@ -2,6 +2,7 @@ import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/int
 import { NextRequest } from 'next/server';
 import SpotifyAPI, { SpotifyPlaylistTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
+import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
 import { object, string } from 'yup';
@@ -10,6 +11,9 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 
 const rebuildWeddingPlaylist = async (): Promise<void> => {
+  if (!ServerEnvironment.isProduction) {
+    return;
+  }
   const accessToken = await SpotifyAPI.getAccessToken();
   const playlist = await SpotifyAPI.getPlaylist(accessToken, process.env.SPOTIFY_PLAYLIST_ID);
   const uris = playlist.tracks.map((track: SpotifyPlaylistTrack): string => track.uri);
