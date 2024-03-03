@@ -463,13 +463,13 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               />
               {errors.entree && <div className={styles.error}>{Translate.t(errors.entree)}</div>}
               <div className={styles.question}>
-                {Translate.t('components.flyouts.rsvp.questions.dietaryRestrictions')}
+                {Translate.t('components.flyouts.rsvp.questions.dietary-restrictions')}
               </div>
               <TextInput
                 inverse
                 name="dietaryRestrictions"
                 onChange={onInputChange}
-                placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietaryRestrictions')}
+                placeholder={Translate.t('components.flyouts.rsvp.placeholders.dietary-restrictions')}
                 value={values.dietaryRestrictions}
               />
               {errors.dietaryRestrictions && (
@@ -477,12 +477,12 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
               )}
             </Fragment>
           )}
-          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailingAddress')}</div>
+          <div className={styles.question}>{Translate.t('components.flyouts.rsvp.questions.mailing-address')}</div>
           <AddressInput
             inverse
             name="mailingAddress"
             onChange={onAddressInputChange}
-            placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailingAddress')}
+            placeholder={Translate.t('components.flyouts.rsvp.placeholders.mailing-address')}
             value={values.mailingAddress}
           />
           {errors.mailingAddress && <div className={styles.error}>{Translate.t(errors.mailingAddress)}</div>}
