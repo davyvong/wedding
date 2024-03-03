@@ -88,7 +88,13 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       message: body.message,
     });
     Logger.info({ response });
-    waitUntil(GoogleSheetsAPI.updateGuestListSheet);
+    waitUntil(async (): Promise<void> => {
+      try {
+        await GoogleSheetsAPI.refreshGuestListSheet();
+      } catch (error: unknown) {
+        Logger.error(error);
+      }
+    });
     if (!response) {
       return new Response(null, { status: 204 });
     }

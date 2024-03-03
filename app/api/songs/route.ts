@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
       const chunkedSongRequests = songRequests.slice(i, i + 50);
       chunkedRequests.push(SpotifyAPI.getSeveralTracks(accessToken, chunkedSongRequests));
     }
-    const tracks = (await Promise.all(chunkedRequests)).flat();
+    const tracks = (await Promise.allSettled(chunkedRequests)).flat();
     return NextResponse.json(tracks, { status: 200 });
   } catch (error: unknown) {
     return ServerError.handleError(error);

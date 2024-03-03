@@ -1,4 +1,5 @@
 import Translate from 'client/translate';
+import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest } from 'next/server';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
@@ -34,14 +35,21 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     }
     const isTokenVerified = await UnsubscribeToken.verify(params.guest, searchParams.token);
     Logger.info({ isTokenVerified });
-    if (isTokenVerified) {
-      const guest = await MySQLQueries.findGuestFromId(params.guest);
-      Logger.info({ guest });
-      if (!guest) {
-        return response;
-      }
-      await MySQLQueries.updateGuestSubscription(guest.id, false);
+    if (!isTokenVerified) {
+      return response;
     }
+    const guest = await MySQLQueries.findGuestFromId(params.guest);
+    Logger.info({ guest });
+    if (!guest) {
+      return response;
+    }
+    waitUntil(async (): Promise<void> => {
+      try {
+        await MySQLQueries.updateGuestSubscription(guest.id, false);
+      } catch (error: unknown) {
+        Logger.error(error);
+      }
+    });
     return response;
   } catch (error: unknown) {
     return ServerError.handleError(error);
