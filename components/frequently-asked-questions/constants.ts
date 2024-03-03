@@ -1,5 +1,6 @@
 export interface FrequentlyAskedQuestion {
   answer: string;
+  params?: Record<string, string>;
   question: string;
   token: boolean;
 }
@@ -7,6 +8,10 @@ export interface FrequentlyAskedQuestion {
 export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
   {
     answer: 'components.frequently-asked-questions.answers.what-is-the-dress-code',
+    params: {
+      bride: 'rgb(208, 99, 62)',
+      groom: 'rgb(240, 212, 181)',
+    },
     question: 'components.frequently-asked-questions.questions.what-is-the-dress-code',
     token: true,
   },

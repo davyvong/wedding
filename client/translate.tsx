@@ -1,3 +1,4 @@
+import faqStyles from 'components/frequently-asked-questions/component.module.css';
 import messages from 'constants/messages.json';
 import parse, { Element } from 'html-react-parser';
 import { Fragment } from 'react';
@@ -36,6 +37,9 @@ export default class Translate {
                 };
                 return <a onClick={onClick}>{domNode.attribs.text}</a>;
               }
+            }
+            if (domNode.type === 'tag' && domNode.name === 'coloredbox') {
+              return <div className={faqStyles.coloredBox} style={{ backgroundColor: domNode.attribs.color }} />;
             }
             return null;
           },

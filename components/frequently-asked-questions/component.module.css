@@ -28,6 +28,16 @@
   cursor: pointer;
 }
 
+.coloredBox {
+  border-radius: 0.25rem;
+  display: inline-block;
+  height: 16px;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+  width: 16px;
+}
+
 @media (min-width: 768px) {
   .faqTitle {
     font-size: 2rem;
@@ -40,6 +50,12 @@
   .faqAnswer {
     font-size: 1.25rem;
     margin-top: 0.675rem;
+  }
+
+  .coloredBox {
+    border-radius: 0.5rem;
+    height: 24px;
+    width: 24px;
   }
 }
 

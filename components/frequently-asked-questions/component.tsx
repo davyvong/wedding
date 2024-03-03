@@ -25,7 +25,7 @@ const FrequentlyAskedQuestionsComponent: FC<FrequentlyAskedQuestionsComponentPro
     (faq: FrequentlyAskedQuestion, index: number): JSX.Element => (
       <Fragment key={faq.question + index}>
         <div className={styles.faqQuestion}>{Translate.t(faq.question)}</div>
-        <div className={styles.faqAnswer}>{Translate.html(faq.answer)}</div>
+        <div className={styles.faqAnswer}>{Translate.html(faq.answer, faq.params)}</div>
       </Fragment>
     ),
     [],
