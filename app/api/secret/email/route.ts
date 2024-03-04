@@ -34,7 +34,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return ServerError.BadRequest();
     }
-    const email = body.email.toLowerCase();
+    const email = body.email.toLowerCase().trim();
     const guest = await MySQLQueries.findGuestFromEmail(email);
     if (!guest) {
       return ServerError.Forbidden();
