@@ -8,16 +8,6 @@ export interface ResponseData {
   message: string;
 }
 
-export interface ResponseRowData {
-  attendance: number;
-  dietary_restrictions?: string;
-  entree: string;
-  guest_id: string;
-  mailing_address?: string;
-  message: string;
-  public_id: string;
-}
-
 export interface ResponseSupabaseData {
   attendance: boolean;
   dietary_restrictions?: string;
@@ -45,19 +35,6 @@ class Response {
     this.id = data.id;
     this.mailingAddress = data.mailingAddress;
     this.message = data.message;
-  }
-
-  public static fromRow(row: ResponseRowData): Response {
-    const data: ResponseData = {
-      attendance: Boolean(row.attendance),
-      dietaryRestrictions: row.dietary_restrictions,
-      entree: row.entree,
-      guest: row.guest_id,
-      id: row.public_id,
-      mailingAddress: row.mailing_address,
-      message: row.message,
-    };
-    return new Response(data);
   }
 
   public static fromSupabase(data: ResponseSupabaseData): Response {

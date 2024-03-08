@@ -5,14 +5,6 @@ export interface GuestData {
   name: string;
 }
 
-export interface GuestRowData {
-  email: string;
-  guest_group_id: number | null;
-  is_admin: number;
-  name: string;
-  public_id: string;
-}
-
 export interface GuestSupabaseData {
   email: string;
   guest_group_id: string | null;
@@ -32,16 +24,6 @@ class Guest {
     this.id = data.id;
     this.isAdmin = data.isAdmin;
     this.name = data.name;
-  }
-
-  public static fromRow(row: GuestRowData): Guest {
-    const data: GuestData = {
-      email: row.email || '',
-      id: row.public_id,
-      isAdmin: Boolean(row.is_admin),
-      name: row.name,
-    };
-    return new Guest(data);
   }
 
   public static fromSupabase(data: GuestSupabaseData): Guest {
