@@ -8,7 +8,7 @@ import secretLinkTemplate from 'server/emails/secret.eml';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import UnsubscribeToken from 'server/tokens/unsubscribe';
 import Logger from 'utils/logger';
 import { object, string } from 'yup';
@@ -35,7 +35,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
       return ServerError.BadRequest();
     }
     const email = body.email.toLowerCase().trim();
-    const guest = await MySQLQueries.findGuestFromEmail(email);
+    const guest = await SupabaseQueries.findGuestFromEmail(email);
     if (!guest) {
       return ServerError.Forbidden();
     }

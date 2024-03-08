@@ -1,4 +1,3 @@
-import ObjectID from 'bson-objectid';
 import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest, NextResponse } from 'next/server';
 import { GuestTokenPayload } from 'server/authenticator';
@@ -6,9 +5,10 @@ import RedisClientFactory from 'server/clients/redis';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RedisKey from 'server/models/redis-key';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import JWT from 'server/tokens/jwt';
 import Logger from 'utils/logger';
+import { v4 as uuidv4 } from 'uuid';
 import { object, string } from 'yup';
 
 export const dynamic = 'force-dynamic';
@@ -32,14 +32,14 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     if (!cachedGuestId) {
       return NextResponse.redirect(redirectURL);
     }
-    const guest = await MySQLQueries.findGuestFromId(cachedGuestId);
+    const guest = await SupabaseQueries.findGuestFromId(cachedGuestId);
     Logger.info({ guest });
     if (!guest) {
       return NextResponse.redirect(redirectURL);
     }
     const payload: GuestTokenPayload = {
       guestId: guest.id,
-      tokenId: ObjectID().toHexString(),
+      tokenId: uuidv4(),
     };
     Logger.info({ payload });
     const expiresIn90Days = 7776000;
@@ -50,7 +50,7 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     response.cookies.set('token', token, { expires: expiryDate });
     waitUntil(async (): Promise<void> => {
       try {
-        await MySQLQueries.insertGuestToken(payload.tokenId, payload.guestId);
+        await SupabaseQueries.insertGuestToken(payload.tokenId, payload.guestId);
       } catch (error: unknown) {
         Logger.error(error);
       }

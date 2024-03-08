@@ -1,7 +1,7 @@
 import GuestList from 'components/guest-list';
 import { FC } from 'react';
 import { generateDefaultMetadata } from 'server/metadata';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 
 export const metadata = generateDefaultMetadata({
   url: '/guests',
@@ -9,7 +9,7 @@ export const metadata = generateDefaultMetadata({
 export const runtime = 'edge';
 
 const Page: FC = async () => {
-  const guestList = await MySQLQueries.findGuestList();
+  const guestList = await SupabaseQueries.findGuestList();
   const guestListData = guestList.map(guestGroup => ({
     guests: guestGroup.guests.map(guest => guest.valueOf()),
     id: guestGroup.id,

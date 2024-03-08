@@ -13,6 +13,14 @@ export interface GuestRowData {
   public_id: string;
 }
 
+export interface GuestSupabaseData {
+  email: string;
+  guest_group_id: string | null;
+  id: string;
+  is_admin: boolean;
+  name: string;
+}
+
 class Guest {
   public email: string;
   public id: string;
@@ -34,6 +42,15 @@ class Guest {
       name: row.name,
     };
     return new Guest(data);
+  }
+
+  public static fromSupabase(data: GuestSupabaseData): Guest {
+    return new Guest({
+      email: data.email,
+      id: data.id,
+      isAdmin: data.is_admin,
+      name: data.name,
+    });
   }
 
   public valueOf(): Omit<GuestData, 'isAdmin'> {

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import GoogleSheetsAPI from 'server/apis/google-sheets';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import Logger from 'utils/logger';
 import { boolean, object, string } from 'yup';
 
@@ -14,9 +14,7 @@ export const runtime = 'edge';
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
     const paramsSchema = object({
-      guest: string()
-        .required()
-        .matches(/^[0-9a-fA-F]{24}$/),
+      guest: string().uuid().required(),
     });
     if (!paramsSchema.isValidSync(params)) {
       return ServerError.BadRequest();
@@ -26,11 +24,11 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
       return ServerError.Unauthorized();
     }
     if (params.guest !== token.guestId && !token.isAdmin) {
-      if (!(await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
+      if (!(await SupabaseQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
         return ServerError.Forbidden();
       }
     }
-    const response = await MySQLQueries.findRSVPFromGuestId(params.guest);
+    const response = await SupabaseQueries.findRSVPFromGuestId(params.guest);
     Logger.info({ response });
     if (!response) {
       return ServerError.NotFound();
@@ -50,9 +48,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
 export const POST = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
     const paramsSchema = object({
-      guest: string()
-        .required()
-        .matches(/^[0-9a-fA-F]{24}$/),
+      guest: string().uuid().required(),
     });
     if (!paramsSchema.isValidSync(params)) {
       return ServerError.BadRequest();
@@ -76,11 +72,11 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       return ServerError.Unauthorized();
     }
     if (params.guest !== token.guestId && !token.isAdmin) {
-      if (!(await MySQLQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
+      if (!(await SupabaseQueries.findGuestGroupFromGuestIds([token.guestId, params.guest]))) {
         return ServerError.Forbidden();
       }
     }
-    const response = await MySQLQueries.upsertResponse(token, params.guest, {
+    const response = await SupabaseQueries.upsertResponse(token, params.guest, {
       attendance: body.attendance,
       dietaryRestrictions: body.dietaryRestrictions,
       entree: body.entree,

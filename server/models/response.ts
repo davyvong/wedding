@@ -18,6 +18,16 @@ export interface ResponseRowData {
   public_id: string;
 }
 
+export interface ResponseSupabaseData {
+  attendance: boolean;
+  dietary_restrictions?: string;
+  entree: string;
+  guest_id: string;
+  id: string;
+  mailing_address?: string;
+  message: string;
+}
+
 class Response {
   public attendance: boolean;
   public dietaryRestrictions?: string;
@@ -48,6 +58,18 @@ class Response {
       message: row.message,
     };
     return new Response(data);
+  }
+
+  public static fromSupabase(data: ResponseSupabaseData): Response {
+    return new Response({
+      attendance: data.attendance,
+      dietaryRestrictions: data.dietary_restrictions,
+      entree: data.entree,
+      guest: data.guest_id,
+      id: data.id,
+      mailingAddress: data.mailing_address,
+      message: data.message,
+    });
   }
 
   public valueOf(): ResponseData {

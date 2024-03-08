@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import SpotifyAPI, { SpotifyTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import Logger from 'utils/logger';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     if (!token) {
       return ServerError.Unauthorized();
     }
-    const songRequests = await MySQLQueries.findSongRequestsFromGuestId(token.guestId);
+    const songRequests = await SupabaseQueries.findSongRequestsFromGuestId(token.guestId);
     Logger.info({ songRequests });
     if (!songRequests) {
       return ServerError.InternalServerError();
