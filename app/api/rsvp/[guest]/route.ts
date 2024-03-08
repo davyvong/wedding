@@ -1,7 +1,7 @@
 import { EntreeOptions } from 'components/flyouts/rsvp/constants';
 import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest, NextResponse } from 'next/server';
-import GoogleSheetsAPI from 'server/apis/gsheet';
+import GoogleSheetsAPI from 'server/apis/google-sheets';
 import Authenticator from 'server/authenticator';
 import ServerError from 'server/error';
 import MySQLQueries from 'server/queries/mysql';
