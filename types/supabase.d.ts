@@ -20,21 +20,32 @@ export type Database = {
       };
       wedding_guest_tokens: {
         Row: {
-          created_at: string | null;
-          guest_id: string | null;
+          created_at: string;
+          guest_id: string;
           id: string;
+          token_id: string;
         };
         Insert: {
-          created_at?: string | null;
-          guest_id?: string | null;
+          created_at?: string;
+          guest_id: string;
           id?: string;
+          token_id: string;
         };
         Update: {
-          created_at?: string | null;
-          guest_id?: string | null;
+          created_at?: string;
+          guest_id?: string;
           id?: string;
+          token_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'public_wedding_guest_tokens_guest_id_fkey';
+            columns: ['guest_id'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       wedding_guests: {
         Row: {
@@ -64,7 +75,15 @@ export type Database = {
           is_subscribed?: boolean;
           name?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'public_wedding_guests_guest_group_id_fkey';
+            columns: ['guest_group_id'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guest_groups';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       wedding_responses: {
         Row: {
@@ -106,7 +125,29 @@ export type Database = {
           modified_at?: string;
           modified_by?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'public_wedding_responses_created_by_fkey';
+            columns: ['created_by'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'public_wedding_responses_guest_id_fkey';
+            columns: ['guest_id'];
+            isOneToOne: true;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'public_wedding_responses_modified_by_fkey';
+            columns: ['modified_by'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       wedding_song_requests: {
         Row: {
@@ -130,7 +171,22 @@ export type Database = {
           id?: string;
           spotify_track_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'public_wedding_song_requests_created_by_fkey';
+            columns: ['created_by'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'public_wedding_song_requests_guest_id_fkey';
+            columns: ['guest_id'];
+            isOneToOne: false;
+            referencedRelation: 'wedding_guests';
+            referencedColumns: ['id'];
+          },
+        ];
       };
     };
     Views: {
