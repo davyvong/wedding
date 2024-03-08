@@ -85,6 +85,7 @@ const AddressInputComponent: FC<AddressInputComponentProps> = ({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     },
   );
 

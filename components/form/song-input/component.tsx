@@ -94,6 +94,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     },
   );
 
