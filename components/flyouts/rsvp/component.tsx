@@ -88,6 +88,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     },
   );
 
