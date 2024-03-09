@@ -302,7 +302,16 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
 
   const renderGuestPartySelector = useCallback((): JSX.Element => {
     if (guests.length <= 1) {
-      return <Fragment />;
+      return (
+        <Fragment>
+          {shouldRenderSavedMessage && (
+            <div className={styles.savedChangesMessage}>
+              {Translate.t('components.flyouts.rsvp.saved-changes')}
+              <div className={styles.savedChangesMessageTimer} />
+            </div>
+          )}
+        </Fragment>
+      );
     }
     return (
       <div className={styles.guests}>
@@ -362,7 +371,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
           </div>
         )}
         {shouldRenderSavedMessage && (
-          <div className={styles.savedChangesMessage}>
+          <div className={classNames(styles.savedChangesMessage, styles.savedChangesMessageInverse)}>
             {Translate.t('components.flyouts.rsvp.saved-changes')}
             <div className={styles.savedChangesMessageTimer} />
           </div>
