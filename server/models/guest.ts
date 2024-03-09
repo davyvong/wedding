@@ -5,12 +5,12 @@ export interface GuestData {
   name: string;
 }
 
-export interface GuestRowData {
+export interface GuestSupabaseData {
   email: string;
-  guest_group_id: number | null;
-  is_admin: number;
+  guest_group_id: string | null;
+  id: string;
+  is_admin: boolean;
   name: string;
-  public_id: string;
 }
 
 class Guest {
@@ -26,14 +26,13 @@ class Guest {
     this.name = data.name;
   }
 
-  public static fromRow(row: GuestRowData): Guest {
-    const data: GuestData = {
-      email: row.email || '',
-      id: row.public_id,
-      isAdmin: Boolean(row.is_admin),
-      name: row.name,
-    };
-    return new Guest(data);
+  public static fromSupabase(data: GuestSupabaseData): Guest {
+    return new Guest({
+      email: data.email,
+      id: data.id,
+      isAdmin: data.is_admin,
+      name: data.name,
+    });
   }
 
   public valueOf(): Omit<GuestData, 'isAdmin'> {

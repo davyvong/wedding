@@ -4,7 +4,7 @@ import SpotifyAPI, { SpotifyPlaylistTrack } from 'server/apis/spotify';
 import Authenticator from 'server/authenticator';
 import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import Logger from 'utils/logger';
 import { object, string } from 'yup';
 
@@ -25,7 +25,7 @@ const refreshWeddingPlaylist = async (accessToken: string): Promise<void> => {
     }
     await Promise.allSettled(chunkedRequests);
     chunkedRequests.length = 0;
-    const songRequests = await MySQLQueries.findSongRequests();
+    const songRequests = await SupabaseQueries.findSongRequests();
     if (songRequests) {
       for (let i = 0; i < songRequests.length; i += 100) {
         const songRequestsChunk = songRequests
@@ -54,7 +54,7 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
     if (!token) {
       return ServerError.Unauthorized();
     }
-    await MySQLQueries.deleteSongRequest(token.guestId, params.id);
+    await SupabaseQueries.deleteSongRequest(token.guestId, params.id);
     waitUntil(async (): Promise<void> => {
       try {
         const accessToken = await SpotifyAPI.getAccessToken();
@@ -85,7 +85,7 @@ export const POST = async (request: NextRequest, { params }: { params: { id: str
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const track = await SpotifyAPI.getTrack(accessToken, params.id);
-    await MySQLQueries.insertSongRequest(token, token.guestId, track.id);
+    await SupabaseQueries.insertSongRequest(token, token.guestId, track.id);
     waitUntil(async (): Promise<void> => {
       try {
         await refreshWeddingPlaylist(accessToken);

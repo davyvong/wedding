@@ -2,7 +2,7 @@ import Translate from 'client/translate';
 import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest } from 'next/server';
 import ServerError from 'server/error';
-import MySQLQueries from 'server/queries/mysql';
+import SupabaseQueries from 'server/queries/supabase';
 import UnsubscribeToken from 'server/tokens/unsubscribe';
 import Logger from 'utils/logger';
 import { object, string } from 'yup';
@@ -14,9 +14,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
   try {
     Logger.info({ params });
     const paramsSchema = object({
-      guest: string()
-        .required()
-        .matches(/^[0-9a-fA-F]{24}$/),
+      guest: string().uuid().required(),
     });
     const response = new Response(Translate.t('app.api.unsubscribe.success'), { status: 200 });
     if (!paramsSchema.isValidSync(params)) {
@@ -38,14 +36,14 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
     if (!isTokenVerified) {
       return response;
     }
-    const guest = await MySQLQueries.findGuestFromId(params.guest);
+    const guest = await SupabaseQueries.findGuestFromId(params.guest);
     Logger.info({ guest });
     if (!guest) {
       return response;
     }
     waitUntil(async (): Promise<void> => {
       try {
-        await MySQLQueries.updateGuestSubscription(guest.id, false);
+        await SupabaseQueries.updateGuestSubscription(guest.id, false);
       } catch (error: unknown) {
         Logger.error(error);
       }

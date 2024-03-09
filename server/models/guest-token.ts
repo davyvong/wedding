@@ -1,5 +1,4 @@
-export interface GuestTokenRowData {
-  id: number;
+export interface GuestTokenSupabaseData {
   guest_id: string;
-  public_id: string;
+  id: string;
 }

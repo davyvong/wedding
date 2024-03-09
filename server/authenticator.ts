@@ -2,10 +2,9 @@ import { JWTPayload } from 'jose';
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { redirect } from 'next/navigation';
+import SupabaseQueries from 'server/queries/supabase';
 import JWT from 'server/tokens/jwt';
 import Logger from 'utils/logger';
-
-import MySQLQueries from './queries/mysql';
 
 export interface GuestTokenPayload extends JWTPayload {
   guestId: string;
@@ -26,7 +25,7 @@ class Authenticator {
     }
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
-      const guest = await MySQLQueries.findGuestFromId(payload.guestId);
+      const guest = await SupabaseQueries.findGuestFromId(payload.guestId);
       Logger.info({ guest });
       if (!guest) {
         return undefined;
