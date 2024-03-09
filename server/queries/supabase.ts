@@ -73,10 +73,15 @@ class SupabaseQueries {
         return null;
       }
       const guestGroupId = await SupabaseQueries.findGuestGroupFromGuestId(guestId);
-      const { data, error } = await SupabaseClientFactory.getInstance()
+      const query = SupabaseClientFactory.getInstance()
         .from('wedding_guests')
-        .select('*, response:public_wedding_responses_guest_id_fkey(*)')
-        .or(`id.eq.${guestId}, guest_group_id.eq.${guestGroupId}`);
+        .select('*, response:public_wedding_responses_guest_id_fkey(*)');
+      if (guestGroupId) {
+        query.or(`id.eq.${guestId}, guest_group_id.eq.${guestGroupId}`);
+      } else {
+        query.eq('id', guestId);
+      }
+      const { data, error } = await query;
       if (error) {
         return null;
       }
