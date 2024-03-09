@@ -117,7 +117,7 @@ class SupabaseQueries {
       if (!guestId || !data) {
         return null;
       }
-      const { error } = await SupabaseClientFactory.getInstance()
+      const results = await SupabaseClientFactory.getInstance()
         .from('wedding_responses')
         .insert({
           attendance: data.attendance,
@@ -129,11 +129,12 @@ class SupabaseQueries {
           message: data.message,
           modified_by: token.guestId,
         })
-        .select();
-      if (error) {
+        .select()
+        .returns<ResponseSupabaseData[]>();
+      if (results.error) {
         return null;
       }
-      return Response.fromSupabase(data[0]);
+      return Response.fromSupabase(results.data[0]);
     } catch {
       return null;
     }
@@ -148,7 +149,7 @@ class SupabaseQueries {
       if (!guestId || !data) {
         return null;
       }
-      const { error } = await SupabaseClientFactory.getInstance()
+      const results = await SupabaseClientFactory.getInstance()
         .from('wedding_responses')
         .update({
           attendance: data.attendance,
@@ -160,11 +161,12 @@ class SupabaseQueries {
           modified_by: token.guestId,
         })
         .eq('guest_id', guestId)
-        .select();
-      if (error) {
+        .select()
+        .returns<ResponseSupabaseData[]>();
+      if (results.error) {
         return null;
       }
-      return Response.fromSupabase(data[0]);
+      return Response.fromSupabase(results.data[0]);
     } catch {
       return null;
     }
@@ -183,27 +185,7 @@ class SupabaseQueries {
       if (updatedResponse) {
         return updatedResponse;
       }
-      const insertedResponse = await SupabaseQueries.insertResponse(token, guestId, data);
-      if (insertedResponse) {
-        return insertedResponse;
-      }
-      return SupabaseQueries.findResponseFromGuestId(guestId);
-    } catch {
-      return null;
-    }
-  }
-
-  public static async findResponseFromGuestId(guestId: string): Promise<Response | null> {
-    try {
-      const { data, error } = await SupabaseClientFactory.getInstance()
-        .from('wedding_responses')
-        .select()
-        .eq('guest_id', guestId)
-        .returns<ResponseSupabaseData[]>();
-      if (error) {
-        return null;
-      }
-      return Response.fromSupabase(data[0]);
+      return SupabaseQueries.insertResponse(token, guestId, data);
     } catch {
       return null;
     }
