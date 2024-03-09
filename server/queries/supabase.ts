@@ -187,7 +187,23 @@ class SupabaseQueries {
       if (insertedResponse) {
         return insertedResponse;
       }
+      return SupabaseQueries.findResponseFromGuestId(guestId);
+    } catch {
       return null;
+    }
+  }
+
+  public static async findResponseFromGuestId(guestId: string): Promise<Response | null> {
+    try {
+      const { data, error } = await SupabaseClientFactory.getInstance()
+        .from('wedding_responses')
+        .select()
+        .eq('guest_id', guestId)
+        .returns<ResponseSupabaseData[]>();
+      if (error) {
+        return null;
+      }
+      return Response.fromSupabase(data[0]);
     } catch {
       return null;
     }
