@@ -222,25 +222,16 @@ class SupabaseQueries {
     try {
       const { data, error } = await SupabaseClientFactory.getInstance()
         .from('wedding_guests')
-        .select(
-          [
-            '*',
-            'response:public_wedding_responses_guest_id_fkey(*)',
-            'guestGroup:public_wedding_guests_guest_group_id_fkey(*)',
-          ].join(','),
-        )
+        .select('*, response:public_wedding_responses_guest_id_fkey(*)')
         .eq('is_deleted', false)
-        .returns<({ guestGroup: { id: string }; response: ResponseSupabaseData } & GuestSupabaseData)[]>();
+        .returns<({ response: ResponseSupabaseData } & GuestSupabaseData)[]>();
       if (error) {
         return [];
       }
       if (!data) {
         return [];
       }
-      const guestGroups = new Map<
-        string | null,
-        ({ guestGroup: { id: string }; response: ResponseSupabaseData } & GuestSupabaseData)[]
-      >();
+      const guestGroups = new Map<string | null, ({ response: ResponseSupabaseData } & GuestSupabaseData)[]>();
       for (const row of data) {
         guestGroups.set(row.guest_group_id, [...(guestGroups.get(row.guest_group_id) || []), row]);
       }
@@ -250,7 +241,7 @@ class SupabaseQueries {
           guests: guestGroup.map((row): Guest => {
             return Guest.fromSupabase(row);
           }),
-          id: guestGroup[0].guestGroup.id || '',
+          id: guestGroup[0].guest_group_id || '',
           responses: guestGroup
             .filter((row): boolean => !!row.response)
             .map((row): Response => {
