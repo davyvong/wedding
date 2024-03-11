@@ -63,7 +63,7 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
         Logger.error(error);
       }
     });
-    return new Response(null, { status: 202 });
+    return new Response(null, { status: 204 });
   } catch (error: unknown) {
     return ServerError.handleError(error);
   }
@@ -93,7 +93,7 @@ export const POST = async (request: NextRequest, { params }: { params: { id: str
         Logger.error(error);
       }
     });
-    return new Response(null, { status: 202 });
+    return new Response(null, { status: 204 });
   } catch (error: unknown) {
     return ServerError.handleError(error);
   }
