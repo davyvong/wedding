@@ -86,7 +86,7 @@
   text-align: center;
 }
 
-.item {
+.task {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -95,12 +95,8 @@
   margin-top: 2rem;
 }
 
-.itemCompleted {
+.taskCompleted {
   color: var(--color-primary-scavenger);
-}
-
-.itemHint {
-  font-size: 1rem;
 }
 
 .heart {

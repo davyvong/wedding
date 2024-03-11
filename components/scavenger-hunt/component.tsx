@@ -7,29 +7,25 @@ import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
 import classNames from 'classnames';
 import { apricots, vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
+import ScavengerHuntUploader from 'components/scavenger-hunt/uploader';
 import Image from 'next/image';
 import { FC, useCallback } from 'react';
 
 import styles from './component.module.css';
-import { scanvengerHuntItems } from './constants';
+import { ScavengerHuntTask, scavengerHuntTasks } from './constants';
 
 const ScavengerHuntComponent: FC = () => {
-  const renderItem = useCallback((item, index: number): JSX.Element => {
-    const isCompleted = index === 0;
+  const renderTask = useCallback((task: ScavengerHuntTask): JSX.Element => {
+    const isCompleted = false;
     return (
-      <div className={classNames(styles.item, isCompleted && styles.itemCompleted)}>
+      <div className={classNames(styles.task, isCompleted && styles.taskCompleted)}>
         <Image
-          alt={item.name}
+          alt={task.name}
           className={styles.heart}
           src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP}
           width={32}
         />
-        <span>
-          {item.name}{' '}
-          {isCompleted && (
-            <span className={styles.itemHint}>{Translate.t('components.scavenger-hunt.completed-hint')}</span>
-          )}
-        </span>
+        <ScavengerHuntUploader disabled={isCompleted} task={task} />
       </div>
     );
   }, []);
@@ -48,7 +44,7 @@ const ScavengerHuntComponent: FC = () => {
         <div className={classNames(styles.title, vidaloka.className)}>
           {Translate.t('components.scavenger-hunt.title')}
         </div>
-        {scanvengerHuntItems.map(renderItem)}
+        {scavengerHuntTasks.map(renderTask)}
         <div className={classNames(styles.instructions, vidaloka.className)}>
           {Translate.t('components.scavenger-hunt.instructions')}
         </div>
