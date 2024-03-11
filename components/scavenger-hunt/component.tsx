@@ -2,7 +2,8 @@ import Background1IWEBP from 'assets/images/scavenger-hunt/background-1.webp';
 import Background2PNG from 'assets/images/scavenger-hunt/background-2.png';
 import Background3PNG from 'assets/images/scavenger-hunt/background-3.png';
 import CameraWEBP from 'assets/images/scavenger-hunt/camera.webp';
-import HeartWEBP from 'assets/images/scavenger-hunt/heart.webp';
+import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
+import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
 import classNames from 'classnames';
 import { apricots, vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
@@ -13,15 +14,25 @@ import styles from './component.module.css';
 import { scanvengerHuntItems } from './constants';
 
 const ScavengerHuntComponent: FC = () => {
-  const renderItem = useCallback(
-    (item): JSX.Element => (
-      <div className={styles.item}>
-        <Image alt={item.name} className={styles.heart} src={HeartWEBP} width={32} />
-        <span>{item.name}</span>
+  const renderItem = useCallback((item, index: number): JSX.Element => {
+    const isCompleted = index === 0;
+    return (
+      <div className={classNames(styles.item, isCompleted && styles.itemCompleted)}>
+        <Image
+          alt={item.name}
+          className={styles.heart}
+          src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP}
+          width={32}
+        />
+        <span>
+          {item.name}{' '}
+          {isCompleted && (
+            <span className={styles.itemHint}>{Translate.t('components.scavenger-hunt.completed-hint')}</span>
+          )}
+        </span>
       </div>
-    ),
-    [],
-  );
+    );
+  }, []);
 
   return (
     <div className={styles.page}>
