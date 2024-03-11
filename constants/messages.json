@@ -106,5 +106,18 @@
   "components.mega-menu.menu-items.songs.description": "Request songs you want to hear",
   "components.mega-menu.menu-items.songs.title": "Song Requests",
   "components.navigation-bar.title": "Vivian & Davy",
+  "components.scavenger-hunt.instructions": "Share the low! Please upload your photos to our album! We will share out favorites on our website.",
+  "components.scavenger-hunt.items.cake": "cake!",
+  "components.scavenger-hunt.items.candid-moment": "a candid moment of the bride & groom",
+  "components.scavenger-hunt.items.first-dance": "first dance",
+  "components.scavenger-hunt.items.food": "food pic",
+  "components.scavenger-hunt.items.group-photo": "a group photo",
+  "components.scavenger-hunt.items.peck-on-cheek": "a peck on the cheek",
+  "components.scavenger-hunt.items.tears-of-joy": "tears of joy",
+  "components.scavenger-hunt.items.toast-or-speech": "a toast or speech",
+  "components.scavenger-hunt.items.wedding-decoration": "your favorite wedding decoration",
+  "components.scavenger-hunt.items.your-outfit": "your outfit",
+  "components.scavenger-hunt.pretitle": "Wedding Photo",
+  "components.scavenger-hunt.title": "Scavenger Hunt",
   "components.select.no-options": "There are no options available."
 }
