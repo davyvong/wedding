@@ -1,7 +1,7 @@
 'use client';
 
-import BackgroundStrokeSVG from 'assets/images/background-stroke.svg';
-import VD72JPG from 'assets/images/VD-72.jpg';
+import BackgroundStrokeSVG from 'assets/images/landing/background-stroke.svg';
+import VD72JPG from 'assets/images/landing/VD-72.jpg';
 import classNames from 'classnames';
 import { waitForElement } from 'client/browser';
 import { brittanySignature, italiana, kollektif } from 'client/fonts';

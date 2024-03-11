@@ -1,8 +1,8 @@
-import VD13JPG from 'assets/images/VD-13.jpg';
-import VD22JPG from 'assets/images/VD-22.jpg';
-import VD26JPG from 'assets/images/VD-26.jpg';
-import VD50JPG from 'assets/images/VD-50.jpg';
-import VD83JPG from 'assets/images/VD-83.jpg';
+import VD13JPG from 'assets/images/landing/VD-13.jpg';
+import VD22JPG from 'assets/images/landing/VD-22.jpg';
+import VD26JPG from 'assets/images/landing/VD-26.jpg';
+import VD50JPG from 'assets/images/landing/VD-50.jpg';
+import VD83JPG from 'assets/images/landing/VD-83.jpg';
 import { StaticImageData } from 'next/image';
 import { CSSProperties } from 'react';
 
