@@ -99,7 +99,7 @@
 }
 
 .savedChangesMessageTimer {
-  background-color: var(--color-hover-surface);
+  background-color: var(--color-on-surface);
   border-radius: 5px;
   height: 5px;
   margin-top: 1.5rem;
@@ -112,7 +112,7 @@
 }
 
 .savedChangesMessageInverse .savedChangesMessageTimer {
-  background-color: var(--color-inverse-hover-surface);
+  background-color: var(--color-inverse-on-surface);
 }
 
 .header {
