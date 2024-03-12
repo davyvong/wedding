@@ -1,30 +1,33 @@
 'use client';
 
+import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
+import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
+import classNames from 'classnames';
 import Translate from 'client/translate';
 import { ScavengerHuntTask } from 'components/scavenger-hunt/constants';
-import { ChangeEvent, FC, Fragment, useCallback, useState } from 'react';
+import Image from 'next/image';
+import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react';
 
 import styles from './component.module.css';
 
-interface ScavengerHuntUploaderComponentProps {
+interface ScavengerHuntTaskComponentProps extends ScavengerHuntTask {
   disabled?: boolean;
-  task: ScavengerHuntTask;
 }
 
-const ScavengerHuntUploaderComponent: FC<ScavengerHuntUploaderComponentProps> = ({ disabled = false, task }) => {
+const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, disabled = false, name }) => {
   const [canRetry, setCanRetry] = useState<boolean>(false);
 
   const fetchSignedURL = useCallback(async (): Promise<URL> => {
     const response = await fetch('/api/scavenger/task', {
       body: JSON.stringify({
-        task: task.id,
+        task: id,
       }),
       cache: 'no-cache',
       method: 'POST',
     });
     const responseJson = await response.json();
     return new URL(responseJson.uploadURL);
-  }, [task]);
+  }, [id]);
 
   const uploadFile = useCallback(
     async (file?: File | null): Promise<void> => {
@@ -60,17 +63,17 @@ const ScavengerHuntUploaderComponent: FC<ScavengerHuntUploaderComponentProps> = 
   const onRetry = useCallback(async (): Promise<void> => {
     try {
       setCanRetry(false);
-      const fileInput = document.getElementById(task.id) as HTMLInputElement | null;
+      const fileInput = document.getElementById(id) as HTMLInputElement | null;
       await uploadFile(fileInput?.files?.item(0));
     } catch {
       setCanRetry(true);
     }
-  }, [task, uploadFile]);
+  }, [id, uploadFile]);
 
   const onUpload = useCallback(async (): Promise<void> => {
-    const fileInput = document.getElementById(task.id) as HTMLInputElement | null;
+    const fileInput = document.getElementById(id) as HTMLInputElement | null;
     fileInput?.click();
-  }, [task]);
+  }, [id]);
 
   const onClick = useCallback(() => {
     if (disabled) {
@@ -92,14 +95,17 @@ const ScavengerHuntUploaderComponent: FC<ScavengerHuntUploaderComponentProps> = 
     return Translate.t('components.scavenger-hunt.statuses.upload');
   }, [canRetry, disabled]);
 
+  const isCompleted = useMemo<boolean>(() => false, []);
+
   return (
-    <Fragment>
-      <div className={styles.taskContent} onClick={onClick}>
-        <span>{task.name}</span> <span className={styles.taskStatus}>{renderStatus()}</span>
+    <div className={classNames(styles.task, isCompleted && styles.completed)}>
+      <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
+      <div className={styles.content} onClick={onClick}>
+        <span>{name}</span> <span className={styles.status}>{renderStatus()}</span>
       </div>
-      <input hidden id={task.id} multiple={false} onChange={onChange} type="file" />
-    </Fragment>
+      <input hidden id={id} multiple={false} onChange={onChange} type="file" />
+    </div>
   );
 };
 
-export default ScavengerHuntUploaderComponent;
+export default ScavengerHuntTaskComponent;

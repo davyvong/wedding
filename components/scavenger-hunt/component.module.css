@@ -89,25 +89,8 @@
   text-align: center;
 }
 
-.task {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 2rem;
-}
-
-.taskCompleted {
-  color: var(--color-primary-scavenger);
-}
-
-.heart {
-  margin-right: 1rem;
-}
-
 .instructions {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   margin-top: 2rem;
   text-align: center;
 }
@@ -124,5 +107,9 @@
 
   .title {
     font-size: 3.5rem;
+  }
+
+  .instructions {
+    font-size: 1.375rem;
   }
 }
