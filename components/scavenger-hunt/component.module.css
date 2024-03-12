@@ -1,5 +1,6 @@
 .page {
-  padding: 0 var(--page-side-spacing);
+  padding: var(--page-side-spacing);
+  padding-top: 0;
 }
 
 .card {
@@ -61,28 +62,30 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  font-size: 3rem;
+  font-size: 2.25rem;
   justify-content: center;
 }
 
-.pretitle .camera {
+.camera {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
+  height: 28px;
   user-select: none;
+  width: 36px;
   z-index: -1;
 }
 
-.pretitle .camera:first-child {
+.camera:first-child {
   margin-right: 1.5rem;
 }
 
-.pretitle .camera:last-child {
+.camera:last-child {
   margin-left: 1.5rem;
 }
 
 .title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   text-align: center;
 }
 
@@ -107,4 +110,19 @@
   font-size: 1.375rem;
   margin-top: 2rem;
   text-align: center;
+}
+
+@media (min-width: 500px) {
+  .pretitle {
+    font-size: 3rem;
+  }
+
+  .camera {
+    height: 40px;
+    width: 52px;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
 }
