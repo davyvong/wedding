@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { ListObjectsV2Command, PutObjectCommand, S3Client, _Object } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 class CloudflareAPI {
@@ -20,6 +20,18 @@ class CloudflareAPI {
       expiresIn: 3600,
     });
     return new URL(signedURL);
+  }
+
+  public static async listObjects(prefix: string): Promise<_Object[]> {
+    const command = new ListObjectsV2Command({
+      Bucket: process.env.CLOUDFLARE_BUCKET_ID,
+      Prefix: prefix,
+    });
+    const list = await CloudflareAPI.s3Client.send(command);
+    if (!list.Contents) {
+      return [];
+    }
+    return list.Contents;
   }
 }
 
