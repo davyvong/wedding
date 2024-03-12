@@ -8,13 +8,18 @@ import classNames from 'classnames';
 import { apricots, vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
 import ScavengerHuntUploader from 'components/scavenger-hunt/uploader';
+import { JWTPayload } from 'jose';
 import Image from 'next/image';
 import { FC, useCallback } from 'react';
 
 import styles from './component.module.css';
 import { ScavengerHuntTask, scavengerHuntTasks } from './constants';
 
-const ScavengerHuntComponent: FC = () => {
+interface ScavengerHuntComponentProps {
+  token?: JWTPayload;
+}
+
+const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = () => {
   const renderTask = useCallback((task: ScavengerHuntTask): JSX.Element => {
     const isCompleted = false;
     return (
