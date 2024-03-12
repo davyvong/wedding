@@ -18,7 +18,8 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     if (!bodySchema.isValidSync(body)) {
       return ServerError.BadRequest();
     }
-    const uploadURL = await CloudflareAPI.getSignedUrl(body.task);
+    const objectKey = 'username-' + body.task;
+    const uploadURL = await CloudflareAPI.getSignedUrl(objectKey);
     return NextResponse.json({ uploadURL }, { status: 200 });
   } catch (error: unknown) {
     return ServerError.handleError(error);
