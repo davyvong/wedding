@@ -4,8 +4,8 @@
 }
 
 .card {
-  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
   border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
   margin-left: auto;
   margin-right: auto;
   max-width: 672px;
@@ -14,6 +14,17 @@
   padding-bottom: 8rem;
   position: relative;
   width: 100%;
+}
+
+.card:before {
+  background-color: var(--palette-white);
+  bottom: 0;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
 }
 
 .background1 {
