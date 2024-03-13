@@ -13,6 +13,7 @@ export const runtime = 'edge';
 
 export const GET = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
+    Logger.info({ params });
     const paramsSchema = object({
       guest: string().uuid().required(),
     });
@@ -47,6 +48,7 @@ export const GET = async (request: NextRequest, { params }: { params: { guest: s
 
 export const POST = async (request: NextRequest, { params }: { params: { guest: string } }): Promise<Response> => {
   try {
+    Logger.info({ params });
     const paramsSchema = object({
       guest: string().uuid().required(),
     });
@@ -54,6 +56,7 @@ export const POST = async (request: NextRequest, { params }: { params: { guest: 
       return ServerError.BadRequest();
     }
     const body = await request.json();
+    Logger.info({ body });
     const bodySchema = object({
       attendance: boolean().required(),
       dietaryRestrictions: string(),
