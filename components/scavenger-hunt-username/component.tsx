@@ -9,7 +9,7 @@ import scavengerHuntStyles from 'components/scavenger-hunt/component.module.css'
 import { Dispatch, FC, FormEvent, SetStateAction, useCallback, useState } from 'react';
 import { string } from 'yup';
 
-import { signScavengerHuntToken } from './actions';
+import { claimUsername } from './actions';
 import styles from './component.module.css';
 
 interface ScavengerHuntUsernameComponentProps {
@@ -19,6 +19,7 @@ interface ScavengerHuntUsernameComponentProps {
 const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = ({ setHasUsername }) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [recoveryEmail] = useState<string>('');
   const [takenUsernames, setTakenUsernames] = useState<Set<string>>(new Set());
   const [username, setUsername] = useState<string>('');
 
@@ -59,14 +60,18 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
         if (isSubmitting) {
           return;
         }
-        setIsSubmitting(true);
         if (errors.length > 0) {
           return;
         }
-        const validationErrors = await signScavengerHuntToken(username);
+        setIsSubmitting(true);
+        const payload = {
+          recoveryEmail: recoveryEmail.toLowerCase().trim(),
+          username: username.toLowerCase().trim(),
+        };
+        const validationErrors = await claimUsername(payload.username, payload.recoveryEmail);
         if (validationErrors.length > 0) {
           if (validationErrors.includes('components.scavenger-hunt-username.errors.unavailable')) {
-            onTakenUsername(username);
+            onTakenUsername(payload.username);
           }
           setErrors(validationErrors);
         } else {
@@ -76,7 +81,7 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
         setIsSubmitting(false);
       }
     },
-    [errors.length, isSubmitting, onTakenUsername, setHasUsername, username],
+    [errors.length, isSubmitting, onTakenUsername, recoveryEmail, setHasUsername, username],
   );
 
   const renderError = useCallback(

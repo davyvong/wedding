@@ -392,7 +392,7 @@ class SupabaseQueries {
 
   public static async insertScavengerHuntToken(
     username: string,
-    recoveryEmail: string | null = null,
+    recoveryEmail: string | null,
   ): Promise<ScavengerTokenSupabaseData | null> {
     try {
       if (!username) {
