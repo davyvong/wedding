@@ -1,9 +1,8 @@
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import SupabaseClientFactory from 'server/clients/supabase';
 import Guest, { GuestSupabaseData } from 'server/models/guest';
-import { GuestTokenSupabaseData } from 'server/models/guest-token';
 import Response, { ResponseData, ResponseSupabaseData } from 'server/models/response';
-import { ScavengerTokenSupabaseData } from 'server/models/scavenger-participant';
+import { ScavengerTokenSupabaseData } from 'server/models/scavenger-token';
 import { SongRequestSupabaseData } from 'server/models/song-request';
 
 class SupabaseQueries {
@@ -377,7 +376,7 @@ class SupabaseQueries {
         return null;
       }
       const { data, error } = await SupabaseClientFactory.getInstance()
-        .from('wedding_scavenger_participants')
+        .from('wedding_scavenger_tokens')
         .select()
         .eq('username', username)
         .limit(1)
@@ -391,14 +390,20 @@ class SupabaseQueries {
     }
   }
 
-  public static async insertScavengerHuntToken(username: string): Promise<ScavengerTokenSupabaseData | null> {
+  public static async insertScavengerHuntToken(
+    username: string,
+    recoveryEmail: string | null = null,
+  ): Promise<ScavengerTokenSupabaseData | null> {
     try {
       if (!username) {
         return null;
       }
       const { data, error } = await SupabaseClientFactory.getInstance()
-        .from('wedding_scavenger_participants')
-        .insert({})
+        .from('wedding_scavenger_tokens')
+        .insert({
+          recovery_email: recoveryEmail || null,
+          username,
+        })
         .select()
         .returns<ScavengerTokenSupabaseData[]>();
       if (error) {
