@@ -6,7 +6,7 @@ class GoogleSheetsAPI {
       return false;
     }
     await fetch(process.env.GOOGLE_SHEETS_WEDDING_WEBHOOK, {
-      cache: 'no-cache',
+      cache: 'no-store',
       method: 'GET',
     });
     return true;

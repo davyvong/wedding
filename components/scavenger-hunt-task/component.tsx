@@ -4,6 +4,7 @@ import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
 import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
 import classNames from 'classnames';
 import Translate from 'client/translate';
+import { fetchSignedURL } from 'components/scavenger-hunt/actions';
 import { ScavengerHuntTask } from 'components/scavenger-hunt/constants';
 import Image from 'next/image';
 import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react';
@@ -17,18 +18,6 @@ interface ScavengerHuntTaskComponentProps extends ScavengerHuntTask {
 const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, disabled = false, name }) => {
   const [canRetry, setCanRetry] = useState<boolean>(false);
 
-  const fetchSignedURL = useCallback(async (): Promise<URL> => {
-    const response = await fetch('/api/scavenger/task', {
-      body: JSON.stringify({
-        task: id,
-      }),
-      cache: 'no-cache',
-      method: 'POST',
-    });
-    const responseJson = await response.json();
-    return new URL(responseJson.uploadURL);
-  }, [id]);
-
   const uploadFile = useCallback(
     async (file?: File | null): Promise<void> => {
       if (!file) {
@@ -36,16 +25,21 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, d
       }
       try {
         setCanRetry(false);
-        const url = await fetchSignedURL();
-        await fetch(url, {
-          body: file,
-          method: 'PUT',
-        });
+        const url = await fetchSignedURL(id);
+        if (url) {
+          await fetch(url, {
+            body: file,
+            cache: 'no-store',
+            method: 'PUT',
+          });
+        } else {
+          setCanRetry(true);
+        }
       } catch {
         setCanRetry(true);
       }
     },
-    [fetchSignedURL],
+    [id],
   );
 
   const onChange = useCallback(
