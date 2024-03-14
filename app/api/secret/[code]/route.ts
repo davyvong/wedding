@@ -1,4 +1,3 @@
-import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { NextRequest, NextResponse } from 'next/server';
 import { GuestTokenPayload } from 'server/authenticator';
 import RedisClientFactory from 'server/clients/redis';
@@ -48,13 +47,6 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     const response = NextResponse.redirect(redirectURL);
     const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
     response.cookies.set('token', token, { expires: expiryDate });
-    waitUntil(async (): Promise<void> => {
-      try {
-        await SupabaseQueries.insertGuestToken(payload.tokenId, payload.guestId);
-      } catch (error: unknown) {
-        Logger.error(error);
-      }
-    });
     return response;
   } catch (error: unknown) {
     ServerError.handleError(error);

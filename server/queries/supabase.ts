@@ -1,8 +1,8 @@
 import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import SupabaseClientFactory from 'server/clients/supabase';
 import Guest, { GuestSupabaseData } from 'server/models/guest';
-import { GuestTokenSupabaseData } from 'server/models/guest-token';
 import Response, { ResponseData, ResponseSupabaseData } from 'server/models/response';
+import { ScavengeHuntTokenSupabaseData } from 'server/models/scavenger-hunt-token';
 import { SongRequestSupabaseData } from 'server/models/song-request';
 
 class SupabaseQueries {
@@ -351,22 +351,6 @@ class SupabaseQueries {
     }
   }
 
-  public static async insertGuestToken(tokenId: string, guestId: string): Promise<string | null> {
-    try {
-      const { data, error } = await SupabaseClientFactory.getInstance()
-        .from('wedding_guest_tokens')
-        .insert({ guest_id: guestId, token_id: tokenId })
-        .select()
-        .returns<GuestTokenSupabaseData[]>();
-      if (error) {
-        return null;
-      }
-      return data[0].id;
-    } catch {
-      return null;
-    }
-  }
-
   public static async updateGuestSubscription(guestId: string, isSubscribed: boolean): Promise<boolean> {
     try {
       if (!guestId) {
@@ -383,6 +367,51 @@ class SupabaseQueries {
       return data[0].is_subscribed;
     } catch {
       return false;
+    }
+  }
+
+  public static async findScavengerHuntToken(username: string): Promise<ScavengeHuntTokenSupabaseData | null> {
+    try {
+      if (!username) {
+        return null;
+      }
+      const { data, error } = await SupabaseClientFactory.getInstance()
+        .from('wedding_scavenger_tokens')
+        .select()
+        .eq('username', username)
+        .limit(1)
+        .returns<ScavengeHuntTokenSupabaseData[]>();
+      if (error || !data) {
+        return null;
+      }
+      return data[0];
+    } catch {
+      return null;
+    }
+  }
+
+  public static async insertScavengerHuntToken(
+    username: string,
+    recoveryEmail: string | null,
+  ): Promise<ScavengeHuntTokenSupabaseData | null> {
+    try {
+      if (!username) {
+        return null;
+      }
+      const { data, error } = await SupabaseClientFactory.getInstance()
+        .from('wedding_scavenger_tokens')
+        .insert({
+          recovery_email: recoveryEmail || null,
+          username,
+        })
+        .select()
+        .returns<ScavengeHuntTokenSupabaseData[]>();
+      if (error) {
+        return null;
+      }
+      return data[0];
+    } catch {
+      return null;
     }
   }
 }

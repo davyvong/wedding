@@ -1,5 +1,5 @@
 export interface SongRequestSupabaseData {
-  id: number;
+  id: string;
   public_id: string;
   spotify_track_id: string;
 }

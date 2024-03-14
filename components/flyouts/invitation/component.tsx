@@ -32,7 +32,9 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
       }
       setIsSending(true);
       const response = await fetch('/api/secret/email', {
-        body: JSON.stringify({ email: email.toLowerCase() }),
+        body: JSON.stringify({
+          email: email.toLowerCase().trim(),
+        }),
         cache: 'no-store',
         method: 'POST',
       });

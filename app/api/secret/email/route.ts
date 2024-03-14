@@ -28,6 +28,7 @@ const getRandomWords = (count: number): string[] => {
 export const POST = async (request: NextRequest): Promise<Response> => {
   try {
     const body = await request.json();
+    Logger.info({ body });
     const bodySchema = object({
       email: string().email().required(),
     });

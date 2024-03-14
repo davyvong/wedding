@@ -2,6 +2,10 @@
 
 namespace NodeJS {
   interface ProcessEnv {
+    CLOUDFLARE_ACCESS_KEY_ID: string;
+    CLOUDFLARE_ACCOUNT_ID: string;
+    CLOUDFLARE_BUCKET_ID: string;
+    CLOUDFLARE_SECRET_ACCESS_KEY: string;
     GOOGLE_SHEETS_WEDDING_WEBHOOK: string;
     JWT_SECRET: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
