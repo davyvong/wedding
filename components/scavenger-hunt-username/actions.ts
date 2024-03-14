@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import JWT from 'server/tokens/jwt';
+import ScavengerHuntToken from 'server/tokens/scavenger-hunt';
 import { string } from 'yup';
 
 export const signScavengerHuntToken = async (username: string): Promise<string[]> => {
@@ -24,7 +24,7 @@ export const signScavengerHuntToken = async (username: string): Promise<string[]
     return Array.from(errors);
   }
   const expiresIn1Year = 31536000;
-  const token = await JWT.sign({ username }, expiresIn1Year);
+  const token = await ScavengerHuntToken.sign(username, expiresIn1Year);
   const expiryDate = new Date(Date.now() + expiresIn1Year * 1000);
   cookies().set('token_sh', token, { expires: expiryDate });
   return [];
