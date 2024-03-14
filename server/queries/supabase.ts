@@ -2,7 +2,7 @@ import { VerifiedGuestTokenPayload } from 'server/authenticator';
 import SupabaseClientFactory from 'server/clients/supabase';
 import Guest, { GuestSupabaseData } from 'server/models/guest';
 import Response, { ResponseData, ResponseSupabaseData } from 'server/models/response';
-import { ScavengerTokenSupabaseData } from 'server/models/scavenger-token';
+import { ScavengeHuntTokenSupabaseData } from 'server/models/scavenger-hunt-token';
 import { SongRequestSupabaseData } from 'server/models/song-request';
 
 class SupabaseQueries {
@@ -370,7 +370,7 @@ class SupabaseQueries {
     }
   }
 
-  public static async findScavengerHuntToken(username: string): Promise<ScavengerTokenSupabaseData | null> {
+  public static async findScavengerHuntToken(username: string): Promise<ScavengeHuntTokenSupabaseData | null> {
     try {
       if (!username) {
         return null;
@@ -380,7 +380,7 @@ class SupabaseQueries {
         .select()
         .eq('username', username)
         .limit(1)
-        .returns<ScavengerTokenSupabaseData[]>();
+        .returns<ScavengeHuntTokenSupabaseData[]>();
       if (error || !data) {
         return null;
       }
@@ -393,7 +393,7 @@ class SupabaseQueries {
   public static async insertScavengerHuntToken(
     username: string,
     recoveryEmail: string | null,
-  ): Promise<ScavengerTokenSupabaseData | null> {
+  ): Promise<ScavengeHuntTokenSupabaseData | null> {
     try {
       if (!username) {
         return null;
@@ -405,7 +405,7 @@ class SupabaseQueries {
           username,
         })
         .select()
-        .returns<ScavengerTokenSupabaseData[]>();
+        .returns<ScavengeHuntTokenSupabaseData[]>();
       if (error) {
         return null;
       }

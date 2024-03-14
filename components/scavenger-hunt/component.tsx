@@ -11,10 +11,11 @@ import ScavengerHuntTaskComponent from 'components/scavenger-hunt-task';
 import ScavengerHuntUsername from 'components/scavenger-hunt-username';
 import { JWTPayload } from 'jose';
 import Image from 'next/image';
-import { FC, Fragment, ReactNode, useCallback, useState } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 
+import { fetchSubmittedTasks } from './actions';
 import styles from './component.module.css';
-import { ScavengerHuntTask, scavengerHuntTasks } from './constants';
+import { ScavengerHuntTaskId, scavengerHuntTasks } from './constants';
 
 interface ScavengerHuntComponentProps {
   token?: JWTPayload;
@@ -22,9 +23,10 @@ interface ScavengerHuntComponentProps {
 
 const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
   const [hasUsername, setHasUsername] = useState<boolean>(!!token);
+  const [submittedTasks, setSubmittedTasks] = useState<Set<ScavengerHuntTaskId>>(new Set());
 
-  const renderLayout = useCallback((children: ReactNode, hasFooter: boolean = true): JSX.Element => {
-    return (
+  const renderLayout = useCallback(
+    (children: ReactNode, hasFooter: boolean = true): JSX.Element => (
       <div className={styles.page}>
         <div className={classNames(styles.card, hasFooter && styles.cardWithFooter)}>
           <Image alt="" className={styles.background1} priority src={Background1IWEBP} />
@@ -39,7 +41,21 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
           {children}
         </div>
       </div>
-    );
+    ),
+    [],
+  );
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const results = await fetchSubmittedTasks();
+        if (results) {
+          setSubmittedTasks(new Set(results.tasks));
+        }
+      } catch {
+        // Failed to fetch submitted tasks
+      }
+    })();
   }, []);
 
   if (!hasUsername) {
@@ -50,8 +66,8 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     <Fragment>
       <Image alt="" className={styles.background2} priority src={Background2PNG} />
       <Image alt="" className={styles.background3} priority src={Background3PNG} />
-      {scavengerHuntTasks.map((task: ScavengerHuntTask) => (
-        <ScavengerHuntTaskComponent {...task} key={task.id} />
+      {scavengerHuntTasks.map((task: { id: ScavengerHuntTaskId; name: string }) => (
+        <ScavengerHuntTaskComponent {...task} isCompleted={submittedTasks.has(task.id)} key={task.id} />
       ))}
       <div className={classNames(styles.instructions, vidaloka.className)}>
         {Translate.t('components.scavenger-hunt.instructions')}

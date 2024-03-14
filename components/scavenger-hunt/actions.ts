@@ -1,24 +1,28 @@
 'use server';
 
+import { _Object } from '@aws-sdk/client-s3';
 import { cookies } from 'next/headers';
 import CloudflareAPI from 'server/apis/cloudflare';
 import ScavengerHuntToken from 'server/tokens/scavenger-hunt';
 import Logger from 'utils/logger';
-import { string } from 'yup';
 
 import { ScavengerHuntTaskId } from './constants';
 
-export const fetchSignedURL = async (task: ScavengerHuntTaskId): Promise<string | null> => {
+export const fetchSubmittedTasks = async (): Promise<{ tasks: ScavengerHuntTaskId[]; username: string } | null> => {
   try {
     const token = await ScavengerHuntToken.verify(cookies());
     if (!token) {
       return null;
     }
-    if (!string().oneOf(Object.values(ScavengerHuntTaskId)).required().isValidSync(task)) {
-      return null;
-    }
-    const url = await CloudflareAPI.getSignedUrl(token.username + '-' + task);
-    return url.href;
+    const objects = await CloudflareAPI.listObjects(token.username + '-');
+    const tasks = objects.map((object: _Object): ScavengerHuntTaskId => {
+      const keyPaths = object.Key?.split('-');
+      return keyPaths?.slice(1).join('-') as ScavengerHuntTaskId;
+    });
+    return {
+      tasks,
+      username: token.username,
+    };
   } catch (error: unknown) {
     Logger.error(error);
     return null;

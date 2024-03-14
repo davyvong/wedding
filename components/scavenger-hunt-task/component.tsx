@@ -4,15 +4,18 @@ import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
 import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
 import classNames from 'classnames';
 import Translate from 'client/translate';
-import { fetchSignedURL } from 'components/scavenger-hunt/actions';
-import { ScavengerHuntTask } from 'components/scavenger-hunt/constants';
+import { ScavengerHuntTaskId } from 'components/scavenger-hunt/constants';
 import Image from 'next/image';
 import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react';
 
+import { fetchUploadURL } from './actions';
 import styles from './component.module.css';
 
-interface ScavengerHuntTaskComponentProps extends ScavengerHuntTask {
+interface ScavengerHuntTaskComponentProps {
   disabled?: boolean;
+  id: ScavengerHuntTaskId;
+  isCompleted: boolean;
+  name: string;
 }
 
 const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, disabled = false, name }) => {
@@ -25,7 +28,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, d
       }
       try {
         setCanRetry(false);
-        const url = await fetchSignedURL(id);
+        const url = await fetchUploadURL(id);
         if (url) {
           await fetch(url, {
             body: file,

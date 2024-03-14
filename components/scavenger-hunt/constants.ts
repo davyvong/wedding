@@ -13,12 +13,7 @@ export enum ScavengerHuntTaskId {
   YourOutfit = 'your-outfit',
 }
 
-export interface ScavengerHuntTask {
-  id: ScavengerHuntTaskId;
-  name: string;
-}
-
-export const scavengerHuntTasks: ScavengerHuntTask[] = [
+export const scavengerHuntTasks: { id: ScavengerHuntTaskId; name: string }[] = [
   {
     id: ScavengerHuntTaskId.YourOutfit,
     name: Translate.t('components.scavenger-hunt.items.your-outfit'),
