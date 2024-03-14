@@ -352,22 +352,6 @@ class SupabaseQueries {
     }
   }
 
-  public static async insertGuestToken(tokenId: string, guestId: string): Promise<string | null> {
-    try {
-      const { data, error } = await SupabaseClientFactory.getInstance()
-        .from('wedding_guest_tokens')
-        .insert({ guest_id: guestId, token_id: tokenId })
-        .select()
-        .returns<GuestTokenSupabaseData[]>();
-      if (error) {
-        return null;
-      }
-      return data[0].id;
-    } catch {
-      return null;
-    }
-  }
-
   public static async updateGuestSubscription(guestId: string, isSubscribed: boolean): Promise<boolean> {
     try {
       if (!guestId) {
