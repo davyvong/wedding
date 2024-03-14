@@ -55,9 +55,14 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
     [errors, setHasUsername, username],
   );
 
-  const renderError = useCallback((error: string): JSX.Element => {
-    return <div className={styles.errorMessage}>{Translate.t(error)}</div>;
-  }, []);
+  const renderError = useCallback(
+    (error: string): JSX.Element => (
+      <div className={styles.errorMessage} key={error}>
+        {Translate.t(error)}
+      </div>
+    ),
+    [],
+  );
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
