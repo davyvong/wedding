@@ -11,7 +11,7 @@ import ScavengerHuntTaskComponent from 'components/scavenger-hunt-task';
 import ScavengerHuntUsername from 'components/scavenger-hunt-username';
 import { JWTPayload } from 'jose';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useState } from 'react';
 
 import styles from './component.module.css';
 import { ScavengerHuntTask, scavengerHuntTasks } from './constants';
@@ -23,32 +23,40 @@ interface ScavengerHuntComponentProps {
 const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
   const [hasUsername, setHasUsername] = useState<boolean>(!!token);
 
-  if (!hasUsername) {
-    return <ScavengerHuntUsername setHasUsername={setHasUsername} />;
-  }
-
-  return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <Image alt="" className={styles.background1} priority src={Background1IWEBP} />
-        <Image alt="" className={styles.background2} priority src={Background2PNG} />
-        <Image alt="" className={styles.background3} priority src={Background3PNG} />
-        <div className={classNames(styles.pretitle, apricots.className)}>
-          <Image alt="" className={styles.camera} height={40} priority src={CameraWEBP} />
-          <span>{Translate.t('components.scavenger-hunt.pretitle')}</span>
-          <Image alt="" className={styles.camera} height={40} priority src={CameraWEBP} />
-        </div>
-        <div className={classNames(styles.title, vidaloka.className)}>
-          {Translate.t('components.scavenger-hunt.title')}
-        </div>
-        {scavengerHuntTasks.map((task: ScavengerHuntTask) => (
-          <ScavengerHuntTaskComponent {...task} key={task.id} />
-        ))}
-        <div className={classNames(styles.instructions, vidaloka.className)}>
-          {Translate.t('components.scavenger-hunt.instructions')}
+  const renderLayout = useCallback((children: ReactNode, hasFooter: boolean = true): JSX.Element => {
+    return (
+      <div className={styles.page}>
+        <div className={classNames(styles.card, hasFooter && styles.cardWithFooter)}>
+          <Image alt="" className={styles.background1} priority src={Background1IWEBP} />
+          <div className={classNames(styles.pretitle, apricots.className)}>
+            <Image alt="" className={styles.camera} height={40} priority src={CameraWEBP} />
+            <span>{Translate.t('components.scavenger-hunt.pretitle')}</span>
+            <Image alt="" className={styles.camera} height={40} priority src={CameraWEBP} />
+          </div>
+          <div className={classNames(styles.title, vidaloka.className)}>
+            {Translate.t('components.scavenger-hunt.title')}
+          </div>
+          {children}
         </div>
       </div>
-    </div>
+    );
+  }, []);
+
+  if (!hasUsername) {
+    return renderLayout(<ScavengerHuntUsername setHasUsername={setHasUsername} />, false);
+  }
+
+  return renderLayout(
+    <Fragment>
+      <Image alt="" className={styles.background2} priority src={Background2PNG} />
+      <Image alt="" className={styles.background3} priority src={Background3PNG} />
+      {scavengerHuntTasks.map((task: ScavengerHuntTask) => (
+        <ScavengerHuntTaskComponent {...task} key={task.id} />
+      ))}
+      <div className={classNames(styles.instructions, vidaloka.className)}>
+        {Translate.t('components.scavenger-hunt.instructions')}
+      </div>
+    </Fragment>,
   );
 };
 

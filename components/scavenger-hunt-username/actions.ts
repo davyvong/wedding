@@ -2,27 +2,30 @@
 
 import { cookies } from 'next/headers';
 import JWT from 'server/tokens/jwt';
-import { object, string } from 'yup';
+import { string } from 'yup';
 
-export interface ScavengerHuntTokenPayload {
-  username: string;
-}
-
-export const signScavengerHuntToken = async (payload: ScavengerHuntTokenPayload): Promise<string | undefined> => {
-  const payloadSchema = object({
-    username: string()
-      .max(24)
-      .min(3)
+export const signScavengerHuntToken = async (username: string): Promise<string[]> => {
+  const errors: Set<string> = new Set();
+  if (!string().required().min(3).max(24).isValidSync(username)) {
+    errors.add('components.scavenger-hunt-username.errors.length');
+  }
+  if (
+    !string()
       .matches(/^[a-zA-Z0-9_]*$/)
-      .required(),
-  });
-  if (!payloadSchema.isValidSync(payload)) {
-    // TODO: Return schema validation failed message
-    return '';
+      .isValidSync(username)
+  ) {
+    errors.add('components.scavenger-hunt-username.errors.characters');
   }
   // TODO: Check username availability
+  // if () {
+  //   errors.add('components.scavenger-hunt-username.errors.unavailable');
+  // }
+  if (errors.size > 0) {
+    return Array.from(errors);
+  }
   const expiresIn1Year = 31536000;
-  const token = await JWT.sign({ username: payload.username }, expiresIn1Year);
+  const token = await JWT.sign({ username }, expiresIn1Year);
   const expiryDate = new Date(Date.now() + expiresIn1Year * 1000);
   cookies().set('token_sh', token, { expires: expiryDate });
+  return [];
 };

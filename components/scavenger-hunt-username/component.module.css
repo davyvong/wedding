@@ -1,0 +1,59 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inputWrapper {
+  margin-top: 3rem;
+  position: relative;
+  width: 100%;
+}
+
+.textInput {
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-secondary-scavenger);
+  font-size: 1rem;
+  padding: 0.75rem;
+  padding-left: 2.25rem;
+  width: 100%;
+}
+
+.usernamePrefix {
+  color: var(--color-secondary-scavenger);
+  font-size: 1rem;
+  font-weight: 600;
+  height: 20px;
+  left: 0.75rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+}
+
+.validationErrors {
+  margin-top: 0.5rem;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: 0.875rem;
+}
+
+.submitButton {
+  background-color: var(--color-secondary-scavenger);
+  border-radius: 0.5rem;
+  border: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  outline: none;
+  padding-bottom: 0.75rem;
+  padding-top: 0.75rem;
+  transition: opacity 300ms ease-in-out;
+}
+
+.submitButton:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
