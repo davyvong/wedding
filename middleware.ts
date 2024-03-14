@@ -4,6 +4,7 @@ import ServerEnvironment from 'server/environment';
 import ServerError from 'server/error';
 import RateLimiter from 'server/rate-limiter';
 import JWT from 'server/tokens/jwt';
+import ScavengerHuntToken from 'server/tokens/scavenger-hunt';
 import { string } from 'yup';
 
 export const config = {
@@ -48,6 +49,22 @@ async function middleware(request: NextRequest): Promise<Response> {
         const token = await JWT.sign(payload, expiresIn90Days);
         const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
         response.cookies.set('token', token, { expires: expiryDate });
+      }
+    } catch (error: unknown) {
+      // Unable to verify token
+    }
+  }
+  const scavengerTokenCookie = request.cookies.get('token_sh');
+  if (scavengerTokenCookie) {
+    try {
+      const payload = await ScavengerHuntToken.verify(request.cookies);
+      const next3MonthsDate = new Date();
+      next3MonthsDate.setFullYear(next3MonthsDate.getFullYear() + 1);
+      if (payload?.exp && payload.exp < next3MonthsDate.getTime() / 1000) {
+        const expiresIn1Year = 31536000;
+        const signedToken = await ScavengerHuntToken.sign(payload.tokenId, payload.username, expiresIn1Year);
+        const expiryDate = new Date(Date.now() + expiresIn1Year * 1000);
+        response.cookies.set('token_sh', signedToken, { expires: expiryDate });
       }
     } catch (error: unknown) {
       // Unable to verify token

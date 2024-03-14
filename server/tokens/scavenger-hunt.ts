@@ -4,6 +4,7 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import JWT from 'server/tokens/jwt';
 
 export interface ScavengerHuntTokenPayload extends JWTPayload {
+  tokenId: string;
   username: string;
 }
 
