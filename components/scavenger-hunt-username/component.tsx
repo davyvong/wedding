@@ -4,6 +4,7 @@ import AlternateEmailIconSVG from 'assets/icons/alternate-email.svg';
 import classNames from 'classnames';
 import { vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
+import LoadingHeart from 'components/loading-heart';
 import scavengerHuntStyles from 'components/scavenger-hunt/component.module.css';
 import { Dispatch, FC, FormEvent, SetStateAction, useCallback, useState } from 'react';
 import { string } from 'yup';
@@ -17,42 +18,65 @@ interface ScavengerHuntUsernameComponentProps {
 
 const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = ({ setHasUsername }) => {
   const [errors, setErrors] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [takenUsernames, setTakenUsernames] = useState<Set<string>>(new Set());
   const [username, setUsername] = useState<string>('');
 
-  const onChange = useCallback((event): void => {
-    setUsername(event.target.value);
-    const validationErrors: Set<string> = new Set();
-    if (event.target.value.length !== 0 && !string().required().min(3).max(24).isValidSync(event.target.value)) {
-      validationErrors.add('components.scavenger-hunt-username.errors.length');
-    }
-    if (
-      !string()
-        .matches(/^[a-zA-Z0-9_]*$/)
-        .isValidSync(event.target.value)
-    ) {
-      validationErrors.add('components.scavenger-hunt-username.errors.characters');
-    }
-    setErrors(Array.from(validationErrors));
+  const onTakenUsername = useCallback((takenUsername: string): void => {
+    setTakenUsernames((prevState: Set<string>): Set<string> => {
+      const nextState = new Set(prevState);
+      nextState.add(takenUsername);
+      return nextState;
+    });
   }, []);
+
+  const onChange = useCallback(
+    (event): void => {
+      setUsername(event.target.value);
+      const validationErrors: Set<string> = new Set();
+      if (event.target.value.length !== 0 && !string().required().min(3).max(24).isValidSync(event.target.value)) {
+        validationErrors.add('components.scavenger-hunt-username.errors.length');
+      }
+      if (
+        !string()
+          .matches(/^[a-zA-Z0-9_]*$/)
+          .isValidSync(event.target.value)
+      ) {
+        validationErrors.add('components.scavenger-hunt-username.errors.characters');
+      }
+      if (takenUsernames.has(event.target.value)) {
+        validationErrors.add('components.scavenger-hunt-username.errors.unavailable');
+      }
+      setErrors(Array.from(validationErrors));
+    },
+    [takenUsernames],
+  );
 
   const onSubmit = useCallback(
     async (event: FormEvent): Promise<void> => {
       try {
         event.preventDefault();
+        if (isSubmitting) {
+          return;
+        }
+        setIsSubmitting(true);
         if (errors.length > 0) {
           return;
         }
         const validationErrors = await signScavengerHuntToken(username);
         if (validationErrors.length > 0) {
+          if (validationErrors.includes('components.scavenger-hunt-username.errors.unavailable')) {
+            onTakenUsername(username);
+          }
           setErrors(validationErrors);
         } else {
           setHasUsername(true);
         }
-      } catch {
-        //
+      } finally {
+        setIsSubmitting(false);
       }
     },
-    [errors, setHasUsername, username],
+    [errors.length, isSubmitting, onTakenUsername, setHasUsername, username],
   );
 
   const renderError = useCallback(
@@ -72,6 +96,7 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
       <div className={styles.inputWrapper}>
         <input
           className={styles.textInput}
+          disabled={isSubmitting}
           onChange={onChange}
           placeholder={Translate.t('components.scavenger-hunt-username.placeholders.username')}
           type="text"
@@ -80,8 +105,8 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
         <AlternateEmailIconSVG className={styles.usernamePrefix} />
       </div>
       <div className={styles.validationErrors}>{errors.map(renderError)}</div>
-      <button className={styles.submitButton} type="submit">
-        {Translate.t('components.scavenger-hunt-username.buttons.participate')}
+      <button className={styles.submitButton} disabled={isSubmitting} type="submit">
+        {isSubmitting ? <LoadingHeart /> : Translate.t('components.scavenger-hunt-username.buttons.participate')}
       </button>
     </form>
   );
