@@ -8,8 +8,8 @@ export interface ScavengerHuntTokenPayload extends JWTPayload {
 }
 
 class ScavengerHuntToken {
-  public static async sign(username: string, expiresIn: number): Promise<string> {
-    return JWT.sign({ username }, expiresIn);
+  public static async sign(tokenId: string, username: string, expiresIn: number): Promise<string> {
+    return JWT.sign({ tokenId, username }, expiresIn);
   }
 
   public static async verify(

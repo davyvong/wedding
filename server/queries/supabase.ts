@@ -3,6 +3,7 @@ import SupabaseClientFactory from 'server/clients/supabase';
 import Guest, { GuestSupabaseData } from 'server/models/guest';
 import { GuestTokenSupabaseData } from 'server/models/guest-token';
 import Response, { ResponseData, ResponseSupabaseData } from 'server/models/response';
+import { ScavengerTokenSupabaseData } from 'server/models/scavenger-participant';
 import { SongRequestSupabaseData } from 'server/models/song-request';
 
 class SupabaseQueries {
@@ -383,6 +384,45 @@ class SupabaseQueries {
       return data[0].is_subscribed;
     } catch {
       return false;
+    }
+  }
+
+  public static async findScavengerHuntToken(username: string): Promise<ScavengerTokenSupabaseData | null> {
+    try {
+      if (!username) {
+        return null;
+      }
+      const { data, error } = await SupabaseClientFactory.getInstance()
+        .from('wedding_scavenger_participants')
+        .select()
+        .eq('username', username)
+        .limit(1)
+        .returns<ScavengerTokenSupabaseData[]>();
+      if (error || !data) {
+        return null;
+      }
+      return data[0];
+    } catch {
+      return null;
+    }
+  }
+
+  public static async insertScavengerHuntToken(username: string): Promise<ScavengerTokenSupabaseData | null> {
+    try {
+      if (!username) {
+        return null;
+      }
+      const { data, error } = await SupabaseClientFactory.getInstance()
+        .from('wedding_scavenger_participants')
+        .insert({})
+        .select()
+        .returns<ScavengerTokenSupabaseData[]>();
+      if (error) {
+        return null;
+      }
+      return data[0];
+    } catch {
+      return null;
     }
   }
 }

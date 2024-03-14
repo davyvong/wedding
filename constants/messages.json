@@ -108,6 +108,7 @@
   "components.navigation-bar.title": "Vivian & Davy",
   "components.scavenger-hunt-username.buttons.participate": "Participate",
   "components.scavenger-hunt-username.errors.characters": "The username must contain alphanumeric or underscores characters.",
+  "components.scavenger-hunt-username.errors.failed": "Something went wrong with claiming the your username. Try again in a few seconds.",
   "components.scavenger-hunt-username.errors.length": "The username length must be between 3 to 24 characters.",
   "components.scavenger-hunt-username.errors.unavailable": "The username is already taken.",
   "components.scavenger-hunt-username.instructions": "Before joining the scavenger hunt, pick a username to let us know who you are participating as.",
