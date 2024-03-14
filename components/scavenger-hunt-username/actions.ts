@@ -12,6 +12,7 @@ export const claimUsername = async (username: string, recoveryEmail: string): Pr
       recoveryEmail: recoveryEmail ? recoveryEmail.toLowerCase().trim() : null,
       username: username.toLowerCase().trim(),
     };
+    Logger.info({ payload });
     const errors: Set<string> = new Set();
     if (!string().required().min(3).max(24).isValidSync(payload.username)) {
       errors.add('components.scavenger-hunt-username.errors.length');

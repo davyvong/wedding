@@ -11,6 +11,7 @@ import { ScavengerHuntTaskId } from './constants';
 export const fetchSubmittedTasks = async (): Promise<{ tasks: ScavengerHuntTaskId[]; username: string } | null> => {
   try {
     const token = await ScavengerHuntToken.verify(cookies());
+    Logger.info({ token });
     if (!token) {
       return null;
     }
@@ -19,6 +20,7 @@ export const fetchSubmittedTasks = async (): Promise<{ tasks: ScavengerHuntTaskI
       const keyPaths = object.Key?.split('-');
       return keyPaths?.slice(1).join('-') as ScavengerHuntTaskId;
     });
+    Logger.info({ tasks });
     return {
       tasks,
       username: token.username,

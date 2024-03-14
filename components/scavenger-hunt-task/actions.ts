@@ -9,7 +9,9 @@ import { string } from 'yup';
 
 export const fetchUploadURL = async (task: ScavengerHuntTaskId): Promise<string | null> => {
   try {
+    Logger.info({ task });
     const token = await ScavengerHuntToken.verify(cookies());
+    Logger.info({ token });
     if (!token) {
       return null;
     }
@@ -17,6 +19,7 @@ export const fetchUploadURL = async (task: ScavengerHuntTaskId): Promise<string 
       return null;
     }
     const url = await CloudflareAPI.getSignedUrl(token.username + '-' + task);
+    Logger.info({ url });
     return url.href;
   } catch (error: unknown) {
     Logger.error(error);

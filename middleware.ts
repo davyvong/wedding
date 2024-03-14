@@ -5,6 +5,7 @@ import ServerError from 'server/error';
 import RateLimiter from 'server/rate-limiter';
 import JWT from 'server/tokens/jwt';
 import ScavengerHuntToken from 'server/tokens/scavenger-hunt';
+import Logger from 'utils/logger';
 import { string } from 'yup';
 
 export const config = {
@@ -42,32 +43,36 @@ async function middleware(request: NextRequest): Promise<Response> {
   if (tokenCookie) {
     try {
       const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
+      Logger.info({ payload });
       const nextMonthDate = new Date();
       nextMonthDate.setDate(nextMonthDate.getDate() + 30);
       if (payload?.exp && payload.exp < nextMonthDate.getTime() / 1000) {
         const expiresIn90Days = 7776000;
         const token = await JWT.sign(payload, expiresIn90Days);
+        Logger.info({ token });
         const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
         response.cookies.set('token', token, { expires: expiryDate });
       }
     } catch (error: unknown) {
-      // Unable to verify token
+      Logger.error(error);
     }
   }
   const scavengerTokenCookie = request.cookies.get('token_sh');
   if (scavengerTokenCookie) {
     try {
       const payload = await ScavengerHuntToken.verify(request.cookies);
+      Logger.info({ payload });
       const next3MonthsDate = new Date();
       next3MonthsDate.setFullYear(next3MonthsDate.getFullYear() + 1);
       if (payload?.exp && payload.exp < next3MonthsDate.getTime() / 1000) {
         const expiresIn1Year = 31536000;
         const signedToken = await ScavengerHuntToken.sign(payload.tokenId, payload.username, expiresIn1Year);
+        Logger.info({ signedToken });
         const expiryDate = new Date(Date.now() + expiresIn1Year * 1000);
         response.cookies.set('token_sh', signedToken, { expires: expiryDate });
       }
     } catch (error: unknown) {
-      // Unable to verify token
+      Logger.error(error);
     }
   }
   return response;
