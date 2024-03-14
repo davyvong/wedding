@@ -7,7 +7,7 @@ import CameraWEBP from 'assets/images/scavenger-hunt/camera.webp';
 import classNames from 'classnames';
 import { apricots, vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
-import ScavengerHuntTaskComponent from 'components/scavenger-hunt-task';
+import ScavengerHuntTask from 'components/scavenger-hunt-task';
 import ScavengerHuntUsername from 'components/scavenger-hunt-username';
 import { JWTPayload } from 'jose';
 import Image from 'next/image';
@@ -45,6 +45,13 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     [],
   );
 
+  const renderTask = useCallback(
+    (task: { id: ScavengerHuntTaskId; name: string }): JSX.Element => (
+      <ScavengerHuntTask {...task} isCompleted={submittedTasks.has(task.id)} key={task.id} />
+    ),
+    [submittedTasks],
+  );
+
   useEffect(() => {
     (async () => {
       try {
@@ -66,9 +73,7 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     <Fragment>
       <Image alt="" className={styles.background2} priority src={Background2PNG} />
       <Image alt="" className={styles.background3} priority src={Background3PNG} />
-      {scavengerHuntTasks.map((task: { id: ScavengerHuntTaskId; name: string }) => (
-        <ScavengerHuntTaskComponent {...task} isCompleted={submittedTasks.has(task.id)} key={task.id} />
-      ))}
+      {scavengerHuntTasks.map(renderTask)}
       <div className={classNames(styles.instructions, vidaloka.className)}>
         {Translate.t('components.scavenger-hunt.instructions')}
       </div>

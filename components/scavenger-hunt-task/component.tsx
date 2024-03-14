@@ -6,19 +6,18 @@ import classNames from 'classnames';
 import Translate from 'client/translate';
 import { ScavengerHuntTaskId } from 'components/scavenger-hunt/constants';
 import Image from 'next/image';
-import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useState } from 'react';
 
 import { fetchUploadURL } from './actions';
 import styles from './component.module.css';
 
 interface ScavengerHuntTaskComponentProps {
-  disabled?: boolean;
   id: ScavengerHuntTaskId;
   isCompleted: boolean;
   name: string;
 }
 
-const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, disabled = false, name }) => {
+const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, isCompleted, name }) => {
   const [canRetry, setCanRetry] = useState<boolean>(false);
 
   const uploadFile = useCallback(
@@ -73,26 +72,24 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, d
   }, [id]);
 
   const onClick = useCallback(() => {
-    if (disabled) {
+    if (isCompleted) {
       return;
     }
     if (canRetry) {
       onRetry();
     }
     onUpload();
-  }, [canRetry, disabled, onRetry, onUpload]);
+  }, [canRetry, isCompleted, onRetry, onUpload]);
 
   const renderStatus = useCallback((): string => {
-    if (disabled) {
+    if (isCompleted) {
       return Translate.t('components.scavenger-hunt.statuses.completed');
     }
     if (canRetry) {
       return Translate.t('components.scavenger-hunt.statuses.retry');
     }
     return Translate.t('components.scavenger-hunt.statuses.upload');
-  }, [canRetry, disabled]);
-
-  const isCompleted = useMemo<boolean>(() => false, []);
+  }, [canRetry, isCompleted]);
 
   return (
     <div className={classNames(styles.task, isCompleted && styles.completed)}>
