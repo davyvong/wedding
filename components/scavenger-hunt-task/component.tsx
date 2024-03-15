@@ -88,17 +88,17 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
     onUpload();
   }, [errorMessage, isCompleted, isUploading, onRetry, onUpload]);
 
-  const renderStatus = useCallback((): string => {
+  const renderHint = useCallback((): JSX.Element => {
     if (isCompleted) {
-      return Translate.t('components.scavenger-hunt-task.statuses.submitted');
+      return <div className={styles.hint}>{Translate.t('components.scavenger-hunt-task.hints.submitted')}</div>;
     }
     if (isUploading) {
-      return Translate.t('components.scavenger-hunt-task.statuses.uploading');
+      return <div className={styles.hint}>{Translate.t('components.scavenger-hunt-task.hints.uploading')}</div>;
     }
     if (errorMessage) {
-      return Translate.t(errorMessage);
+      return <div className={classNames(styles.hint, styles.errorMessage)}>{Translate.t(errorMessage)}</div>;
     }
-    return Translate.t('components.scavenger-hunt-task.statuses.upload');
+    return <div className={styles.hint}>{Translate.t('components.scavenger-hunt-task.hints.upload')}</div>;
   }, [errorMessage, isCompleted, isUploading]);
 
   return (
@@ -106,7 +106,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
       <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
       <div className={styles.content} onClick={onClick}>
         <div>{name}</div>
-        <div className={styles.status}>{renderStatus()}</div>
+        {renderHint()}
       </div>
       <input accept="image/*" disabled={isUploading} hidden id={id} multiple={false} onChange={onChange} type="file" />
     </div>
