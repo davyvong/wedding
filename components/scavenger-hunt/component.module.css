@@ -30,45 +30,38 @@
   z-index: -1;
 }
 
-.background1 {
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  left: -15%;
-  opacity: 44%;
-  position: absolute;
-  top: -15%;
-  transform: rotate(10deg);
-  user-select: none;
-  width: 500px;
-  z-index: -1;
-}
-
-.background2 {
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  bottom: -20%;
-  opacity: 38%;
-  position: absolute;
-  right: -30%;
-  transform: rotate(-60deg);
-  width: 500px;
-  z-index: -1;
-  user-select: none;
-}
-
+.background1,
+.background2,
 .background3 {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  bottom: -15%;
-  left: -10%;
   position: absolute;
-  transform: rotate(27deg);
   user-select: none;
-  width: 300px;
   z-index: -1;
+}
+
+.background1 {
+  left: -15%;
+  opacity: 44%;
+  top: -8%;
+  transform: rotate(10deg);
+  width: 100vw;
+}
+
+.background2 {
+  bottom: -9%;
+  opacity: 38%;
+  right: -23%;
+  transform: rotate(-60deg);
+  width: 100vw;
+}
+
+.background3 {
+  bottom: -8%;
+  left: -10%;
+  transform: rotate(27deg);
+  width: 60vw;
 }
 
 .pretitle {
@@ -110,6 +103,15 @@
 }
 
 @media (min-width: 500px) {
+  .background1,
+  .background2 {
+    width: 500px;
+  }
+
+  .background3 {
+    width: 300px;
+  }
+
   .pretitle {
     font-size: 3rem;
   }
