@@ -12,6 +12,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
+import ContentPasteSearchIconSVG from 'assets/icons/content-paste-search.svg';
 import HelpIconSVG from 'assets/icons/help.svg';
 import MarkEmailReadIconSVG from 'assets/icons/mark-email-read.svg';
 import MarkEmailUnreadIconSVG from 'assets/icons/mark-email-unread.svg';
@@ -124,6 +125,15 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           type: 'button',
         },
       );
+      if (token.isAdmin) {
+        items.push({
+          description: Translate.t('components.mega-menu.menu-items.scavenger-hunt.description'),
+          href: '/scavenger',
+          icon: <ContentPasteSearchIconSVG />,
+          title: Translate.t('components.mega-menu.menu-items.scavenger-hunt.title'),
+          type: 'link',
+        });
+      }
     } else {
       items.push({
         description: Translate.t('components.mega-menu.menu-items.invitation.description'),
