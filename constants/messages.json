@@ -128,6 +128,7 @@
   "components.scavenger-hunt.statuses.completed": "(completed)",
   "components.scavenger-hunt.statuses.retry": "(upload failed - click to retry)",
   "components.scavenger-hunt.statuses.upload": "(click to upload)",
+  "components.scavenger-hunt.statuses.uploading": "(uploading)",
   "components.scavenger-hunt.title": "Scavenger Hunt",
   "components.select.no-options": "There are no options available."
 }

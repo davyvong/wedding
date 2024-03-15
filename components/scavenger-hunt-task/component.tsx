@@ -15,10 +15,17 @@ interface ScavengerHuntTaskComponentProps {
   id: ScavengerHuntTaskId;
   isCompleted: boolean;
   name: string;
+  onSuccessfulUpload: (id: ScavengerHuntTaskId) => void;
 }
 
-const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, isCompleted, name }) => {
+const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
+  id,
+  isCompleted,
+  name,
+  onSuccessfulUpload,
+}) => {
   const [canRetry, setCanRetry] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const uploadFile = useCallback(
     async (file?: File | null): Promise<void> => {
@@ -27,6 +34,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, i
       }
       try {
         setCanRetry(false);
+        setIsUploading(true);
         const url = await fetchUploadURL(id);
         if (url) {
           await fetch(url, {
@@ -34,14 +42,17 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, i
             cache: 'no-store',
             method: 'PUT',
           });
+          onSuccessfulUpload(id);
         } else {
           setCanRetry(true);
         }
       } catch {
         setCanRetry(true);
+      } finally {
+        setIsUploading(false);
       }
     },
-    [id],
+    [id, onSuccessfulUpload],
   );
 
   const onChange = useCallback(
@@ -85,11 +96,14 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({ id, i
     if (isCompleted) {
       return Translate.t('components.scavenger-hunt.statuses.completed');
     }
+    if (isUploading) {
+      return Translate.t('components.scavenger-hunt.statuses.uploading');
+    }
     if (canRetry) {
       return Translate.t('components.scavenger-hunt.statuses.retry');
     }
     return Translate.t('components.scavenger-hunt.statuses.upload');
-  }, [canRetry, isCompleted]);
+  }, [canRetry, isCompleted, isUploading]);
 
   return (
     <div className={classNames(styles.task, isCompleted && styles.completed)}>

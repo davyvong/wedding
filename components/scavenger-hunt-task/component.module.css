@@ -19,6 +19,10 @@
   cursor: pointer;
 }
 
+.completed .content:hover {
+  cursor: text;
+}
+
 .status {
   font-size: 1rem;
   white-space: nowrap;

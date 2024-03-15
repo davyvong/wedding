@@ -45,25 +45,44 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     [],
   );
 
+  const fetchTasks = useCallback(async (): Promise<void> => {
+    try {
+      const results = await fetchSubmittedTasks();
+      if (results) {
+        setSubmittedTasks(new Set(results.tasks));
+      }
+    } catch {
+      // Failed to fetch submitted tasks
+    }
+  }, []);
+
+  const onSuccessfulUpload = useCallback(
+    (id: ScavengerHuntTaskId): void => {
+      setSubmittedTasks((prevState: Set<ScavengerHuntTaskId>): Set<ScavengerHuntTaskId> => {
+        const nextState = new Set(prevState);
+        nextState.add(id);
+        return nextState;
+      });
+      fetchTasks();
+    },
+    [fetchTasks],
+  );
+
   const renderTask = useCallback(
     (task: { id: ScavengerHuntTaskId; name: string }): JSX.Element => (
-      <ScavengerHuntTask {...task} isCompleted={submittedTasks.has(task.id)} key={task.id} />
+      <ScavengerHuntTask
+        {...task}
+        isCompleted={submittedTasks.has(task.id)}
+        key={task.id}
+        onSuccessfulUpload={onSuccessfulUpload}
+      />
     ),
-    [submittedTasks],
+    [onSuccessfulUpload, submittedTasks],
   );
 
   useEffect(() => {
-    (async () => {
-      try {
-        const results = await fetchSubmittedTasks();
-        if (results) {
-          setSubmittedTasks(new Set(results.tasks));
-        }
-      } catch {
-        // Failed to fetch submitted tasks
-      }
-    })();
-  }, []);
+    fetchTasks();
+  }, [fetchTasks]);
 
   if (!hasUsername) {
     return renderLayout(<ScavengerHuntUsername setHasUsername={setHasUsername} />, false);
