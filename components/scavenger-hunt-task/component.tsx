@@ -24,30 +24,32 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
   name,
   onSuccessfulUpload,
 }) => {
-  const [canRetry, setCanRetry] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const uploadFile = useCallback(
     async (file?: File | null): Promise<void> => {
-      if (!file) {
-        return;
-      }
       try {
-        setCanRetry(false);
+        if (!file) {
+          return;
+        }
+        setErrorMessage(undefined);
         setIsUploading(true);
-        const url = await fetchUploadURL(id);
-        if (url) {
-          await fetch(url, {
+        const { data: uploadURL, error } = await fetchUploadURL(id, file.type, file.size);
+        if (error) {
+          throw error;
+        }
+        if (uploadURL) {
+          await fetch(uploadURL, {
             body: file,
-            cache: 'no-store',
             method: 'PUT',
           });
           onSuccessfulUpload(id);
-        } else {
-          setCanRetry(true);
         }
-      } catch {
-        setCanRetry(true);
+      } catch (error: unknown) {
+        if (typeof error === 'string') {
+          setErrorMessage(error);
+        }
       } finally {
         setIsUploading(false);
       }
@@ -57,24 +59,14 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
 
   const onChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
-      try {
-        setCanRetry(false);
-        await uploadFile(event.target?.files?.item(0));
-      } catch {
-        setCanRetry(true);
-      }
+      await uploadFile(event.target?.files?.item(0));
     },
     [uploadFile],
   );
 
   const onRetry = useCallback(async (): Promise<void> => {
-    try {
-      setCanRetry(false);
-      const fileInput = document.getElementById(id) as HTMLInputElement | null;
-      await uploadFile(fileInput?.files?.item(0));
-    } catch {
-      setCanRetry(true);
-    }
+    const fileInput = document.getElementById(id) as HTMLInputElement | null;
+    await uploadFile(fileInput?.files?.item(0));
   }, [id, uploadFile]);
 
   const onUpload = useCallback(async (): Promise<void> => {
@@ -86,32 +78,37 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
     if (isCompleted) {
       return;
     }
-    if (canRetry) {
+    if (isUploading) {
+      return;
+    }
+    if (errorMessage === 'components.scavenger-hunt-task.errors.failed') {
       onRetry();
+      return;
     }
     onUpload();
-  }, [canRetry, isCompleted, onRetry, onUpload]);
+  }, [errorMessage, isCompleted, isUploading, onRetry, onUpload]);
 
   const renderStatus = useCallback((): string => {
     if (isCompleted) {
-      return Translate.t('components.scavenger-hunt.statuses.completed');
+      return Translate.t('components.scavenger-hunt-task.statuses.submitted');
     }
     if (isUploading) {
-      return Translate.t('components.scavenger-hunt.statuses.uploading');
+      return Translate.t('components.scavenger-hunt-task.statuses.uploading');
     }
-    if (canRetry) {
-      return Translate.t('components.scavenger-hunt.statuses.retry');
+    if (errorMessage) {
+      return Translate.t(errorMessage);
     }
-    return Translate.t('components.scavenger-hunt.statuses.upload');
-  }, [canRetry, isCompleted, isUploading]);
+    return Translate.t('components.scavenger-hunt-task.statuses.upload');
+  }, [errorMessage, isCompleted, isUploading]);
 
   return (
     <div className={classNames(styles.task, isCompleted && styles.completed)}>
       <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
       <div className={styles.content} onClick={onClick}>
-        <span>{name}</span> <span className={styles.status}>{renderStatus()}</span>
+        <div>{name}</div>
+        <div className={styles.status}>{renderStatus()}</div>
       </div>
-      <input hidden id={id} multiple={false} onChange={onChange} type="file" />
+      <input disabled={isUploading} hidden id={id} multiple={false} onChange={onChange} type="file" />
     </div>
   );
 };

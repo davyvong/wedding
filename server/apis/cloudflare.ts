@@ -11,9 +11,11 @@ class CloudflareAPI {
     region: 'auto',
   });
 
-  public static async getSignedUrl(key: string): Promise<URL> {
+  public static async getSignedUrl(key: string, contentType: string, contentLength: number): Promise<URL> {
     const command = new PutObjectCommand({
       Bucket: process.env.CLOUDFLARE_BUCKET_ID,
+      ContentLength: contentLength,
+      ContentType: contentType,
       Key: key,
     });
     const signedURL = await getSignedUrl(CloudflareAPI.s3Client, command, {

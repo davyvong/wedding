@@ -106,6 +106,12 @@
   "components.mega-menu.menu-items.songs.description": "Request songs you want to hear",
   "components.mega-menu.menu-items.songs.title": "Song Requests",
   "components.navigation-bar.title": "Vivian & Davy",
+  "components.scavenger-hunt-task.errors.failed": "(upload failed - click to retry)",
+  "components.scavenger-hunt-task.errors.file-not-image": "(file must be an image - click to retry)",
+  "components.scavenger-hunt-task.errors.file-too-large": "(file must be less than 10mb - click to retry)",
+  "components.scavenger-hunt-task.statuses.submitted": "(submitted)",
+  "components.scavenger-hunt-task.statuses.upload": "(click to upload)",
+  "components.scavenger-hunt-task.statuses.uploading": "(uploading)",
   "components.scavenger-hunt-username.buttons.participate": "Participate",
   "components.scavenger-hunt-username.errors.characters": "The username must contain alphanumeric or underscores characters.",
   "components.scavenger-hunt-username.errors.failed": "Something went wrong with claiming the your username. Try again in a few seconds.",
@@ -125,10 +131,6 @@
   "components.scavenger-hunt.items.wedding-decoration": "your favorite wedding decoration",
   "components.scavenger-hunt.items.your-outfit": "your outfit",
   "components.scavenger-hunt.pretitle": "Wedding Photo",
-  "components.scavenger-hunt.statuses.completed": "(completed)",
-  "components.scavenger-hunt.statuses.retry": "(upload failed - click to retry)",
-  "components.scavenger-hunt.statuses.upload": "(click to upload)",
-  "components.scavenger-hunt.statuses.uploading": "(uploading)",
   "components.scavenger-hunt.title": "Scavenger Hunt",
   "components.select.no-options": "There are no options available."
 }

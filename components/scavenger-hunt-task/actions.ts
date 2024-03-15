@@ -7,22 +7,32 @@ import ScavengerHuntToken from 'server/tokens/scavenger-hunt';
 import Logger from 'utils/logger';
 import { string } from 'yup';
 
-export const fetchUploadURL = async (task: ScavengerHuntTaskId): Promise<string | null> => {
+export const fetchUploadURL = async (
+  task: ScavengerHuntTaskId,
+  contentType: string,
+  contentLength: number,
+): Promise<{ data: string | null; error?: string | null }> => {
   try {
     Logger.info({ task });
     const token = await ScavengerHuntToken.verify(cookies());
     Logger.info({ token });
     if (!token) {
-      return null;
+      return { data: null, error: 'components.scavenger-hunt-task.errors.failed' };
     }
     if (!string().oneOf(Object.values(ScavengerHuntTaskId)).required().isValidSync(task)) {
-      return null;
+      return { data: null, error: 'components.scavenger-hunt-task.errors.failed' };
     }
-    const url = await CloudflareAPI.getSignedUrl(token.username + '-' + task);
+    if (!contentType.startsWith('image/')) {
+      return { data: null, error: 'components.scavenger-hunt-task.errors.file-not-image' };
+    }
+    if (contentLength > 10000000) {
+      return { data: null, error: 'components.scavenger-hunt-task.errors.file-too-large' };
+    }
+    const url = await CloudflareAPI.getSignedUrl(token.username + '-' + task, contentType, contentLength);
     Logger.info({ url });
-    return url.href;
+    return { data: url.href, error: null };
   } catch (error: unknown) {
     Logger.error(error);
-    return null;
+    return { data: null, error: 'components.scavenger-hunt-task.errors.failed' };
   }
 };
