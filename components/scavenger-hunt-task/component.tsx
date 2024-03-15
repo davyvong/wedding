@@ -108,7 +108,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
         <div>{name}</div>
         <div className={styles.status}>{renderStatus()}</div>
       </div>
-      <input disabled={isUploading} hidden id={id} multiple={false} onChange={onChange} type="file" />
+      <input accept="image/*" disabled={isUploading} hidden id={id} multiple={false} onChange={onChange} type="file" />
     </div>
   );
 };
