@@ -28,7 +28,7 @@ export const fetchUploadURL = async (
     if (contentLength > 10000000) {
       return { data: null, error: 'components.scavenger-hunt-task.errors.file-too-large' };
     }
-    const url = await CloudflareAPI.getSignedUrl(token.username + '-' + task, contentType, contentLength);
+    const url = await CloudflareAPI.getSignedUrl(token.username + '/' + task, contentType, contentLength);
     Logger.info({ url });
     return { data: url.href, error: null };
   } catch (error: unknown) {

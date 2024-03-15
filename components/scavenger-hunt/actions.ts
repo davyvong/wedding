@@ -15,10 +15,10 @@ export const fetchSubmittedTasks = async (): Promise<{ tasks: ScavengerHuntTaskI
     if (!token) {
       return null;
     }
-    const objects = await CloudflareAPI.listObjects(token.username + '-');
+    const objects = await CloudflareAPI.listObjects(token.username + '/');
     const tasks = objects.map((object: _Object): ScavengerHuntTaskId => {
-      const keyPaths = object.Key?.split('-');
-      return keyPaths?.slice(1).join('-') as ScavengerHuntTaskId;
+      const keyPaths = object.Key?.split('/');
+      return keyPaths?.at(1) as ScavengerHuntTaskId;
     });
     Logger.info({ tasks });
     return {
