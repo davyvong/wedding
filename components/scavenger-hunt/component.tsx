@@ -5,20 +5,21 @@ import Background2PNG from 'assets/images/scavenger-hunt/background-2.png';
 import Background3PNG from 'assets/images/scavenger-hunt/background-3.png';
 import CameraWEBP from 'assets/images/scavenger-hunt/camera.webp';
 import classNames from 'classnames';
+import { getStyleProperty, waitForElement } from 'client/browser';
 import { apricots, vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
 import ScavengerHuntTask from 'components/scavenger-hunt-task';
 import ScavengerHuntUsername from 'components/scavenger-hunt-username';
-import { JWTPayload } from 'jose';
 import Image from 'next/image';
-import { FC, Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ScavengerHuntTokenPayload } from 'server/tokens/scavenger-hunt';
 
 import { fetchSubmittedTasks } from './actions';
 import styles from './component.module.css';
 import { ScavengerHuntTaskId, scavengerHuntTasks } from './constants';
 
 interface ScavengerHuntComponentProps {
-  token?: JWTPayload;
+  token?: ScavengerHuntTokenPayload;
 }
 
 const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
@@ -57,13 +58,24 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
   }, []);
 
   const onSuccessfulUpload = useCallback(
-    (id: ScavengerHuntTaskId): void => {
+    async (id: ScavengerHuntTaskId): Promise<void> => {
       setSubmittedTasks((prevState: Set<ScavengerHuntTaskId>): Set<ScavengerHuntTaskId> => {
         const nextState = new Set(prevState);
         nextState.add(id);
         return nextState;
       });
-      fetchTasks();
+      await fetchTasks();
+      waitForElement('#' + id, (element: HTMLElement): void => {
+        let top = window.pageYOffset + element.getBoundingClientRect().top;
+        const navigationBarHeight = getStyleProperty('--navigation-bar-height');
+        if (navigationBarHeight) {
+          top -= parseInt(navigationBarHeight.replace('px', ''));
+        }
+        document.querySelector<HTMLElement>('body')?.scrollTo({
+          behavior: 'smooth',
+          top,
+        });
+      });
     },
     [fetchTasks],
   );
@@ -75,10 +87,32 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
         isCompleted={submittedTasks.has(task.id)}
         key={task.id}
         onSuccessfulUpload={onSuccessfulUpload}
+        username={token!.username}
       />
     ),
-    [onSuccessfulUpload, submittedTasks],
+    [onSuccessfulUpload, submittedTasks, token],
   );
+
+  const groupedTasks = useMemo<{
+    available: { id: ScavengerHuntTaskId; name: string }[];
+    submitted: { id: ScavengerHuntTaskId; name: string }[];
+  }>(() => {
+    const groups: {
+      available: { id: ScavengerHuntTaskId; name: string }[];
+      submitted: { id: ScavengerHuntTaskId; name: string }[];
+    } = {
+      available: [],
+      submitted: [],
+    };
+    for (const task of scavengerHuntTasks) {
+      if (submittedTasks.has(task.id)) {
+        groups.submitted.push(task);
+      } else {
+        groups.available.push(task);
+      }
+    }
+    return groups;
+  }, [submittedTasks]);
 
   useEffect(() => {
     fetchTasks();
@@ -92,7 +126,15 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     <Fragment>
       <Image alt="" className={styles.background2} priority src={Background2PNG} />
       <Image alt="" className={styles.background3} priority src={Background3PNG} />
-      {scavengerHuntTasks.map(renderTask)}
+      {groupedTasks.available.map(renderTask)}
+      {groupedTasks.submitted.length > 0 && (
+        <Fragment>
+          <div className={classNames(styles.instructions, vidaloka.className)}>
+            {Translate.t('components.scavenger-hunt-submitted-photos')}
+          </div>
+          {groupedTasks.submitted.map(renderTask)}
+        </Fragment>
+      )}
       <div className={classNames(styles.instructions, vidaloka.className)}>
         {Translate.t('components.scavenger-hunt.instructions')}
       </div>

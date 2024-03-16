@@ -28,6 +28,10 @@ module.exports = {
         hostname: 'i.scdn.co',
         protocol: 'https',
       },
+      {
+        hostname: 'scavenger.vivian-and-davy.com',
+        protocol: 'https',
+      },
     ],
   },
   redirects: () => [

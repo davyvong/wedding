@@ -5,21 +5,42 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-top: 2rem;
+  position: relative;
 }
 
 .completed {
-  color: var(--color-primary-scavenger);
+  color: var(--color-inverse-on-surface);
 }
 
 .heart {
+  height: 33px;
   margin-right: 1rem;
+  width: 32px;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  position: relative;
 }
 
 .content:hover {
   cursor: pointer;
 }
 
-.completed .content:hover {
+.completed .content {
+  background: linear-gradient(var(--color-inverse-surface), var(--palette-transparent));
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  left: 0;
+  padding: 1rem 1rem 4rem 1rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.completed .description:hover {
   cursor: text;
 }
 
@@ -29,4 +50,12 @@
 
 .errorMessage {
   color: var(--color-error);
+}
+
+.submittedImage {
+  border-radius: 0.5rem;
+  height: auto !important;
+  max-height: 300px;
+  object-fit: cover;
+  width: 100%;
 }
