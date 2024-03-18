@@ -117,6 +117,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
           height={0}
           src={url.href}
           style={{ height: 'auto', width: '100%' }}
+          unoptimized
           width={672}
         />
       </ErrorBoundary>

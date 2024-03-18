@@ -127,6 +127,7 @@ const SongInputComponent: FC<SongInputComponentProps> = ({
             className={classNames(songFlyoutStyles.songImage, styles.songImage)}
             height={64}
             src={suggestion.image}
+            unoptimized
             width={64}
           />
           <div className={classNames(songFlyoutStyles.songInformation, styles.songInformation)}>

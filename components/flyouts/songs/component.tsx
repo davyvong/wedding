@@ -71,7 +71,7 @@ const SongsFlyoutComponent: FC<SongsFlyoutComponentProps> = () => {
   const renderSong = useCallback(
     (song: SpotifyPlaylistTrack): JSX.Element => (
       <div className={classNames(styles.songCard, styles.songCardHoverable)} key={song.id}>
-        <Image alt={song.name} className={styles.songImage} height={80} src={song.image} width={80} />
+        <Image alt={song.name} className={styles.songImage} height={80} src={song.image} unoptimized width={80} />
         <div className={styles.songInformation}>
           <a className={styles.songName} href={song.href} target="_blank">
             {song.name}
