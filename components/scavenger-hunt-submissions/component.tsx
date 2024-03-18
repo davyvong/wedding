@@ -1,9 +1,12 @@
 'use client';
 
+import { waitForElement } from 'client/browser';
 import Translate from 'client/translate';
 import { ScavengerHuntTaskId } from 'components/scavenger-hunt/constants';
+import useMediaQuery from 'hooks/useMediaQuery';
+import Masonry from 'masonry-layout';
 import Image from 'next/image';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode, useCallback, useEffect } from 'react';
 
 import styles from './component.module.css';
 
@@ -17,6 +20,24 @@ interface ScavengerHuntSubmissionsComponentProps {
 }
 
 const ScavengerHuntSubmissionsComponent: FC<ScavengerHuntSubmissionsComponentProps> = ({ submissions }) => {
+  const is1Column = useMediaQuery('(max-width: 767px)');
+  const is2Columns = useMediaQuery('(min-width: 768px) and (max-width: 1439px)');
+  const is3Columns = useMediaQuery('(min-width: 1440px)');
+
+  useEffect(() => {
+    let masonry;
+    waitForElement('.' + styles.list, (element: HTMLElement): void => {
+      masonry = new Masonry(element, {
+        horizontalOrder: true,
+        itemSelector: '.' + styles.submission,
+        percentPosition: true,
+      });
+    });
+    return (): void => {
+      masonry?.destroy();
+    };
+  }, [is1Column, is2Columns, is3Columns]);
+
   const renderSubmission = useCallback(
     (
       submission: { checksum: string; id: ScavengerHuntTaskId; uploadedAt: Date; uploadedBy: string },
@@ -50,7 +71,7 @@ const ScavengerHuntSubmissionsComponent: FC<ScavengerHuntSubmissionsComponentPro
     [],
   );
 
-  return submissions.map(renderSubmission);
+  return <div className={styles.list}>{submissions.map(renderSubmission)}</div>;
 };
 
 export default ScavengerHuntSubmissionsComponent;

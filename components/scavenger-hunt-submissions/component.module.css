@@ -1,9 +1,26 @@
+.list {
+  margin-left: var(--page-side-spacing);
+}
+
 .submission {
   background-color: var(--palette-white);
   border-radius: 0.5rem;
-  margin: var(--page-side-spacing);
-  margin-top: 0;
+  margin-bottom: var(--page-side-spacing);
+  margin-right: var(--page-side-spacing);
   overflow: hidden;
+  width: calc(100% - var(--page-side-spacing));
+}
+
+@media (min-width: 768px) {
+  .submission {
+    max-width: calc(50% - var(--page-side-spacing));
+  }
+}
+
+@media (min-width: 1440px) {
+  .submission {
+    max-width: calc(33% - var(--page-side-spacing));
+  }
 }
 
 .content {
