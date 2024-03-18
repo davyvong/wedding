@@ -60,6 +60,7 @@ interface MegaMenuButtonItem extends MegaMenuBaseItem {
 
 interface MegaMenuLinkItem extends MegaMenuBaseItem {
   href: string;
+  onClick?: () => void;
   type: 'link';
 }
 
@@ -101,6 +102,9 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           description: Translate.t('components.mega-menu.menu-items.guest-list.description'),
           href: '/guests',
           icon: <QueueMusicIconSVG />,
+          onClick: (): void => {
+            setIsOpen(false);
+          },
           title: Translate.t('components.mega-menu.menu-items.guest-list.title'),
           type: 'link',
         });
@@ -130,6 +134,9 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           description: Translate.t('components.mega-menu.menu-items.scavenger-hunt.description'),
           href: '/scavenger',
           icon: <ContentPasteSearchIconSVG />,
+          onClick: (): void => {
+            setIsOpen(false);
+          },
           title: Translate.t('components.mega-menu.menu-items.scavenger-hunt.title'),
           type: 'link',
         });
@@ -178,7 +185,14 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
   const renderMenuItem = useCallback((item: MegaMenuItem, index: number): JSX.Element => {
     if (item.type === 'link') {
       return (
-        <Link className={styles.menuItem} href={item.href} key={index} role="menuitem" tabIndex={0}>
+        <Link
+          className={styles.menuItem}
+          href={item.href}
+          key={index}
+          onClick={item.onClick}
+          role="menuitem"
+          tabIndex={0}
+        >
           <div className={styles.menuItemIcon}>{item.icon}</div>
           <div className={styles.menuItemContent}>
             <div>{item.title}</div>
