@@ -6,18 +6,18 @@ import CloudflareAPI from 'server/apis/cloudflare';
 import Logger from 'utils/logger';
 import { sortByKey } from 'utils/sort';
 
-export const fetchAllSubmissions = async (): Promise<
-  {
-    checksum: string;
-    id: ScavengerHuntTaskId;
-    uploadedAt: Date;
-    uploadedBy: string;
-  }[]
-> => {
+export interface ScavengerHuntSubmission {
+  checksum: string;
+  id: ScavengerHuntTaskId;
+  uploadedAt: Date;
+  uploadedBy: string;
+}
+
+export const fetchAllSubmissions = async (): Promise<ScavengerHuntSubmission[]> => {
   try {
     const objects = await CloudflareAPI.listObjects('');
     return objects
-      .map((object: _Object) => {
+      .map((object: _Object): ScavengerHuntSubmission => {
         const keyPaths = object.Key?.split('/');
         return {
           checksum: object.ETag?.replace(/"/g, '') || '',
