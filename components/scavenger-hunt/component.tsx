@@ -11,19 +11,20 @@ import Translate from 'client/translate';
 import ScavengerHuntTask from 'components/scavenger-hunt-task';
 import ScavengerHuntUsername from 'components/scavenger-hunt-username';
 import Image from 'next/image';
-import { FC, Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ScavengerHuntTokenPayload } from 'server/tokens/scavenger-hunt';
 
-import { fetchSubmittedTasks } from './actions';
+import { fetchSubmissions } from './actions';
 import styles from './component.module.css';
 import { ScavengerHuntTaskId, scavengerHuntTasks } from './constants';
 
 interface ScavengerHuntComponentProps {
+  submissions: ScavengerHuntTaskId[];
   token?: ScavengerHuntTokenPayload;
 }
 
-const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
-  const [submittedTasks, setSubmittedTasks] = useState<Set<ScavengerHuntTaskId>>(new Set());
+const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ submissions, token }) => {
+  const [submittedTasks, setSubmittedTasks] = useState<Set<ScavengerHuntTaskId>>(new Set(submissions));
   const [username, setUsername] = useState<string>(token?.username || '');
 
   const renderLayout = useCallback(
@@ -53,9 +54,9 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
 
   const fetchTasks = useCallback(async (): Promise<void> => {
     try {
-      const results = await fetchSubmittedTasks();
-      if (results) {
-        setSubmittedTasks(new Set(results.tasks));
+      const submissions = await fetchSubmissions();
+      if (submissions) {
+        setSubmittedTasks(new Set(submissions.tasks));
       }
     } catch {
       // Failed to fetch submitted tasks
@@ -118,10 +119,6 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     }
     return groups;
   }, [submittedTasks]);
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
 
   if (!username) {
     return renderLayout(<ScavengerHuntUsername onClaimUsername={setUsername} />, false);

@@ -54,8 +54,6 @@
 
 .submittedImage {
   border-radius: 0.5rem;
-  height: auto !important;
   max-height: 300px;
   object-fit: cover;
-  width: 100%;
 }

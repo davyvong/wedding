@@ -116,6 +116,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
           className={styles.submittedImage}
           height={0}
           src={url.href}
+          style={{ height: 'auto', width: '100%' }}
           width={672}
         />
       </ErrorBoundary>

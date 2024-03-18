@@ -8,7 +8,7 @@ import Logger from 'utils/logger';
 
 import { ScavengerHuntTaskId } from './constants';
 
-export const fetchSubmittedTasks = async (): Promise<{ tasks: ScavengerHuntTaskId[]; username: string } | null> => {
+export const fetchSubmissions = async (): Promise<{ tasks: ScavengerHuntTaskId[]; username: string } | null> => {
   try {
     const token = await ScavengerHuntToken.verify(cookies());
     Logger.info({ token });
