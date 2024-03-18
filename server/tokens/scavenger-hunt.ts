@@ -10,7 +10,8 @@ export interface ScavengerHuntTokenPayload extends JWTPayload {
 
 class ScavengerHuntToken {
   public static async sign(tokenId: string, username: string, expiresIn: number): Promise<string> {
-    return JWT.sign({ tokenId, username }, expiresIn);
+    const jwt = new JWT(process.env.JWT_SECRET_SCAVENGER);
+    return jwt.sign({ tokenId, username }, expiresIn);
   }
 
   public static async verify(
@@ -21,7 +22,8 @@ class ScavengerHuntToken {
       if (!tokenCookie) {
         return undefined;
       }
-      return (await JWT.verify(tokenCookie.value)) as ScavengerHuntTokenPayload;
+      const jwt = new JWT(process.env.JWT_SECRET_SCAVENGER);
+      return (await jwt.verify(tokenCookie.value)) as ScavengerHuntTokenPayload;
     } catch {
       return undefined;
     }

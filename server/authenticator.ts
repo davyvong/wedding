@@ -24,7 +24,8 @@ class Authenticator {
       return undefined;
     }
     try {
-      const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
+      const jwt = new JWT(process.env.JWT_SECRET);
+      const payload = (await jwt.verify(tokenCookie.value)) as GuestTokenPayload;
       Logger.info({ token: payload });
       const guest = await SupabaseQueries.findGuestFromId(payload.guestId);
       Logger.info({ guest });

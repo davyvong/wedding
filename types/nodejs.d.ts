@@ -8,6 +8,7 @@ namespace NodeJS {
     CLOUDFLARE_SECRET_ACCESS_KEY: string;
     GOOGLE_SHEETS_WEDDING_WEBHOOK: string;
     JWT_SECRET: string;
+    JWT_SECRET_SCAVENGER: string;
     NEXT_PUBLIC_VERCEL_ENV: string;
     NODEMAILER_ADDRESS: string;
     NODEMAILER_HOST: string;

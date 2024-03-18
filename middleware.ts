@@ -42,13 +42,14 @@ async function middleware(request: NextRequest): Promise<Response> {
   const tokenCookie = request.cookies.get('token');
   if (tokenCookie) {
     try {
-      const payload = (await JWT.verify(tokenCookie.value)) as GuestTokenPayload;
+      const jwt = new JWT(process.env.JWT_SECRET);
+      const payload = (await jwt.verify(tokenCookie.value)) as GuestTokenPayload;
       Logger.info({ payload });
       const nextMonthDate = new Date();
       nextMonthDate.setDate(nextMonthDate.getDate() + 30);
       if (payload?.exp && payload.exp < nextMonthDate.getTime() / 1000) {
         const expiresIn90Days = 7776000;
-        const token = await JWT.sign(payload, expiresIn90Days);
+        const token = await jwt.sign(payload, expiresIn90Days);
         Logger.info({ token });
         const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
         response.cookies.set('token', token, { expires: expiryDate });

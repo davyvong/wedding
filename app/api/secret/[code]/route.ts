@@ -42,7 +42,8 @@ export const GET = async (request: NextRequest, { params }: { params: { code: st
     };
     Logger.info({ payload });
     const expiresIn90Days = 7776000;
-    const token = await JWT.sign(payload, expiresIn90Days);
+    const jwt = new JWT(process.env.JWT_SECRET);
+    const token = await jwt.sign(payload, expiresIn90Days);
     redirectURL.searchParams.set('open', 'rsvp');
     const response = NextResponse.redirect(redirectURL);
     const expiryDate = new Date(Date.now() + expiresIn90Days * 1000);
