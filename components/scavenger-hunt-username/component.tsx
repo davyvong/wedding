@@ -6,17 +6,17 @@ import { vidaloka } from 'client/fonts';
 import Translate from 'client/translate';
 import LoadingHeart from 'components/loading-heart';
 import scavengerHuntStyles from 'components/scavenger-hunt/component.module.css';
-import { Dispatch, FC, FormEvent, SetStateAction, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { string } from 'yup';
 
 import { claimUsername } from './actions';
 import styles from './component.module.css';
 
 interface ScavengerHuntUsernameComponentProps {
-  setHasUsername: Dispatch<SetStateAction<boolean>>;
+  onClaimUsername: (username: string) => void;
 }
 
-const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = ({ setHasUsername }) => {
+const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = ({ onClaimUsername }) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [recoveryEmail] = useState<string>('');
@@ -75,13 +75,13 @@ const ScavengerHuntUsernameComponent: FC<ScavengerHuntUsernameComponentProps> = 
           }
           setErrors(validationErrors);
         } else {
-          setHasUsername(true);
+          onClaimUsername(payload.username);
         }
       } finally {
         setIsSubmitting(false);
       }
     },
-    [errors.length, isSubmitting, onTakenUsername, recoveryEmail, setHasUsername, username],
+    [errors.length, isSubmitting, onClaimUsername, onTakenUsername, recoveryEmail, username],
   );
 
   const renderError = useCallback(

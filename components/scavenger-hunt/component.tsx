@@ -23,8 +23,8 @@ interface ScavengerHuntComponentProps {
 }
 
 const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
-  const [hasUsername, setHasUsername] = useState<boolean>(!!token);
   const [submittedTasks, setSubmittedTasks] = useState<Set<ScavengerHuntTaskId>>(new Set());
+  const [username, setUsername] = useState<string>(token?.username || '');
 
   const renderLayout = useCallback(
     (children: ReactNode, hasFooter: boolean = true): JSX.Element => (
@@ -87,10 +87,10 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
         isCompleted={submittedTasks.has(task.id)}
         key={task.id}
         onSuccessfulUpload={onSuccessfulUpload}
-        username={token!.username}
+        username={username}
       />
     ),
-    [onSuccessfulUpload, submittedTasks, token],
+    [onSuccessfulUpload, submittedTasks, username],
   );
 
   const groupedTasks = useMemo<{
@@ -118,8 +118,8 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     fetchTasks();
   }, [fetchTasks]);
 
-  if (!hasUsername) {
-    return renderLayout(<ScavengerHuntUsername setHasUsername={setHasUsername} />, false);
+  if (!username) {
+    return renderLayout(<ScavengerHuntUsername onClaimUsername={setUsername} />, false);
   }
 
   return renderLayout(
