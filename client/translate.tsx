@@ -37,11 +37,10 @@ export default class Translate {
                 };
                 return <a onClick={onClick}>{domNode.attribs.text}</a>;
               }
+              if (domNode.type === 'tag' && domNode.name === 'coloredbox') {
+                return <div className={faqStyles.coloredBox} style={{ backgroundColor: domNode.attribs.color }} />;
+              }
             }
-            if (domNode.type === 'tag' && domNode.name === 'coloredbox') {
-              return <div className={faqStyles.coloredBox} style={{ backgroundColor: domNode.attribs.color }} />;
-            }
-            return null;
           },
         })}
       </Fragment>

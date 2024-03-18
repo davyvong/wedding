@@ -1,31 +1,33 @@
 'use server';
 
+import { _Object } from '@aws-sdk/client-s3';
 import { ScavengerHuntTaskId } from 'components/scavenger-hunt/constants';
 import CloudflareAPI from 'server/apis/cloudflare';
 import Logger from 'utils/logger';
+import { sortByKey } from 'utils/sort';
 
 export const fetchAllSubmissions = async (): Promise<
-  { tasks: { id: ScavengerHuntTaskId; uploadedAt: Date }[]; username: string }[]
+  {
+    checksum: string;
+    id: ScavengerHuntTaskId;
+    uploadedAt: Date;
+    uploadedBy: string;
+  }[]
 > => {
   try {
     const objects = await CloudflareAPI.listObjects('');
-    const submissionsByUsername = new Map<string, { id: ScavengerHuntTaskId; uploadedAt: Date }[]>();
-    for (const object of objects) {
-      const keyPaths = object.Key?.split('/');
-      const username = keyPaths?.at(0) as string;
-      const task = {
-        id: keyPaths?.at(1) as ScavengerHuntTaskId,
-        uploadedAt: object.LastModified as Date,
-      };
-      const submissions = submissionsByUsername.get(username);
-      submissionsByUsername.set(username, [...(submissions || []), task]);
-    }
-    return Array.from(submissionsByUsername.entries()).map(
-      ([username, tasks]: [string, { id: ScavengerHuntTaskId; uploadedAt: Date }[]]) => ({
-        tasks,
-        username,
-      }),
-    );
+    return objects
+      .map((object: _Object) => {
+        const keyPaths = object.Key?.split('/');
+        return {
+          checksum: object.ETag?.replace(/"/g, '') || '',
+          id: keyPaths?.at(1) as ScavengerHuntTaskId,
+          uploadedAt: object.LastModified as Date,
+          uploadedBy: keyPaths?.at(0) as string,
+        };
+      })
+      .sort(sortByKey('uploadedAt'))
+      .reverse();
   } catch (error: unknown) {
     Logger.error(error);
     return [];

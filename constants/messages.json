@@ -110,6 +110,7 @@
   "components.mega-menu.menu-items.songs.description": "Request songs you want to hear",
   "components.mega-menu.menu-items.songs.title": "Song Requests",
   "components.navigation-bar.title": "Vivian & Davy",
+  "components.scavenger-hunt-submissions.uploaded-message": "<b>{{username}}</b> - {{task}}",
   "components.scavenger-hunt-submitted-photos": "Submitted photos",
   "components.scavenger-hunt-task.errors.failed": "(upload failed - click to retry)",
   "components.scavenger-hunt-task.errors.file-not-image": "(file must be an image - click to retry)",
