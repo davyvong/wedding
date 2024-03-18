@@ -130,16 +130,28 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
         },
       );
       if (token.isAdmin) {
-        items.push({
-          description: Translate.t('components.mega-menu.menu-items.scavenger-hunt.description'),
-          href: '/scavenger',
-          icon: <ContentPasteSearchIconSVG />,
-          onClick: (): void => {
-            setIsOpen(false);
+        items.push(
+          {
+            description: Translate.t('components.mega-menu.menu-items.scavenger-hunt.description'),
+            href: '/scavenger',
+            icon: <ContentPasteSearchIconSVG />,
+            onClick: (): void => {
+              setIsOpen(false);
+            },
+            title: Translate.t('components.mega-menu.menu-items.scavenger-hunt.title'),
+            type: 'link',
           },
-          title: Translate.t('components.mega-menu.menu-items.scavenger-hunt.title'),
-          type: 'link',
-        });
+          {
+            description: Translate.t('components.mega-menu.menu-items.scavenger-hunt-submissions.description'),
+            href: '/scavenger/submissions',
+            icon: <ContentPasteSearchIconSVG />,
+            onClick: (): void => {
+              setIsOpen(false);
+            },
+            title: Translate.t('components.mega-menu.menu-items.scavenger-hunt-submissions.title'),
+            type: 'link',
+          },
+        );
       }
     } else {
       items.push({

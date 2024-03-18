@@ -101,6 +101,8 @@
   "components.mega-menu.menu-items.invitation.title": "Guest Invitation",
   "components.mega-menu.menu-items.rsvp.description": "Let us know if you will be attending",
   "components.mega-menu.menu-items.rsvp.title": "RSVP",
+  "components.mega-menu.menu-items.scavenger-hunt-submissions.description": "List of submissions by participants",
+  "components.mega-menu.menu-items.scavenger-hunt-submissions.title": "Scavenger Hunt Submissions",
   "components.mega-menu.menu-items.scavenger-hunt.description": "Share your photos with us",
   "components.mega-menu.menu-items.scavenger-hunt.title": "Scavenger Hunt",
   "components.mega-menu.menu-items.sign-out.description": "Get a secret link to view your invitation",
