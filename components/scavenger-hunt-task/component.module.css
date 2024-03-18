@@ -25,10 +25,6 @@
   position: relative;
 }
 
-.content:hover {
-  cursor: pointer;
-}
-
 .completed .content {
   background: linear-gradient(var(--color-inverse-surface), var(--palette-transparent));
   border-top-left-radius: 0.5rem;
@@ -38,6 +34,10 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.description:hover {
+  cursor: pointer;
 }
 
 .completed .description:hover {
