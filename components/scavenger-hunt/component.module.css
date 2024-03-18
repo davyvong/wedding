@@ -49,6 +49,10 @@
   width: 100vw;
 }
 
+.background1WithoutFooter {
+  top: -19%;
+}
+
 .background2 {
   bottom: -9%;
   opacity: 38%;

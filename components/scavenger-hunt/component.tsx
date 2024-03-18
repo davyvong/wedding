@@ -30,7 +30,12 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ token }) => {
     (children: ReactNode, hasFooter: boolean = true): JSX.Element => (
       <div className={styles.page}>
         <div className={classNames(styles.card, hasFooter && styles.cardWithFooter)}>
-          <Image alt="" className={styles.background1} priority src={Background1IWEBP} />
+          <Image
+            alt=""
+            className={classNames(styles.background1, !hasFooter && styles.background1WithoutFooter)}
+            priority
+            src={Background1IWEBP}
+          />
           <div className={classNames(styles.pretitle, apricots.className)}>
             <Image alt="" className={styles.camera} height={40} priority src={CameraWEBP} />
             <span>{Translate.t('components.scavenger-hunt.pretitle')}</span>
