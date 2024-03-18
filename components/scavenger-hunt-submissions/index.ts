@@ -1,3 +1,7 @@
-import ScavengerHuntSubmissions from './component';
+import dynamic from 'next/dynamic';
 
-export default ScavengerHuntSubmissions;
+const DynamicScavengerHuntSubmissions = dynamic(() => import('./component'), {
+  ssr: false,
+});
+
+export default DynamicScavengerHuntSubmissions;
