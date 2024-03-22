@@ -280,18 +280,13 @@ class SupabaseQueries {
     }
   }
 
-  public static async insertSongRequest(
-    token: VerifiedGuestTokenPayload,
-    guestId: string,
-    spotifyTrackId: string,
-  ): Promise<boolean> {
+  public static async insertSongRequest(guestId: string, spotifyTrackId: string): Promise<boolean> {
     try {
       if (!spotifyTrackId) {
         return false;
       }
       const { count, error } = await SupabaseClientFactory.getInstance().from('wedding_song_requests').insert(
         {
-          created_by: token.guestId,
           guest_id: guestId,
           spotify_track_id: spotifyTrackId,
         },

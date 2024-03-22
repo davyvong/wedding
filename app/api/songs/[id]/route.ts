@@ -85,7 +85,7 @@ export const POST = async (request: NextRequest, { params }: { params: { id: str
     }
     const accessToken = await SpotifyAPI.getAccessToken();
     const track = await SpotifyAPI.getTrack(accessToken, params.id);
-    await SupabaseQueries.insertSongRequest(token, token.guestId, track.id);
+    await SupabaseQueries.insertSongRequest(token.guestId, track.id);
     waitUntil(async (): Promise<void> => {
       try {
         await refreshWeddingPlaylist(accessToken);
