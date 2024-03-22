@@ -5,12 +5,14 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "next lint",
     "lint:prettier": "prettier --list-different --ignore-path .gitignore .",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "postsupabase:types": "npm run lint:prettier -- --write",
     "prebuild": "npm run lint",
     "prepare": "husky",
-    "start": "next start"
+    "start": "next start",
+    "supabase:types": "env-cmd --file ./.env.local supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > types/supabase.d.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.535.0",
@@ -45,6 +47,7 @@
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.3",
     "eslint-config-prettier": "^9.1.0",
@@ -54,6 +57,7 @@
     "prettier": "^3.2.5",
     "raw-loader": "^4.0.2",
     "sharp": "^0.33.2",
+    "supabase": "^1.150.0",
     "typescript": "^5.4.2",
     "vercel": "^33.6.1"
   }

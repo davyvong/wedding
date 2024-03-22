@@ -21,7 +21,7 @@ namespace NodeJS {
     SPOTIFY_REDIRECT_URI: string;
     SPOTIFY_REFRESH_TOKEN: string;
     SUPABASE_KEY: string;
-    SUPABASE_URL: string;
+    SUPABASE_PROJECT_ID: string;
     TOKEN_SIGNING_KEY: string;
     UPSTASH_REDIS_REST_TOKEN: string;
     UPSTASH_REDIS_REST_URL: string;
