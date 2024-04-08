@@ -19,7 +19,6 @@
     "@aws-sdk/s3-request-presigner": "^3.540.0",
     "@floating-ui/react": "^0.26.10",
     "@supabase/supabase-js": "^2.41.1",
-    "@upstash/ratelimit": "^1.0.1",
     "@upstash/redis": "^1.29.0",
     "@vercel/analytics": "^1.2.2",
     "classnames": "^2.5.1",
