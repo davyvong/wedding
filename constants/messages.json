@@ -122,7 +122,7 @@
   "components.scavenger-hunt-username.errors.failed": "Something went wrong with claiming the your username. Try again in a few seconds.",
   "components.scavenger-hunt-username.errors.length": "The username length must be between 3 to 24 characters.",
   "components.scavenger-hunt-username.errors.unavailable": "The username is already taken.",
-  "components.scavenger-hunt-username.instructions": "Before joining the scavenger hunt, pick a username to let us know who you are participating as.",
+  "components.scavenger-hunt-username.instructions": "Before joining the scavenger hunt, pick a username to let us know who you are participating as. You cannot change the your username once you participate.",
   "components.scavenger-hunt-username.placeholders.username": "Username",
   "components.scavenger-hunt.instructions": "Share the love! Please upload your photos to our album! We will share our favorites on our website.",
   "components.scavenger-hunt.items.cake": "cake!",
