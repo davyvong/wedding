@@ -9,7 +9,7 @@ import Logger from 'utils/logger';
 import { string } from 'yup';
 
 export const config = {
-  matcher: ['/', '/api/:path*', '/guests'],
+  matcher: ['/', '/api/:path*', '/guests', '/scavenger/:path*'],
 };
 
 async function middleware(request: NextRequest): Promise<Response> {
