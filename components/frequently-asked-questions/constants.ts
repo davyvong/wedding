@@ -12,8 +12,8 @@ export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
     token: false,
   },
   {
-    answer: 'components.frequently-asked-questions.answers.is-there-parking',
-    question: 'components.frequently-asked-questions.questions.is-there-parking',
+    answer: 'components.frequently-asked-questions.answers.is-parking-available',
+    question: 'components.frequently-asked-questions.questions.is-parking-available',
     token: false,
   },
   {
