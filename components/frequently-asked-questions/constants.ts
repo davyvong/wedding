@@ -7,22 +7,32 @@ export interface FrequentlyAskedQuestion {
 
 export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
   {
+    answer: 'components.frequently-asked-questions.answers.what-time-should-i-arrive',
+    question: 'components.frequently-asked-questions.questions.what-time-should-i-arrive',
+    token: false,
+  },
+  {
+    answer: 'components.frequently-asked-questions.answers.is-there-parking',
+    question: 'components.frequently-asked-questions.questions.is-there-parking',
+    token: false,
+  },
+  {
     answer: 'components.frequently-asked-questions.answers.what-is-the-dress-code',
     params: {
       bride: 'rgb(208, 99, 62)',
       groom: 'rgb(240, 212, 181)',
     },
     question: 'components.frequently-asked-questions.questions.what-is-the-dress-code',
-    token: true,
-  },
-  {
-    answer: 'components.frequently-asked-questions.answers.how-to-respond-to-invitation',
-    question: 'components.frequently-asked-questions.questions.how-to-respond-to-invitation',
     token: false,
   },
   {
-    answer: 'components.frequently-asked-questions.answers.when-is-the-rsvp-deadline',
-    question: 'components.frequently-asked-questions.questions.when-is-the-rsvp-deadline',
+    answer: 'components.frequently-asked-questions.answers.can-i-post-to-social-media',
+    question: 'components.frequently-asked-questions.questions.can-i-post-to-social-media',
+    token: false,
+  },
+  {
+    answer: 'components.frequently-asked-questions.answers.where-is-the-gift-registry',
+    question: 'components.frequently-asked-questions.questions.where-is-the-gift-registry',
     token: false,
   },
   {
