@@ -392,9 +392,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
     if (isSaving) {
       return (
         <Fragment>
-          <div className={styles.submitButtonLoading}>
-            <LoadingHeart className={styles.submitButtonLoadingHeart} inverse />
-          </div>
+          <LoadingHeart className={styles.submitButtonLoading} inverse />
           <span>{Translate.t('components.flyouts.rsvp.buttons.saving')}</span>
         </Fragment>
       );

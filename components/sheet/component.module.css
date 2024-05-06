@@ -1,0 +1,60 @@
+.container {
+  bottom: 0;
+  left: 50%;
+  max-height: 100%;
+  max-width: 672px;
+  outline: none;
+  overflow: hidden;
+  padding: 1.5rem;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
+
+.sheet {
+  background-color: var(--color-inverse-surface);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 0.25rem 0.5rem;
+  color: var(--color-inverse-on-surface);
+  height: 100%;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.sheet::-webkit-scrollbar {
+  background-color: var(--color-inverse-scrollbar);
+  display: block;
+}
+
+.sheet::-webkit-scrollbar:hover {
+  background-color: var(--color-inverse-scrollbar-hover);
+}
+
+.sheet::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+}
+
+.sheet::-webkit-scrollbar:vertical {
+  width: 0.5rem;
+}
+
+.sheet::-webkit-scrollbar-thumb {
+  background-color: var(--color-inverse-scrollbar-thumb);
+  border-radius: 0.25rem;
+}
+
+.sheet::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-inverse-scrollbar-thumb-active);
+}
+
+.overlay {
+  z-index: 2;
+}
+
+.overlayBlur {
+  backdrop-filter: blur(0.25rem);
+  height: 100%;
+  width: 100%;
+}

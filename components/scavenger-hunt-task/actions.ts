@@ -36,3 +36,23 @@ export const fetchUploadURL = async (
     return { data: null, error: 'components.scavenger-hunt-task.errors.failed' };
   }
 };
+
+export const deleteSubmission = async (task: ScavengerHuntTaskId): Promise<boolean> => {
+  try {
+    Logger.info({ task });
+    const token = await ScavengerHuntToken.verify(cookies());
+    Logger.info({ token });
+    if (!token) {
+      return false;
+    }
+    if (!string().oneOf(Object.values(ScavengerHuntTaskId)).required().isValidSync(task)) {
+      return false;
+    }
+    const output = await CloudflareAPI.deleteObject(token.username + '/' + task);
+    Logger.info({ output });
+    return true;
+  } catch (error: unknown) {
+    Logger.error(error);
+    return false;
+  }
+};

@@ -1,4 +1,11 @@
-import { ListObjectsV2Command, PutObjectCommand, S3Client, _Object } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  DeleteObjectCommandOutput,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+  _Object,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 class CloudflareAPI {
@@ -34,6 +41,14 @@ class CloudflareAPI {
       return [];
     }
     return list.Contents;
+  }
+
+  public static async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.CLOUDFLARE_BUCKET_ID,
+      Key: key,
+    });
+    return CloudflareAPI.s3Client.send(command);
   }
 }
 

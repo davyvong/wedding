@@ -59,9 +59,7 @@ const InvitationFlyoutComponent: FC<InvitationFlyoutComponentProps> = ({ setIsOp
     if (isSending) {
       return (
         <Fragment>
-          <div className={rsvpFlyoutStyles.submitButtonLoading}>
-            <LoadingHeart className={rsvpFlyoutStyles.submitButtonLoadingHeart} inverse />
-          </div>
+          <LoadingHeart className={rsvpFlyoutStyles.submitButtonLoading} inverse />
           <span>{Translate.t('components.flyouts.invitation.buttons.sending')}</span>
         </Fragment>
       );

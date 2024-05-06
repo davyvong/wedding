@@ -1,21 +1,25 @@
 'use client';
 
+import AddFilesSVG from 'assets/images/scavenger-hunt/add-files.svg';
 import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
 import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
-import classNames from 'classnames';
 import Translate from 'client/translate';
+import Button from 'components/button';
 import ErrorBoundary from 'components/error-boundary';
+import LoadingHeart from 'components/loading-heart';
 import { ScavengerHuntTaskId } from 'components/scavenger-hunt/constants';
+import Sheet from 'components/sheet';
 import Image from 'next/image';
 import { ChangeEvent, FC, Fragment, useCallback, useState } from 'react';
 
-import { fetchUploadURL } from './actions';
+import { deleteSubmission, fetchUploadURL } from './actions';
 import styles from './component.module.css';
 
 interface ScavengerHuntTaskComponentProps {
   id: ScavengerHuntTaskId;
   isCompleted: boolean;
   name: string;
+  onSuccessfulDelete: (id: ScavengerHuntTaskId) => void;
   onSuccessfulUpload: (id: ScavengerHuntTaskId) => void;
   username: string;
 }
@@ -24,10 +28,12 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
   id,
   isCompleted,
   name,
+  onSuccessfulDelete,
   onSuccessfulUpload,
   username,
 }) => {
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const uploadFile = useCallback(
@@ -67,6 +73,16 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
     [uploadFile],
   );
 
+  const onDelete = useCallback(async (): Promise<void> => {
+    try {
+      setIsDeleting(true);
+      await deleteSubmission(id);
+      onSuccessfulDelete(id);
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [id, onSuccessfulDelete]);
+
   const onRetry = useCallback((): void => {
     const fileInput = document.getElementById(id + '-file') as HTMLInputElement | null;
     uploadFile(fileInput?.files?.item(0));
@@ -77,74 +93,102 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
     fileInput?.click();
   }, [id]);
 
-  const onClick = useCallback(() => {
-    if (isCompleted) {
-      return;
-    }
-    if (isUploading) {
-      return;
-    }
-    if (errorMessage === 'components.scavenger-hunt-task.errors.failed') {
-      onRetry();
-      return;
-    }
-    onUpload();
-  }, [errorMessage, isCompleted, isUploading, onRetry, onUpload]);
-
-  const renderHint = useCallback((): JSX.Element => {
-    if (isCompleted) {
-      return <Fragment />;
-    }
-    if (isUploading) {
-      return <div className={styles.hint}>{Translate.t('components.scavenger-hunt-task.hints.uploading')}</div>;
-    }
-    if (errorMessage) {
-      return <div className={classNames(styles.hint, styles.errorMessage)}>{Translate.t(errorMessage)}</div>;
-    }
-    return <div className={styles.hint}>{Translate.t('components.scavenger-hunt-task.hints.upload')}</div>;
-  }, [errorMessage, isCompleted, isUploading]);
-
   const renderSubmittedImage = useCallback((): JSX.Element => {
     if (!isCompleted) {
-      return <Fragment />;
+      return (
+        <Fragment>
+          <div className={styles.imageUploader} onClick={onUpload}>
+            <div className={styles.imageUploaderContent}>
+              <AddFilesSVG className={styles.imageUploaderIcon} />
+              {isUploading ? (
+                <span>{Translate.t('components.scavenger-hunt-task.upload-placeholder.uploading')}</span>
+              ) : (
+                <span>{Translate.t('components.scavenger-hunt-task.upload-placeholder.upload')}</span>
+              )}
+            </div>
+          </div>
+          {errorMessage && <div className={styles.errorMessage}>{Translate.t(errorMessage)}</div>}
+          <input
+            accept="image/*"
+            disabled={isUploading}
+            hidden
+            id={id + '-file'}
+            multiple={false}
+            onChange={onChange}
+            type="file"
+          />
+        </Fragment>
+      );
     }
     const url = new URL('https://scavenger.vivian-and-davy.com/' + username + '/' + id);
     return (
       <ErrorBoundary>
-        <Image
-          alt={Translate.t('components.scavenger-hunt.items.' + id)}
-          className={styles.submittedImage}
-          height={0}
-          src={url.href}
-          style={{ height: 'auto', width: '100%' }}
-          unoptimized
-          width={0}
-        />
+        <a href={url.href} target="_blank">
+          <Image
+            alt={Translate.t('components.scavenger-hunt.items.' + id)}
+            className={styles.submittedImage}
+            height={0}
+            src={url.href}
+            style={{ height: 'auto', width: '100%' }}
+            unoptimized
+            width={0}
+          />
+        </a>
       </ErrorBoundary>
     );
-  }, [id, isCompleted, username]);
+  }, [errorMessage, id, isCompleted, isUploading, onChange, onUpload, username]);
 
-  return (
-    <div className={classNames(styles.task, isCompleted && styles.completed)} id={id}>
-      {renderSubmittedImage()}
-      <div className={styles.content} onClick={onClick}>
-        <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
-        <div className={styles.description}>
-          <div>{name}</div>
-          {renderHint()}
+  const renderContent = useCallback(
+    ({ setIsOpen }) => (
+      <Fragment>
+        <div className={styles.taskName}>{name}</div>
+        {renderSubmittedImage()}
+        <div className={styles.sheetActions}>
+          {errorMessage === 'components.scavenger-hunt-task.errors.failed' && (
+            <Button className={styles.deleteButton} disabled={isUploading} onClick={onRetry}>
+              {isUploading ? (
+                <Fragment>
+                  <LoadingHeart className={styles.deleteButtonLoading} />
+                  <span>{Translate.t('components.scavenger-hunt-task.buttons.retrying-upload')}</span>
+                </Fragment>
+              ) : (
+                <span>{Translate.t('components.scavenger-hunt-task.buttons.retry-upload')}</span>
+              )}
+            </Button>
+          )}
+          {isCompleted && (
+            <Button className={styles.deleteButton} disabled={isDeleting} onClick={onDelete}>
+              {isDeleting ? (
+                <Fragment>
+                  <LoadingHeart className={styles.deleteButtonLoading} />
+                  <span>{Translate.t('components.scavenger-hunt-task.buttons.deleting')}</span>
+                </Fragment>
+              ) : (
+                <span>{Translate.t('components.scavenger-hunt-task.buttons.delete')}</span>
+              )}
+            </Button>
+          )}
+          <div className={styles.spacer} />
+          <Button inverse onClick={() => setIsOpen(false)}>
+            {Translate.t('components.scavenger-hunt-task.buttons.close')}
+          </Button>
         </div>
-      </div>
-      <input
-        accept="image/*"
-        disabled={isUploading}
-        hidden
-        id={id + '-file'}
-        multiple={false}
-        onChange={onChange}
-        type="file"
-      />
-    </div>
+      </Fragment>
+    ),
+    [errorMessage, isCompleted, isDeleting, isUploading, name, onDelete, onRetry, renderSubmittedImage],
   );
+
+  const renderReference = useCallback(
+    refProps => (
+      <div {...refProps} className={styles.task} id={id}>
+        <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
+        <span>{name}</span>
+      </div>
+    ),
+    [id, isCompleted, name],
+  );
+
+  return <Sheet renderContent={renderContent} renderReference={renderReference} />;
 };
 
 export default ScavengerHuntTaskComponent;
