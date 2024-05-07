@@ -88,10 +88,10 @@ const ScavengerHuntComponent: FC<ScavengerHuntComponentProps> = ({ submissions, 
     <Fragment>
       <Image alt="" className={styles.background2} priority src={Background2PNG} />
       <Image alt="" className={styles.background3} priority src={Background3PNG} />
-      {scavengerHuntTasks.map(renderTask)}
       <div className={classNames(styles.instructions, vidaloka.className)}>
         {Translate.t('components.scavenger-hunt.instructions')}
       </div>
+      {scavengerHuntTasks.map(renderTask)}
     </Fragment>,
   );
 };
