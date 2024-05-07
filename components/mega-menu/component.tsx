@@ -129,7 +129,7 @@ const MegaMenu: FC<MegaMenuProps> = ({ token }) => {
           type: 'button',
         },
       );
-      if (new Date().toISOString() > '2024-06-20T00:00:00.000Z') {
+      if (token.isAdmin || new Date().toISOString() > '2024-06-20T00:00:00.000Z') {
         items.push({
           description: Translate.t('components.mega-menu.menu-items.scavenger-hunt.description'),
           href: '/scavenger',
