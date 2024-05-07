@@ -79,7 +79,7 @@ const SheetComponent: FC<SheetComponentProps> = ({
     close: {
       transform: 'translate(-50%, 100%)',
     },
-    duration: 650,
+    duration: 300,
     initial: {
       transform: 'translate(-50%, 100%)',
     },
@@ -91,7 +91,7 @@ const SheetComponent: FC<SheetComponentProps> = ({
     close: {
       opacity: 0,
     },
-    duration: 650,
+    duration: 300,
     initial: {
       opacity: 0,
     },

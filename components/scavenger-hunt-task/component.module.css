@@ -39,6 +39,10 @@
   width: 100%;
 }
 
+.imageUploader:hover {
+  cursor: pointer;
+}
+
 .imageUploaderContent {
   align-items: center;
   border: 2px dashed var(--color-inverse-placeholder);
@@ -58,32 +62,73 @@
   width: 40%;
 }
 
-.sheetActions {
-  align-items: center;
+.deleteConfirmation {
+  background-color: var(--color-error);
+  border-radius: 0.5rem;
+  color: var(--color-on-error);
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+}
+
+.deleteConfirmationActions {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1.5rem;
 }
 
-.deleteButton {
+.permanentlyDeleteButton,
+.permanentlyDeleteButton:disabled {
+  background-color: var(--color-on-error);
+  color: var(--color-error);
+}
+
+.permanentlyDeleteButtonLoading {
+  margin-right: 0.5rem;
+}
+.permanentlyDeleteButtonLoading div,
+.permanentlyDeleteButtonLoading div:after,
+.permanentlyDeleteButtonLoading div:before {
+  background-color: var(--color-error);
+}
+
+.cancelDeleteButton {
+  background-color: var(--palette-transparent);
+  box-shadow: inset 0 0 0 2px var(--color-on-error);
+  color: var(--color-on-error);
+}
+
+.sheetActions {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1.5rem;
+}
+
+.deleteButton,
+.deleteButton:disabled {
   background-color: var(--color-error);
   color: var(--color-on-error);
   display: flex;
   flex-direction: row;
 }
 
+.deleteButtonLoading {
+  margin-right: 0.5rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.permanentlyDeleteButton:disabled,
 .deleteButton:disabled {
-  background-color: var(--color-error);
   cursor: wait;
   opacity: 0.8;
 }
 
+.permanentlyDeleteButton:hover,
 .deleteButton:hover {
   cursor: pointer;
   opacity: 0.8;
-}
-
-.deleteButtonLoading {
-  margin-right: 0.5rem;
 }

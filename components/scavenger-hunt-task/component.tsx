@@ -35,6 +35,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [shouldRenderDeleteConfirmation, setShouldRenderDeleteConfirmation] = useState<boolean>(false);
 
   const uploadFile = useCallback(
     async (file?: File | null): Promise<void> => {
@@ -77,6 +78,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
     try {
       setIsDeleting(true);
       await deleteSubmission(id);
+      setShouldRenderDeleteConfirmation(false);
       onSuccessfulDelete(id);
     } finally {
       setIsDeleting(false);
@@ -143,6 +145,26 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
       <Fragment>
         <div className={styles.taskName}>{name}</div>
         {renderSubmittedImage()}
+        {shouldRenderDeleteConfirmation && (
+          <div className={styles.deleteConfirmation}>
+            <span>{Translate.t('components.scavenger-hunt-task.delete-confirmation')}</span>
+            <div className={styles.deleteConfirmationActions}>
+              <Button className={styles.permanentlyDeleteButton} disabled={isDeleting} onClick={onDelete}>
+                {isDeleting ? (
+                  <Fragment>
+                    <LoadingHeart className={styles.permanentlyDeleteButtonLoading} inverse />
+                    <span>{Translate.t('components.scavenger-hunt-task.buttons.deleting')}</span>
+                  </Fragment>
+                ) : (
+                  Translate.t('components.scavenger-hunt-task.buttons.permanently-delete')
+                )}
+              </Button>
+              <Button className={styles.cancelDeleteButton} onClick={() => setShouldRenderDeleteConfirmation(false)}>
+                {Translate.t('components.scavenger-hunt-task.buttons.cancel')}
+              </Button>
+            </div>
+          </div>
+        )}
         <div className={styles.sheetActions}>
           {errorMessage === 'components.scavenger-hunt-task.errors.failed' && (
             <Button className={styles.deleteButton} disabled={isUploading} onClick={onRetry}>
@@ -156,16 +178,9 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
               )}
             </Button>
           )}
-          {isCompleted && (
-            <Button className={styles.deleteButton} disabled={isDeleting} onClick={onDelete}>
-              {isDeleting ? (
-                <Fragment>
-                  <LoadingHeart className={styles.deleteButtonLoading} />
-                  <span>{Translate.t('components.scavenger-hunt-task.buttons.deleting')}</span>
-                </Fragment>
-              ) : (
-                <span>{Translate.t('components.scavenger-hunt-task.buttons.delete')}</span>
-              )}
+          {isCompleted && !shouldRenderDeleteConfirmation && (
+            <Button className={styles.deleteButton} onClick={() => setShouldRenderDeleteConfirmation(true)}>
+              {Translate.t('components.scavenger-hunt-task.buttons.delete')}
             </Button>
           )}
           <div className={styles.spacer} />
@@ -175,7 +190,17 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
         </div>
       </Fragment>
     ),
-    [errorMessage, isCompleted, isDeleting, isUploading, name, onDelete, onRetry, renderSubmittedImage],
+    [
+      errorMessage,
+      isCompleted,
+      isDeleting,
+      isUploading,
+      name,
+      onDelete,
+      onRetry,
+      renderSubmittedImage,
+      shouldRenderDeleteConfirmation,
+    ],
   );
 
   const renderReference = useCallback(
