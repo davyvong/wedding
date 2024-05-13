@@ -18,9 +18,9 @@
     "supabase:types": "env-cmd --file ./.env.local supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > types/supabase.d.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.569.0",
-    "@aws-sdk/s3-request-presigner": "^3.569.0",
-    "@floating-ui/react": "^0.26.13",
+    "@aws-sdk/client-s3": "^3.574.0",
+    "@aws-sdk/s3-request-presigner": "^3.574.0",
+    "@floating-ui/react": "^0.26.14",
     "@supabase/supabase-js": "^2.43.1",
     "@upstash/redis": "^1.30.1",
     "@vercel/analytics": "^1.2.2",
@@ -28,7 +28,7 @@
     "gsap": "^3.12.5",
     "handlebars": "^4.7.8",
     "html-react-parser": "^5.1.10",
-    "jose": "^5.2.4",
+    "jose": "^5.3.0",
     "locomotive-scroll": "^4.1.4",
     "lodash.clonedeep": "^4.5.0",
     "masonry-layout": "^4.2.2",
@@ -43,9 +43,9 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
-    "@types/node": "^20.12.8",
+    "@types/node": "^20.12.11",
     "@types/nodemailer": "^6.4.15",
-    "@types/react": "^18.3.1",
+    "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
@@ -61,6 +61,6 @@
     "sharp": "^0.33.3",
     "supabase": "^1.165.0",
     "typescript": "^5.4.5",
-    "vercel": "^34.1.8"
+    "vercel": "^34.1.11"
   }
 }
