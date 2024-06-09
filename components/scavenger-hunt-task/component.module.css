@@ -8,6 +8,14 @@
   position: relative;
 }
 
+.task:hover {
+  cursor: pointer;
+}
+
+.completedTask {
+  text-decoration: line-through;
+}
+
 .heart {
   height: 33px;
   margin-right: 1rem;

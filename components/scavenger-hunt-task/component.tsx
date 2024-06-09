@@ -3,6 +3,7 @@
 import AddFilesSVG from 'assets/images/scavenger-hunt/add-files.svg';
 import HeartFilledWEBP from 'assets/images/scavenger-hunt/heart-filled.webp';
 import HeartEmptyWEBP from 'assets/images/scavenger-hunt/heart.webp';
+import classNames from 'classnames';
 import Translate from 'client/translate';
 import Button from 'components/button';
 import ErrorBoundary from 'components/error-boundary';
@@ -205,7 +206,7 @@ const ScavengerHuntTaskComponent: FC<ScavengerHuntTaskComponentProps> = ({
 
   const renderReference = useCallback(
     refProps => (
-      <div {...refProps} className={styles.task} id={id}>
+      <div {...refProps} className={classNames(styles.task, isCompleted && styles.completedTask)} id={id}>
         <Image alt={name} className={styles.heart} src={isCompleted ? HeartFilledWEBP : HeartEmptyWEBP} width={32} />
         <span>{name}</span>
       </div>
