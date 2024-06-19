@@ -509,7 +509,7 @@ const RSVPFlyoutComponent: FC<RSVPFlyoutComponentProps> = ({
       )}
       {errors.message && <div className={styles.error}>{Translate.t(errors.message)}</div>}
       <div className={styles.buttons}>
-        <Button className={styles.submitButton} disabled={isSaving} inverse type="submit">
+        <Button className={styles.submitButton} disabled inverse type="submit">
           {renderSubmitButtonContent()}
         </Button>
         <Button inverse onClick={() => setIsOpen(false, true)}>
